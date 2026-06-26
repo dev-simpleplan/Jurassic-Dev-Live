@@ -1,0 +1,39 @@
+predictive{% if predictive_search.performed %}
+  <div id="predictive-search-results">
+    {%- if predictive_search.resources.products.size > 0 -%}
+      <h2 id="predictive-search-products">
+        {{ predictive_search.resources.products.size }} Results Found for
+        <span>"{{ predictive_search.terms }}"</span>
+      </h2>
+      <ul
+        role="listbox"
+        aria-labelledby="predictive-search-products"
+        class="predictive-search-list">
+        {%- for product in predictive_search.resources.products limit: 4 -%}
+          <li role="option">
+            {% render 'product-card-primary'
+              , product: product %}
+          </li>
+        {%- endfor -%}
+      </ul>
+      <div class="search-load-more">
+        <a href="/search?q={{ predictive_search.terms }}" class="custom-btn dark">Press Enter to View Results</a>
+      </div>
+    {% else %}
+      <div class="no-search-result">
+        <h3 class="no-res">
+          {{ predictive_search.resources.products.size }} Results Found
+        </h3>
+        <p class="no-res-txt">
+          No results found for "{{ predictive_search.terms }}". Check the spelling or use a<br> different word or phrase.
+        </p>
+        <p>
+          Press enter to search across all products..
+        </p>
+        <div class="no-search-logo">
+          <img src="" alt="">
+        </div>
+      </div>
+    {%- endif -%}
+  </div>
+{% endif %}

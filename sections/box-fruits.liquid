@@ -1,0 +1,76 @@
+{% if product.metafields.custom.box_products.value != blank %}
+{% assign box_product_heading = product.metafields.custom.box_product_heading %}
+{% assign box_product_subheading = product.metafields.custom.box_product_subheading %}
+<div class="lalabox-content">
+    <div class="container-fluid">
+        <div class="lalabox-content-in">
+            <div class="sec-with-space">
+                {% if box_product_heading != blank or box_product_subheading != blank %}
+                    <div class="heading">
+                        {% if box_product_heading != blank %}
+                            <h2 data-aos="fade-up" data-aos-duration="1000">
+                                {{ box_product_heading }}
+                            </h2>
+                        {% endif %}
+                        {% if box_product_subheading != blank %}
+                            <p data-aos="fade-up" data-aos-duration="1000" data-aos-delay="50">
+                                {{ box_product_subheading }}
+                            </p>
+                        {% endif %}
+                    </div>
+                {% endif %}
+
+                <div class="bcontent-grid">
+                    {% for item in product.metafields.custom.box_products.value %}
+                        <div class="bcg-item">
+                            <div class="bcg-item-inner">
+                                <div class="bcgitem-front">
+                                    <div class="bcgfront-head">
+                                        {{ item.product_name }}
+                                    </div>
+
+                                    <div class="bcgfront-image">
+                                        <img src="{{ item.product_image | img_url: 'master' }}" alt="{{ item.product_name }}">
+                                    </div>
+                                </div>
+
+                                <div class="bcgitem-back">
+                                    <div class="bcgback-bottom">
+                                        <div>{{ item.description_pointers | metafield_tag }}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+{% schema %}
+  {
+    "name": "Box Fruits",
+    "settings": [
+      {
+        "type": "text",
+        "id": "heading",
+        "label": "Heading",
+        "default": "Meet the Wild Ones of the Lala Box"
+      },
+      {
+        "type": "text",
+        "id": "subheading",
+        "label": "Sub Heading",
+        "default": "These aren’t just fruits — they’re invitations to explore. Here's what makes each one extraordinary."
+      }
+    ],
+    "presets": [
+      {
+        "name": "Box Fruits"
+      }
+    ]
+  }
+{% endschema %}

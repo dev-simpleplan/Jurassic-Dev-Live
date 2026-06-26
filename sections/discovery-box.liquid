@@ -1,0 +1,100 @@
+<section class="dis-box">
+    <div class="db-bg">
+        <img src="{{ section.settings.bg-image |img_url: 'master' }}" alt="">
+    </div>
+    <div class="container">
+        <div class="db-in">
+            <div class="bdi-left">
+                <div class="bdil-top">
+                    <div class="heading left white">
+                        <h2 class="small" data-aos="fade-up" data-aos-duration="1000">{{ section.settings.heading }}</h2>
+                        <p class="big" data-aos="fade-up" data-aos-duration="1000">{{ section.settings.para }}</p>
+                    </div>
+                </div>
+                <div class="bdil-bottom">
+                    <div class="bd-testimonial-wrap">
+                        <div class="db-tw-image">
+                            <img src="{{ section.settings['user_image'] | img_url: 'master' }}" alt="User Image" class="img">
+                        </div>
+                        <div class="db-tw-review">
+                            {% render 'rating-stars-fa', rating: section.settings.review_star %}
+                            <div class="rating-text" aria-hidden="true">{{ section.settings.review_star }}</div>
+                        </div>
+                        <div class="db-tw-user">
+                            <p>{{ section.settings.user_name }}</p>
+                        </div>
+                        <div class="db-tw-content">
+                            <p>{{ section.settings.user_comment }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="bdi-right">
+                <div class="dbir-box-wrap">
+                    <div class="dbir-box">
+                        {% assign product = section.settings.product %}
+                        {% if product == blank %}
+                            <p class="noproducts">No product selected.</p>
+                        {% else %}
+                            {% render 'product-card-primary', product: product %}
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+{% schema %}
+{
+  "name": "Discovery Box",
+  "class": "discovery-box",
+  "settings": [
+    {
+      "type": "product",
+      "id": "product",
+      "label": "Select product"
+    },
+    {
+      "type": "image_picker",
+      "id": "bg-image",
+      "label": "Background Image"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading Text"
+    },
+    {
+      "type": "text",
+      "id": "para",
+      "label": "Paragraph Text"
+    },
+    {
+        "type": "image_picker",
+        "id": "user_image",
+        "label": "User Image"
+    },
+    {
+        "type": "range",
+        "id": "review_star",
+        "min": 0,
+        "max": 5,
+        "step": 0.1,
+        "label": "Star Ratings",
+        "default": 4.5
+    },
+    {
+        "type": "text",
+        "id": "user_name",
+        "label": "User Name"
+    },
+    {
+        "type": "text",
+        "id": "user_comment",
+        "label": "Testimonial Content"
+    }
+  ]
+}
+{% endschema %}

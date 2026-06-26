@@ -1,0 +1,105 @@
+<div class="threeimages">
+    <div class="container-fluid custom-right">
+        <div class="threeimages-in">
+            <div class="heading center for-mob">
+                <h2>{{ section.settings.heading }}</h2>
+            </div>
+            <div class="tii-left">
+                <div class="heading left for-desktop">
+                    <h2>{{ section.settings.heading }}</h2>
+                </div>
+                <div class="tii-pointers">
+                    {%- for block in section.blocks -%}
+                        <div class="tiip-item">
+                            <div class="tiip-item-top">
+                                <div class="tit-icon">
+                                    <img width="100%" height="100%" src="{{ block.settings.pointer_icon | img_url:'master' }}" alt="{{ block.settings.pointer_icon.alt }}">
+                                </div>
+                                <div class="tii-heading">
+                                    {{ block.settings.pointer_heading }}
+                                </div>
+                            </div>
+                            <div class="tii-item-bottom">
+                                <p>{{ block.settings.pointer_description }}</p>
+                            </div>
+                        </div>
+                    {%- endfor -%}
+                </div>
+            </div>
+            <div class="tii-right">
+                <div class="tii-image-wrap">
+                    <div class="tii-image-left">
+                        <div class="til-top">
+                            <img width="100%" height="100%" src="{{ section.settings.first_image | img_url:'master' }}" alt="{{ section.settings.first_image.alt }}">
+                        </div>
+                        <div class="til-bottom">
+                            <img width="100%" height="100%" src="{{ section.settings.second_image | img_url:'master' }}" alt="{{ section.settings.second_image.alt }}">
+                        </div>
+                    </div>
+                    <div class="tii-image-right">
+                        <img width="100%" height="100%" src="{{ section.settings.third_image | img_url:'master' }}" alt="{{ section.settings.third_image.alt }}">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% schema %}
+  {
+    "name": "three-images-box",
+    "tag": "section",
+    "settings": [
+        {
+            "type": "text",
+            "id": "heading",
+            "label": "Section Heading"
+        },
+        {
+            "type": "image_picker",
+            "id": "first_image",
+            "label": "Select First Image"
+        },
+        {
+            "type": "image_picker",
+            "id": "second_image",
+            "label": "Select Second Image"
+        },
+        {
+            "type": "image_picker",
+            "id": "third_image",
+            "label": "Select Third Image"
+        }
+    ],
+    "blocks": [
+        {
+        "name": "slides",
+        "type": "cards",
+        "settings": [
+            {
+                "type": "image_picker",
+                "id": "pointer_icon",
+                "label": "Select Icon"
+            },
+            {
+                "type": "text",
+                "id": "pointer_heading",
+                "label": "Enter Text"
+            },
+            {
+                "type": "text",
+                "id": "pointer_description",
+                "label": "Enter Description"
+            }
+        ]
+        }
+    ],
+    "presets": [
+      {
+        "name": "three-images-box",
+        "settings": {
+        }
+      }
+    ]
+  }
+{% endschema %}

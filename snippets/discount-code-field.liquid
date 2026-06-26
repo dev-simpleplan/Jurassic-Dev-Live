@@ -1,0 +1,158 @@
+<discount-field class="discount-field">
+  <form class="discount-field__form">
+    <input
+      type="text"
+      name="discount"
+      placeholder="Discount code"
+      class="discount-field__input"
+      required
+    >
+    <button type="submit" class="discount-field__submit-btn">
+      Apply
+    </button>
+  </form>
+
+  <p class="discount-error" hidden>
+    Invalid or expired discount code
+  </p>
+
+  <ul class="discount-pills" hidden></ul>
+</discount-field>
+
+
+
+
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  class DiscountField extends HTMLElement {
+    constructor() {
+      super();
+
+      this.form = this.querySelector('.discount-field__form');
+      this.input = this.querySelector('.discount-field__input');
+      this.pills = this.querySelector('.discount-pills');
+
+      this.input.addEventListener('input', () => this.hideError());
+
+      this.form.addEventListener('submit', e => {
+        e.preventDefault();
+        const code = this.input.value.trim();
+        if (code) this.applyDiscount(code);
+      });
+    }
+
+    async applyDiscount(code) {
+      try {
+        const res = await fetch('/cart/update.js', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ discount: code || '' })
+        });
+
+        const cart = await res.json();
+
+        // ✅ Horizon-style validation
+        if (!code) {
+          this.hideError();
+        } else {
+          const isValid =
+            cart.discount_codes?.some(d => d.applicable === true);
+
+          if (!isValid) this.showError();
+          else this.hideError();
+        }
+
+        // 🔁 Local UI
+        this.updateFromCart(cart);
+        this.input.value = '';
+
+        // 🔔 GLOBAL sync (side cart + cart page)
+        document.dispatchEvent(
+          new CustomEvent('cart:updated', { detail: cart })
+        );
+
+      } catch (err) {
+        console.error('Discount error', err);
+        this.showError();
+      }
+    }
+
+    updateFromCart(cart) {
+  const codesMap = new Map();
+
+  // 1️⃣ ORDER-level discount codes
+  cart.discount_codes?.forEach(d => {
+    if (d.applicable) {
+      codesMap.set(d.code, { scope: 'order' });
+    }
+  });
+
+  // 2️⃣ PRODUCT-level discount codes
+  cart.items.forEach(item => {
+    item.line_level_discount_allocations?.forEach(a => {
+      if (a.discount_application.type === 'discount_code') {
+        const title = a.discount_application.title;
+
+        // If not already marked as order-level
+        if (!codesMap.has(title)) {
+          codesMap.set(title, { scope: 'product' });
+        }
+      }
+    });
+  });
+
+  this.renderPills([...codesMap.entries()], cart);
+}
+
+
+    showError() {
+      this.querySelector('.discount-error')?.removeAttribute('hidden');
+    }
+
+    hideError() {
+      this.querySelector('.discount-error')?.setAttribute('hidden', '');
+    }
+
+    renderPills(entries) {
+  this.pills.innerHTML = '';
+
+  if (!entries.length) {
+    this.pills.hidden = true;
+    return;
+  }
+
+  this.pills.hidden = false;
+
+  entries.forEach(([code, meta]) => {
+    const li = document.createElement('li');
+    li.className = 'discount-pill';
+
+    li.innerHTML = `
+      <div class="discount-text">
+        <span>
+          <img src="https://cdn.shopify.com/s/files/1/0752/8015/4881/files/discount-icon.svg?v=1768204649"/>
+        </span>
+        Discount: ${code}
+        ${
+          meta.scope === 'order'
+            ? `<small class="discount-scope">Applied to entire order</small>`
+            : ''
+        }
+      </div>
+      <button type="button" class="discount-remove">Remove</button>
+    `;
+
+    li.querySelector('.discount-remove')
+      .addEventListener('click', () => this.applyDiscount(''));
+
+    this.pills.appendChild(li);
+  });
+}
+
+  }
+
+  customElements.define('discount-field', DiscountField);
+});
+</script>
+

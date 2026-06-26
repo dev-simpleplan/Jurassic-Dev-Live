@@ -1,0 +1,153 @@
+<div class="pair-with">
+  <div class="container">
+    <div class="freqIn">
+      <div class="heading">
+        <h2
+          data-aos="fade-up"
+          data-aos-duration="1000"
+          class="aos-init aos-animate">{{ section.settings.head }} {{ product.title }}
+        </h2>
+      </div>
+      <div class="freq-wrap"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+  const productId = {{ product.id }};
+  const container = document.querySelector(".freq-wrap");
+  const shopRoot = window.Shopify?.routes?.root || '/';
+
+  if (!container) return;
+
+  // 🔹 Fetch recommended products
+  fetch(`/recommendations/products.json?product_id=${productId}&limit=16`)
+    .then((res) => res.json())
+    .then((data) => {
+      const filteredProducts = data.products
+        .filter((p) => p.id !== productId)
+        .slice(0, 3);
+
+      container.innerHTML = "";
+
+      filteredProducts.forEach((product) => {
+        const localizedProductUrl = new URL(`${shopRoot}products/${product.handle}`, window.location.origin);
+        localizedProductUrl.searchParams.set('section_id', 'product-card-primary');
+
+        fetch(localizedProductUrl.toString())
+          .then((res) => res.text())
+          .then((html) => {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(html, "text/html");
+            const card = doc.querySelector(".product-card-primary");
+
+            if (card) {
+              // ✅ Add data-product-id for cart script filtering
+              card.setAttribute("data-product-id", product.id);
+              container.appendChild(card);
+
+              if (typeof syncSelectedDropdownItem === 'function') {
+                const dropdown = card.querySelector('.wrapper-dropdown');
+                if (dropdown) syncSelectedDropdownItem(dropdown);
+              }
+
+              if (typeof window.bindProductCardAddForms === 'function') {
+                window.bindProductCardAddForms(card);
+              }
+
+              initVariantLogic(card);
+              if (typeof window.initializeCartFunction === 'function') {
+                window.initializeCartFunction();
+              }
+            }
+          })
+          .catch((err) => console.error("Error loading product card:", err));
+      });
+    })
+    .catch((err) => console.error("Error fetching recommendations:", err));
+  });
+
+  /* -------------------------------
+   * VARIANT LOGIC (Reusable Function)
+   * ------------------------------- */
+  function initVariantLogic(card) {
+  const variantItems = card.querySelectorAll(".fc_variant_item");
+  const sellingPrice = card.querySelector(".selling_price");
+  const comparePrice = card.querySelector("strike");
+  const addToCartInput = card.querySelector('input[name="id"]');
+  const trustText = card.querySelector(".fc_trust_text p");
+  const mainImg = card.querySelector(".fc_image .main_img");
+  const perKg = card.querySelector(".fc_weight");
+
+  variantItems.forEach((variant) => {
+    variant.addEventListener("click", () => {
+      variantItems.forEach((v) => v.classList.remove("active"));
+      variant.classList.add("active");
+
+      const price = variant.dataset.price;
+      const compare = variant.dataset.compare;
+      const inventory = variant.dataset.inventory;
+      const variantId = variant.dataset.id;
+      const image = variant.dataset.image;
+      const perKgfinal = variant.dataset.unit;
+
+      if (sellingPrice) sellingPrice.textContent = price;
+      if (comparePrice) {
+        if (compare && compare !== price) {
+          comparePrice.textContent = compare;
+          comparePrice.style.display = "inline";
+        } else {
+          comparePrice.style.display = "none";
+        }
+      }
+
+      if (addToCartInput) addToCartInput.value = variantId;
+      if (trustText) {
+        const inventoryQty = parseInt(inventory, 10) || 0;
+        const inventoryTemplate = window.themeStrings?.inventoryStatus || 'Only __COUNT__ left';
+        trustText.textContent = inventoryQty <= 0
+          ? (window.themeStrings?.outOfStock || 'Out of stock')
+          : inventoryQty < 100
+            ? inventoryTemplate.replace('__COUNT__', inventoryQty)
+            : (window.themeStrings?.inStock || 'In stock');
+        trustText.classList.toggle("low-stock", inventoryQty > 0 && inventoryQty < 100);
+      }
+      if (image && mainImg) mainImg.src = image;
+      if (perKg) {
+        if (perKgfinal) {
+          perKg.textContent = perKgfinal;
+          perKg.style.display = "";
+        } else {
+          perKg.textContent = "";
+          perKg.style.display = "none";
+        }
+      }
+    });
+  });
+  }
+</script>
+
+
+{% schema %}
+  {
+    "name": "Pair With",
+    "tag": "section",
+    "class": "pair-with",
+    "settings": [
+      {
+        "type": "textarea",
+        "id": "head",
+        "label": "Heading before product title",
+        "default": "Frequently Bought<br>Together with"
+      }
+    ],
+    "presets": [
+      {
+        "name": "Pair With",
+        "settings": {
+        }
+      }
+    ]
+  }
+{% endschema %}

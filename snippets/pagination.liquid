@@ -1,0 +1,31 @@
+{% if pagination.pages > 0 %}
+  <nav role="navigation" class="pagination">
+    {% if pagination.previous %}
+      <a href="{{ pagination.previous.url }}" class="pag-btn">
+        <img
+          src="https://cdn.shopify.com/s/files/1/0752/8015/4881/files/Vector_1.svg?v=1762172404"
+          alt=""
+          class="icon">
+      </a>
+    {% endif %}
+
+    <div class="pag-numbers">
+      {% for part in pagination.parts %}
+        {% if part.is_link %}
+          <a href="{{ part.url }}">{{ part.title }}</a>
+        {% else %}
+          <span class="active">{{ part.title }}</span>
+        {% endif %}
+      {% endfor %}
+    </div>
+
+    {% if pagination.next %}
+      <a href="{{ pagination.next.url }}" class="pag-btn">
+        <img
+          src="https://cdn.shopify.com/s/files/1/0752/8015/4881/files/Vector.svg?v=1762172371"
+          alt=""
+          class="icon">
+      </a>
+    {% endif %}
+  </nav>
+{% endif %}

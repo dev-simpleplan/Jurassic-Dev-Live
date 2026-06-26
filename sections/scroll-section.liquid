@@ -1,0 +1,576 @@
+<section class="scroll-sec">
+    <div class="scroll-nav">
+        <button class="scroll-arrow prev" aria-label="Scroll Left">{% render 'arrow-prev' %}</button>
+        <button class="scroll-arrow next" aria-label="Scroll Right">{% render 'arrow-next' %}</button>
+    </div>
+    <div class="scrollsec-wrapper">
+        {% for block in section.blocks %}
+            {% if block.type == 'slide1' %}
+                <div class="scrollsec-slide slide_1">
+                    <div class="scrollsecslide-in">
+                        <div class="container-fluid">
+                            <div class="slide1-wrap">
+                                <div class="sw-first-left">
+                                    <h2>{{section.settings.section_heading}}</h2>
+                                    <p>{{section.settings.section_subheading}}</p>
+                                </div>
+                                <div class="sw-first-right">
+                                    <div class="swfr-in">
+                                        <div class="swright-top">
+                                            <div class="swrt-image">
+                                                <img src="{{ block.settings.main_image |  img_url: 'master' }}" alt="">
+                                                <div class="swrt-scroll">
+                                                    <img src="{{ block.settings.scroll_image |  img_url: 'master' }}" alt="">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="swright-bottom">
+                                            <h3>{{ block.settings.side_heading }}</h3>
+                                            <p class="small">{{ block.settings.side_content }}​​</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% elsif block.type == 'slide2' %}
+                <div class="scrollsec-slide slide_2">
+                    <div class="scrollsecslide-in">
+                        <div class="container-fluid">
+                            <div class="slide2-wrap">
+                                <div class="sw-second-left">
+                                    <div class="sws-image">
+                                        <img src="{{ block.settings.main_image |  img_url: 'master' }}" alt="">
+                                    </div>
+                                    <div class="sws-content">
+                                        <p>{{ block.settings.image_label }}</p>
+                                    </div>
+                                </div>
+                                <div class="sw-second-right">
+                                    <div class="sws-heading">
+                                        <h3>{{ block.settings.side_heading }}</h3>
+                                        <p class="small">{{ block.settings.side_content }}</p>
+                                    </div>
+                                    <div class="sws-fruits">
+                                        <div class="swsfruits-item fruit1">
+                                            <img src="{{ block.settings.fruit1 | img_url: 'master' }}" alt="">
+                                        </div>
+                                        <div class="swsfruits-item fruit2">
+                                            <img src="{{ block.settings.fruit2 | img_url: 'master' }}" alt="">
+                                        </div>
+                                        <div class="swsfruits-item fruit3">
+                                            <img src="{{ block.settings.fruit3 | img_url: 'master' }}" alt="">
+                                        </div>
+                                        <div class="swsfruits-item fruit4">
+                                            <img src="{{ block.settings.fruit4 | img_url: 'master' }}" alt="">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% elsif block.type == 'slide3' %}
+                <div class="scrollsec-slide slide_3">
+                    <div class="scrollsecslide-in">
+                        <div class="container-fluid">
+                            <div class="slide3-wrap">
+                                <div class="sw-three-left">
+                                    <div class="swfr-in">
+                                        <div class="swright-top">
+                                            <div class="sidetop-text">{{ block.settings.image_label }}</div>
+                                            <div class="swrt-image">
+                                                <img src="{{ block.settings.side_image |  img_url: 'master' }}" alt="">
+                                                <div class="swrt-scroll">
+                                                    <img src="{{ block.settings.scroll_image |  img_url: 'master' }}" alt="">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="swright-bottom">
+                                            <h3>{{ block.settings.side_heading }}</h3>
+                                            <p class="small">{{ block.settings.side_content }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="sw-three-right sw-second-left">
+                                    <div class="sws-image">
+                                        <img src="{{ block.settings.main_image |  img_url: 'master' }}" alt="">
+                                    </div>
+                                    <div class="sws-content">
+                                        <p>{{ block.settings.main_image_label }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% elsif block.type == 'slide4' %}
+                <div class="scrollsec-slide slide_4">
+                    <div class="scrollsecslide-in">
+                        <div class="container-fluid">
+                            <div class="slide4-wrap">
+                                <div class="sw-four-left">
+                                    <div class="sws-heading">
+                                        <h3>{{ block.settings.left_heading }}</h3>
+                                        <p class="small">{{ block.settings.left_content }}</p>
+                                    </div>
+                                </div>
+                                <div class="sw-four-right">
+                                    <div class="swfr-in">
+                                        <div class="swright-top">
+                                            <div class="sidetop-text">{{ block.settings.side_image_label }}</div>
+                                            <div class="swrt-image">
+                                                <img src="{{ block.settings.main_image |  img_url: 'master' }}" alt="">
+                                            </div>
+                                        </div>
+                                        <div class="swright-bottom">
+                                            <h3>{{ block.settings.side_heading }}</h3>
+                                            <p class="small">{{ block.settings.side_content }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        {% endfor %}
+    </div>
+
+    <div class="scrollsec-slider">
+        <div class="container">
+            <div class="scs-slider">
+                <div class="scsslider-heading">
+                    <div class="heading center small-width">
+                        <h2>{{section.settings.section_heading}}</h2>
+                        <p>{{section.settings.section_subheading}}</p>
+                    </div>
+                </div>
+                <div class="owl-carousel owl-theme">
+                    {% for block in section.blocks %}
+                        {% if block.type == 'slide1' %}
+                            <div class="item">
+                                <div class="scs-item">
+                                    <div class="scs-in">
+                                        <div class="scs-top">
+                                            <div class="scs-image">
+                                                <img src="{{ block.settings.main_image |  img_url:'master' }}" alt="">
+                                            </div>
+                                        </div>
+                                        <div class="scs-bottom">
+                                            <div class="swsb-heading">
+                                                <h4>{{ block.settings.side_heading }}</h4>
+                                            </div>
+                                            <div class="swsb-para">
+                                                <p>{{ block.settings.side_content }}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% elsif block.type == 'slide2' %}
+                            <div class="item">
+                                <div class="scs-item">
+                                    <div class="scs-in">
+                                        <div class="scs-top">
+                                            <div class="scs-image">
+                                                <img src="{{ block.settings.main_image |  img_url:'master' }}" alt="">
+                                            </div>
+                                            <div class="scs-image-label">
+                                                <p>{{ block.settings.image_label }}</p>
+                                            </div>
+                                        </div>
+                                        <div class="scs-bottom">
+                                            <div class="swsb-heading">
+                                                <h4>{{ block.settings.side_heading }}</h4>
+                                            </div>
+                                            <div class="swsb-para">
+                                                <p>{{ block.settings.side_content }}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% elsif block.type == 'slide3' %}
+                            <div class="item">
+                                <div class="scs-item">
+                                    <div class="scs-in">
+                                        <div class="scs-top">
+                                            <div class="scs-image">
+                                                <img src="{{ block.settings.side_image |  img_url:'master' }}" alt="">
+                                            </div>
+                                            <div class="scs-image-label">
+                                                <p>{{ block.settings.image_label }}</p>
+                                            </div>
+                                        </div>
+                                        <div class="scs-bottom">
+                                            <div class="swsb-heading">
+                                                <h4>{{ block.settings.side_heading }}</h4>
+                                            </div>
+                                            <div class="swsb-para">
+                                                <p>{{ block.settings.side_content }}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="item">
+                                <div class="scs-item">
+                                    <div class="scs-in">
+                                        <div class="scs-top">
+                                            <div class="scs-image">
+                                                <img src="{{ block.settings.main_image |  img_url:'master' }}" alt="">
+                                            </div>
+                                            <div class="scs-image-label">
+                                                <p>{{ block.settings.main_image_label }}</p>
+                                            </div>
+                                        </div>
+                                        <div class="scs-bottom">
+                                            <div class="swsb-heading">
+                                                <h4>{{ block.settings.image_heading }}</h4>
+                                            </div>
+                                            <div class="swsb-para">
+                                                <p>{{ block.settings.image_content }}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% elsif block.type == 'slide4' %}
+                            <div class="item">
+                                <div class="scs-item">
+                                    <div class="scs-in">
+                                        <div class="scs-top">
+                                            <div class="scs-image">
+                                                <img src="{{ block.settings.main_image |  img_url:'master' }}" alt="">
+                                            </div>
+                                            <div class="scs-image-label">
+                                                <p>{{ block.settings.side_image_label }}</p>
+                                            </div>
+                                        </div>
+                                        <div class="scs-bottom">
+                                            <div class="swsb-heading">
+                                                <h4>{{ block.settings.side_heading }}</h4>
+                                            </div>
+                                            <div class="swsb-para">
+                                                <p>{{ block.settings.side_content }}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<div class="custom-scrollbar-track">
+    <div class="custom-scrollbar-thumb"></div>
+</div>
+<style>
+    .scrollsec-wrapper {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+.scrollsec-wrapper::-webkit-scrollbar {
+    display: none;
+}
+.custom-scrollbar-track {
+    width: 80%;
+    height: 4px;
+    background: #e0e0e0;
+    border-radius: 2px;
+    margin: 0 auto;
+    margin-top: 20px;
+    position: relative;
+    cursor: pointer;
+}
+.custom-scrollbar-thumb {
+    height: 100%;
+    background: #1a1a1a;
+    border-radius: 2px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    cursor: grab;
+}
+@media screen and (max-width: 991px) {
+    .custom-scrollbar-track{
+        display: none;
+    }
+}
+</style>
+{% comment %} <script>
+    document.addEventListener("DOMContentLoaded", () => {
+    const wrapper = document.querySelector('.scrollsec-wrapper');
+    const nextBtn = document.querySelector('.scroll-arrow.next');
+    const prevBtn = document.querySelector('.scroll-arrow.prev');
+
+    if (!wrapper || !nextBtn || !prevBtn) return;
+
+    nextBtn.addEventListener('click', () => {
+        // Calculate the width of one slide
+        const slideWidth = wrapper.querySelector('.scrollsec-slide').offsetWidth;
+        wrapper.scrollBy({ left: slideWidth, behavior: 'smooth' });
+    });
+
+    prevBtn.addEventListener('click', () => {
+        const slideWidth = wrapper.querySelector('.scrollsec-slide').offsetWidth;
+        wrapper.scrollBy({ left: -slideWidth, behavior: 'smooth' });
+    });
+
+    // Optional: Hide/Show arrows at the start and end
+    wrapper.addEventListener('scroll', () => {
+        const maxScroll = wrapper.scrollWidth - wrapper.clientWidth;
+        prevBtn.style.opacity = wrapper.scrollLeft <= 0 ? "0.3" : "1";
+        nextBtn.style.opacity = wrapper.scrollLeft >= maxScroll ? "0.3" : "1";
+    });
+});
+</script> {% endcomment %}
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    const wrapper = document.querySelector('.scrollsec-wrapper');
+    const nextBtn = document.querySelector('.scroll-arrow.next');
+    const prevBtn = document.querySelector('.scroll-arrow.prev');
+    const track = document.querySelector('.custom-scrollbar-track');
+    const thumb = document.querySelector('.custom-scrollbar-thumb');
+
+    if (!wrapper || !nextBtn || !prevBtn || !track || !thumb) return;
+
+    function updateThumb() {
+        const ratio = wrapper.clientWidth / wrapper.scrollWidth;
+        const thumbWidth = Math.max(ratio * track.clientWidth, 30);
+        thumb.style.width = thumbWidth + 'px';
+        const maxScroll = wrapper.scrollWidth - wrapper.clientWidth;
+        const maxThumbLeft = track.clientWidth - thumbWidth;
+        thumb.style.left = maxScroll > 0 ? (wrapper.scrollLeft / maxScroll) * maxThumbLeft + 'px' : '0px';
+    }
+
+    wrapper.addEventListener('scroll', () => {
+        updateThumb();
+        const maxScroll = wrapper.scrollWidth - wrapper.clientWidth;
+        prevBtn.style.opacity = wrapper.scrollLeft <= 0 ? "0.3" : "1";
+        nextBtn.style.opacity = wrapper.scrollLeft >= maxScroll ? "0.3" : "1";
+    });
+
+    track.addEventListener('click', (e) => {
+        if (e.target === thumb) return;
+        const rect = track.getBoundingClientRect();
+        const ratio = (e.clientX - rect.left) / track.clientWidth;
+        wrapper.scrollTo({ left: ratio * (wrapper.scrollWidth - wrapper.clientWidth), behavior: 'smooth' });
+    });
+
+    let isDragging = false, startX = 0, startScrollLeft = 0;
+    thumb.addEventListener('mousedown', (e) => {
+        isDragging = true; startX = e.clientX; startScrollLeft = wrapper.scrollLeft;
+        document.body.style.userSelect = 'none';
+    });
+    document.addEventListener('mousemove', (e) => {
+        if (!isDragging) return;
+        const maxThumbLeft = track.clientWidth - thumb.clientWidth;
+        const maxScroll = wrapper.scrollWidth - wrapper.clientWidth;
+        wrapper.scrollLeft = startScrollLeft + ((e.clientX - startX) / maxThumbLeft) * maxScroll;
+    });
+    document.addEventListener('mouseup', () => {
+        isDragging = false; document.body.style.userSelect = '';
+    });
+
+    nextBtn.addEventListener('click', () => {
+        wrapper.scrollBy({ left: wrapper.querySelector('.scrollsec-slide').offsetWidth, behavior: 'smooth' });
+    });
+    prevBtn.addEventListener('click', () => {
+        wrapper.scrollBy({ left: -wrapper.querySelector('.scrollsec-slide').offsetWidth, behavior: 'smooth' });
+    });
+
+    updateThumb();
+    window.addEventListener('resize', updateThumb);
+});
+</script>
+{% schema %}
+{
+  "name": "Scroll Section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "section_heading",
+      "label": "Section Heading",
+      "default": "This Is What Wild Tastes Like"
+    },
+    {
+      "type": "textarea",
+      "id": "section_subheading",
+      "label": "Section Subheading",
+      "default": "Taste the difference in every bite — harvested at the peak of ripeness, delivered at the peak of freshness."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "slide1",
+      "name": "Slide 1",
+      "settings": [
+        { 
+            "type": "text", 
+            "id": "side_heading", 
+            "label": "Side Heading", 
+            "default": "Grown with Purpose"
+        },
+        { 
+            "type": "textarea", 
+            "id": "side_content", 
+            "label": "Side Content", 
+            "default": "We partner directly with small-scale farmers who care deeply for their land..." 
+        },
+            { "type": "image_picker", 
+            "id": "main_image", 
+            "label": "Main Image" 
+        },
+            { "type": "image_picker", 
+            "id": "scroll_image", 
+            "label": "Scroll Image" 
+        }
+      ]
+    },
+    {
+      "type": "slide2",
+      "name": "Slide 2",
+      "settings": [
+        { "type": "text", 
+            "id": "side_heading", 
+            "label": "Side Heading", 
+            "default": "Chemical-Free and Organic" 
+        },
+        { "type": "textarea",
+            "id": "side_content", 
+            "label": "Side Content", 
+            "default": "Many of our fruits are organically certified..." 
+        },
+        { "type": "image_picker", 
+            "id": "main_image", 
+            "label": "Main Image" 
+        },
+        { "type": "text", 
+            "id": "image_label", 
+            "label": "Image Label", 
+            "default": "No Chemicals. No Compromises." 
+        },
+        { "type": "image_picker", 
+            "id": "fruit1", 
+            "label": "Fruit 1" 
+        },
+        { "type": "image_picker", 
+            "id": "fruit2", 
+            "label": "Fruit 2" 
+        },
+            { "type": "image_picker", 
+            "id": "fruit3", 
+            "label": "Fruit 3" 
+        },
+        { "type": "image_picker",
+            "id": "fruit4", 
+            "label": "Fruit 4" 
+        }
+      ]
+    },
+    {
+      "type": "slide3",
+      "name": "Slide 3",
+      "settings": [
+        { "type": "text", 
+            "id": "side_heading", 
+            "label": "Side Heading",
+            "default": "Picked After You Click"
+        },
+        { "type": "textarea", 
+            "id": "side_content", 
+            "label": "Side Content", 
+            "default": "When you place your order before Thursday at 8:00 PM..."
+        },
+            { "type": "image_picker", 
+            "id": "main_image", 
+            "label": "Main Image"
+        },
+        { "type": "text", 
+            "id": "image_label", 
+            "label": "Image Label Text",
+            "default": "Harvested only after you order"
+        },
+        { "type": "text", 
+            "id": "image_heading", 
+            "label": "Main Image Heading Mobile",
+            "default": "Harvested at Full Maturity"
+        },
+        { "type": "textarea", 
+            "id": "image_content", 
+            "label": "Main Image Content Mobile", 
+            "default": "Unlike supermarket fruit, ours are harvested at physiological maturity—when nutrients and flavor are fully developed. Some fruits (like avocados or bananas) ripen post-harvest, so we ship them slightly firm. This ensures they arrive safe and natural, needing just 2–3 days at room temperature to reach perfect ripeness—no chemicals, no shortcuts."
+        },
+            { "type": "image_picker", 
+            "id": "scroll_image", 
+            "label": "Scroll Image" 
+        },
+            { "type": "image_picker", 
+            "id": "side_image",
+            "label": "Side Image" 
+        },
+        { "type": "text", 
+            "id": "main_image_label", 
+            "label": "Main Image Label",
+            "default": "Picked at peak natural ripeness"
+        }
+      ]
+    },
+    {
+      "type": "slide4",
+      "name": "Slide 4",
+      "settings": [
+        { 
+            "type": "text",
+            "id": "left_heading",
+            "label": "Left Heading",
+            "default": "Ultra-Fresh Delivery"
+        },
+        { 
+            "type": "textarea",
+            "id": "left_content",
+            "label": "Left Content",
+            "default": "From the moment you place an order, your fruits are harvested, packed, and shipped..."
+        },
+        { 
+            "type": "image_picker",
+            "id": "main_image",
+            "label": "Side Image" 
+        },
+        { 
+            "type": "text",
+            "id": "side_heading",
+            "label": "Side Heading",
+            "default": "Ultra-Fresh Delivery"
+        },
+        { 
+            "type": "textarea",
+            "id": "side_content",
+            "label": "Side Content",
+            "default": "From the moment you place an order, your fruits are harvested, packed, and shipped..."
+        },
+        { 
+            "type": "text",
+            "id": "side_image_label",
+            "label": "Side Image Label",
+            "default": "Reaches you in 5-6 days"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Scroll Section Fixed Slides",
+      "category": "Sections"
+    }
+  ]
+}
+{% endschema %}
+
+

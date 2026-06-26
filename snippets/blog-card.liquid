@@ -1,0 +1,42 @@
+<div class="blog-card" data-title="{{ article.title | downcase }}" 
+     data-tags="{{ article.tags | join: ',' | downcase }}">
+   <a href="{{ article.url }}">
+    <div class="blog-card-wrap">
+         <div class="bc-image">
+        <div class="bf-image">
+            {% if article.image %}
+            <img src="{{ article.image | img_url: '900x' }}" alt="{{ article.title }}" class="img">
+            {% else %}
+            <img src="{{ 'placeholder.jpg' | asset_url }}" class="img">
+            {% endif %}
+        </div>
+        {% if article.metafields.custom.read_time != blank %}
+            <p class="read-time-tag">{{ article.metafields.custom.read_time }} Min Read</p>
+        {% endif %}
+    </div>
+
+    <div class="bc-content">
+        <div class="bcc-top">
+            <p class="bc-ct-tags">
+                <span>{{ blog.title }}</span>
+
+                {% if article.tags.size > 0 %}
+                {% for tag in article.tags %}
+                <span> • {{ tag | upcase }}</span>
+                {% endfor %}
+                {% endif %}
+            </p>
+        </div>
+        <div class="bcc-bottom">
+            <p class="bc-ct-title">
+            {{ article.title }}
+            </p>
+
+            <p class="bc-ct-para">
+                {{ article.excerpt_or_content | strip_html | truncate: 120 }}
+            </p>
+        </div>
+    </div>
+    </div>
+   </a>
+</div>

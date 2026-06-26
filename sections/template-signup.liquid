@@ -1,0 +1,117 @@
+<section class="login-signup-template">
+  <div class="log-form-wrap">
+    <div class="container">
+      <div class="log-form-con">
+        <div class="head">
+          <h1>{{ section.settings.head }}</h1>
+        </div>
+        <div class="log-form">
+          {% form 'create_customer' %}
+            {% if form.errors %}
+              {{ form.errors | default_errors }}
+            {% endif %}
+            <div class="form-con-wrap">
+              <div class="form-con">
+                <label for="full-name">Full name*
+                </label>
+                <input
+                  type="text"
+                  name="customer[first_name]"
+                  placeholder="John Doe"
+                  id="full-name"
+                  required />
+              </div>
+              <div class="form-con">
+                <label for="email">EMAIL ADDRESS<sup>*</sup>
+                </label>
+                <input
+                  type="email"
+                  name="customer[email]"
+                  placeholder="Enter your email address"
+                  id="email"
+                  required
+                  autocomplete=false
+                  pattern="[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,}$" />
+              </div>
+              <div class="form-con">
+                <label for="password">password<sup>*</sup>
+                </label>
+                <input
+                  type="password"
+                  name="customer[password]"
+                  id="password"
+                  placeholder="Enter Password"
+                  required
+                  autocomplete="off"
+                  pattern=".{8,}"
+                  title="8+ characters" />
+              </div>
+            </div>
+            <div class="form-con checkbox">
+              <input
+                type="checkbox"
+                name="customer[accepts_terms_conditions]"
+                id="accepts_terms_conditions"
+                required>
+              <label for="accepts_terms_conditions">I agree to
+                <a href="{{ section.settings.page.url }}">terms of service</a>
+              </label>
+            </div>
+            <div class="form-con submit-but">
+              <button class="" type="submit" id="signup-button" disabled>
+                SignUp
+              </button>
+            </div>
+          {% endform %}
+          <div class="cc-signup">
+            Have an account? {{ 'Login' | customer_login_link }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="log-img">
+    <img src="{{ section.settings.bg-img |  img_url: 'master' }}" alt="">
+  </div>
+</section>
+
+<script>
+  $(document).ready(function(){
+    $(".forgot-password").click(function(){
+      $(".forget").addClass('active');
+      $(".log-form-con").addClass('hide');
+    });
+
+    // Add event listener for the terms checkbox
+    $("#accepts_terms_conditions").change(function() {
+      $("#signup-button").prop("disabled", !this.checked);
+    });
+  });
+</script>
+
+{% schema %}
+  {
+    "name": "SignUp",
+    "settings": [
+      {
+        "type": "text",
+        "id": "head",
+        "label": "Heading",
+        "default": "Get Started Now"
+      }, {
+        "type": "image_picker",
+        "id": "bg-img",
+        "label": "Image"
+      }, {
+        "type": "page",
+        "id": "page",
+        "label": "Select terms and condition"
+      }, {
+        "type": "text",
+        "id": "fp-head",
+        "label": "Forget Password Heading",
+        "default": "Forgot Password"
+      }
+    ]
+  }
+{% endschema %}

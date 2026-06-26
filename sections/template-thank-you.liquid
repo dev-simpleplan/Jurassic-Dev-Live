@@ -1,0 +1,89 @@
+{% liquid
+  assign thank_you_heading = 'Thank you'
+  assign thank_you_subheading = 'Your form was successfully submitted.'
+  assign thank_you_body_intro = 'Welcome in.'
+  assign thank_you_body_text = 'You’ll now hear about rare finds, fresh arrivals, and what’s truly worth trying. We’ll only reach out when it matters.'
+  assign thank_you_cta = 'Go Back To Homepage'
+
+  case request.locale.iso_code
+    when 'de'
+      assign thank_you_heading = 'Danke'
+      assign thank_you_subheading = 'Ihr Formular wurde erfolgreich übermittelt.'
+      assign thank_you_body_intro = 'Willkommen bei uns.'
+      assign thank_you_body_text = 'Sie erfahren jetzt von seltenen Entdeckungen, frischen Neuheiten und allem, was sich wirklich zu probieren lohnt. Wir melden uns nur, wenn es wirklich etwas zu sagen gibt.'
+      assign thank_you_cta = 'Zurück zur Startseite'
+    when 'fr'
+      assign thank_you_heading = 'Merci'
+      assign thank_you_subheading = 'Votre formulaire a été envoyé avec succès.'
+      assign thank_you_body_intro = 'Bienvenue chez nous.'
+      assign thank_you_body_text = 'Vous recevrez désormais nos découvertes rares, nos arrivages frais et ce qui vaut vraiment la peine d’être goûté. Nous vous écrirons seulement lorsque cela en vaut la peine.'
+      assign thank_you_cta = 'Retour à l’accueil'
+  endcase
+%}
+
+<section class="error-template">
+  <div class="et-bg">
+        <img src="https://cdn.shopify.com/s/files/1/0752/8015/4881/files/Vector_-_2025-12-08T192241.263.svg?v=1765201976" alt="">
+    </div>
+  <div class="container">
+    <div class="et-data">
+        <div class="etd-heading">
+            <h1>{{ thank_you_heading }}</h1>
+            <p>{{ thank_you_subheading }}</p>
+        </div>
+        <div class="etd-desc">
+            <p>
+              <strong>{{ thank_you_body_intro }}</strong>
+              {{ thank_you_body_text }}
+            </p>
+        </div>
+        <div class="etd-button">
+            {% if section.settings.cta-url.url != blank and section.settings.cta-txt != blank %}
+            <a href="{{ section.settings.cta-url.url }}" class="line-btn dark">
+                {{ section.settings.cta-txt }}
+            </a>
+            {% else %}
+            <a href="{{ routes.root_url }}" class="line-btn dark">
+                {{ thank_you_cta }}
+            </a>
+            {% endif %}
+        </div>
+        <div class="etd-logo">
+            <img src="https://cdn.shopify.com/s/files/1/0752/8015/4881/files/Group_66.svg?v=1765202267" alt="">
+        </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+  {
+    "name": "Thank You",
+    "settings": [
+      {
+        "type": "text",
+        "id": "head",
+        "label": "Heading"
+      },
+      {
+        "type": "text",
+        "id": "subhead",
+        "label": "Sub Heading"
+      }, 
+      {
+        "type": "richtext",
+        "id": "text",
+        "label": "Description"
+      }, 
+      {
+        "type": "text",
+        "id": "cta-txt",
+        "label": "Button Text"
+      }, 
+      {
+        "type": "page",
+        "id": "cta-url",
+        "label": "Select Page"
+      }
+    ]
+  }
+{% endschema %}

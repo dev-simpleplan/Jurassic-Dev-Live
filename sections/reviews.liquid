@@ -1,0 +1,101 @@
+<section class="c_reviews">
+    <div class="container">
+        <div class="heading center">
+            <h2 data-aos="fade-up" data-aos-duration="1000">{{ section.settings.heading }}</h2>
+        </div>
+    </div>
+    <div class="creviews-slider">
+        <div class="crs-in">
+            <div class="bxslider review_slider">
+                {% for block in section.blocks %}
+                <div class="reviewslider_item">
+                    <div class="rsi-in">
+                        <div class="rsi-top">
+                            <div class="rsitop-data">
+                                <div class="rsit-image">
+                                    <img class="icon" src="{{ block.settings.user_image | img_url: 'master' }}" alt="{{ block.settings.user_name }}">
+                                </div>
+                                <div class="rsit-review">
+                                    {% render 'rating-stars-fa', rating: block.settings.review_star %}
+                                    <div class="rating-text" aria-hidden="true">{{ block.settings.review_star }}</div>
+                                </div>
+                            </div>
+                            <div class="rsibottom-data">
+                                <div class="rsi-comma">
+                                    {% render 'icon-comma' %}
+                                </div>
+                                <div class="rsi-comment">
+                                    <p>{{ block.settings.comment }}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="rsi-bottom">
+                            <div class="rsi-username"><p>{{ block.settings.user_name }}</p></div>
+                            <div class="rsi-desig"><p>{{ block.settings.user_desig }}</p></div>
+                        </div>
+                        
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</section>
+
+
+{% schema %}
+{
+  "name": "Reviews",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Section Heading",
+      "default": "What Explorers Are Saying"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "review_item",
+      "name": "Review Item",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "user_image",
+          "label": "User Image"
+        },
+        {
+          "type": "text",
+          "id": "comment",
+          "label": "User Comment"
+        },
+        {
+          "type": "range",
+          "id": "review_star",
+          "min": 0,
+          "max": 5,
+          "step": 0.1,
+          "label": "Star Ratings",
+          "default": 4.7
+        },
+        {
+          "type": "text",
+          "id": "user_name",
+          "label": "User Name"
+        },
+        {
+          "type": "text",
+          "id": "user_desig",
+          "label": "User Designation"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Reviews Section",
+      "category": "Testimonials"
+    }
+  ]
+}
+{% endschema %}

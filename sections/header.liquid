@@ -1,0 +1,763 @@
+{% comment %} {% if blog and blog.handle == 'news' %}
+  <header class="site-header header-bg" data-ajax-cart-section>
+{% else %}
+  <header class="site-header" data-ajax-cart-section>
+{% endif %} {% endcomment %}
+<header class="site-header" data-ajax-cart-section>
+  <div class="container">
+    <div class="desktop-header">
+      <div class="header-in">
+        <div class="h-left">
+          <div class="hamburger">
+          <div class="open">
+            {% render 'icon-menu' %}
+          </div>
+          <div class="close" style="display: none;">
+            {% render 'icon-close' %}
+          </div>
+        </div>
+          <div class="brand-logo mob-none flex">
+            <a href="{{ routes.root_url }}">
+              {% if section.settings.select_logo %}
+                <img
+                  src="{{ section.settings.select_logo | image_url }}"
+                  alt="{{ shop.name | escape }}"
+                  class="icon">
+              {% else %}
+                {{ shop.name }}
+              {% endif %}
+            </a>
+          </div>
+        </div>
+
+        <div class="h-nav" id="mySidenav">
+          <div class="hnav-menu">
+            <ul>
+              {% assign menu_right = section.blocks | where: 'type', 'nav_menu_right' %}
+              {% for block in menu_right %}
+                {%- comment -%} Resolve the selected menu safely (OS 2.0 & older) {%- endcomment -%}
+                {%- assign selected_menu = menus[block.settings.nav_items_right] -%}
+                {%- if selected_menu == blank -%}
+                  {%- assign selected_menu = linklists[block.settings.nav_items_right] -%}
+                {%- endif -%}
+
+                {%- if selected_menu and selected_menu.links and selected_menu.links.size > 0 -%}
+                  {%- assign nav_links = selected_menu.links -%}
+                  {%- assign selected_menu_title_downcase = selected_menu.title | downcase | strip -%}
+                  {%- assign selected_menu_url = selected_menu.url | default: 'javascript:void()' -%}
+
+                  {%- if selected_menu_title_downcase == 'wieder kaufen' or selected_menu_title_downcase == 'buy again' -%}
+                    {%- assign selected_menu_url = routes.account_url -%}
+                  {%- endif -%}
+
+                  {%- comment -%} Determine if we need a dropdown {%- endcomment -%}
+                  {%- assign top_count   = nav_links.size -%}
+                  {%- assign has_children = false -%}
+                  {%- for l in nav_links -%}
+                    {%- if l.links and l.links.size > 0 -%}
+                      {%- assign has_children = true -%}
+                      {%- break -%}
+                    {%- endif -%}
+                  {%- endfor -%}
+
+                  {%- assign needs_dropdown = false -%}
+                  {%- if top_count > 1 or has_children -%}
+                    {%- assign needs_dropdown = true -%}
+                  {%- endif -%}
+
+                  {%- if needs_dropdown -%}
+                    <li class="nav-item has-mega-menu">
+                      <div class="arrow">
+                        <a href="{{ selected_menu_url }}" class="nav-link">
+                          {{ selected_menu.title | default: 'Menu' }}
+                        </a>
+                        <span class="nav_arrow_down">{% render 'icon-arrow_down' %}</span>
+                      </div>
+
+                      <div class="mega-menu">
+                        <div class="container">
+                          <div class="mobile-flat-links">
+                            {%- for link in nav_links -%}
+                              {%- if link.links and link.links.size > 0 -%}
+                                {%- for sublink in link.links -%}
+                                  <a href="{{ sublink.url }}" class="mobile-flat-link">
+                                    <div class="link-flex">
+                                      {%- if sublink.type == 'collection_link' or sublink.type == 'product_link' -%}
+                                        {%- assign nav_image = blank -%}
+                                        {%- if sublink.type == 'collection_link' -%}
+                                          {%- assign nav_image = sublink.object.image -%}
+                                        {%- elsif sublink.type == 'product_link' -%}
+                                          {%- assign nav_image = sublink.object.featured_image -%}
+                                        {%- endif -%}
+
+                                        {%- if nav_image != blank -%}
+                                          <div class="lf-image">
+                                            <img
+                                              src="{{ nav_image | image_url: width: 150, height: 150, crop: 'center' }}"
+                                              alt="{{ sublink.title | escape }}"
+                                              loading="lazy">
+                                          </div>
+                                        {%- endif -%}
+                                      {%- endif -%}
+
+                                      <div class="lf-text">{{ sublink.title }}</div>
+                                    </div>
+                                  </a>
+                                {%- endfor -%}
+                              {%- else -%}
+                                {%- assign nav_link_title_downcase = link.title | downcase | strip -%}
+                                {%- assign nav_link_url = link.url -%}
+                                {%- if nav_link_title_downcase == 'wieder kaufen' or nav_link_title_downcase == 'buy again' -%}
+                                  {%- assign nav_link_url = routes.account_url -%}
+                                {%- endif -%}
+
+                                <a href="{{ nav_link_url }}" class="mobile-flat-link">
+                                  <div class="link-flex">
+                                    {%- if link.type == 'collection_link' or link.type == 'product_link' -%}
+                                      {%- assign nav_image = blank -%}
+                                      {%- if link.type == 'collection_link' -%}
+                                        {%- assign nav_image = link.object.image -%}
+                                      {%- elsif link.type == 'product_link' -%}
+                                        {%- assign nav_image = link.object.featured_image -%}
+                                      {%- endif -%}
+
+                                      {%- if nav_image != blank -%}
+                                        <div class="lf-image">
+                                          <img
+                                            src="{{ nav_image | image_url: width: 150, height: 150, crop: 'center' }}"
+                                            alt="{{ link.title | escape }}"
+                                            loading="lazy">
+                                        </div>
+                                      {%- endif -%}
+                                    {%- endif -%}
+
+                                    <div class="lf-text">{{ link.title }}</div>
+                                  </div>
+                                </a>
+                              {%- endif -%}
+                            {%- endfor -%}
+                          </div>
+
+                          <div class="mega-menu-split">
+                            {%- comment -%} LEFT: groups with children {%- endcomment -%}
+                            {%- assign any_child_groups = false -%}
+                            {%- for link in nav_links -%}
+                              {%- if link.links and link.links.size > 0 -%}
+                                {%- assign any_child_groups = true -%}
+                                {%- break -%}
+                              {%- endif -%}
+                            {%- endfor -%}
+
+                            
+                              <div class="mms-left">
+                                {%- if any_child_groups -%}
+                                {%- for link in nav_links -%}
+                                  {%- if link.links and link.links.size > 0 -%}
+                                  {%- assign child_count = link.links.size -%}
+
+                                  {%- if child_count < 6 -%}
+                                    <div class="child-block-straight">
+                                  {%- else -%}
+                                    <div class="child-block">
+                                  {%- endif -%}
+
+                                      {% comment %} <p class="links-heading">{{ link.title }}</p> {% endcomment %}
+                                      <ul>
+                                        {%- for sublink in link.links -%}
+                                          <li>
+                                            <a href="{{ sublink.url }}">
+                                              <div class="link-flex">
+                                                {%- comment -%} 
+                                                  Only attempt to render the image container if the link is a Product or Collection.
+                                                  Pages, Blogs, and Search links will skip this block.
+                                                {%- endcomment -%}
+                                                {%- if sublink.type == 'collection_link' or sublink.type == 'product_link' -%}
+                                                  
+                                                  {%- assign nav_image = blank -%}
+                                                  {%- if sublink.type == 'collection_link' -%}
+                                                    {%- assign nav_image = sublink.object.image -%}
+                                                  {%- elsif sublink.type == 'product_link' -%}
+                                                    {%- assign nav_image = sublink.object.featured_image -%}
+                                                  {%- endif -%}
+
+                                                  {%- if nav_image != blank -%}
+                                                    <div class="lf-image">
+                                                      <img
+                                                        src="{{ nav_image | image_url: width: 150, height: 150, crop: 'center' }}"
+                                                        alt="{{ sublink.title | escape }}"
+                                                        loading="lazy">
+                                                    </div>
+                                                  {%- endif -%}
+                                                  
+                                                {%- endif -%}
+
+                                                <div class="lf-text">{{ sublink.title }}</div>
+                                              </div>
+                                            </a>
+                                          </li>
+                                        {%- endfor -%}
+                                      </ul>
+                                    </div>
+                                {%- endif -%}
+
+                                {%- endfor -%}
+
+                                {%- endif -%}
+
+                                {%- assign any_solo = false -%}
+                                  {%- for link in nav_links -%}
+                                    {%- if link.links == blank -%}
+                                      {%- assign any_solo = true -%}
+                                      {%- break -%}
+                                    {%- endif -%}
+                                  {%- endfor -%}
+
+                                  {%- if any_solo -%}
+                                    <div class="child-block-onlylink">
+                                      <div class="child-block non-sublink">
+                                        <ul>
+                                          {%- for link in nav_links -%}
+                                            {%- if link.links == blank -%}
+                                              {%- assign nav_link_title_downcase = link.title | downcase | strip -%}
+                                              {%- assign nav_link_url = link.url -%}
+                                              {%- if nav_link_title_downcase == 'wieder kaufen' or nav_link_title_downcase == 'buy again' -%}
+                                                {%- assign nav_link_url = routes.account_url -%}
+                                              {%- endif -%}
+                                              <li>
+                                                <a href="{{ nav_link_url }}">{{ link.title }}</a>
+                                              </li>
+                                            {%- endif -%}
+                                          {%- endfor -%}
+                                        </ul>
+                                      </div>
+                                    </div>
+                                  {%- endif -%}
+                              </div>
+                            
+
+                            {%- comment -%} MIDDLE: top-level links without children {%- endcomment -%}
+                            
+
+                            {%- comment -%} RIGHT: optional promo image from block setting {%- endcomment -%}
+                            {%- if block.settings.product_list != blank -%}
+                              <div class="mms-right">
+                                <div class="mmsr-wrap">
+                                    <div class="mmsr-top">
+                                      {{ block.settings.product_list_heading | default: 'Favourites' }}
+                                    </div>
+                                    <div class="mmsr-bottom">
+                                      {% for item in block.settings.product_list %}
+                                        <div class="mms-right-item">
+                                          {%- render 'product-card-header', product: item -%}
+                                        </div>
+                                      {% endfor %}
+                                    </div>
+                                  </div>
+                                
+                              </div>
+                            {%- endif -%}
+                          </div>
+                        </div>
+                      </div>
+                    </li>
+                  {%- else -%}
+                    {%- comment -%} Exactly one top-level link and no children → simple item {%- endcomment -%}
+                    {%- assign single_link = nav_links.first -%}
+                    {%- if single_link -%}
+                      {%- assign single_link_title_downcase = single_link.title | downcase | strip -%}
+                      {%- assign single_link_url = single_link.url -%}
+                      {%- if single_link_title_downcase == 'wieder kaufen' or single_link_title_downcase == 'buy again' -%}
+                        {%- assign single_link_url = routes.account_url -%}
+                      {%- endif -%}
+                      <li class="nav-item no-mega-menu">
+                        <a href="{{ single_link_url }}" class="nav-link">{{ single_link.title }}</a>
+                      </li>
+                    {%- endif -%}
+                  {%- endif -%}
+                {%- endif -%}
+              {% endfor %}
+            </ul>
+
+            <div class="mobile-nav-flat">
+              <div class="mobile-nav-section">
+                <p class="mobile-nav-flat-heading">Categories</p>
+
+                {% assign mobile_categories = linklists['mobile-menu-categories'] %}
+
+                {% for link in mobile_categories.links %}
+                  <a href="{{ link.url }}" class="mobile-nav-flat-link">
+                    <div class="link-flex">
+
+                      {% if link.type == 'collection_link' and link.object.image %}
+                        <div class="lf-image">
+                          <img
+                            src="{{ link.object.image | image_url: width: 150, height: 150, crop: 'center' }}"
+                            alt="{{ link.title | escape }}"
+                            loading="lazy">
+                        </div>
+                      {% endif %}
+
+                      <div class="lf-text">
+                        {{ link.title }}
+                      </div>
+
+                    </div>
+                  </a>
+                {% endfor %}
+              </div>
+
+              {%- assign information_menu_handles = 'footer-learn-menu' | split: ',' -%}
+              {%- assign has_information_links = false -%}
+
+              {%- capture information_links_markup -%}
+                {%- for information_menu_handle in information_menu_handles -%}
+                  {%- assign information_menu = menus[information_menu_handle] -%}
+                  {%- if information_menu == blank -%}
+                    {%- assign information_menu = linklists[information_menu_handle] -%}
+                  {%- endif -%}
+
+                  {%- if information_menu and information_menu.links and information_menu.links.size > 0 -%}
+                    {%- assign has_information_links = true -%}
+                    {%- for info_link in information_menu.links -%}
+                      {%- if info_link.links and info_link.links.size > 0 -%}
+                        {%- for info_sublink in info_link.links -%}
+                          <a href="{{ info_sublink.url }}" class="mobile-nav-flat-link mobile-nav-flat-link-information">
+                            <div class="link-flex">
+                              <div class="lf-text">{{ info_sublink.title }}</div>
+                            </div>
+                          </a>
+                        {%- endfor -%}
+                      {%- else -%}
+                        <a href="{{ info_link.url }}" class="mobile-nav-flat-link mobile-nav-flat-link-information">
+                          <div class="link-flex">
+                            <div class="lf-text">{{ info_link.title }}</div>
+                          </div>
+                        </a>
+                      {%- endif -%}
+                    {%- endfor -%}
+                  {%- endif -%}
+                {%- endfor -%}
+              {%- endcapture -%}
+
+              {%- if has_information_links -%}
+                <div class="mobile-nav-section mobile-nav-section-information">
+                  <p class="mobile-nav-flat-heading">Information</p>
+                  {{ information_links_markup }}
+                </div>
+              {%- endif -%}
+
+              
+
+            </div>
+
+            <div class="langswitch-btn">
+                <button class="locale-trigger mobile-nav-locale-trigger" type="button" data-locale-open>
+                  <img
+                    src="https://flagcdn.com/w20/{{ localization.country.iso_code | downcase }}.png"
+                    alt="{{ localization.country.name }}"
+                    width="20"
+                    height="14"
+                  >
+                  <span>
+                    {{ localization.country.name }} |
+                    {{ localization.language.iso_code | upcase }}
+                  </span>
+                </button>
+              </div>
+
+          </div>
+
+        </div>
+
+        
+
+        <div class="h-right">
+          <div class="header-icons-wrap flex">
+            {% comment %} <a href="#" class="search">{% render 'icon-search' %}</a> {% endcomment %}
+             <div class="hiw-search">
+              <predictive-search>
+                <form
+                  action="{{ routes.search_url }}"
+                  method="get"
+                  role="search" autocomplete="off">
+                  <input type="hidden" name="view" value="noindex">
+                  <div class="search-input-bar">
+                    {% render 'icon-search' %}
+                    <input
+                      id="Search"
+                      type="search"
+                      name="q"
+                      value="{{ search.terms | escape }}"
+                      placeholder="{{ 'search.placeholder_fruits' | t }}"
+                      role="combobox"
+                      aria-expanded="false"
+                      aria-owns="predictive-search-results"
+                      aria-controls="predictive-search-results"
+                      aria-haspopup="listbox"
+                      aria-autocomplete="list">
+                  </div>
+                  <div class="for-mobile">
+                    {% render 'icon-search' %}
+                  </div>
+                  <input
+                    name="type"
+                    type="hidden"
+                    value="product">
+
+                  <div id="predictive-search" class="predictive-search" hidden>
+                    <div class="ps-grid">
+                      <div class="ps-suggestions">
+                        <p class="ps-title">Suggestions</p>
+                        <ul class="ps-list ps-suggestions-list" data-lenis-prevent></ul>
+                      </div>
+
+                      <div class="ps-products">
+                        <p class="ps-title">Products</p>
+                        <ul class="ps-list ps-products-list" data-lenis-prevent></ul>
+                      </div>
+                    </div>
+
+                    <div class="ps-empty-state" hidden>
+                      <p>No results found</p>
+                    </div>
+
+                    <a href="#" class="ps-view-all">
+                      Search for "<span></span>" →
+                    </a>
+                  </div>
+
+                </form>
+              </predictive-search>
+             </div>
+            {% if customer %}
+              <a href="{{ routes.account_url }}" class="cust-login">{% render 'icon-profile' %}</a>
+            {% else %}
+              <a href="{{ routes.account_login_url }}" class="profile">{% render 'icon-profile' %}</a>
+            {% endif %}
+            {% unless template.name == 'cart' %}
+              <div class="cart" data-ajax-cart-section>
+                <a href="javascript:void(0)" class="cart-open">
+                  {% render 'icon-cart' %}
+                </a>
+                <span
+                  data-ajax-cart-bind="item_count"
+                  class="header__cart-quantity{% if cart.item_count == 0 %} is-hidden{% endif %}">
+                  {{ cart.item_count }}
+                </span>
+              </div>
+            {% endunless %}
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</header>
+
+{% schema %}
+  {
+    "name": "Header",
+    "settings": [
+      {
+        "type": "image_picker",
+        "id": "select_logo",
+        "label": "Change Logo"
+      }
+    ],
+    "blocks": [
+      {
+        "type": "nav_menu_right",
+        "name": "Nav Menu Right",
+        "settings": [
+          {
+            "type": "link_list",
+            "id": "nav_items_right",
+            "label": "Nav Items"
+          },
+          {
+            "type": "text",
+            "id": "product_list_heading",
+            "label": "Product List Heading"
+          },
+          {
+            "type": "product_list",
+            "id": "product_list",
+            "label": "Select Products",
+            "limit": 3
+          }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "name": "Header"
+      }
+    ]
+  }
+{% endschema %}
+
+<script
+  src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
+  integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
+  crossorigin="anonymous"
+  referrerpolicy="no-referrer"></script>
+
+<script>
+  $(function() {
+    // mobile drawer toggles (if you use them)
+    $('.close').hide();
+    $('.open').on('click', function() {
+      $('.h-nav').addClass('active');
+      $('body').attr('data-lenis-prevent', 'true'); // add attribute
+      $('.close').show();
+      $('.open').hide();
+    });
+    $('.close').on('click', function() {
+      $('.h-nav').removeClass('active');
+      $('body').removeAttr('data-lenis-prevent'); // remove attribute
+      $('.close').hide();
+      $('.open').show();
+    });
+
+    // nested mobile subnav
+    $('.mob-link_inner').on('click', function(e) {
+      e.preventDefault();
+      $(this).closest('.mob-link').find('.sublinks_wrapper').addClass('visible');
+    });
+    $('.mob-sublink_inner').on('click', function(e) {
+      e.preventDefault();
+      $(this).closest('.mob-sublink').find('.childlink_wrapper').addClass('visible');
+    });
+    $('.nav_back_link').on('click', function(e) {
+      e.preventDefault();
+      $(this).closest('.sublinks_wrapper').removeClass('visible');
+    });
+    $('.nav_back_sublink').on('click', function(e) {
+      e.preventDefault();
+      $(this).closest('.childlink_wrapper').removeClass('visible');
+    });
+
+    // backdrop hover for desktop mega menu
+    $('.nav-item.has-mega-menu').on('mouseenter', function() {
+      $('main').addClass('backdrop_bg');
+    }).on('mouseleave', function() {
+      $('main').removeClass('backdrop_bg');
+    });
+  });
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const searchBar = document.querySelector(".search-input-bar");
+    const icon = document.querySelector(".hiw-search .for-mobile");
+    const input = searchBar ? searchBar.querySelector('input[type="search"]') : null;
+
+    if (!searchBar || !icon || !input) return;
+
+    const focusSearchInput = () => {
+      searchBar.classList.add("active");
+      searchBar.style.visibility = "visible";
+      searchBar.style.opacity = "1";
+      searchBar.offsetHeight;
+
+      try {
+        input.focus({ preventScroll: true });
+      } catch (error) {
+        input.focus();
+      }
+
+      input.click();
+      requestAnimationFrame(() => {
+        try {
+          input.focus({ preventScroll: true });
+        } catch (error) {
+          input.focus();
+        }
+
+        if (typeof input.setSelectionRange === "function") {
+          input.setSelectionRange(input.value.length, input.value.length);
+        }
+      });
+    };
+
+    // Use pointerdown for mobile/touch so the focus happens as part of the first gesture.
+    icon.addEventListener("pointerdown", (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      focusSearchInput();
+    });
+
+    // Keep click as a fallback for browsers that do not fire pointer events consistently.
+    icon.addEventListener("click", (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      focusSearchInput();
+    });
+
+    // When clicking anywhere outside → remove active
+    document.addEventListener("click", (e) => {
+      if (!searchBar.contains(e.target) && !icon.contains(e.target)) {
+        searchBar.classList.remove("active");
+        searchBar.style.removeProperty("visibility");
+        searchBar.style.removeProperty("opacity");
+      }
+    });
+  });
+
+</script>
+
+<script>
+  function highlightMatch(text, query) {
+    if (!query) return text;
+
+    const escaped = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const regex = new RegExp(`(${escaped})`, 'ig');
+
+    return text.replace(regex, '<mark>$1</mark>');
+  }
+
+class PredictiveSearch {
+  constructor() {
+    this.input = document.getElementById('Search');
+    this.container = document.getElementById('predictive-search');
+    this.suggestionsList = this.container.querySelector('.ps-suggestions-list');
+    this.productsList = this.container.querySelector('.ps-products-list');
+    this.viewAll = this.container.querySelector('.ps-view-all');
+    this.abortController = null;
+    this.cache = new Map();
+    this.lastRequestedQuery = '';
+
+    this.input.addEventListener('input', this.onChange.bind(this));
+    document.addEventListener('click', this.onOutsideClick.bind(this));
+  }
+
+  onChange() {
+    const query = this.input.value.trim();
+
+    if (query.length < 1) {
+      this.close();
+      return;
+    }
+
+    this.fetchResults(query);
+  }
+
+  fetchResults(query) {
+    if (query === this.lastRequestedQuery && this.cache.has(query)) {
+      this.render(this.cache.get(query), query);
+      return;
+    }
+
+    if (this.cache.has(query)) {
+      this.lastRequestedQuery = query;
+      this.render(this.cache.get(query), query);
+      return;
+    }
+
+    if (this.abortController) this.abortController.abort();
+    this.abortController = new AbortController();
+    this.lastRequestedQuery = query;
+
+    fetch(
+      `{{ routes.predictive_search_url }}.json?q=${encodeURIComponent(query)}`
+      + `&resources[type]=query,product`
+      + `&resources[query][limit]=6`
+      + `&resources[product][limit]=6`,
+      { signal: this.abortController.signal }
+    )
+
+      .then(res => res.json())
+      .then(data => {
+        this.cache.set(query, data);
+        if (this.cache.size > 20) {
+          const firstKey = this.cache.keys().next().value;
+          this.cache.delete(firstKey);
+        }
+        this.render(data, query);
+      })
+      .catch(() => {});
+  }
+
+  render(data, query) {
+  const suggestions = data.resources.results.queries || [];
+  const products = data.resources.results.products || [];
+  const emptyState = this.container.querySelector('.ps-empty-state');
+  const placeholderImage = 'https://cdn.shopify.com/s/files/1/0752/8015/4881/files/jf-placeholder.png?v=1769522647';
+
+  // Clear first
+  this.suggestionsList.innerHTML = '';
+  this.productsList.innerHTML = '';
+
+  // Fallback: use product titles as suggestions if queries are empty
+  const finalSuggestions = suggestions.length
+  ? suggestions
+  : products.map(p => ({
+      text: p.title,
+      url: p.url
+    }));
+
+  // Render suggestions (always show left column)
+  this.suggestionsList.innerHTML = finalSuggestions
+    .slice(0, 6)
+    .map(item => `
+      <li>
+        <a href="${item.url}">
+          ${highlightMatch(item.text, query)}
+        </a>
+      </li>
+    `)
+    .join('');
+
+
+  // Render products (right column)
+  if (products.length) {
+    this.productsList.innerHTML = products
+      .map(product => `
+        <li class="ps-product-item">
+          <a href="${product.url}">
+            <img src="${product.image || placeholderImage}" alt="${product.title}">
+            <span>${highlightMatch(product.title, query)}</span>
+
+          </a>
+        </li>
+      `)
+      .join('');
+  }
+
+  // Empty state logic
+  const hasResults = suggestions.length || products.length;
+
+  emptyState.hidden = hasResults;
+  this.container.querySelector('.ps-grid').style.display = hasResults ? 'grid' : 'none';
+  this.viewAll.style.display = hasResults ? 'flex' : 'none';
+
+  // View all link
+  this.viewAll.href = `{{ routes.search_url }}?q=${encodeURIComponent(query)}&view=noindex&type=product`;
+  this.viewAll.querySelector('span').textContent = query;
+
+  this.open();
+}
+
+
+  open() {
+    this.container.hidden = false;
+    this.input.setAttribute('aria-expanded', 'true');
+  }
+
+  close() {
+    this.container.hidden = true;
+    this.input.setAttribute('aria-expanded', 'false');
+    this.lastRequestedQuery = '';
+  }
+
+  onOutsideClick(e) {
+    if (!e.target.closest('.hiw-search')) {
+      this.close();
+    }
+  }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  new PredictiveSearch();
+});
+</script>
+
+ 

@@ -1,0 +1,1045 @@
+{% if collection.handle != 'all' %}
+  {% comment %} <div class="collection-banner">
+    <div class="container">
+      <div class="cb-wrapper">
+        <div class="heading center">
+          <h1>{{ section.settings.head }}</h1>
+        </div>
+        <div class="cb-collection">
+          {% for block in section.blocks %}
+            {% assign collection_item = block.settings.col %}
+            <a href="{{ collection_item.url }}" class="cbcIn">
+              <div class="cbcImg">
+                {% if collection_item.featured_image %}
+                  <img src="{{ collection_item.featured_image | img_url: 'master' }}" alt="{{ collection_item.title }}">
+                {% elsif block.settings.col_img %}
+                  <img src="{{ block.settings.col_img | img_url: 'master' }}" alt="{{ collection_item.title }}">
+                {% endif %}
+              </div>
+
+              <div class="cbcTxt">
+                {% assign collection_title = block.settings.col_name %}
+                {% if collection_title == '' %}
+                  <p>{{ collection_item.title | strip_html | strip }}</p>
+                {% else %}
+                  <p>{{ block.settings.col_name }}</p>
+                {% endif %}
+              </div>
+            </a>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div> {% endcomment %}
+{% endif %}
+<div class="collection-banner">
+  <div class="collection-main">
+    <div class="container">
+      <div class="cb-wrapper">
+        <div class="breadcrumbs">
+            <a href="{{ routes.root_url }}">Home</a>
+            <p>
+              >
+            </p>
+            <p>
+              {% if collection.handle == 'all' %}
+                All {{ collection.title }}
+              {% else %}
+                {{ collection.title }}
+              {% endif %}
+            </p>
+          </div>
+        {% comment %} <div class="heading">
+          <h1>{{ section.settings.head }}</h1>
+        </div> {% endcomment %}
+        <div class="head">
+          
+          {% if collection.handle == 'all' %}
+            <h1>All {{ collection.title }}</h1>
+          {% else %}
+            <h1>{{ collection.title }}</h1>
+          {% endif %}
+        </div> 
+        {%- capture current_page_url -%}{{ content_for_header | split:'"pageurl":"' | last | split:'"' | first }}{%- endcapture -%}
+        {%- liquid
+          assign generic_collection_handles = "all,all-products,all-fruits,all-fruit,all-collections,shop-all,alle-produkte,alle-fruchte,alle-fruechte,tous-les-produits,tous-les-fruits" | split: ","
+          assign all_fruits_collection_handles = "all,all-products,all-fruits,all-fruit,alle-produkte,alle-fruchte,alle-fruechte,tous-les-produits,tous-les-fruits" | split: ","
+          assign is_generic_collection = false
+          assign is_all_fruits_collection = false
+          assign unavailable_only_active = false
+          assign untreated_only_active = false
+          assign region_filter_value = ''
+          assign has_active_collection_filters = false
+          assign total_products_count = collection.all_products_count | default: collection.products_count
+          assign filtered_products_count = collection.products_count
+
+          if generic_collection_handles contains collection.handle or collection.handle contains 'all-' or collection.handle contains 'alle-' or collection.handle contains 'tous-les-'
+            assign is_generic_collection = true
+          endif
+
+          if all_fruits_collection_handles contains collection.handle
+            assign is_all_fruits_collection = true
+          endif
+
+          if current_page_url contains 'jf_unavailable=1'
+            assign unavailable_only_active = true
+            assign has_active_collection_filters = true
+          endif
+
+          if current_page_url contains 'jf_quality_label=untreated'
+            assign untreated_only_active = true
+            assign has_active_collection_filters = true
+          endif
+
+          if current_page_url contains 'jf_region=asia'
+            assign region_filter_value = 'asia'
+            assign has_active_collection_filters = true
+          elsif current_page_url contains 'jf_region=europe'
+            assign region_filter_value = 'europe'
+            assign has_active_collection_filters = true
+          elsif current_page_url contains 'jf_region=america'
+            assign region_filter_value = 'america'
+            assign has_active_collection_filters = true
+          elsif current_page_url contains 'jf_region=africa'
+            assign region_filter_value = 'africa'
+            assign has_active_collection_filters = true
+          endif
+
+          if current_tags != blank
+            assign has_active_collection_filters = true
+          endif
+
+          for filter in collection.filters
+            if filter.type == 'boolean'
+              if filter.true_value.active or filter.false_value.active
+                assign has_active_collection_filters = true
+              endif
+            elsif filter.type == 'price_range'
+              if filter.min_value.value != blank or filter.max_value.value != blank
+                assign has_active_collection_filters = true
+              endif
+            elsif filter.active_values.size > 0
+              assign has_active_collection_filters = true
+            endif
+          endfor
+        -%}
+
+        {%- if section.blocks.size > 0 -%}
+          {%- capture collection_tiles -%}
+            {% for block in section.blocks %}
+              {% assign collection_item = block.settings.col %}
+
+              {% if collection_item == blank or collection_item.handle == collection.handle %}
+                {% continue %}
+              {% endif %}
+
+              {%- liquid
+                assign show_collection_tile = false
+
+                if is_generic_collection
+                  if block.settings.hide_on_generic_collections != true
+                    assign show_collection_tile = true
+                  endif
+                else
+                  for parent_collection in block.settings.parent_collections
+                    if parent_collection.handle == collection.handle
+                      assign show_collection_tile = true
+                      break
+                    endif
+                  endfor
+                endif
+              -%}
+
+              {% unless show_collection_tile %}
+                {% continue %}
+              {% endunless %}
+
+              <a href="{{ collection_item.url }}" class="cbcIn">
+                <div class="cbcImg">
+                  {% if collection_item.featured_image %}
+                    <img src="{{ collection_item.featured_image | img_url: 'master' }}" alt="{{ collection_item.title }}">
+                  {% elsif block.settings.col_img %}
+                    <img src="{{ block.settings.col_img | img_url: 'master' }}" alt="{{ collection_item.title }}">
+                  {% endif %}
+                </div>
+
+                <div class="cbcTxt">
+                  {% assign collection_title = block.settings.col_name %}
+                  {% assign collection_fallback_title = collection_item.metafields.custom.collection_short_name.value | default: collection_item.title | strip_html | strip %}
+                  {% if collection_title == blank %}
+                    <p>{{ collection_fallback_title }}</p>
+                  {% else %}
+                    <p>{{ block.settings.col_name }}</p>
+                  {% endif %}
+                </div>
+              </a>
+            {% endfor %}
+          {%- endcapture -%}
+
+          {%- if collection_tiles != blank -%}
+            <div class="cb-collection">
+              {{ collection_tiles }}
+            </div>
+          {%- endif -%}
+        {%- endif -%}
+      </div>
+      <div class="cm-wrapper">
+        {% comment %} <div class="head">
+          
+          {% if collection.handle == 'all' %}
+            <h1>All {{ collection.title }}</h1>
+          {% else %}
+            <h2>{{ collection.title }}</h2>
+          {% endif %}
+        </div> {% endcomment %}
+        <div class="tc-filter-wrap">
+          <div class="filter-wrap filter">
+            <div class="filter-buttton">
+              Filter {% render 'filter-icon' %}
+            </div>
+            <div class="filter-sidebar">
+              <div class="filtersidebar-in" data-lenis-prevent>
+                <div class="filter-cross-div">
+                  <p><span>Filter</span> {% render 'filter-icon' %}</p>
+                  <div class="filter-close-mob">{% render 'cross' %}</div>
+                </div>
+                <div class="filter-sidebar-form">
+                  <form>
+                    {%- assign bestseller_active = false -%}
+                    {%- for tag in current_tags -%}
+                      {%- assign tag_handle = tag | handleize -%}
+                      {%- if tag == 'Best Seller' or tag_handle == 'best-seller' -%}
+                        {%- assign bestseller_active = true -%}
+                      {%- endif -%}
+                    {%- endfor -%}
+
+                    <div class="form-filter-wrap list">
+                      <div class="ff-head">
+                        <p>Sort By</p>
+                        <div class="filter-down-arrow">{% render "icon-arrow_down" %}</div>
+                      </div>
+                      <div class="ff-in">
+                        <ul>
+                          {% assign sort_by = collection.sort_by | default: collection.default_sort_by %}
+                          {% for option in collection.sort_options %}
+                            <li>
+                              <label for="sort-{{ forloop.index }}">
+                                <input type="radio" name="sort_by" value="{{ option.value }}" id="sort-{{ forloop.index }}" {% if option.value == sort_by %}checked{% endif %}>
+                                {{ option.name }}
+                              </label>
+                            </li>
+                          {% endfor %}
+                        </ul>
+                      </div>
+                    </div>
+
+                    {%- for filter in collection.filters -%}
+                      <div class="form-filter-wrap {{ filter.type }}">
+                        <div class="ff-head">
+                          <p>{{ filter.label }}</p>
+                          <div class="filter-down-arrow">{% render "icon-arrow_down" %}</div>
+                        </div>
+                        <div class="ff-in">
+                          {%- case filter.type -%}
+                            {%- when 'boolean' -%}
+                              <ul>
+                                <li>
+                                  <label for="Filter-{{ filter.param_name }}-true">
+                                    <input type="radio" name="{{ filter.param_name }}" value="{{ filter.true_value.value }}" id="Filter-{{ filter.param_name }}-true" {% if filter.true_value.active %}checked{% endif %} {% if filter.true_value.count == 0 and filter.true_value.active == false %}disabled{% endif %}>
+                                    {{ filter.true_value.label }}
+                                  </label>
+                                </li>
+                                <li>
+                                  <label for="Filter-{{ filter.param_name }}-false">
+                                    <input type="radio" name="{{ filter.param_name }}" value="{{ filter.false_value.value }}" id="Filter-{{ filter.param_name }}-false" {% if filter.false_value.active %}checked{% endif %} {% if filter.false_value.count == 0 and filter.false_value.active == false %}disabled{% endif %}>
+                                    {{ filter.false_value.label }}
+                                  </label>
+                                </li>
+                              </ul>
+                            {%- when 'list' -%}
+                              <ul>
+                                {%- for filter_value in filter.values -%}
+                                  <li>
+                                    <label for="Filter-{{ filter.param_name }}-{{ forloop.index }}">
+                                      <input type="checkbox" name="{{ filter_value.param_name }}" value="{{ filter_value.value }}" id="Filter-{{ filter.param_name }}-{{ forloop.index }}" {% if filter_value.active %}checked{% endif %} {% if filter_value.count == 0 and filter_value.active == false %}disabled{% endif %}>
+                                      {{ filter_value.label }} ({{ filter_value.count }})
+                                    </label>
+                                  </li>
+                                {%- endfor -%}
+                              </ul>
+                            {%- when 'price_range' -%}
+                              {%- endcase -%}
+                        </div>
+                      </div>
+                    {%- endfor -%}
+                    {%- if collection.all_tags contains 'Best Seller' or bestseller_active -%}
+                      <div class="form-filter-wrap list">
+                        <div class="ff-head">
+                          <p>{{ 'quick_filters.bestseller' | t }}</p>
+                          <div class="filter-down-arrow">{% render "icon-arrow_down" %}</div>
+                        </div>
+                        <div class="ff-in">
+                          <ul>
+                            <li>
+                              <label for="Filter-constraint-bestseller">
+                                <input type="checkbox" name="constraint" value="best-seller" id="Filter-constraint-bestseller" {% if bestseller_active %}checked{% endif %}>
+                                {{ 'quick_filters.bestseller' | t }}
+                              </label>
+                            </li>
+                          </ul>
+                        </div>
+                      </div>
+                    {%- endif -%}
+                    <div class="clear-filter">
+                      <a href="{{ collection.url }}" class="reset-btn">Reset</a>
+                      <button type="submit" class="apply-filter-btn custom-btn black">Apply Filters</button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {% comment %} Self Populating Filters with condition {% endcomment %}
+          {% comment %} <div class="quick-filters">
+            <div class="qf-wrapper">
+              {%- assign availability_filter = collection.filters | where: "param_name", "filter.v.availability" | first -%}
+              {%- if availability_filter -%}
+                {%- for filter_value in availability_filter.values -%}
+                  {%- if filter_value.count > 0 or filter_value.active -%}
+                    <button type="button" class="qf-pill {% if filter_value.active %}is-active{% endif %}" data-name="{{ filter_value.param_name }}" data-value="{{ filter_value.value }}">
+                      {{ filter_value.label }} ({{ filter_value.count }})
+                    </button>
+                  {%- endif -%}
+                {%- endfor -%}
+              {%- endif -%}
+              <button type="button" class="qf-pill clear-all-pill" style="display: none;">Clear All ✕</button>
+            </div>
+          </div> {% endcomment %}
+
+          {% comment %} Manual Filter with condition {% endcomment %}
+           <div class="quick-filters">
+  <div class="qf-wrapper">
+    {%- assign bestseller_active = false -%}
+    {%- for tag in current_tags -%}
+      {%- assign tag_handle = tag | handleize -%}
+      {%- if tag == 'Best Seller' or tag_handle == 'best-seller' -%}
+        {%- assign bestseller_active = true -%}
+      {%- endif -%}
+    {%- endfor -%}
+
+    {%- assign certificate_filter = collection.filters | where: "param_name", "filter.p.m.custom.certificate" | first -%}
+    {%- comment -%} 1. Bestseller {%- endcomment -%}
+    {%- if collection.all_tags contains 'Best Seller' or bestseller_active -%}
+      <button type="button" 
+              class="qf-pill {% if bestseller_active %}is-active{% endif %}" 
+              data-name="constraint" 
+              data-value="best-seller">
+        {% if is_all_fruits_collection %}{{ 'quick_filters.bestsellers' | t }}{% else %}{{ 'quick_filters.bestseller' | t }}{% endif %}
+      </button>
+    {%- endif -%}
+
+    {%- if is_all_fruits_collection -%}
+      <button type="button" class="qf-pill {% if region_filter_value == 'asia' %}is-active{% endif %}" data-name="jf_region" data-value="asia">{{ 'quick_filters.asia' | t }}</button>
+      <button type="button" class="qf-pill {% if region_filter_value == 'europe' %}is-active{% endif %}" data-name="jf_region" data-value="europe">{{ 'quick_filters.europe' | t }}</button>
+      <button type="button" class="qf-pill {% if region_filter_value == 'america' %}is-active{% endif %}" data-name="jf_region" data-value="america">{{ 'quick_filters.america' | t }}</button>
+      <button type="button" class="qf-pill {% if region_filter_value == 'africa' %}is-active{% endif %}" data-name="jf_region" data-value="africa">{{ 'quick_filters.africa' | t }}</button>
+    {%- endif -%}
+
+    {%- comment -%} 2. Organic {%- endcomment -%}
+    {%- if certificate_filter -%}
+      {%- for value in certificate_filter.values -%}
+        {%- assign organic_handle = value.label | handleize -%}
+        {%- if organic_handle == 'organic' or organic_handle == 'bio' or organic_handle == 'biologique' -%}
+          <button type="button" 
+                  class="qf-pill {% if value.active %}is-active{% endif %}" 
+                  data-name="{{ value.param_name }}" 
+                  data-value="{{ value.value }}">
+            {{ 'quick_filters.organic' | t }}
+          </button>
+        {%- endif -%}
+      {%- endfor -%}
+    {%- endif -%}
+
+    {%- if is_all_fruits_collection -%}
+      <button type="button"
+              class="qf-pill {% if untreated_only_active %}is-active{% endif %}"
+              data-name="jf_quality_label"
+              data-value="untreated">
+        {{ 'quick_filters.untreated' | t }}
+      </button>
+    {%- endif -%}
+
+    {%- unless is_all_fruits_collection -%}
+      {%- comment -%} 3. Out of Stock (Fully sold out products only) {%- endcomment -%}
+      <button
+        type="button"
+        class="qf-pill {% if unavailable_only_active %}is-active{% endif %}"
+        data-name="jf_unavailable"
+        data-value="1">
+        {{ 'products.product.out_of_stock' | t }}
+      </button>
+    {%- endunless -%}
+
+    {%- comment -%} 4. Clear All Button {%- endcomment -%}
+    <button type="button" class="qf-pill clear-all-pill" style="display: none;">
+      {{ 'quick_filters.clear_all' | t }} ✕
+    </button>
+  </div>
+  <div
+    class="qf-count"
+    data-total-count="{{ total_products_count }}"
+    data-total-template="{{ 'quick_filters.products_count' | t: count: '__COUNT__' }}"
+    data-filtered-template="{{ 'quick_filters.products_count_filtered' | t: count: '__COUNT__', total: '__TOTAL__' }}">
+    {% if has_active_collection_filters and unavailable_only_active == false and filtered_products_count < total_products_count %}
+      {{ 'quick_filters.products_count_filtered' | t: count: filtered_products_count, total: total_products_count }}
+    {% else %}
+      {{ 'quick_filters.products_count' | t: count: total_products_count }}
+    {% endif %}
+  </div>
+</div>
+        </div>
+        <div class="collection-wrapper" id="ProductGrid">
+          <div class="cart-loader">
+            <div class="loader-spinner"></div>
+          </div>
+          {%- assign products_per_page = section.settings.number_of_product -%}
+          {%- if unavailable_only_active or untreated_only_active or region_filter_value != blank -%}
+            {%- assign products_per_page = 250 -%}
+          {%- endif -%}
+          {% paginate collection.products by products_per_page %}
+            {% if collection.products_count > 0 %}
+              {% if unavailable_only_active %}
+                {%- assign has_unavailable_products = false -%}
+                {% for product in collection.products %}
+                  {% unless product.available %}
+                    {%- assign has_unavailable_products = true -%}
+                    {% render 'product-card-primary', product: product %}
+                  {% endunless %}
+                {% endfor %}
+
+                {% unless has_unavailable_products %}
+                  <div class="no-products-found">
+                    <h3>No products found</h3>
+                    <p>No fully unavailable products were found in this collection.</p>
+                    <button type="button" class="reset-link custom-btn black" onclick="window.location.href=window.location.pathname">Clear all filters</button>
+                  </div>
+                {% endunless %}
+              {% elsif untreated_only_active or region_filter_value != blank %}
+                {%- assign has_custom_filtered_products = false -%}
+                {% for product in collection.products %}
+                  {%- assign product_quality_label = product.metafields.custom.quality_label.value | default: product.metafields.custom.quality_label | handleize -%}
+                  {%- assign matches_custom_filters = true -%}
+
+                  {% if untreated_only_active and product_quality_label != 'untreated' %}
+                    {%- assign matches_custom_filters = false -%}
+                  {% endif %}
+
+                  {% if region_filter_value != blank %}
+                    {%- assign matches_region_filter = false -%}
+                    {%- assign product_collection_handles = product.collections | map: 'handle' | join: ',' -%}
+                    {% if region_filter_value == 'asia' %}
+                      {% if product_collection_handles contains 'fruit-asia' or product_collection_handles contains 'fruit-from-asia' or product_collection_handles contains 'fruits-from-asia' %}
+                        {%- assign matches_region_filter = true -%}
+                      {% endif %}
+                    {% elsif region_filter_value == 'europe' %}
+                      {% if product_collection_handles contains 'fruit-europe' or product_collection_handles contains 'fruit-from-europe' or product_collection_handles contains 'fruits-from-europe' %}
+                        {%- assign matches_region_filter = true -%}
+                      {% endif %}
+                    {% elsif region_filter_value == 'america' %}
+                      {% if product_collection_handles contains 'fruit-america' or product_collection_handles contains 'fruit-from-america' or product_collection_handles contains 'fruits-from-america' %}
+                        {%- assign matches_region_filter = true -%}
+                      {% endif %}
+                    {% elsif region_filter_value == 'africa' %}
+                      {% if product_collection_handles contains 'fruit-africa' or product_collection_handles contains 'fruit-from-africa' or product_collection_handles contains 'fruits-from-africa' %}
+                        {%- assign matches_region_filter = true -%}
+                      {% endif %}
+                    {% endif %}
+
+                    {% unless matches_region_filter %}
+                      {%- assign matches_custom_filters = false -%}
+                    {% endunless %}
+                  {% endif %}
+
+                  {% if matches_custom_filters and product.available %}
+                    {%- assign has_custom_filtered_products = true -%}
+                    {% render 'product-card-primary', product: product %}
+                  {% endif %}
+                {% endfor %}
+                {% for product in collection.products %}
+                  {%- assign product_quality_label = product.metafields.custom.quality_label.value | default: product.metafields.custom.quality_label | handleize -%}
+                  {%- assign matches_custom_filters = true -%}
+
+                  {% if untreated_only_active and product_quality_label != 'untreated' %}
+                    {%- assign matches_custom_filters = false -%}
+                  {% endif %}
+
+                  {% if region_filter_value != blank %}
+                    {%- assign matches_region_filter = false -%}
+                    {%- assign product_collection_handles = product.collections | map: 'handle' | join: ',' -%}
+                    {% if region_filter_value == 'asia' %}
+                      {% if product_collection_handles contains 'fruit-asia' or product_collection_handles contains 'fruit-from-asia' or product_collection_handles contains 'fruits-from-asia' %}
+                        {%- assign matches_region_filter = true -%}
+                      {% endif %}
+                    {% elsif region_filter_value == 'europe' %}
+                      {% if product_collection_handles contains 'fruit-europe' or product_collection_handles contains 'fruit-from-europe' or product_collection_handles contains 'fruits-from-europe' %}
+                        {%- assign matches_region_filter = true -%}
+                      {% endif %}
+                    {% elsif region_filter_value == 'america' %}
+                      {% if product_collection_handles contains 'fruit-america' or product_collection_handles contains 'fruit-from-america' or product_collection_handles contains 'fruits-from-america' %}
+                        {%- assign matches_region_filter = true -%}
+                      {% endif %}
+                    {% elsif region_filter_value == 'africa' %}
+                      {% if product_collection_handles contains 'fruit-africa' or product_collection_handles contains 'fruit-from-africa' or product_collection_handles contains 'fruits-from-africa' %}
+                        {%- assign matches_region_filter = true -%}
+                      {% endif %}
+                    {% endif %}
+
+                    {% unless matches_region_filter %}
+                      {%- assign matches_custom_filters = false -%}
+                    {% endunless %}
+                  {% endif %}
+
+                  {% if matches_custom_filters and product.available != true %}
+                    {%- assign has_custom_filtered_products = true -%}
+                    {% render 'product-card-primary', product: product %}
+                  {% endif %}
+                {% endfor %}
+
+                {% unless has_custom_filtered_products %}
+                  <div class="no-products-found">
+                    <h3>No products found</h3>
+                    <p>No products were found for the selected quick filters.</p>
+                    <button type="button" class="reset-link custom-btn black" onclick="window.location.href=window.location.pathname">Clear all filters</button>
+                  </div>
+                {% endunless %}
+              {% else %}
+                {% for product in collection.products %}
+                  {% if product.available %}
+                    {% render 'product-card-primary', product: product %}
+                  {% endif %}
+                {% endfor %}
+                {% for product in collection.products %}
+                  {% unless product.available %}
+                    {% render 'product-card-primary', product: product %}
+                  {% endunless %}
+                {% endfor %}
+                {% render 'pagination' | pagination: paginate %}
+              {% endif %}
+            {% else %}
+              <div class="no-products-found">
+                <h3>No products found</h3>
+                <p>Try adjusting your filters or clearing them to see more delicious fruits.</p>
+                <button type="button" class="reset-link custom-btn black" onclick="window.location.href=window.location.pathname">Clear all filters</button>
+              </div>
+            {% endif %}
+          {% endpaginate %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<section class="collection-seo-footer">
+  <div class="container">
+    <div class="seo-sec-wrapper">
+      <div class="seo-content" id="seoContent">
+        {{ collection.metafields.custom.seo_focused_paragraph | metafield_tag }}
+      </div>
+      <button type="button" class="seo-show-more" id="seoToggleButton">Show More</button>
+    </div>
+  </div>
+</section>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  
+    // Selectors
+    const filterForm = document.querySelector(".tc-filter-wrap form");
+    const productGrid = document.querySelector("#ProductGrid");
+    const collectionBaseUrl = {{ collection.url | json }};
+    const filter_sidebar = document.querySelector('.filter-sidebar');
+    const filter_button = document.querySelector('.filter-buttton');
+    const filter_close = document.querySelector('.filter-close-mob');
+    const clearAllBtn = document.querySelector('.clear-all-pill');
+    const loader = productGrid.querySelector('.cart-loader');
+
+    if (!filterForm || !productGrid) return;
+
+    // --- 1. AJAX UTILITIES ---
+    function updateProductGrid(extraParams = {}, urlOverride = null) {
+
+        if (!productGrid) return;
+        // 1. START LOADING
+        if (loader) loader.classList.add('active');
+        productGrid.style.pointerEvents = 'none'; // Prevent double-clicks while loading
+
+        const formData = new FormData(filterForm);
+        const searchParams = new URLSearchParams(formData);
+        const currentUrlParams = new URLSearchParams(window.location.search);
+
+        ['jf_unavailable', 'jf_quality_label', 'jf_region'].forEach((key) => {
+            const currentValue = currentUrlParams.get(key);
+            if (currentValue) {
+                searchParams.set(key, currentValue);
+            }
+        });
+
+        Object.keys(extraParams).forEach((key) => {
+            if (extraParams[key]) {
+                searchParams.set(key, extraParams[key]);
+            } else {
+                searchParams.delete(key);
+            }
+        });
+
+        const constraints = searchParams.getAll('constraint').filter(Boolean);
+        searchParams.delete('constraint');
+
+        // --- Add NoIndex logic ---
+        // Check if any filters are active (excluding the sort_by parameter)
+        let hasFilters = false;
+        searchParams.forEach((value, key) => {
+            if (key.includes('filter.') || key === 'constraint') {
+                hasFilters = true;
+            }
+        });
+
+        // If filters are active, append the noindex view
+        if (hasFilters) {
+            searchParams.set('view', 'noindex');
+        } else {
+            searchParams.delete('view');
+        }
+
+        let url;
+
+        if (urlOverride) {
+            url = urlOverride;
+        } else {
+            const constraintPath = constraints.length ? `/${constraints.join('+')}` : '';
+            const queryString = searchParams.toString();
+            url = `${collectionBaseUrl}${constraintPath}${queryString ? `?${queryString}` : ''}`;
+        }
+
+        fetch(url)
+            .then(res => res.text())
+            .then(data => {
+                const parser = new DOMParser();
+                const newDoc = parser.parseFromString(data, "text/html");
+                const newGrid = newDoc.querySelector("#ProductGrid");
+                const newQuickFilters = newDoc.querySelector(".quick-filters");
+
+                if (newGrid) {
+                    productGrid.innerHTML = newGrid.innerHTML;
+                }
+                
+                if (newQuickFilters) {
+                    // This replaces the whole quick-filters div, 
+                    // updating the 'is-disabled' class automatically
+                    const oldFilters = document.querySelector(".quick-filters");
+                    oldFilters.className = newQuickFilters.className; 
+                    oldFilters.innerHTML = newQuickFilters.innerHTML;
+                }
+
+                // Re-run UI syncs
+                if (typeof lenis !== 'undefined') lenis.resize();
+                if (typeof window.bindProductCardAddForms === 'function') {
+                    window.bindProductCardAddForms(productGrid);
+                }
+
+                window.history.pushState({}, "", url);
+                bindPaginationLinks();
+                
+                // Re-bind click events to new pills injected via AJAX
+                bindQuickPills();
+                toggleClearAllVisibility();
+                updateQuickFilterCount();
+
+                // Re-enable pointer events.
+                productGrid.style.pointerEvents = 'all';
+
+                // Scroll to top of grid
+                const topPos = productGrid.getBoundingClientRect().top + window.pageYOffset - 100;
+                window.scrollTo({ top: topPos, behavior: "smooth" });
+            })
+            .catch(err => {
+                if (loader) loader.classList.remove('active');
+                productGrid.style.pointerEvents = 'all';
+                console.error("Filter error:", err);
+            });
+    }
+
+    function toggleClearAllVisibility() {
+        const clearAllBtn = document.querySelector('.clear-all-pill');
+        const filterForm = document.querySelector(".tc-filter-wrap form");
+        if (!clearAllBtn || !filterForm) return;
+
+        // 1. Check for checked inputs (excluding sort_by)
+        const hasActiveInputs = Array.from(filterForm.querySelectorAll('input:checked'))
+            .some(input => input.name !== 'sort_by');
+
+        // 2. Check for pills that have the 'is-active' class
+        const hasActivePills = document.querySelectorAll('.qf-pill.is-active').length > 0;
+
+        // 3. Check the URL for filter parameters (as a fallback)
+        const hasUrlFilters = window.location.search.includes('filter.')
+            || window.location.search.includes('jf_unavailable=1')
+            || window.location.search.includes('jf_quality_label=untreated')
+            || window.location.search.includes('jf_region=');
+
+        if (hasActiveInputs || hasActivePills || hasUrlFilters) {
+            clearAllBtn.style.display = 'inline-block';
+        } else {
+            clearAllBtn.style.display = 'none';
+        }
+    }
+
+    function updateQuickFilterCount() {
+        const countEl = document.querySelector('.qf-count');
+        if (!countEl) return;
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const unavailableActive = urlParams.get('jf_unavailable') === '1';
+        const untreatedActive = urlParams.get('jf_quality_label') === 'untreated';
+        const regionActive = urlParams.get('jf_region');
+
+        if (!unavailableActive && !untreatedActive && !regionActive) return;
+
+        const totalCount = countEl.dataset.totalCount || '0';
+        const filteredTemplate = countEl.dataset.filteredTemplate || '__COUNT__ products out of __TOTAL__';
+        const visibleFilteredCount = document.querySelectorAll('#ProductGrid .product-card-primary').length;
+
+        countEl.textContent = filteredTemplate
+            .replace('__COUNT__', visibleFilteredCount)
+            .replace('__TOTAL__', totalCount);
+    }
+
+    function bindQuickPills() {
+        const pills = document.querySelectorAll('.qf-pill:not(.clear-all-pill)');
+        const form = document.querySelector(".tc-filter-wrap form");
+
+        function syncPillStates() {
+            const urlParams = new URLSearchParams(window.location.search);
+
+            pills.forEach(pill => {
+                const name = pill.getAttribute('data-name');
+                const value = pill.getAttribute('data-value');
+                const input = form.querySelector(`input[name="${name}"][value="${value}"]`);
+                
+                if (input) {
+                    // Toggle Active State
+                    pill.classList.toggle('is-active', input.checked);
+                    
+                    // Toggle Disabled State (matches your sidebar screenshot)
+                    if (input.disabled) {
+                        pill.classList.add('is-disabled');
+                        pill.style.pointerEvents = 'none'; // Stop further clicks
+                    } else {
+                        pill.classList.remove('is-disabled');
+                        pill.style.pointerEvents = 'all';
+                    }
+                } else {
+                    const activeValues = urlParams.getAll(name);
+                    pill.classList.toggle('is-active', activeValues.includes(value));
+                    pill.classList.remove('is-disabled');
+                    pill.style.pointerEvents = 'all';
+                }
+            });
+        }
+
+        pills.forEach(button => {
+            button.onclick = function() {
+                const name = this.getAttribute('data-name');
+                const value = this.getAttribute('data-value');
+                const input = form.querySelector(`input[name="${name}"][value="${value}"]`);
+
+                if (input && !input.disabled) {
+                    input.checked = !input.checked;
+                    updateProductGrid();
+                } else {
+                    const isActive = this.classList.contains('is-active');
+                    const extraParams = {};
+
+                    if (isActive) {
+                        extraParams[name] = '';
+                    } else {
+                        extraParams[name] = value;
+                    }
+
+                    updateProductGrid(extraParams);
+                }
+            };
+        });
+
+        const clearBtn = document.querySelector('.clear-all-pill');
+              if (clearBtn) {
+                  clearBtn.onclick = (e) => {
+                      e.preventDefault();
+                      // Redirect to the clean collection URL to strip all filters
+                      window.location.href = collectionBaseUrl;
+                  };
+              }
+
+        syncPillStates();
+    }
+
+    function bindPaginationLinks() {
+      document.querySelectorAll(".pagination a").forEach(link => {
+          link.onclick = (e) => {
+              e.preventDefault();
+              let url = link.getAttribute("href");
+              
+              // If the URL doesn't have view=noindex but we are on page 2+, 
+              // the theme.liquid logic will handle it, but adding it to the URL is cleaner.
+              if (!url.includes('view=noindex')) {
+                  url += (url.includes('?') ? '&' : '?') + 'view=noindex';
+              }
+              
+              updateProductGrid({}, url);
+          };
+      });
+  }
+
+    // --- 2. SIDEBAR TOGGLE & OUTSIDE CLICK ---
+    filter_button.onclick = (e) => {
+        e.stopPropagation();
+        filter_sidebar.classList.add('active');
+        if (typeof lenis !== 'undefined') lenis.stop();
+    };
+
+    filter_close.onclick = () => closeSidebar();
+
+    filter_sidebar.onclick = (e) => {
+        if (e.target === filter_sidebar) closeSidebar();
+    };
+
+    function closeSidebar() {
+        filter_sidebar.classList.remove('active');
+        if (typeof lenis !== 'undefined') lenis.start();
+    }
+
+    // --- 3. ACCORDION (Bulletproof Version) ---
+    document.querySelectorAll(".form-filter-wrap .ff-head").forEach(head => {
+        head.addEventListener('click', function(e) {
+            // Kill all other scripts trying to touch this click
+            e.preventDefault();
+            e.stopPropagation(); 
+            e.stopImmediatePropagation(); 
+
+            const body = this.nextElementSibling;
+            const isActive = this.classList.contains("active");
+            
+            // 1. Close ALL other headers and bodies
+            document.querySelectorAll(".ff-head").forEach(otherHead => {
+                if (otherHead !== this) {
+                    otherHead.classList.remove("active");
+                    if (otherHead.nextElementSibling) {
+                        otherHead.nextElementSibling.style.display = "none";
+                    }
+                }
+            });
+
+            // 2. Toggle the current one
+            if (isActive) {
+                this.classList.remove("active");
+                if (body) body.style.display = "none";
+            } else {
+                this.classList.add("active");
+                if (body) body.style.display = "block";
+            }
+        });
+    });
+
+    // --- 4. OUTSIDE CLICK (Updated to avoid conflicts) ---
+    document.addEventListener("click", function(event) {
+        // If the click is NOT inside a filter wrap, close everything
+        if (!event.target.closest(".form-filter-wrap")) {
+            document.querySelectorAll(".ff-in").forEach(el => {
+                el.style.display = "none";
+            });
+            document.querySelectorAll(".ff-head").forEach(el => {
+                el.classList.remove("active");
+            });
+        }
+    });
+
+    // Initial Bindings
+    filterForm.onsubmit = (e) => {
+        e.preventDefault();
+        updateProductGrid();
+        closeSidebar();
+    };
+
+    bindQuickPills();
+    bindPaginationLinks();
+    toggleClearAllVisibility();
+    updateQuickFilterCount();
+});
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const content = document.getElementById('seoContent');
+  const button = document.getElementById('seoToggleButton');
+
+  if (content && button) {
+    // Hide button if content is already short
+    if (content.scrollHeight <= content.offsetHeight) {
+      button.style.display = 'none';
+    }
+
+    button.addEventListener('click', function() {
+      const isExpanded = content.classList.toggle('is-expanded');
+      button.textContent = isExpanded ? 'Show Less' : 'Show More';
+
+      // 1. Fix Lenis Scroll
+      if (window.lenis) {
+        window.lenis.resize();
+      }
+
+      // 2. Fix GSAP ScrollTrigger (since it's in your theme)
+      if (window.ScrollTrigger) {
+        window.ScrollTrigger.refresh();
+      }
+      
+      // Optional: Smoothly scroll to the top of the section when closing
+      if (!isExpanded) {
+        content.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+    });
+  }
+});
+</script>
+
+
+
+<script>
+   $(document).ready(function() {
+      // Toggle logic
+      $(".form-filter-wrap.list .ff-head").click(function(e) {
+        e.stopPropagation(); 
+        
+        let $currentBody = $(this).siblings(".ff-in");
+        let $currentHead = $(this);
+        let $currentParent = $(this).parent(".form-filter-wrap.list");
+
+        // If this one is already open, slide it up
+        if ($currentHead.hasClass("active")) {
+          $currentBody.slideUp(300).removeClass("active");
+          $currentHead.removeClass("active");
+          $currentParent.removeClass("active");
+        } else {
+          // Close any other open filters with a slideUp
+          $(".list .ff-in").slideUp(300).removeClass("active");
+          $(".list .ff-head").removeClass("active");
+          $(".form-filter-wrap.list").removeClass("active");
+
+          // Slide down the clicked one
+          $currentBody.slideDown(300).addClass("active");
+          $currentHead.addClass("active");
+          $currentParent.addClass("active");
+        }
+      });
+
+      // Close when clicking outside
+      $(document).on("click", function(event) {
+        if (!$(event.target).closest(".form-filter-wrap.list").length) {
+          $(".list .ff-in").slideUp(300).removeClass("active");
+          $(".list .ff-head").removeClass("active");
+          $(".form-filter-wrap.list").removeClass("active");
+        }
+      });
+    });
+
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const filter_button = document.querySelector('.filter-buttton');
+      const filter_sidebar = document.querySelector('.filter-sidebar');
+      const filter_close = document.querySelector('.filter-close-mob');
+
+      // Open sidebar
+      filter_button.addEventListener('click', function(e) {
+          e.stopPropagation(); 
+          filter_sidebar.classList.add('active');
+          if (typeof lenis !== 'undefined') lenis.stop(); // Stop Lenis scrolling
+      });
+
+      // Close sidebar via close button
+      filter_close.addEventListener('click', function() {
+          filter_sidebar.classList.remove('active');
+          if (typeof lenis !== 'undefined') lenis.start(); // Restart Lenis
+      });
+
+      // Close sidebar when clicking the BACKGROUND
+      filter_sidebar.addEventListener('click', function(event) {
+          // 'event.target' is the element you actually clicked
+          // 'this' is the filter_sidebar itself
+          // If they match, it means you clicked the background overlay, not the content inside
+          if (event.target === this) {
+              filter_sidebar.classList.remove('active');
+              if (typeof lenis !== 'undefined') lenis.start();
+          }
+      });
+
+      // Optional: Keep the document click as a fallback for the button area
+      document.addEventListener('click', function(event) {
+          const isClickOnButton = filter_button.contains(event.target);
+          
+          // If clicking somewhere else entirely that isn't the sidebar or button
+          if (!filter_sidebar.contains(event.target) && !isClickOnButton) {
+              filter_sidebar.classList.remove('active');
+              if (typeof lenis !== 'undefined') lenis.start();
+          }
+      });
+  });
+</script>
+
+{% schema %}
+  {
+    "name": "Collection",
+    "tag": "section",
+    "class": "collectionMain",
+    "settings": [
+      {
+        "type": "text",
+        "id": "head",
+        "label": "Category Pages Heading"
+      }
+    ],
+    "blocks": [
+      {
+        "type": "collection",
+        "name": "Category Collections",
+        "settings": [
+          {
+            "type": "collection",
+            "id": "col",
+            "label": "Select Collection"
+          }, {
+            "type": "collection_list",
+            "id": "parent_collections",
+            "label": "Show as sub-category on",
+            "info": "Leave empty to show this tile only on the all/generic collection pages. Select parent collections to show it as a sub-category there."
+          }, {
+            "type": "checkbox",
+            "id": "hide_on_generic_collections",
+            "label": "Hide on all/generic collection pages",
+            "info": "Enable this for sub-category-only tiles.",
+            "default": false
+          }, {
+            "type": "text",
+            "id": "col_name",
+            "label": "Collection Name(optional)"
+          }, {
+            "type": "image_picker",
+            "id": "col_img",
+            "label": "Collection Image(optional)"
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}

@@ -1,0 +1,167 @@
+<div class="recommended-item">
+      {% assign product_title_suffix = '' %}
+      {% for cert in product.metafields.custom.certificate.value %}
+        {% if cert.system.handle == 'organic' %}
+          {% assign product_title_suffix = cert.key.value %}
+          {% break %}
+        {% endif %}
+      {% endfor %}
+      {% assign product_display_title = product.title %}
+      {% if product_title_suffix != blank %}
+        {% assign product_display_title = product.title | append: ' ' | append: product_title_suffix %}
+      {% endif %}
+      <div class="ri-img">
+        <a href="{{ product.url }}" class="card-link"></a>
+        {% assign images = product.images %}
+        {% if images.size > 0 %}
+            <img
+              src="{{ images.first | img_url: 'master' }}"
+              alt="{{ product.title | escape }}"
+              width="{{ images.first.width }}"
+              height="{{ images.first.height }}"
+              class="img_sizing primary-img">
+
+            {% if images.size > 1 %}
+              <img
+                src="{{ images[1] | img_url: 'master' }}"
+                alt="{{ product.title | escape }}"
+                width="{{ images[1].width }}"
+                height="{{ images[1].height }}"
+                class="img_sizing hover-img">
+            {% endif %}
+          {% else %}
+            <img
+              src="{{ 'https://cdn.shopify.com/s/files/1/0752/8015/4881/files/placeholder.jpg?v=1760532683' }}"
+              alt="No Image Available"
+              width="800"
+              height="1000"
+              class="img_sizing primary-img">
+          {% endif %}
+          <div class="ri-image-items">
+            <div class="ri-image-items-top">
+              {% if product.metafields.custom.certificate %}
+                {% assign certificate = product.metafields.custom.certificate.value %}
+                {% for item in product.metafields.custom.certificate.value %}
+                  <div class="fc_organic_auth">
+                    <img
+                      src="{{ item.badge_image | img_url:'master' }}"
+                      alt="{{ item.display_name }}"
+                      class="img_sizing">
+                  </div>
+                {% endfor %}
+              {% endif %}
+              {% comment %} {% if product.tags contains 'Best Seller' %}
+                <div class="fc_bestsell_tags">
+                  <span>Bestseller</span>
+                </div>
+              {% endif %} {% endcomment %}
+            </div>
+            <div class="ri-image-items-bottom">
+              <div class="ri-txt">
+                <p data-oke-star-rating data-oke-reviews-product-id="shopify-{{ product.id }}"></p>
+                <p class="rit-title">{{ product_display_title | truncate: 50 }}</p>
+              </div>
+            </div>
+          </div>
+      </div>
+      
+      {% comment %} <div class="ri-form">
+        <form action="/cart/add" method="post" enctype="multipart/form-data">
+          <input
+            type="hidden"
+            name="id"
+            value="{{ product.selected_or_first_available_variant.id }}"
+          >
+          <input type="hidden" name="quantity" value="1">
+
+          <div class="fc_add_to_cart">
+            <button type="submit" class="add-to-cart"{% unless product.available %}disabled{% endunless %}>
+              {% if product.available %}
+                {{ 'products.product.add_to_cart' | t }}
+              {% else %}
+                {{ 'products.product.sold_out' | t }}
+              {% endif %}
+            </button>
+          </div>
+        </form>
+
+      </div>  {% endcomment %}
+
+      <div class="ri-form">
+        <div class="fc_add_to_cart">
+            <a href="{{ product.url }}" class="add-to-cart"{% unless product.available %}disabled{% endunless %}>
+              {% if product.available %}
+                {{ 'products.product.select_product' | t }}
+              {% else %}
+                {{ 'products.product.sold_out' | t }}
+              {% endif %}
+            </a>
+          </div>
+      </div>
+</div>
+
+
+<script>
+  function attachAddToCartListeners(scope = document) {
+  // Find all forms that add to cart (use ends-with action for safety)
+  scope.querySelectorAll('form[action$="/cart/add"]').forEach(form => {
+    // Prevent adding multiple listeners to same form
+    if (form.dataset.listenerAttached === 'true') return;
+    form.dataset.listenerAttached = 'true';
+
+    // Prefer a custom button class, fallback to any submit button
+    const addToCartBtn = form.querySelector('.add-to-cart') || form.querySelector('button[type="submit"]');
+
+    if (!addToCartBtn) return;
+
+    addToCartBtn.addEventListener('click', async (e) => {
+      // Prevent native form submit so we control requests
+      e.preventDefault();
+
+      // Guard against duplicates
+      if (form.dataset.submitting === 'true') return;
+      form.dataset.submitting = 'true';
+      showLoader();
+
+      try {
+        const formData = new FormData(form);
+
+        // If button has data-variant-id and input id is missing, ensure it exists
+        const btnVariantId = addToCartBtn.dataset.variantId;
+        if (btnVariantId && !form.querySelector('input[name="id"]')) {
+          formData.set('id', btnVariantId);
+        }
+
+        const response = await fetch(window.Shopify.routes.root + 'cart/add.js', {
+          method: 'POST',
+          body: formData
+        });
+
+        if (!response.ok) throw new Error('Network response was not ok');
+
+        const data = await response.json();
+        console.log('Added to cart:', data);
+
+        /* Update cart count */
+        const cart = await fetch('/cart.js').then(r => r.json());
+
+        document.querySelectorAll('[data-ajax-cart-bind="item_count"]').forEach(el => {
+          el.textContent = cart.item_count;
+          el.classList.toggle('is-hidden', cart.item_count === 0);
+        });
+
+        // Open side cart and re-render
+        sideCart.classList.add('active');
+        await loadCartItems();
+        await fetchShippingRateByRegion();
+        await recommendedCart();
+      } catch (err) {
+        console.error('Error adding to cart:', err);
+      } finally {
+        form.dataset.submitting = 'false';
+        hideLoader();
+      }
+    });
+  });
+}
+</script>

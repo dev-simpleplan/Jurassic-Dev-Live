@@ -1,0 +1,116 @@
+<section class="sustain">
+    <div class="container-fluid">
+        <div class="sustain-in">
+            <div class="heading left with-mark">
+                <h2 class="heading-big">{{ section.settings.heading }}</h2>
+                <p class="small">{{ section.settings.content }}</p>
+                <div class="heading-mark">
+                    <img width="100%" src="{{ section.settings.mark_image | img_url:'master' }}" alt="{{ section.settings.mark_image.alt }}">
+                </div>
+            </div>
+            <div class="sustain-data">
+                <div class="sustain-row">
+                    <div class="sustain-colm">
+                        <div class="sustain-image">
+                            <img width="100%" src="{{ section.settings.section_image | img_url:'master' }}" alt="{{ section.settings.section_image.alt }}">
+                        </div>
+                    </div>
+                    <div class="sustain-colm">
+                        {%- for block in section.blocks -%}
+                            <div class="numb_in number-item">
+                                <div class="numbold"><span class="value">{{ block.settings.number }}</span>{{ block.settings.expression }}</div>
+                                <div class="numdetail">{{ block.settings.content }}</div>
+                            </div>
+                        {%- endfor -%}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    //Number counter
+    var section = document.querySelector('.sustain');
+    var hasEntered = false;
+
+    window.addEventListener('scroll', (e) => {
+        var shouldAnimate = (window.scrollY + window.innerHeight) >= section.offsetTop;
+
+        if (shouldAnimate && !hasEntered) {
+        hasEntered = true;
+
+        $('.value').each(function () {
+            $(this).prop('Counter',0).animate({
+            Counter: $(this).text()
+            }, {
+            duration: 2000,
+            easing: 'swing',
+            step: function (now) {
+                $(this).text(Math.ceil(now));
+            }
+            });
+        });
+
+        }
+    });
+</script>
+
+{% schema %}
+  {
+    "name": "sustain",
+    "tag": "section",
+    "settings": [
+      {
+        "type": "text",
+        "id": "heading",
+        "label": "Section Heading"
+      }, {
+        "type": "text",
+        "id": "content",
+        "label": "Section Content"
+      },
+      {
+        "type": "image_picker",
+        "id": "mark_image",
+        "label": "Heading Mark Image"
+      },
+      {
+        "type": "image_picker",
+        "id": "section_image",
+        "label": "Sustainability Image"
+      }
+    ],
+    "blocks": [
+        {
+        "name": "counter",
+        "type": "cards",
+        "limit": 3,
+        "settings": [
+            {
+            "type": "number",
+            "id": "number",
+            "label": "Sustainability Number"
+            },
+            {
+            "type": "text",
+            "id": "expression",
+            "label": "Sustainability Number Expression"
+            },
+            {
+            "type": "text",
+            "id": "content",
+            "label": "Sustainability Content"
+            },
+        ]
+        }
+    ],
+    "presets": [
+      {
+        "name": "sustain",
+        "settings": {
+        }
+      }
+    ]
+  }
+{% endschema %}

@@ -1,0 +1,24 @@
+{%- assign rating = rating | default: 0 | plus: 0.0 -%}
+{%- if rating < 0 -%}{%- assign rating = 0 -%}{%- endif -%}
+{%- if rating > 5 -%}{%- assign rating = 5 -%}{%- endif -%}
+
+<!-- {%- assign percent = rating | times: 20 -%} {# 5 stars = 100% => 1 star = 20% #} -->
+
+<span class="score" aria-label="Rating {{ rating }}/5">
+  <span class="score-wrap">
+    <span class="stars-active" style="width:{{ percent }}%">
+      <i class="fa fa-star" aria-hidden="true"></i>
+      <i class="fa fa-star" aria-hidden="true"></i>
+      <i class="fa fa-star" aria-hidden="true"></i>
+      <i class="fa fa-star" aria-hidden="true"></i>
+      <i class="fa fa-star" aria-hidden="true"></i>
+    </span>
+    <span class="stars-inactive" aria-hidden="true">
+      <i class="fa fa-star"></i>
+      <i class="fa fa-star"></i>
+      <i class="fa fa-star"></i>
+      <i class="fa fa-star"></i>
+      <i class="fa fa-star"></i>
+    </span>
+  </span>
+</span>

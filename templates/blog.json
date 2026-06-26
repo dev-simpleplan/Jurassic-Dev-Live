@@ -1,0 +1,44 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "featured-blogs": {
+      "type": "featured-blogs",
+      "settings": {
+        "head":"Featured Blogs",
+        "blog_source": "news"
+      }
+    },
+    "spacer1": {
+      "type": "spacer",
+      "settings": {
+        "spacer_height": 140
+      }
+    },
+    "blog": {
+      "type": "blog",
+      "settings": {
+        "number_of_blog_posts": 9
+      }
+    },
+    "spacer2": {
+      "type": "spacer",
+      "settings": {
+        "spacer_height": 140
+      }
+    }
+  },
+  "order": [
+    "featured-blogs",
+    "spacer1",
+    "blog",
+    "spacer2",
+  ]
+}

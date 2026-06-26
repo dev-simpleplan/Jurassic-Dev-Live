@@ -1,0 +1,152 @@
+.fc_add_to_cart {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  background: #FFC107;
+  border-radius: 8px;
+  /* padding: 12px 20px; */
+  min-height: 48px;
+  transition: all 0.3s ease;
+}
+
+.fc_add_to_cart button.add-to-cart {
+  background: transparent;
+  border: none;
+  font-weight: 600;
+  font-size: 14px;
+  color: #151515;
+  cursor: pointer;
+  padding: 0;
+  flex: 1;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.fc_add_to_cart button.add-to-cart:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* Quantity control icons - hidden by default */
+.fc_add_to_cart .add_product,
+.fc_add_to_cart .remove_product {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0 8px;
+  transition: all 0.2s;
+  flex-shrink: 0;
+  border-radius: 4px;
+  background: transparent;
+}
+
+/* Show controls when item is in cart */
+.fc_add_to_cart.show-controls {
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 16px;
+}
+
+.fc_add_to_cart.show-controls .add_product,
+.fc_add_to_cart.show-controls .remove_product {
+  display: flex !important;
+}
+
+/* Hover effects for quantity buttons */
+.fc_add_to_cart .add_product:hover,
+.fc_add_to_cart .remove_product:hover {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.fc_add_to_cart .add_product:active,
+.fc_add_to_cart .remove_product:active {
+  transform: scale(0.95);
+}
+
+/* Style the SVG icons */
+.fc_add_to_cart .add_product svg,
+.fc_add_to_cart .remove_product svg {
+  width: 20px;
+  height: 20px;
+  display: block;
+}
+
+.fc_add_to_cart .add_product svg path,
+.fc_add_to_cart .remove_product svg path {
+  stroke: #151515;
+  stroke-width: 2;
+}
+
+/* When showing quantity, style the number display */
+.fc_add_to_cart button.add-to-cart.has-quantity {
+  min-width: 40px;
+  font-size: 18px;
+  font-weight: 700;
+  flex: 0 0 auto;
+}
+
+/* Adjust form styling */
+.fc_add_to_cart_outer form {
+  width: 100%;
+}
+
+/* Ensure the container maintains proper layout */
+.fc_add_to_cart_outer {
+  width: 100%;
+  margin-top: 12px;
+}
+
+/* Add some visual feedback */
+.fc_add_to_cart.show-controls button.add-to-cart {
+  pointer-events: none; /* Prevent clicking the number */
+  user-select: none;
+}
+
+/* Mobile responsive adjustments */
+@media (max-width: 768px) {
+  .fc_add_to_cart {
+    padding: 10px 16px;
+    min-height: 44px;
+  }
+  
+  .fc_add_to_cart.show-controls {
+    padding: 6px 12px;
+    gap: 8px;
+  }
+  
+  .fc_add_to_cart .add_product,
+  .fc_add_to_cart .remove_product {
+    padding: 6px;
+  }
+  
+  .fc_add_to_cart .add_product svg,
+  .fc_add_to_cart .remove_product svg {
+    width: 18px;
+    height: 18px;
+  }
+  
+  .fc_add_to_cart button.add-to-cart.has-quantity {
+    font-size: 16px;
+    min-width: 36px;
+  }
+}
+
+/* Animation for smooth transition */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.fc_add_to_cart.show-controls .add_product,
+.fc_add_to_cart.show-controls .remove_product {
+  animation: fadeIn 0.3s ease;
+}

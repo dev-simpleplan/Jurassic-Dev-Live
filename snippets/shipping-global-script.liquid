@@ -1,0 +1,107 @@
+<script>
+  (function() {
+    const freeShippingThresholds = {
+      de: '99 €',
+      fr: '120 €',
+      be: '120 €',
+      nl: '120 €',
+      dk: '120 €',
+      at: '120 €',
+      default: '99 €'
+    };
+
+    const translations = {
+      freeShippingFrom: {{ 'sections.product.free_shipping_from' | t | json }},
+      shippingStartsFrom: {{ 'sections.product.shipping_starts_from' | t | json }},
+      finalPricesCheckout: {{ 'sections.product.final_prices_checkout' | t | json }}
+    };
+
+    let lastMarketKey = null;
+
+    function resolveMarketKey() {
+      const urlParams = new URLSearchParams(window.location.search);
+      let market = window.corner?.sessionData?.market || urlParams.get('country') || '{{ localization.country.iso_code }}' || 'default';
+      let marketKey = String(market).toLowerCase().trim();
+
+      const countryMap = {
+        france: 'fr',
+        germany: 'de',
+        austria: 'at',
+        belgium: 'be',
+        netherlands: 'nl',
+        denmark: 'dk',
+        'united kingdom': 'gb',
+        'united states': 'us',
+        india: 'in'
+      };
+
+      if (countryMap[marketKey]) marketKey = countryMap[marketKey];
+      return marketKey;
+    }
+
+    function updateShippingText(force) {
+      const mainEl = document.getElementById('corner-cowi-cart-custom-html-above-cta');
+      const deliveryEl = document.getElementById('delivery-data');
+      const newOuterPrice = document.getElementById('delivery-data-new');
+      if (!mainEl && !deliveryEl && !newOuterPrice) return;
+
+      try {
+        const marketKey = resolveMarketKey();
+
+        if (!force && marketKey === lastMarketKey) {
+          return;
+        }
+
+        lastMarketKey = marketKey;
+        const shippingPrice = freeShippingThresholds[marketKey] || freeShippingThresholds.default;
+
+        if (mainEl) {
+          const text = `${translations.shippingStartsFrom} ${shippingPrice}.\n${translations.finalPricesCheckout}`;
+          if (mainEl.innerText !== text) mainEl.innerText = text;
+        }
+
+        if (deliveryEl) {
+          const text = `${translations.freeShippingFrom} ${shippingPrice}`;
+          if (deliveryEl.innerText !== text) deliveryEl.innerText = text;
+        }
+
+        if (newOuterPrice) {
+          const text = `${translations.freeShippingFrom} ${shippingPrice}`;
+          if (newOuterPrice.innerText !== text) newOuterPrice.innerText = text;
+        }
+
+      } catch (e) {
+        console.error('Shipping Script Error:', e);
+      }
+    }
+
+    function scheduleUpdate(force) {
+      window.requestAnimationFrame(() => updateShippingText(force));
+    }
+
+    function bootShippingUpdates() {
+      scheduleUpdate(true);
+
+      let attempts = 0;
+      const retryTimer = window.setInterval(() => {
+        attempts += 1;
+        scheduleUpdate(false);
+
+        if (
+          window.corner?.sessionData?.market ||
+          attempts >= 5
+        ) {
+          window.clearInterval(retryTimer);
+        }
+      }, 700);
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', bootShippingUpdates, { once: true });
+    } else {
+      bootShippingUpdates();
+    }
+
+    window.addEventListener('load', () => scheduleUpdate(false), { once: true });
+  })();
+</script>

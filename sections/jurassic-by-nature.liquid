@@ -1,0 +1,182 @@
+<link href="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/css/splide.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js"></script>
+
+<section class="jurassic-nature">
+    <div class="bg-image">
+        <img width="100%" height="100%" src="{{ section.settings.bg_image | img_url:'master' }}" alt="{{ section.settings.bg_image.alt }}">
+    </div>
+    <div class="jn-in">
+        <div class="container-fluid">
+            <div class="jnheading-wrap">
+                <div class="heading left white">
+                    <h2>{{ section.settings.section_heading }}</h2>
+                    <p>{{ section.settings.section_subheading }}</p>
+                </div>
+                <div class="jn-icon">
+                    <div class="outer">
+                        <img width="100%" height="100%" src="{{ section.settings.icon-outer | img_url:'master' }}" alt="{{ section.settings.icon.alt }}">
+                    </div>
+                    <div class="inner">
+                        <img width="100%" height="100%" src="{{ section.settings.icon-inner | img_url:'master' }}" alt="{{ section.settings.icon.alt }}">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="jni-slider splide">
+            <div class="splide__track">
+                <div class="splide__list">
+                    {% for item in product.metafields.custom.timeline.value %}
+                        <div class="splide__slide">
+                            <div class="jbn-item">
+                                <div class="jbnitem-textbox">
+                                    <div class="jbtb-top">{{ item.timeline_year }}</div>
+                                    <div class="jbtb-bottom">
+                                        <p>{{ item.timeline_body }}</p>
+                                    </div>
+                                </div>
+                                <div class="jbniitem-image">
+                                    <img src="{{ item.timeline_fruit_image | img_url:'master' }}" alt="{{ item.timeline_fruit_image.alt }}">
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  var splide = new Splide('.jni-slider', {
+    perPage: 3,
+    perMove: 1,
+    arrows: false,
+    pagination: false,
+    gap: '60px',
+    drag: 'free',
+    flickPower: 300,
+    flickMaxPages: 1,
+    speed: 600,
+    waitForTransition: false,
+    breakpoints: {
+      1200: { perPage: 2 },
+      1000: { perPage: 2 },
+      600:  { perPage: 1, arrows: true },
+    },
+  });
+
+  splide.mount();
+
+  const track = document.querySelector('.jni-slider .splide__track');
+
+  const STEP_THRESHOLD = 140;         // increase threshold for finer control
+  const COOLDOWN_MS = 140;            // prevent rapid consecutive jumps
+  let accum = 0;
+  let lastGo = 0;
+
+  function clampIndex(idx) {
+    const perPage = splide.options.perPage || 1;
+    const slides  = splide.root.querySelectorAll('.splide__slide').length;
+    const maxIdx  = Math.max(0, slides - perPage);
+    return Math.max(0, Math.min(idx, maxIdx));
+  }
+
+  track.addEventListener('wheel', function (e) {
+    if (Math.abs(e.deltaX) <= Math.abs(e.deltaY)) return;
+
+    e.preventDefault();
+    accum += e.deltaX;
+
+    const now = performance.now();
+    if (now - lastGo < COOLDOWN_MS) return;
+
+    const rawSteps = Math.trunc(accum / STEP_THRESHOLD);
+    if (rawSteps !== 0) {
+      const step = Math.sign(rawSteps);        // clamp to -1 / +1 per tick
+      const target = clampIndex(splide.index + step);
+      if (target !== splide.index) {
+        splide.go(target);
+        lastGo = now;
+      }
+      // keep only the remainder but remove the step we just consumed
+      accum -= step * STEP_THRESHOLD;
+    }
+  }, { passive: false });
+});
+</script>
+
+
+{% schema %}
+  {
+    "name": "jurassic-nature",
+    "tag": "section",
+    "settings": [
+        {
+            "type": "text",
+            "id": "section_heading",
+            "label": "Section Heading",
+            "default": "Jurassic by Nature"
+        },
+        {
+            "type": "text",
+            "id": "section_subheading",
+            "label": "Section Sub Heading",
+            "default": "A Fruit Born With the Dinosaurs... and Still Intact"
+        },
+        {
+            "type": "image_picker",
+            "id": "bg_image",
+            "label": "Background Image"
+        },
+        {
+            "type": "image_picker",
+            "id": "icon-outer",
+            "label": "Heading Icon Outer"
+        },
+        {
+            "type": "image_picker",
+            "id": "icon-inner",
+            "label": "Heading Icon Inner"
+        },
+        {
+            "type": "image_picker",
+            "id": "item_image",
+            "label": "Item Image"
+        },
+        {
+            "type": "image_picker",
+            "id": "item_image1",
+            "label": "Item Image1"
+        },
+        {
+            "type": "image_picker",
+            "id": "item_image2",
+            "label": "Item Image2"
+        },
+        {
+            "type": "image_picker",
+            "id": "item_image3",
+            "label": "Item Image3"
+        },
+        {
+            "type": "image_picker",
+            "id": "item_image4",
+            "label": "Item Image4"
+        },
+        {
+            "type": "image_picker",
+            "id": "item_image5",
+            "label": "Item Image5"
+        }
+    ],
+    "presets": [
+      {
+        "name": "jurassic-nature",
+        "settings": {
+        }
+      }
+    ]
+  }
+{% endschema %}

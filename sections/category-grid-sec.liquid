@@ -1,0 +1,131 @@
+<section class="all-category">
+    <div class="container-fluid">
+        <div class="sec-with-space">
+            <div class="heading center">
+                <h2 data-aos="fade-up" data-aos-duration="1000">{{ section.settings.heading }}</h2>
+            </div>
+            {% comment %} <div class="category-grid">
+                {% for block in section.blocks %}
+                {% assign collection = block.settings.collection %}
+                {% if collection %}
+                <div class="c-item">
+                    <a href="{{ collection.url }}">
+                        <div class="citem-in">
+                            <div class="citem-image">
+                                <img class="icon" src="{{ collection.image | img_url: 'master' }}" alt="{{ collection.title }}">
+                            </div>
+                            <div class="citem-text">
+                                <h3>{{ collection.title }}</h3>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                {% endif %}
+                {% endfor %}
+            </div> {% endcomment %}
+            <div class="category-slider slider_container">
+              <div class="owl-carousel owl-theme category-carousel">
+
+                {% for block in section.blocks %}
+                  {% assign collection = block.settings.collection %}
+                  {% if collection %}
+                    {% assign collection_display_title = collection.metafields.custom.collection_short_name.value | default: collection.title %}
+                    <div class="c-item">
+                      <a href="{{ collection.url }}">
+                        <div class="citem-in">
+                          <div class="citem-image">
+                            {% if collection.image %}
+                              <img
+                                class="icon"
+                                src="{{ collection.image | img_url: 'master' }}"
+                                alt="{{ collection.title | escape }}">
+                            {% endif %}
+                          </div>
+                          <div class="citem-text">
+                            <h3>{{ collection_display_title }}</h3>
+                          </div>
+                        </div>
+                      </a>
+                    </div>
+                  {% endif %}
+                {% endfor %}
+              </div>
+              <div class="slider-counter"></div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<script>
+  $(document).ready(function () {
+    $('.category-slider .owl-carousel').owlCarousel({
+      loop: true,
+      center: true,
+      margin: 20,
+      nav: true,
+      dots: false,
+      touchDrag: false,
+      mouseDrag: false,
+      autoplayTimeout: 3000,
+      navText: [
+        '<button class="custom-prev"><svg width="11" height="9" viewBox="0 0 11 9" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4.64897 8.43826C4.66854 8.41871 4.68407 8.39549 4.69466 8.36993C4.70526 8.34438 4.71071 8.31698 4.71071 8.28932C4.71071 8.26165 4.70526 8.23426 4.69466 8.2087C4.68407 8.18314 4.66854 8.15992 4.64897 8.14037L1.21909 4.71049L9.97351 4.71049C10.0293 4.71049 10.0829 4.68832 10.1224 4.64884C10.1619 4.60936 10.184 4.55581 10.184 4.49998C10.184 4.44414 10.1619 4.3906 10.1224 4.35112C10.0829 4.31164 10.0293 4.28946 9.97351 4.28946L1.21909 4.28946L4.64897 0.859578C4.66853 0.840019 4.68404 0.816799 4.69463 0.791243C4.70521 0.765688 4.71066 0.738297 4.71066 0.710636C4.71066 0.682975 4.70521 0.655585 4.69463 0.630029C4.68404 0.604474 4.66853 0.581253 4.64897 0.561694C4.62941 0.542135 4.60619 0.526619 4.58063 0.516034C4.55508 0.505448 4.52769 0.5 4.50002 0.5C4.47236 0.5 4.44497 0.505448 4.41942 0.516034C4.39386 0.526619 4.37064 0.542135 4.35108 0.561694L0.561742 4.35103C0.542169 4.37058 0.526641 4.3938 0.516047 4.41936C0.505453 4.44492 0.5 4.47231 0.5 4.49998C0.5 4.52764 0.505453 4.55504 0.516047 4.58059C0.526641 4.60615 0.542169 4.62937 0.561742 4.64892L4.35108 8.43826C4.37063 8.45783 4.39385 8.47336 4.41941 8.48395C4.44496 8.49455 4.47236 8.5 4.50002 8.5C4.52769 8.5 4.55508 8.49455 4.58064 8.48395C4.6062 8.47336 4.62941 8.45783 4.64897 8.43826Z" fill="#FCF9F5" stroke="#1A1A1A"></path></svg></button>',
+        '<button class="custom-next"><svg width="11" height="9" viewBox="0 0 11 9" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6.03463 8.43826C6.01505 8.41871 5.99953 8.39549 5.98893 8.36993C5.97834 8.34438 5.97289 8.31698 5.97289 8.28932C5.97289 8.26165 5.97834 8.23426 5.98893 8.2087C5.99953 8.18314 6.01505 8.15992 6.03463 8.14037L9.46451 4.71049L0.710079 4.71049C0.654246 4.71049 0.600699 4.68832 0.56122 4.64884C0.52174 4.60936 0.49956 4.55581 0.49956 4.49998C0.49956 4.44414 0.52174 4.3906 0.56122 4.35112C0.600699 4.31164 0.654246 4.28946 0.710079 4.28946L9.46451 4.28946L6.03463 0.859578C6.01507 0.840019 5.99955 0.816799 5.98897 0.791243C5.97838 0.765688 5.97293 0.738297 5.97293 0.710636C5.97293 0.682975 5.97838 0.655585 5.98897 0.630029C5.99955 0.604474 6.01507 0.581253 6.03463 0.561694C6.05419 0.542135 6.07741 0.526619 6.10296 0.516034C6.12852 0.505448 6.15591 0.5 6.18357 0.5C6.21123 0.5 6.23862 0.505448 6.26418 0.516034C6.28973 0.526619 6.31295 0.542135 6.33251 0.561694L10.1219 4.35103C10.1414 4.37058 10.157 4.3938 10.1675 4.41936C10.1781 4.44492 10.1836 4.47231 10.1836 4.49998C10.1836 4.52764 10.1781 4.55504 10.1675 4.58059C10.157 4.60615 10.1414 4.62937 10.1219 4.64892L6.33251 8.43826C6.31296 8.45783 6.28974 8.47336 6.26419 8.48395C6.23863 8.49455 6.21124 8.5 6.18357 8.5C6.1559 8.5 6.12851 8.49455 6.10295 8.48395C6.0774 8.47336 6.05418 8.45783 6.03463 8.43826Z" fill="#FCF9F5" stroke="#1A1A1A"></path></svg></button>',
+      ],
+      responsive: {
+        0: {
+          items: 1.2,
+          center: false,
+          touchDrag: true,
+          mouseDrag: true,
+          pullDrag: true,
+          onInitialized: counter,
+          onChanged: counter,
+        },
+        700: {
+          items: 4,
+        },
+        1100: {
+          items: 8,
+          loop: false,
+          center: false
+        }
+      },
+    });
+    function counter(event) {
+  if (!event.namespace) {
+    return;
+  }
+  var slides = event.relatedTarget;
+  $('.slider-counter').text(slides.relative(slides.current()) + 1 + '/' + slides.items().length);
+}
+  });
+</script>
+
+{% schema %}
+
+  {
+    "name": "Category Grid Sec",
+    "settings": [
+      {
+        "type": "text",
+        "id": "heading",
+        "label": "Section Heading",
+        "default": "All Categories"
+      }
+    ],
+    "blocks": [
+      {
+        "type": "collection_block",
+        "name": "Collection",
+        "settings": [
+          {
+            "type": "collection",
+            "id": "collection",
+            "label": "Select Categories"
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}

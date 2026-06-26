@@ -1,0 +1,553 @@
+<section
+  class="address"
+  data-scroll-section
+  style="background-image: url({{ section.settings.Img |  img_url: 'master' }}); background-size: cover; background-repeat: no-repeat; background-position: center;"
+>
+  <div class="container">
+    <div class="address-con">
+      <div class="address-head aukera-head row">
+        <h3>
+          <span></span>
+          Addresses
+        </h3>
+      </div>
+      <div class="address-cards">
+        {% for address in customer.addresses %}
+          <div class="address-card-con">
+            {% if address == customer.default_address %}
+              <p class="capsule-text">Default</p>
+            {% endif %}
+            <div class="address-text">
+              {{ address | format_address }}
+            </div>
+            <div class="address-button">
+              <button
+                type="button"
+                data-modal-target="#myModal_{{ address.id }}"
+                id="{{ address.id }}"
+                class="aukera-button underline"
+              >
+                <div class="button-con">Edit</div>
+              </button>
+              <button
+                type="button"
+                data-delete-address
+                data-url="{{ address.url }}"
+                class="aukera-button underline"
+              >
+                <div class="button-con">Delete</div>
+              </button>
+              <form method="post" action="{{ address.url }}">
+                <input
+                  type="hidden"
+                  name="_method"
+                  value="delete"
+                >
+              </form>
+            </div>
+          </div>
+        {% endfor %}
+        <div class="address-card-con">
+          <button
+            type="button"
+            class="aukera-button underline"
+            data-modal-target="#myModal1"
+          >
+            <span class="plus-icon"> + </span>Add New Address
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- The Modal Add Address Button -->
+<div class="modal" id="myModal1" data-lenis-prevent>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <div class="aukera-head row">
+          <span></span>
+          <h3 class="modal-title head-text">Add A new Address</h3>
+        </div>
+        <button
+          type="button"
+          class="close-modal"
+          data-close-button
+        >{% render 'cart-close' %}</button>
+      </div>
+
+      <!-- Modal body -->
+      <div class="modal-body">
+        {% form 'customer_address', customer.new_address %}
+          <div class="new-add">
+            <label for="f-name_{{ form.id }}">First Name</label>
+            <input
+              type="text"
+              name="address[first_name]"
+              id="f-name_{{ form.id }}"
+              autocomplete=""
+              value="{{ form.first_name}}"
+            >
+          </div>
+          <div class="new-add">
+            <label for="l-name_{{ form.id }}">Last Name</label>
+            <input
+              type="text"
+              name="address[last_name]"
+              id="l-name_{{ form.id }}"
+              autocomplete=""
+              value="{{ form.last_name}}"
+            >
+          </div>
+          <div class="new-add">
+            <label for="company_{{ form.id }}">Company</label>
+            <input
+              type="text"
+              name="address[company]"
+              id="company_{{ form.id }}"
+              autocomplete=""
+              value="{{ form.company}}"
+            >
+          </div>
+          <div class="new-add">
+            <label for="address1_{{ form.id }}">Address Line 1</label>
+            <input
+              type="text"
+              name="address[address1]"
+              id="address1_{{ form.id }}"
+              autocomplete=""
+              value="{{ form.address1}}"
+            >
+          </div>
+          <div class="new-add">
+            <label for="address2_{{ form.id }}">Address Line 2</label>
+            <input
+              type="text"
+              name="address[address2]"
+              id="address2_{{ form.id }}"
+              autocomplete=""
+              value="{{ form.address2}}"
+            >
+          </div>
+          <div class="new-add">
+            <label for="city_{{ form.id }}">City</label>
+            <input
+              type="text"
+              name="address[city]"
+              id="city_{{ form.id }}"
+              autocomplete=""
+              value="{{ form.city}}"
+            >
+          </div>
+          <div class="new-add">
+            <label for="address_country_{{ form.id }}">Country</label>
+            <select
+              name="address[country]"
+              id="address_country_{{ form.id }}"
+              value="{{ form.country }}"
+              data-country-selector
+              data-id="{{ form.id }}"
+            >
+              {{ all_country_option_tags }}
+            </select>
+          </div>
+          <div class="new-add">
+            <label for="address_province_{{ form.id }}">Province</label>
+            <select
+              name="address[province]"
+              id="address_province_{{ form.id }}"
+              value="{{ form.province }}"
+            ></select>
+          </div>
+          <div class="new-add">
+            <label for="zip-code_{{ form.id }}">Zip Code</label>
+            <input
+              type="text"
+              name="address[zip]"
+              id="zip-code_{{ form.id }}"
+              autocomplete=""
+              value="{{ form.zip }}"
+            >
+          </div>
+          <div class="new-add">
+            <label for="phno_{{ form.id }}">Phone Number</label>
+            <input
+              type="tel"
+              name="address[phone]"
+              id="phno_{{ form.id }}"
+              autocomplete=""
+              value="{{ form.phone }}"
+            >
+          </div>
+          <div class="new-add flex-direction-row">
+            {{ form.set_as_default_checkbox }}
+            <label for="address_default_address_{{ form.id }}">Set As Default Address</label>
+          </div>
+          <div class="new-add extra-gap">
+            <button type="submit" class="aukera-button primary">Create</button>
+            <button type="reset" class="aukera-button secondary">Reset</button>
+          </div>
+        {% endform %}
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- The Modal Edit Button -->
+{% for address in customer.addresses %}
+  <div class="modal" id="myModal_{{ address.id }}" data-lenis-prevent>
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <div class="aukera-head row">
+            <span></span>
+          <h3 class="modal-title head-text">Edit Address</h3>
+
+          </div>
+          <button
+            type="button"
+            class="close-modal"
+            data-close-button
+          > 
+          {% render 'cart-close' %}</button>
+        </div>
+
+        <!-- Modal body -->
+        <div class="modal-body">
+          {% form 'customer_address', address %}
+            <div class="new-add">
+              <label for="f-name_{{ form.id }}">First Name</label>
+              <input
+                type="text"
+                name="address[first_name]"
+                id="f-name_{{ form.id }}"
+                autocomplete=""
+                value="{{ form.first_name}}"
+              >
+            </div>
+            <div class="new-add">
+              <label for="l-name_{{ form.id }}">Last Name</label>
+              <input
+                type="text"
+                name="address[last_name]"
+                id="l-name_{{ form.id }}"
+                autocomplete=""
+                value="{{ form.last_name}}"
+              >
+            </div>
+            <div class="new-add">
+              <label for="company_{{ form.id }}">Company</label>
+              <input
+                type="text"
+                name="address[company]"
+                id="company_{{ form.id }}"
+                autocomplete=""
+                value="{{ form.company}}"
+              >
+            </div>
+            <div class="new-add">
+              <label for="address1_{{ form.id }}">Address Line 1</label>
+              <input
+                type="text"
+                name="address[address1]"
+                id="address1_{{ form.id }}"
+                autocomplete=""
+                value="{{ form.address1}}"
+              >
+            </div>
+            <div class="new-add">
+              <label for="address2_{{ form.id }}">Address Line 2</label>
+              <input
+                type="text"
+                name="address[address2]"
+                id="address2_{{ form.id }}"
+                autocomplete=""
+                value="{{ form.address2}}"
+              >
+            </div>
+            <div class="new-add">
+              <label for="city_{{ form.id }}">City</label>
+              <input
+                type="text"
+                name="address[city]"
+                id="city_{{ form.id }}"
+                autocomplete=""
+                value="{{ form.city}}"
+              >
+            </div>
+            <div class="new-add">
+              <label for="address_country_{{ form.id }}">Country</label>
+              <select
+                name="address[country]"
+                id="address_country_{{ form.id }}"
+                value="{{ form.country }}"
+                data-country-selector
+                data-id="{{ form.id }}"
+              >
+                {{ all_country_option_tags }}
+              </select>
+            </div>
+            <div class="new-add">
+              <label for="address_province_{{ form.id }}">Province</label>
+              <select
+                name="address[province]"
+                id="address_province_{{ form.id }}"
+                value="{{ form.province }}"
+              ></select>
+            </div>
+            <div class="new-add">
+              <label for="zip-code_{{ form.id }}">Zip Code</label>
+              <input
+                type="text"
+                name="address[zip]"
+                id="zip-code_{{ form.id }}"
+                autocomplete=""
+                value="{{ form.zip }}"
+              >
+            </div>
+            <div class="new-add">
+              <label for="phno_{{ form.id }}">Phone Number</label>
+              <input
+                type="tel"
+                name="address[phone]"
+                id="phno_{{ form.id }}"
+                autocomplete=""
+                value="{{ form.phone }}"
+              >
+            </div>
+            <div class="new-add flex-direction-row">
+              {{ form.set_as_default_checkbox }}
+              <label for="address_default_address_{{ form.id }}">Set As Default Address</label>
+            </div>
+            <div class="new-add">
+              <button type="submit" class="aukera-button primary">Edit Address</button>
+            </div>
+          {% endform %}
+        </div>
+      </div>
+    </div>
+  </div>
+{% endfor %}
+
+<script>
+  class CustomerAddress {
+    constructor() {
+      this.initCustomerAddress();
+      this.customerAddressesSelector();
+      this.initDeleteAddressButtons();
+      this.initModalFunctionality();
+    }
+
+    initDeleteAddressButtons() {
+      const deleteButtons = document.querySelectorAll('button[data-delete-address]');
+      if (deleteButtons.length < 1) return;
+
+      deleteButtons.forEach((button) => {
+        button.addEventListener('click', function (e) {
+          var url = this.dataset.url;
+
+          var confirmation = window.confirm('Do you really wish to delete this address?');
+
+          if (confirmation) {
+            document.querySelector(`form[action="${url}"]`).submit();
+          }
+        });
+      });
+    }
+
+    initCustomerAddress() {
+      const allAddressesSelector = document.querySelectorAll('select[data-country-selector]');
+      if (allAddressesSelector.length < 1) return;
+
+      // console.log(allAddressesSelector);
+
+      allAddressesSelector.forEach((select) => {
+        var selectedCountry = this.getSelectedCountry(select);
+
+        if (!selectedCountry) return;
+
+        var provinces = selectedCountry.dataset.provinces;
+        var arrayOfProvince = JSON.parse(provinces);
+
+        var provinceSelector = document.querySelector(`#address_province_${select.dataset.id}`);
+
+        if (arrayOfProvince.length < 1) {
+          provinceSelector.setAttribute('disabled', 'disabled');
+        } else {
+          provinceSelector.removeAttribute('disabled');
+        }
+        provinceSelector.innerHTML = '';
+        var options = '';
+        for (var index = 0; index < arrayOfProvince.length; index++) {
+          if (arrayOfProvince[index][0] === provinceSelector.getAttribute('value')) {
+            options += `<option value="${arrayOfProvince[index][0]}" selected>${arrayOfProvince[index][0]}</option>`;
+          } else {
+            options += `<option value="${arrayOfProvince[index][0]}">${arrayOfProvince[index][0]}</option>`;
+          }
+        }
+
+        provinceSelector.innerHTML = options;
+      });
+    }
+
+    getSelectedCountry(select) {
+      var option, selectedOption;
+      for (var index = 0; index < select.options.length; index++) {
+        option = select.options[index];
+
+        if (option.value === select.getAttribute('value')) {
+          selectedOption = option;
+          selectedOption.setAttribute('selected', 'selected');
+          break;
+        }
+      }
+
+      return selectedOption;
+    }
+
+    customerAddressesSelector() {
+      const addressesSelector = document.querySelectorAll('select[data-country-selector]');
+      if (addressesSelector.length < 1) return;
+
+      addressesSelector.forEach((select) => {
+        select.addEventListener('change', function (e) {
+          var provinces = this.options[this.selectedIndex].dataset.provinces;
+          var arrayOfProvince = JSON.parse(provinces);
+
+          var provinceSelector = document.querySelector(`#address_province_${this.dataset.id}`);
+
+          if (arrayOfProvince.length < 1) {
+            provinceSelector.setAttribute('disabled', 'disabled');
+          } else {
+            provinceSelector.removeAttribute('disabled');
+          }
+          provinceSelector.innerHTML = '';
+          var options = '';
+          for (var index = 0; index < arrayOfProvince.length; index++) {
+            options += `<option value="${arrayOfProvince[index][0]}">${arrayOfProvince[index][0]}</option>`;
+          }
+
+          provinceSelector.innerHTML = options;
+        });
+      });
+    }
+
+    initModalFunctionality() {
+      const openModalButtons = document.querySelectorAll('[data-modal-target]');
+      const closeModalButtons = document.querySelectorAll('[data-close-button]');
+      const overlay = document.createElement('div');
+      overlay.id = 'modal-overlay';
+      document.body.appendChild(overlay);
+
+      openModalButtons.forEach(button => {
+        button.addEventListener('click', () => {
+          const modal = document.querySelector(button.dataset.modalTarget);
+          this.openModal(modal);
+        });
+      });
+
+      closeModalButtons.forEach(button => {
+        button.addEventListener('click', () => {
+          const modal = button.closest('.modal');
+          this.closeModal(modal);
+        });
+      });
+
+      overlay.addEventListener('click', () => {
+        const modals = document.querySelectorAll('.modal.active');
+        modals.forEach(modal => {
+          this.closeModal(modal);
+        });
+      });
+
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          const modals = document.querySelectorAll('.modal.active');
+          modals.forEach(modal => {
+            this.closeModal(modal);
+          });
+        }
+      });
+
+      // Close modal when clicking outside
+      document.addEventListener('click', (e) => {
+        if (e.target.classList.contains('modal')) {
+          this.closeModal(e.target);
+        }
+      });
+    }
+
+    openModal(modal) {
+      if (modal == null) return;
+      modal.style.display = 'block';
+      modal.classList.add('active');
+      document.getElementById('modal-overlay').style.display = 'block';
+      document.body.setAttribute('data-lenis-prevent', '');
+    }
+
+    closeModal(modal) {
+      if (modal == null) return;
+      modal.style.display = 'none';
+      modal.classList.remove('active');
+      document.getElementById('modal-overlay').style.display = 'none';
+      document.body.removeAttribute('data-lenis-prevent');
+    }
+  }
+
+  const customerAddress = new CustomerAddress();
+</script>
+
+{% schema %}
+{
+  "name": "Address Page",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "Img",
+      "label": "Background Image"
+    }
+  ]
+}
+{% endschema %}
+
+
+<style>
+
+  button{
+    background-color: transparent;
+  }
+  .modal {
+    display: none;
+    width: 90%;
+    height: 90%;
+    backdrop-filter: blur(23.600000381469727px);
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000000;
+    overflow: hidden;
+    overflow-y: auto;
+    border-radius: 8px;
+  }
+  #modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 999999;
+  }
+
+  .modal-body{
+    margin-top: 40px;
+  }
+</style>
+
+
+

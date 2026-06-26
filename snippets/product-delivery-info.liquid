@@ -1,0 +1,51 @@
+{% assign variant = product.selected_or_first_available_variant %}
+
+<!-- <div class="box light-box">  <p style="margin:0;"><strong>{{ 'products.product.additional.delivery' | t }}</strong> from Tue 22/04/2025 (can be changed)</p>
+  <small>{{ block.settings.delivery_message }}</small>
+
+  <p class="product_delivery_modal_opener">
+    <span aria-hidden="true">&gt;</span>
+    <small> {{ block.settings.popup_button }} </small>
+  </p>
+</div> -->
+<div class="product_payment_methods box light-box">
+  <strong>{{ 'products.product.additional.payment' | t }}</strong>
+  {%- unless shop.enabled_payment_types == empty -%}
+    {%- for type in shop.enabled_payment_types -%}
+      <span>
+        {{ type | payment_type_svg_tag: class: 'icon icon--full-color' }}
+      </span>
+    {%- endfor -%}
+  {%- endunless -%}
+</div>
+
+<!-- <script>  document.addEventListener('DOMContentLoaded', () => {
+    const deliveryModalButton = document.querySelector('.product_delivery_modal_opener');
+    const deliveryModalCloseButton = document.querySelector('.product_delivery_modal_container .close');
+    const deliveryModal = document.querySelector('.product_delivery_modal_container');
+
+    if (deliveryModalButton) {
+      deliveryModalButton.addEventListener("click", () => {
+        deliveryModal.style.visibility = "visible";
+        deliveryModal.style.opacity = "1";
+        deliveryModal.style.display = "block";
+        requestAnimationFrame(() => {
+          deliveryModal.classList.add("show");
+        });
+        document.querySelector('body').classList.add('modal-open');
+      });
+    }
+
+    if (deliveryModalCloseButton) {
+      deliveryModalCloseButton.addEventListener("click", () => {
+        deliveryModal.classList.remove("show");
+        setTimeout(() => {
+          deliveryModal.style.visibility = "hidden";
+          deliveryModal.style.opacity = "0";
+        }, 200);
+        document.querySelector('body').classList.remove('modal-open');
+      });
+    }
+  });
+</script>
+-->

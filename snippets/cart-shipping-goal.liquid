@@ -1,0 +1,55 @@
+{%- comment -%} 
+  Accessing the product setting using .value to ensure the object is loaded.
+{%- endcomment -%}
+{%- assign gift_setting = settings.free_gift_product -%}
+{%- assign gift_variant_id = gift_setting.first_available_variant.id -%}
+
+{%- if gift_variant_id == blank -%}
+  {%- assign gift_variant_id = all_products[gift_setting].first_available_variant.id -%}
+{%- endif -%}
+
+{%- if gift_variant_id == blank -%}
+  {%- assign gift_variant_id = gift_setting.value.first_available_variant.id -%}
+{%- endif -%}
+
+{%- assign threshold_shipping = settings.cart_shipping_threshold | default: 99 | times: 100 -%}
+{%- assign threshold_gift = settings.cart_gift_threshold | default: 119 | times: 100 -%}
+{%- assign cart_total = cart.total_price -%}
+
+<div class="cart-shipping-goal" 
+     data-threshold-shipping="{{ settings.cart_shipping_threshold | default: 99 | times: 100 }}"
+     data-threshold-gift="{{ settings.cart_gift_threshold | default: 119 | times: 100 }}"
+     data-gift-variant-id="{{ gift_variant_id }}">
+  
+   <div class="shipping-goal-text">
+    <p id="shipping-goal-message">
+      {% if cart_total < threshold_shipping %}
+        Spend <span class="goal-highlight">{{ threshold_shipping | minus: cart_total | money }}</span> more for <b>Free Shipping</b>
+      {% elsif cart_total < threshold_gift %}
+        Spend <span class="goal-highlight">{{ threshold_gift | minus: cart_total | money }}</span> more for a <b>Free Gift</b>
+      {% else %}
+        <span class="goal-highlight">All rewards unlocked!</span>
+      {% endif %}
+    </p>
+  </div>
+
+  <div class="shipping-goal-bar-container">
+    <div class="shipping-goal-bar-bg">
+      <div id="shipping-goal-progress" class="shipping-goal-progress-fill" 
+           style="width: {{ cart_total | times: 100 | divided_by: threshold_gift | at_most: 100 }}%;">
+      </div>
+
+      <div class="milestone-marker shipping-unlocked {% if cart_total >= threshold_shipping %}achieved{% endif %}"
+           style="left: {{ threshold_shipping | times: 100 | divided_by: threshold_gift }}%;">
+        <div class="icon-circle">{% render 'free-shipping' %}</div>
+        <span class="marker-label">+Free Shipping</span>
+      </div>
+
+      <div class="milestone-marker goal-marker-gift {% if cart_total >= threshold_gift %}achieved{% endif %}"
+           style="left: 100%;">
+        <div class="icon-circle">{% render 'gift-icon' %}</div>
+        <span class="marker-label">Free Gift</span>
+      </div>
+    </div>
+  </div>
+</div>

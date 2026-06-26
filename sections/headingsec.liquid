@@ -1,0 +1,35 @@
+<section class="headingsec">
+    <div class="container">
+        <div class="heading center">
+            <h2 data-aos="fade-up" data-aos-duration="1000">{{ section.settings.heading }}</h2>
+            <p data-aos="fade-up" data-aos-duration="1000" data-aos-delay="50">{{ section.settings.para }}</p>
+        </div>
+    </div>
+</section>
+
+{% schema %}
+  {
+    "name": "headingsec",
+    "tag": "section",
+    "class": "headingsec",
+    "settings": [
+      {
+        "type": "text",
+        "id": "heading",
+        "label": "Heading"
+      },
+      {
+        "type": "text",
+        "id": "para",
+        "label": "Paragraph"
+      }
+    ],
+    "presets": [
+      {
+        "name": "headingsec",
+        "settings": {
+        }
+      }
+    ]
+  }
+{% endschema %}

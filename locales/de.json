@@ -1,0 +1,173 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin language editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "404": {
+    "not_found": "Seite nicht gefunden.",
+    "back_to_shopping": "Zurück zum Shop"
+  },
+  "blog": {
+    "article_comments": "Kommentare",
+    "comment_form_body": "Kommentar",
+    "comment_form_email": "E-Mail",
+    "comment_form_title": "Einen Kommentar hinzufügen",
+    "article_metadata_html": "{{ date }} von {{ author }}",
+    "comment_form_name": "Name",
+    "comment_form_submit": "Beitrag"
+  },
+  "blogs": {
+    "general": {
+      "title": "Blogs"
+    }
+  },
+  "cart": {
+    "checkout": "Kasse",
+    "title": "Warenkorb",
+    "update": "Aktualisieren",
+    "remove": "Entfernen"
+  },
+  "customers": {
+    "login": {
+      "email": "E-Mail",
+      "password": "Passwort",
+      "submit": "anmelden",
+      "title": "Anmelden"
+    }
+  },
+  "quick_filters": {
+    "organic": "Bio",
+    "bestseller": "Bestseller",
+    "bestsellers": "Bestseller",
+    "asia": "Asien",
+    "europe": "Europa",
+    "america": "Amerika",
+    "africa": "Afrika",
+    "untreated": "Unbehandelt",
+    "clear_all": "Alle löschen",
+    "products_count": "{{ count }} Produkte",
+    "products_count_filtered": "{{ count }} Produkte von {{ total }}"
+  },
+  "gift_card": {
+    "add_to_apple_wallet": "Zu Apple Wallet hinzufügen",
+    "card": "Geschenkgutschein",
+    "expired": "Diese Geschenkkarte ist abgelaufen.",
+    "expires_on": "Läuft ab am {{ expires_on }}",
+    "use_at_checkout": "Verwenden Sie diese Geschenkkarte an der Kasse."
+  },
+  "thank_you_page": {
+    "heading": "Danke",
+    "subheading": "Ihr Formular wurde erfolgreich übermittelt.",
+    "body_intro": "Willkommen bei uns.",
+    "body_text": "Sie erfahren jetzt von seltenen Entdeckungen, frischen Neuheiten und allem, was sich wirklich zu probieren lohnt. Wir melden uns nur, wenn es wirklich etwas zu sagen gibt.",
+    "cta": "Zurück zur Startseite"
+  },
+  "general": {
+    "shipping_policy": "Versandrichtlinie"
+  },
+  "password": {
+    "title": "Dieser Laden ist privat",
+    "password": "Passwort",
+    "enter": "Eingeben"
+  },
+  "search": {
+    "placeholder": "Artikel, Seiten oder Produkte suchen",
+    "no_results_html": "Für {{ terms }} wurden keine Ergebnisse gefunden.",
+    "title": "Suchen",
+    "submit": "Suchen",
+    "placeholder_fruits": "Suche nach Früchten",
+    "results_for_html": "{{ count }} Ergebnisse für {{ terms }} gefunden"
+  },
+  "collections": {
+    "title": "Sammlungen"
+  },
+  "products": {
+    "product": {
+      "from": "Aus",
+      "add_to_cart": "in den Warenkorb legen",
+      "select_product": "Wählen",
+      "added_to_cart": "Hinzugefügt",
+      "sold_out": "Nicht verfügbar",
+      "inventory_status": "Nur noch {{ count }} verfügbar",
+      "in_stock": "Auf Lager",
+      "out_of_stock": "Nicht verfügbar"
+    }
+  },
+  "shopify": {
+    "checkout": {
+      "payment": {
+        "multiple_primary_payment_not_allowed": "Ungültige Zahlungsmethoden"
+      }
+    }
+  },
+  "benefits": {
+    "freshly_picked": "Frisch gepflückt",
+    "rare_handpicked": "Selten & Handverlesen",
+    "pure_raw": "Pur & Unverarbeitet",
+    "artisanal": "Kleinserie · Handgefertigt"
+  },
+  "sections": {
+    "newsletter": {
+      "email_placeholder": "E-Mail-Adresse eingeben",
+      "subscribe": "Abonnieren"
+    },
+    "frequently_bought": {
+      "heading_html": "Wird oft zusammen gekauft"
+    },
+    "product": {
+      "price_includes_vat": "Preise inkl. MwSt., zzgl.",
+      "shipping_costs": "Versandkosten.",
+      "select_variant": "Variante wählen",
+      "best_seller": "Bestseller",
+      "deliver_to": "Liefern nach",
+      "delivery_by": "bis",
+      "details": "Details",
+      "free_shipping_from": "Kostenloser Versand ab",
+      "shipping_starts_from": "Versand ab",
+      "final_prices_checkout": "Die endgültigen Preise werden an der Kasse berechnet.",
+      "freshness_usp": "Frisch angekommen oder Rückerstattung",
+      "payment_usp": "Zahlung nach 30 Tagen",
+      "freshness_modal_title": "Frischegarantie",
+      "freshness_modal_body": "Wenn dein Obst nicht in bestem Zustand ankommt, übernehmen wir Verantwortung. Sende uns einfach innerhalb von 24 Stunden nach Lieferung ein Foto per E-Mail an support@jurassicfruit.com, und wir erstatten dir die betroffenen Artikel – unkompliziert und ohne Hin und Her. Wir arbeiten hart daran, Obst genau im richtigen Moment zu versenden, damit es dich in bester Qualität erreicht. Aber Obst lebt, und manchmal läuft beim Transport etwas schief. Wenn das passiert, bist du abgesichert.",
+      "payment_modal_title": "Zahlung nach 30 Tagen",
+      "payment_modal_body": "Wähle „Zahlung nach 30 Tagen“ mit PayPal und behalte dein Geld vorerst in der Tasche. Du zahlst erst später – nachdem dein Obst angekommen ist und du Zeit hattest, es zu probieren.",
+      "technical_details": "Technische Details",
+      "description": "Beschreibung",
+      "how_to_eat_store": "So isst & lagerst du sie",
+      "nutrition_benefits": "Nährwerte & Vorteile",
+      "origin_sourcing": "Herkunft & Beschaffung",
+      "taste_profile": "Geschmacksprofil",
+      "seasonal_calendar_sourcing": "Saisonkalender und Herkunft",
+      "scientific_name": "Anderer Names",
+      "origin": "Herkunft",
+      "weight_per_piece": "Gewicht pro Stück",
+      "ingredients": "Zutaten",
+      "manufacturing": "Herstellung",
+      "allergens": "Allergene",
+      "cross_contamination": "Kreuzkontamination",
+      "best_before_date": "Mindestens haltbar bis",
+      "net_quantity": "Nettomenge",
+      "storage_conditions": "Lagerbedingungen",
+      "quality_label": "Qualität",
+      "certificate":"Zertifizierung",
+      "texture": "Textur",
+      "sweetness": "Süße",
+      "sourness": "Säure",
+      "juiciness": "Saftigkeit",
+      "texture_low": "Seidig",
+      "texture_high": "Knackig",
+      "sweetness_low": "Fein",
+      "sweetness_high": "Sirupartig",
+      "sourness_low": "Mild",
+      "sourness_high": "Spritzig",
+      "juiciness_low": "Fest",
+      "juiciness_high": "Saftig",
+      "order_today_delivery_from": "Bestelle heute für die Lieferung ab"
+    }
+  }
+}

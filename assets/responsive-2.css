@@ -1,0 +1,129 @@
+/* Responsive Css Starts */
+/* Max Width 1800px */
+@media (max-width: 1800px) {
+}
+/* Max Width 1800px Ends */
+/* Max Width 1700px */
+@media (max-width: 1700px) {
+}
+/* Max Width 1700px Ends */
+/* Max Width 1600px */
+@media (max-width: 1600px) {
+}
+/* Max Width 1600px Ends */
+/* Max Width 1500px */
+@media (max-width: 1500px) {
+  .etd-logo {
+    margin-top: 20px;
+  }
+  .etd-heading p {
+    font-size: 24px;
+  }
+  .error-template .et-data {
+    gap: 24px;
+  }
+}
+/* Max Width 1500px Ends */
+/* Max Width 1400px */
+@media (max-width: 1400px) {
+}
+/* Max Width 1400px Ends */
+/* Max Width 1300px */
+@media (max-width: 1300px) {
+  .collection-wrapper {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+/* Max Width 1300px Ends */
+/* Max Width 1200px */
+@media (max-width: 1200px) {
+    .seo-sec-wrapper p {
+        font-size: 14px;
+    }
+    .etd-heading h1 {
+        font-size: 60px;
+    }
+    .error-template .et-data {
+        max-width: 65ch;
+    }
+}
+/* Max Width 1200px Ends */
+/* Max Width 1100px */
+@media (max-width: 1100px) {
+}
+/* Max Width 1100px Ends */
+/* Max Width 991px */
+@media (max-width: 991px) {
+  .collection-wrapper {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+/* Max Width 991px Ends */
+/* Max Width 767px */
+@media (max-width: 767px) {
+  .collection-wrapper {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    margin-top: 30px;
+    grid-column-gap: 8px;
+    grid-row-gap: 8px;
+  }
+  .fc_bottom .fc_bottom_end {
+    padding: 10px 10px;
+    gap: 10px;
+  }
+      .fc_bottom .fc_bottom_center {
+        padding: 0 10px;
+    }
+    .fc_category_tags span {
+      font-size: 10px;
+    }
+  .fc_top .fc_bestsell_tags {
+    top: auto;
+    bottom: 10px;
+  }
+  .star_review {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+  }
+  .star_review .rating_info {
+    display: none;
+  }
+  .fc_add_to_cart button {
+    font-size: 12px;
+    padding: 10px 12px;
+  }
+  .fc_price_weight {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+  .fc_price_weight p span {
+    font-size: 14px;
+  }
+  .fc_top .fc_category_tags {
+    left: 10px;
+    top: 12px;
+  }
+    .fc_bottom .fc_bottom_top {
+      padding: 10px 10px;
+      gap: 5px;
+  }
+  .fc_product_title {
+    font-size: 15px;
+  }
+  .container, .container-fluid {
+        padding: 0 12px;
+    }
+  .etd-heading h1 {
+        font-size: 50px;
+    }
+    .etd-heading p {
+        font-size: 20px;
+    }
+.error-template .et-data {
+    padding-top: 130px;
+}
+}
+/* Max Width 767px Ends */
+/* Responsive Css Ends */

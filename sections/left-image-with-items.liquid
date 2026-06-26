@@ -1,0 +1,227 @@
+<div class="liwi">
+    <div class="container-fluid">
+      <div class="heading left show-mobile">
+            <h2>{{ section.settings.heading }}</h2>
+            <p class="small">{{ section.settings.sub_heading }}</p>
+        </div>
+        <div class="liwi-wrap">
+            <div class="liwi-left">
+                <div class="ll-image">
+                    {% if section.settings.video_link != blank %}
+                        {{ section.settings.video_link | video_tag:
+                            autoplay: false,
+                            loop: true,
+                            muted: false,
+                            controls: false,
+                            playsinline: true,
+                            class: 'img ab'
+                        }}
+                        <button class="video-control" aria-label="Video Play Button">
+                            <span class="video-control-play">
+                                <span class="video-control-symbol" aria-hidden="true"><img src="https://cdn.shopify.com/s/files/1/0752/8015/4881/files/Polygon_1.svg?v=1759301174" alt=""></span>
+                            </span>
+                            <span class="video-control-pause">
+                                <span class="video-control-symbol" aria-hidden="true"><img src="https://cdn.shopify.com/s/files/1/0752/8015/4881/files/pause-svgrepo-com.svg?v=1759998102" alt=""></span>
+                            </span>
+                        </button>
+                    {% else %}
+                        <img src="{{ section.settings.video_img |  img_url: 'master' }}" alt="{{ section.settings.video_img.title }}" class="img ab">
+                    {% endif %}
+                </div>
+            </div>
+            <div class="liwi-right">
+                <div class="lr-content">
+                    <div class="heading left half-width hide-mobile">
+                        <h2>{{ section.settings.heading }}</h2>
+                        <p class="small">{{ section.settings.sub_heading }}</p>
+                    </div>
+                    <div class="lrcontent-points">
+                        {%- for block in section.blocks -%}
+                            <div class="lrcont-item">
+                                <div class="lrci-head">
+                                    {{ block.settings.head_text }}
+                                </div>
+                                <div class="lrci-para">
+                                    <p>{{ block.settings.para_text }}</p>
+                                </div>
+                            </div>
+                        {%- endfor -%}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const wraps = document.querySelectorAll('.ll-image');
+  const AUTO_HIDE_MS = 1500; // how long after movement to hide while playing
+
+  wraps.forEach((wrap) => {
+    const video = wrap.querySelector('video');
+    const btn = wrap.querySelector('button.video-control');
+    if (!video || !btn) return;
+
+    let hideTimeoutId = null;
+
+    // Utility: show button and schedule auto-hide if playing
+    const showButton = () => {
+      clearHideTimeout();
+      btn.classList.remove('hidden');
+      // if video is playing, auto-hide after AUTO_HIDE_MS
+      if (!video.paused && !video.ended) {
+        hideTimeoutId = setTimeout(() => {
+          hideButton();
+        }, AUTO_HIDE_MS);
+      }
+    };
+
+    const hideButton = () => {
+      clearHideTimeout();
+      btn.classList.add('hidden');
+    };
+
+    const clearHideTimeout = () => {
+      if (hideTimeoutId) {
+        clearTimeout(hideTimeoutId);
+        hideTimeoutId = null;
+      }
+    };
+
+    // keep accessible state / CSS class in sync
+    const setState = (playing) => {
+      btn.classList.toggle('playing', playing);
+      btn.setAttribute('aria-pressed', playing ? 'true' : 'false');
+      if (playing) {
+        // hide immediately when playback starts
+        hideButton();
+      } else {
+        // show when paused or ended
+        showButton();
+      }
+    };
+
+    // Click handler for play/pause
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      // If paused or ended, play and pause others
+      if (video.paused || video.ended) {
+        // pause other videos on page (optional)
+        document.querySelectorAll('.ll-image video').forEach((v) => {
+          if (v !== video && !v.paused) v.pause();
+        });
+        video.play().catch(err => {
+          // play may be blocked by autoplay policies; show button as fallback
+          console.warn('play() failed:', err);
+          showButton();
+        });
+      } else {
+        video.pause();
+      }
+    });
+
+    // Video native events
+    video.addEventListener('play', () => setState(true));
+    video.addEventListener('playing', () => setState(true)); // extra safety
+    video.addEventListener('pause', () => setState(false));
+    video.addEventListener('ended', () => setState(false));
+
+    // When user moves inside the wrapper, show the button (mouse + touch)
+    let lastMoveTs = 0;
+    const movementHandler = (e) => {
+      // small debouncing so we don't thrash timers
+      const now = Date.now();
+      if (now - lastMoveTs < 50) return;
+      lastMoveTs = now;
+      showButton();
+    };
+
+    wrap.addEventListener('mousemove', movementHandler);
+    wrap.addEventListener('touchstart', movementHandler, {passive: true});
+    wrap.addEventListener('touchmove', movementHandler, {passive: true});
+
+    // if user uses keyboard focus (accessibility), show the control
+    btn.addEventListener('focus', showButton);
+    btn.addEventListener('blur', () => {
+      if (!video.paused && !video.ended) {
+        // hide after focus leaves when playing
+        hideTimeoutId = setTimeout(hideButton, 300);
+      } else {
+        showButton();
+      }
+    });
+
+    // Initial sync after metadata is ready
+    if (video.readyState >= 2) {
+      // metadata/first frame available
+      setState(!video.paused && !video.ended);
+    } else {
+      video.addEventListener('loadedmetadata', () => {
+        setState(!video.paused && !video.ended);
+      }, { once: true });
+    }
+
+    // Also hide button if user clicks directly on video to play
+    // (some UIs allow clicking the video element itself)
+    video.addEventListener('click', () => {
+      if (video.paused || video.ended) {
+        video.play().catch(() => {});
+      } else {
+        video.pause();
+      }
+    });
+
+    // Clean up on unload/navigations if needed (not strictly necessary here)
+    // window.addEventListener('beforeunload', clearHideTimeout);
+  });
+});
+</script>
+
+
+{% schema %}
+{
+  "name": "left image with items",
+  "settings": [
+    {
+        "type": "image_picker",
+        "id": "video_img",
+        "label": "Upload Image"
+    },
+    {
+        "type": "video",
+        "id": "video_link",
+        "label": "Upload Video"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading"
+    },
+    {
+      "type": "text",
+      "id": "sub_heading",
+      "label": "Sub Heading"
+    }
+  ],
+  "blocks": [
+    {
+      "name": "block_item",
+      "type": "cards",
+      "limit": 6,
+      "settings": [
+        {
+          "type": "text",
+          "id": "head_text",
+          "label": "Block Top Content"
+        },
+        {
+          "type": "text",
+          "id": "para_text",
+          "label": "Block Bottom Content"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

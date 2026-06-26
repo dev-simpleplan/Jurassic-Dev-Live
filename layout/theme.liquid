@@ -1,0 +1,774 @@
+<!doctype html>
+<html lang="{{ request.locale.iso_code }}">
+
+	<head>
+  {% include 'app-plaza' %}
+  {%- render 'ecom_header' -%}
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no">
+  {% comment %} {% if request.page_type == 'search' %}
+    <meta name="robots" content="noindex, follow">
+  {% endif %} {% endcomment %}
+  {%- liquid
+    assign favicon_default = ''
+    assign favicon_light = ''
+    assign favicon_dark = ''
+    if settings.favicon != blank
+      assign favicon_default = settings.favicon | img_url: '32x32'
+    endif
+    if settings.favicon_light != blank
+      assign favicon_light = settings.favicon_light | img_url: '32x32'
+    endif
+    if settings.favicon_dark != blank
+      assign favicon_dark = settings.favicon_dark | img_url: '32x32'
+    endif
+    assign favicon_initial = favicon_default
+    if favicon_light != blank
+      assign favicon_initial = favicon_light
+    elsif favicon_dark != blank
+      assign favicon_initial = favicon_dark
+    endif
+  -%}
+  {%- if favicon_initial != blank -%}
+    <link id="theme-favicon" rel="icon" href="{{ favicon_initial }}" type="image/png">
+    <link id="theme-favicon-shortcut" rel="shortcut icon" href="{{ favicon_initial }}" type="image/png">
+    <script>
+      (function() {
+        var faviconLight = {{ favicon_light | json }};
+        var faviconDark = {{ favicon_dark | json }};
+        var faviconDefault = {{ favicon_default | json }};
+        var mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+
+        function getFaviconHref() {
+          if (mediaQuery.matches && faviconDark) return faviconDark;
+          if (!mediaQuery.matches && faviconLight) return faviconLight;
+          return faviconDefault || faviconLight || faviconDark || '';
+        }
+
+        function setFavicon() {
+          var href = getFaviconHref();
+          if (!href) return;
+
+          var iconLink = document.getElementById('theme-favicon');
+          var shortcutLink = document.getElementById('theme-favicon-shortcut');
+
+          if (iconLink) iconLink.href = href;
+          if (shortcutLink) shortcutLink.href = href;
+        }
+
+        setFavicon();
+
+        if (typeof mediaQuery.addEventListener === 'function') {
+          mediaQuery.addEventListener('change', setFavicon);
+        } else if (typeof mediaQuery.addListener === 'function') {
+          mediaQuery.addListener(setFavicon);
+        }
+      })();
+    </script>
+  {%- endif -%}
+
+  {%- comment -%} Always output a Canonical URL {%- endcomment -%}
+  <link rel="canonical" href="{{ canonical_url }}">
+
+  {%- comment -%} Advanced NoIndex Detection {%- endcomment -%}
+  {%- capture full_url -%}{{ content_for_header | split:'"pageurl":"' | last | split:'"' | first }}{%- endcapture -%}
+  {%- assign should_noindex = false -%}
+
+  {%- if template.name == 'search' -%}
+    {%- assign should_noindex = true -%}
+  {%- elsif template.name == 'collection' -%}
+    {%- if full_url contains 'view=noindex' or current_page > 1 -%}
+      {%- assign should_noindex = true -%}
+    {%- endif -%}
+  {%- endif -%}
+
+  {%- if should_noindex -%}
+    <meta name="robots" content="noindex, follow">
+  {%- else -%}
+    <meta name="robots" content="index, follow">
+  {%- endif -%}
+
+  {% # Rest of your head content (Title, description, etc.) %}
+  {% render 'meta-tags' %}
+  
+  {% if page_description %}
+    <meta name="description" content="{{ page_description | escape }}" />
+  {% endif %}
+
+  {{ content_for_header }}
+
+    {% if template.name == 'index' %}
+      <script>
+        (function() {
+          try {
+            if (!sessionStorage.getItem('homepageLoaderSeen')) {
+              document.documentElement.classList.add('show-home-loader');
+            }
+          } catch (e) {}
+        })();
+      </script>
+      <style>
+        .homepage-loader {
+          position: fixed;
+          inset: 0;
+          z-index: 2147483647;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background: #000;
+          opacity: 0;
+          visibility: hidden;
+          transition: opacity 0.45s ease, visibility 0.45s ease;
+          pointer-events: none;
+        }
+
+        .homepage-loader__media {
+          width: min(76vw, 520px);
+          max-width: 520px;
+        }
+
+        .homepage-loader__media img {
+          display: block;
+          width: 100%;
+          height: auto;
+        }
+
+        html.show-home-loader .homepage-loader {
+          opacity: 1;
+          visibility: visible;
+          pointer-events: auto;
+        }
+
+        html.show-home-loader,
+        html.show-home-loader body {
+          overflow: hidden;
+          height: 100%;
+          overscroll-behavior: none;
+        }
+
+        html.show-home-loader body {
+          position: fixed;
+          width: 100%;
+          inset: 0;
+          touch-action: none;
+        }
+
+        html.home-loader-done .homepage-loader {
+          opacity: 0;
+          visibility: hidden;
+          pointer-events: none;
+        }
+      </style>
+    {% endif %}
+
+    {% comment %} <lincustom.csseconnect" href="https://fonts.googleapis.com"> {% endcomment %}
+    <link
+      rel="preconnect"
+      href="https://fonts.gstatic.com"
+      crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://use.typekit.net/dic6enr.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" rel="stylesheet" />
+    {% comment %} <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" /> {% endcomment %}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bxslider@4.2.17/dist/jquery.bxslider.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.2.3/animate.min.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.css"
+      integrity="sha512-UTNP5BXLIptsaj5WdKFrkFov94lDx+eBvbKyoe1YAfjeRPC+gT5kyZ10kOHCfNZqEui1sxmqvodNUx3KbuYI/A=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css"
+      integrity="sha512-sMXtMNL1zRzolHYKEujM2AqCLUR9F2C4/05cdbxjjLSRvMQIciEPCQZo++nk7go3BtSuK9kfa/s+a4f4i5pLkw=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js" defer></script>
+
+    {% # Inlined CSS Variables %}
+  {% render 'css-variables' %}
+
+    {% # Load and preload the critical CSS %}
+    {{ 'style.css' | asset_url | stylesheet_tag: preload: true }}
+    {{ 'custom.css' | asset_url | stylesheet_tag: preload: true }}
+    {{ 'custom-2.css' | asset_url | stylesheet_tag: preload: true }}
+    {{ 'responsive.css' | asset_url | stylesheet_tag: preload: true }}
+  {{ 'responsive-2.css' | asset_url | stylesheet_tag: preload: true }}
+
+    {% # Social, title, etc. %}
+    {% render 'meta-tags' %}
+
+    {% if page_description %}
+      <meta name="description" content="{{ page_description | escape }}" />
+    {% endif %}
+
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
+      integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"></script>
+
+    <script>
+      window.shopCurrency = "{{ shop.currency }}";
+      window.activeCurrency = "{{ cart.currency.iso_code | default: shop.currency }}";
+      window.currencySymbol = "{{ cart.currency.symbol | default: shop.currency_symbol }}";
+    </script>
+    
+  </head>
+
+  <script>
+(function() {
+
+  try {
+
+    const pref = JSON.parse(
+      localStorage.getItem('jurassicLocalePreference') || '{}'
+    );
+
+    const lang = pref.language;
+
+    if (!lang || lang === 'de') return;
+
+    const currentPath = window.location.pathname;
+
+    const localePrefixes = ['/en', '/fr'];
+
+    // Already localized
+    if (
+      localePrefixes.some(prefix =>
+        currentPath === prefix || currentPath.startsWith(prefix + '/')
+      )
+    ) {
+      return;
+    }
+
+    const prefixMap = {
+      en: '/en',
+      fr: '/fr'
+    };
+
+    const prefix = prefixMap[lang];
+
+    if (prefix) {
+      location.replace(
+        prefix +
+        currentPath +
+        window.location.search +
+        window.location.hash
+      );
+    }
+
+  } catch(e) {}
+
+})();
+</script>
+
+  <body{% if template.name == 'index' %} class="template-index"{% endif %}>
+    {% if template.name == 'index' %}
+      <div class="homepage-loader" id="homepage-loader" aria-hidden="true">
+        <div class="homepage-loader__media">
+          <img
+            src="{{ 'home-loader.gif' | asset_url }}"
+            alt="Loading"
+            loading="eager">
+        </div>
+      </div>
+    {% endif %}
+    {% section 'top-bar' %}
+    {% sections 'header-group' %}
+    {% comment %} Disabled - Using corner cart app now {% endcomment %}
+    {%- comment %} {% section 'side-cart' %} {% endcomment %}
+
+    <div class="main">
+      {{ content_for_layout }}
+    </div>
+    {% section 'newsletter' %}
+    {% sections 'footer-group' %}
+
+    {% comment %} Dynamic SEO Content for Collection Pages {% endcomment %}
+    {% comment %} {% if template.name == 'collection' and collection.metafields.custom.seo_focused_paragraph != blank %}
+      <section class="collection-seo-footer">
+        <div class="container">
+          <div class="seo-sec-wrapper">
+            {{ collection.metafields.custom.seo_focused_paragraph |  metafield_tag }}
+          </div>
+        </div>
+      </section>
+    {% endif %} {% endcomment %}
+    {% comment %} Script Tags {% endcomment %}
+
+    {% comment %} Script Tags {% endcomment %}
+    <script src="https://unpkg.com/lenis@1.3.17/dist/lenis.min.js" defer></script> 
+    {% comment %} <script src="https://unpkg.com/aos@next/dist/aos.js"></script> {% endcomment %}
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/bxslider@4.2.17/dist/jquery.bxslider.min.js" defer></script>
+    <script
+      src="{{ 'product-card.js' |  asset_url }}"
+      data-reload="product-card-js"
+      defer></script>
+
+    <script src="{{ 'custom.js' |  asset_url }}" defer></script>
+        <script>
+          document.addEventListener("DOMContentLoaded", (event) => {
+            // 1. Initialize Lenis
+            window.lenis = new Lenis({
+              duration: 1.2,
+              easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+              prevent: (node) => node.closest('[data-lenis-prevent]') !== null
+            });
+
+            const lenisPreventSelectors = [
+              '[role="dialog"]',
+              '[aria-modal="true"]',
+              '[role="list"]',
+              '[role="listbox"]',
+              '[role="menu"]',
+              '.tl-overlay',
+              '.tl-dropdown',
+              '.tl-select',
+              '.tl-switcher',
+              '.tl-options',
+              '.adt-itemsContainer',
+              '.adt-itemsList',
+              '.adt-item',
+              '[class*="country" i]',
+              '[class*="currency" i]',
+              '[class*="locale" i]',
+              '[class*="market" i]',
+              '[id*="country" i]',
+              '[id*="currency" i]',
+              '[id*="locale" i]',
+              '[id*="market" i]'
+            ].join(',');
+
+            function isScrollableNode(node) {
+              if (!(node instanceof HTMLElement)) return false;
+              const styles = window.getComputedStyle(node);
+              const canScrollY = /(auto|scroll)/.test(styles.overflowY) && node.scrollHeight > node.clientHeight;
+              const canScrollX = /(auto|scroll)/.test(styles.overflowX) && node.scrollWidth > node.clientWidth;
+              return canScrollY || canScrollX;
+            }
+
+            function addLenisPreventToAppDropdowns(root = document) {
+              const candidates = [];
+              if (root instanceof HTMLElement && root.matches(lenisPreventSelectors)) {
+                candidates.push(root);
+              }
+              if (root.querySelectorAll) {
+                candidates.push(...root.querySelectorAll(lenisPreventSelectors));
+              }
+
+              candidates.forEach((node) => {
+                if (
+                  node.matches('[role="dialog"], [aria-modal="true"], [role="list"], [role="listbox"], [role="menu"], .tl-overlay, .tl-dropdown, .tl-select, .tl-switcher, .tl-options, .adt-itemsContainer, .adt-itemsList, .adt-item') ||
+                  isScrollableNode(node)
+                ) {
+                  node.setAttribute('data-lenis-prevent', '');
+                }
+
+                node.querySelectorAll?.('*').forEach((child) => {
+                  if (isScrollableNode(child)) child.setAttribute('data-lenis-prevent', '');
+                });
+              });
+            }
+
+            addLenisPreventToAppDropdowns();
+
+            const lenisPreventObserver = new MutationObserver((mutations) => {
+              mutations.forEach((mutation) => {
+                if (mutation.type === 'attributes') {
+                  addLenisPreventToAppDropdowns(mutation.target);
+                }
+
+                mutation.addedNodes.forEach((node) => {
+                  if (node.nodeType === Node.ELEMENT_NODE) {
+                    addLenisPreventToAppDropdowns(node);
+                  }
+                });
+              });
+            });
+
+            lenisPreventObserver.observe(document.body, {
+              childList: true,
+              subtree: true,
+              attributes: true,
+              attributeFilter: ['class', 'style', 'aria-expanded']
+            });
+
+            function raf(time) {
+              window.lenis.raf(time);
+              requestAnimationFrame(raf);
+            }
+            requestAnimationFrame(raf);
+
+            // 2. Setup Header Logic
+            const header = document.querySelector('header');
+            let lastScroll = 0;
+            const BACKDROP_TRIGGER = 80;
+
+            window.lenis.on('scroll', ({ scroll }) => {
+              if (scroll > BACKDROP_TRIGGER) {
+                header.classList.add('backdrop');
+              } else {
+                header.classList.remove('backdrop');
+              }
+
+              if (scroll > BACKDROP_TRIGGER) {
+                header.classList.add('active');
+              } else {
+                header.classList.remove('active');
+              }
+              lastScroll = scroll;
+            });
+
+            // 3. THE UNIVERSAL FIX (Inside the same scope)
+            // This watches for height changes from Okendo, Instafeed, etc.
+            const scrollTarget = document.querySelector('.main');
+            if (scrollTarget) {
+              const resizeObserver = new ResizeObserver(() => {
+                window.lenis.resize();
+                if (window.ScrollTrigger) {
+                  window.ScrollTrigger.refresh();
+                }
+              });
+              resizeObserver.observe(scrollTarget);
+              resizeObserver.observe(document.body);
+            }
+
+            // 4. Initial Safety Refresh
+            let refreshCount = 0;
+            const refreshInterval = setInterval(() => {
+              window.lenis.resize();
+              refreshCount++;
+              if (refreshCount >= 5) clearInterval(refreshInterval);
+            }, 1000);
+
+            // --- GSAP Logic Starts ---
+            if (window.gsap && window.ScrollTrigger) {
+  gsap.registerPlugin(ScrollTrigger);
+  const mm = gsap.matchMedia();
+
+  mm.add("(min-width: 993px)", () => {
+    const imageText = document.querySelector(".image-text-scroll");
+    if (!imageText) return;
+
+    // 1. ONLY hide the items that should appear LATER
+    // We leave #image1 and .dt-in.one visible by default
+    gsap.set(
+      ["#image3", ".dt-in.three", "#image2", ".dt-in.two", ".dt-in.four"],
+      { opacity: 0 }
+    );
+
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: imageText,
+        start: "top top",
+        end: "+=200%", 
+        pin: true,
+        scrub: 1,
+        snap: {
+          snapTo: "labels",
+          duration: { min: 0.2, max: 0.5 },
+          delay: 0.1,
+          ease: "power1.inOut"
+        }
+      }
+    });
+
+    // We start at Label 1 with the first items already visible
+    tl.addLabel("step1")
+      
+      // 2. Reveal Second Set (Image 3 + Text Three) TOGETHER
+      // Based on your HTML, Image 3 is "REAL"
+      .to("#image3", { opacity: 1, duration: 0.8 }, "+=0.2")
+      .to(".dt-in.three", { opacity: 1, duration: 0.8 }, "<") 
+      .addLabel("step2")
+      
+      // 3. Reveal Third Set (Image 2 + Text Two) TOGETHER
+      // Based on your HTML, Image 2 is "ROAR"
+      .to("#image2", { opacity: 1, duration: 0.8 }, "+=0.2")
+      .to(".dt-in.two", { opacity: 1, duration: 0.8 }, "<")
+      .to(".dt-in.four", { opacity: 1, duration: 0.8 }, "<")
+      .addLabel("step3")
+      
+      // 4. Reveal Final Set (Button)
+      // .to(".dt-in.four", { opacity: 1, duration: 0.8 }, "+=0.2")
+      // .addLabel("step4");
+
+    window.addEventListener("resize", ScrollTrigger.refresh);
+
+    return () => {
+      window.removeEventListener("resize", ScrollTrigger.refresh);
+      tl.scrollTrigger && tl.scrollTrigger.kill();
+      tl.kill();
+    };
+  });
+}
+          });
+      </script>
+
+
+    <script>
+      {% if template.name == 'index' %}
+        (function() {
+          let loaderDismissed = false;
+
+          const hideLoader = () => {
+            if (loaderDismissed) return;
+            loaderDismissed = true;
+
+            document.documentElement.classList.remove('show-home-loader');
+            document.documentElement.classList.add('home-loader-done');
+
+            try {
+              sessionStorage.setItem('homepageLoaderSeen', 'true');
+            } catch (e) {}
+
+            window.setTimeout(() => {
+              const loader = document.getElementById('homepage-loader');
+              if (loader) {
+                loader.remove();
+              }
+            }, 500);
+          };
+
+          const shouldShowLoader = document.documentElement.classList.contains('show-home-loader');
+
+          if (shouldShowLoader) {
+            window.addEventListener('load', hideLoader, { once: true });
+            window.setTimeout(hideLoader, 5000);
+          }
+        })();
+      {% endif %}
+
+          // AOS.init();
+    </script>
+
+    <script>
+      $(document).ready(function(){
+        var slidesToShow = ($(window).width() < 1000) ? 1.5 : 4;
+          $('.creviews-slider .bxslider').bxSlider({
+      minSlides: slidesToShow,
+      maxSlides: slidesToShow,
+      slideWidth: 400,
+      slideMargin: 16,
+      ticker: true,
+      infiniteLoop: true,
+      tickerHover: false,
+      speed: 22000
+          });
+
+          $('.vc-carousel .owl-carousel').owlCarousel({
+      center: true,
+      autoplay: false,
+      autoplayTimeout: 15000,
+      items: 2,
+      loop: true,
+      margin: 10,
+      nav: false,
+      dots: false,
+      navText: [
+        '<button class="custom-prev"><svg height="18px" width="18px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 185.343 185.343" style="transform: rotate(180deg);"><g><path style="fill:#fff;" d="M51.707,185.343c-2.741,0-5.493-1.044-7.593-3.149c-4.194-4.194-4.194-10.981,0-15.175l74.352-74.347L44.114,18.32c-4.194-4.194-4.194-10.987,0-15.175c4.194-4.194,10.987-4.194,15.18,0l81.934,81.934c4.194,4.194,4.194,10.987,0,15.175l-81.934,81.939C57.201,184.293,54.454,185.343,51.707,185.343z"/></g></svg></button>',
+        '<button class="custom-next"><svg height="18px" width="18px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 185.343 185.343"><g><path style="fill:#fff;" d="M51.707,185.343c-2.741,0-5.493-1.044-7.593-3.149c-4.194-4.194-4.194-10.981,0-15.175l74.352-74.347L44.114,18.32c-4.194-4.194-4.194-10.987,0-15.175c4.194-4.194,10.987-4.194,15.18,0l81.934,81.934c4.194,4.194,4.194,10.987,0,15.175l-81.934,81.939C57.201,184.293,54.454,185.343,51.707,185.343z"/></g></svg></button>',
+      ],
+      onTranslated: playCenterVideo, // Fires after the slide moves
+  onInitialized: playCenterVideo, // Fires when the carousel first loads
+      responsive: {
+        0: {
+          items: 2,
+          margin: 6,
+          nav: true
+        },
+        600: {
+          items: 2,
+          nav: true
+        },
+        900: {
+          items: 4,
+          nav: true
+        }
+      }
+          });
+
+          function playCenterVideo() {
+  // 1. Pause all videos first
+  document.querySelectorAll(".vcitem-video video").forEach(v => v.pause());
+
+  // 2. Find the video inside the current center slide and play it
+  const centerVideo = document.querySelector(".owl-item.center video");
+  if (centerVideo) {
+    centerVideo.muted = true; // Required for browser autoplay permissions
+    centerVideo.play().catch(e => console.log("Autoplay prevented:", e));
+  }
+}
+
+          $('.scs-slider .owl-carousel').owlCarousel({
+      items: 1,
+      loop: false,
+      margin: 30,
+      autoplay: true,
+      autoplayTimeout: 15000,
+      dots: true,
+      responsive: {
+        0: {
+          items: 1
+        },
+        600: {
+          items: 2
+        },
+        1000: {
+          items: 2
+        }
+      }
+          });
+      });
+    </script>
+
+    <script>
+          (function ($) {
+      $(document).ready(function () {
+        $('.scrollsec-slider').each(function () {
+          var $scs = $(this);                      // wrapper to receive odd/even class
+          var $owl = $scs.find('.owl-carousel');   // the actual carousel inside
+
+          // helper: set odd/even on wrapper based on 1-based slide position
+          function setOddEvenByPage(pageIndex) {
+            var slideNum = (pageIndex || 0) + 1;   // convert 0-based to 1-based
+            var cls = (slideNum % 2) ? 'odd' : 'even';
+            $scs.removeClass('odd even').addClass(cls);
+          }
+
+          // initial class after owl initialized
+          $owl.on('initialized.owl.carousel', function (event) {
+            // event.page.index is present in Owl v2 (0-based)
+            var pageIndex = (event.page && event.page.index !== undefined) ? event.page.index : 0;
+            setOddEvenByPage(pageIndex);
+          });
+
+          // on slide change — update wrapper class
+          $owl.on('changed.owl.carousel', function (event) {
+            var pageIndex = (event.page && event.page.index !== undefined) ? event.page.index : 0;
+            setOddEvenByPage(pageIndex);
+          });
+
+          // If Owl is already initialized before this script runs:
+          if ($owl.hasClass('owl-loaded')) {
+            // try to read current index from data (fallbacks)
+            var carouselData = $owl.data('owl.carousel') || $owl.data('owl');
+            var currentPage = (carouselData && carouselData.settings && carouselData._current !== undefined)
+              ? carouselData._current
+              : 0;
+            // prefer event.page if available; otherwise use _current or 0
+            setOddEvenByPage(currentPage);
+          }
+        });
+      });
+          })(jQuery);
+    </script>
+
+
+    <script>
+          document.addEventListener("DOMContentLoaded", () => {
+      document.querySelectorAll(".sws-fruits").forEach((container) => {
+        const items = Array.from(container.querySelectorAll(".swsfruits-item"));
+        const shouldReset = container.dataset.reset === "true";
+
+        container.addEventListener("mouseenter", () => {
+          items.forEach((el, index) => {
+            setTimeout(() => {
+              el.classList.add("visible");
+            }, index * 200); // 200ms delay per item (adjust as needed)
+          });
+        });
+      });
+          });
+    </script>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        function openNav() {
+            document.getElementById("mySidenav").classList.toggle("active");
+            document.body.classList.toggle("stay");
+            document.querySelector(".navbar_toggler")?.classList.toggle("open");
+        }
+
+          var $cmenu = $('.hnav-menu');
+
+          $cmenu.find('.has-mega-menu > .arrow').on('click', function (e) {
+            // Check if the window width is less than 992px
+            if (window.innerWidth < 992) {
+              e.preventDefault();
+              
+              var $megaMenu = $(this).next('.mega-menu');
+
+              if ($megaMenu.is(':visible')) {
+                $(this).removeClass('active');
+                $megaMenu.slideUp();
+              } else {
+                // Reset other arrows and menus
+                $cmenu.find('.has-mega-menu > .arrow').removeClass('active');
+                $cmenu.find('.mega-menu').slideUp();
+
+                // Open current menu
+                $(this).addClass('active');
+                $megaMenu.slideToggle();
+              }
+            }
+          });
+      
+          /* Close the side navigation */
+          // function closeNav() {
+          //   document.getElementById("mySidenav").classList.remove("active");
+          //   document.body.classList.remove("stay");
+          //   document.querySelector(".navbar_toggler")?.classList.remove("open");
+          // }
+
+          // Close nav when clicking anywhere on the page
+          // document.documentElement.addEventListener("click", () => {
+          //   document.getElementById("mySidenav").classList.remove("active");
+          //   document.body.classList.remove("stay");
+          //   document.querySelector(".navbar_toggler")?.classList.remove("open");
+          // });
+        });
+
+    </script>
+
+    <script>
+      // 1. Find ALL buttons with the class 'open-my-form'
+      const formButtons = document.querySelectorAll('.open-my-form');
+
+      // 2. Loop through each button found
+      formButtons.forEach(button => {
+        button.addEventListener('click', function(e) {
+          // Optional: Prevent default if it's an <a> tag
+          e.preventDefault();
+          
+          // 3. Trigger the Omnisend popup
+          window.omnisend = window.omnisend || [];
+          window.omnisend.push(['openForm', '69958495faf307608c8f52f5']);
+        });
+      });
+    </script>
+
+    <script>
+      window.themeStrings = {
+        addToCart: {{ 'products.product.add_to_cart' | t | json }},
+        addedToCart: {{ 'products.product.added_to_cart' | t | json }},
+        soldOut: {{ 'products.product.sold_out' | t | json }},
+        inStock: {{ 'products.product.in_stock' | t | json }},
+        outOfStock: {{ 'products.product.out_of_stock' | t | json }},
+        inventoryStatus: {{ 'products.product.inventory_status' | t: count: '__COUNT__' | json }}
+      };
+    </script>
+
+{% render 'shipping-global-script' %}
+
+    {%- render "ecom_footer" - %}
+    
+  </body>
+
+</html>

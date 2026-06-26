@@ -1,0 +1,264 @@
+<sections class="blogs">
+    <div class="container">
+        <div class="blogs-in">
+            <div class="heading-search-wrap">
+                <div class="heading">
+                    <h2>All Blogs</h2>
+                </div>
+                <div class="blog-search">
+                    {% render 'icon-search' %}
+                    <input type="search" placeholder="Search for any blog">
+                </div>
+            </div>
+
+            <div class="tc-filter-wrap">
+                <div class="filter-wrap filter">
+                    <div class="filter-buttton">
+                        Filter{% render 'filter-icon' %}
+                    </div>
+                    <div class="filter-sidebar">
+                        <div class="filter-cross-div">
+                            <p> <span>Filter</span>{% render 'filter-icon' %}</p>
+                            <div class="filter-close-mob">
+                                {% render 'cross' %}
+                            </div>
+                        </div>
+                        <div class="filter-sidebar-form">
+                            <div class="tab">
+                                <button
+                                class="tablinks"
+                                onclick="openCity(event, 'all')"
+                                id="{% if current_tags == blank %}defaultOpen{% endif %}">All</button>
+                                {% for tag in blog.all_tags %}
+                                <button
+                                    class="tablinks"
+                                    onclick="openCity(event, 'Category-{{ forloop.index }}')"
+                                    id="{% if current_tags contains tag %}defaultOpen{% endif %}">{{ tag }}</button>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="filter-wrap sort-by">
+                    <select name="sort" id="sort" onchange="sortArticles()">
+                        <option value="" disabled selected>Sort By</option>
+                        <option value="a-z">A-Z</option>
+                        <option value="z-a">Z-A</option>
+                        <option value="new-first">New First</option>
+                        <option value="old-first">Old First</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="blog-blocks" id="ajax-blog-container">
+
+                <div id="ajax-articles">
+                <!-- All Articles -->
+                <div id="all" class="tabcontent">
+                    <div class="blog-banner-card-wrap">
+                    {% paginate blog.articles by section.settings.number_of_blog_posts %}
+                        {% for article in blog.articles %}
+                        {% render "blog-card"
+                            , article: article %}
+                        {% endfor %}
+                        {% render 'pagination' | pagination: paginate %}
+                    {% endpaginate %}
+                    </div>
+                </div>
+
+                <!-- Filtered Articles -->
+                {% for tag in blog.all_tags %}
+                    <div id="Category-{{ forloop.index }}" class="tabcontent" style="display: none;">
+                        <div class="blog-banner-card-wrap" id="category-{{ forloop.index }}-articles">
+                            {% for article in blog.articles %}
+                            {% if article.tags contains tag %}
+                                {% render "blog-card"
+                                , article: article %}
+                            {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</sections>
+
+<script>
+  function showLoader() {
+    const loader = document.getElementById("ajax-loader");
+    if (loader) loader.style.display = "flex";
+  }
+
+  function hideLoader() {
+    const loader = document.getElementById("ajax-loader");
+    if (loader) loader.style.display = "none";
+  }
+
+  function openCity(evt, cityName) {
+    const tabcontent = document.querySelectorAll(".tabcontent");
+    const tablinks = document.querySelectorAll(".tablinks");
+
+    tabcontent.forEach(tc => tc.style.display = "none");
+    tablinks.forEach(tl => tl.classList.remove("active"));
+
+    const activeTab = document.getElementById(cityName);
+    if (activeTab) {
+      activeTab.style.display = "block";
+    }
+
+    if (evt?.currentTarget) {
+      evt.currentTarget.classList.add("active");
+    }
+
+    document.getElementById("sort").value = "";
+  }
+
+  function sortArticles() {
+    const sortValue = document.getElementById("sort").value;
+    const activeTab = document.querySelector(".tabcontent[style*='block']");
+    if (!activeTab) return;
+
+    const container = activeTab.querySelector(".blog-banner-card-wrap");
+    if (!container) return;
+
+    const articles = Array.from(container.querySelectorAll(".blog-card"));
+    let sortedArticles;
+
+    switch (sortValue) {
+      case "a-z":
+        sortedArticles = articles.sort((a, b) => a.dataset.title.localeCompare(b.dataset.title));
+        break;
+      case "z-a":
+        sortedArticles = articles.sort((a, b) => b.dataset.title.localeCompare(a.dataset.title));
+        break;
+      case "new-first":
+        sortedArticles = articles.sort((a, b) => parseInt(b.dataset.date) - parseInt(a.dataset.date));
+        break;
+      case "old-first":
+        sortedArticles = articles.sort((a, b) => parseInt(a.dataset.date) - parseInt(b.dataset.date));
+        break;
+      default:
+        return;
+    }
+
+    container.innerHTML = "";
+    sortedArticles.forEach(article => container.appendChild(article));
+  }
+
+  function initTabsAndSortAfterAjax() {
+    const activeTabBtn = document.querySelector(".tablinks.active");
+    if (activeTabBtn) {
+      activeTabBtn.click();
+    } else {
+      document.querySelector(".tablinks")?.click();
+    }
+
+    document.getElementById("sort").value = "";
+  }
+
+  document.addEventListener("DOMContentLoaded", function () {
+    const defaultTab = document.getElementById("defaultOpen");
+    if (defaultTab) {
+      defaultTab.click();
+    } else {
+      document.querySelector(".tablinks")?.click();
+    }
+
+    document.body.addEventListener("click", function (e) {
+      const link = e.target.closest(".pagination.blogs a");
+      if (link) {
+        e.preventDefault();
+        const pageUrl = link.href;
+
+        showLoader();
+
+        fetch(pageUrl)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(html, "text/html");
+            const newArticlesHTML = doc.querySelector("#ajax-articles")?.innerHTML;
+
+            if (newArticlesHTML) {
+              document.querySelector("#ajax-articles").innerHTML = newArticlesHTML;
+              history.pushState(null, "", pageUrl);
+              initTabsAndSortAfterAjax();
+              document.getElementById("ajax-blog-container")?.scrollIntoView({ behavior: "smooth" });
+            }
+          })
+          .catch(err => console.error("AJAX pagination failed", err))
+          .finally(() => {
+            hideLoader();
+          });
+      }
+    });
+  });
+
+  window.addEventListener("popstate", function () {
+    location.reload();
+  });
+
+  // Search Blogs js
+    document.addEventListener("DOMContentLoaded", function () {
+      const searchInput = document.querySelector(".blog-search input[type='search']");
+
+      if (!searchInput) return;
+
+      searchInput.addEventListener("input", function () {
+        const query = this.value.toLowerCase().trim();
+
+        // get active tab container
+        const activeTab = document.querySelector(".tabcontent[style*='block']");
+        if (!activeTab) return;
+
+        const articles = activeTab.querySelectorAll(".blog-card");
+
+        articles.forEach(article => {
+          const title = article.dataset.title;
+          const tags = article.dataset.tags;
+
+          if (title.includes(query) || tags.includes(query)) {
+            article.style.display = "";
+          } else {
+            article.style.display = "none";
+          }
+        });
+      });
+    });
+</script>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+      const filter_button = document.querySelector('.filter-buttton');
+      const filter_sidebar = document.querySelector('.filter-sidebar');
+      const filter_close = document.querySelector('.filter-close-mob');
+
+      filter_button.addEventListener('click', function() {
+        filter_sidebar.classList.add('active');
+      });
+
+      filter_close.addEventListener('click', function() {
+        filter_sidebar.classList.remove('active');
+      })
+  });
+</script>
+
+
+{% schema %}
+  {
+    "name": "Blog",
+    "settings": [
+      {
+        "type": "range",
+        "id": "number_of_blog_posts",
+        "step": 1,
+        "min": 1,
+        "max": 9,
+        "label": "Number of Blogs",
+        "default": 9
+      }
+    ]
+  }
+{% endschema %}

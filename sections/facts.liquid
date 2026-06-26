@@ -1,0 +1,184 @@
+<link href="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/css/splide.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js"></script>
+
+<div class="facts">
+    <div class="facts-bg">
+        {% comment %} <img class="cover" src="{{ section.settings.bg_image | img_url: 'master' }}" alt="{{ block.settings.bg_image.alt }}" /> {% endcomment %}
+         <img src="https://cdn.shopify.com/s/files/1/0752/8015/4881/files/Rectangle_25307.jpg?v=1762433592" alt="">
+    </div>
+    <div class="facts-heading">
+        <div class="heading center white md">
+            <h2>{{ section.settings.heading }}</h2>
+            <p>{{ section.settings.subheading }}</p>
+        </div>
+    </div>
+    <div class="for-desktop">
+        <div class="facts-data">
+        {% for block in section.blocks %}
+            <div class="factsdata-item">
+                <div class="facts-item-in">
+                    <div class="facts-hover"></div>
+                    <div class="facts-hover-data" style="opacity: {% if block.settings.show_item %}1{% else %}0{% endif %};">
+                        <div class="fhd-top">
+                            <div class="fhd-top-para">{{ block.settings.facts_top_data }}</div>
+                            <div class="fhd-bottom-para">{{ block.settings.facts_bottom_data }}</div>
+                        </div>
+                        <div class="fhd-bottom">
+                            <div class="fhdb-image">
+                                <img src="https://cdn.shopify.com/s/files/1/0752/8015/4881/files/image_69.png?v=1762435701" alt="">
+                            </div>
+                            <p>{{ block.settings.facts_heading }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+        </div>
+    </div>
+    <div class="for-mobile">
+        <div class="facts-data splide">
+            <div class="splide__track">
+                <div class="splide__list">
+                    {% for block in section.blocks %}
+                        <div class="splide__slide">
+                        <div class="factsdata-item">
+                            <div class="facts-item-in">
+                                <div class="facts-hover"></div>
+                                <div class="facts-hover-data" style="opacity: {% if block.settings.show_item %}1{% else %}0{% endif %};">
+                                    <div class="fhd-top">
+                                        <div class="fhd-top-para">{{ block.settings.facts_top_data }}</div>
+                                        <div class="fhd-bottom-para">{{ block.settings.facts_bottom_data }}</div>
+                                    </div>
+                                    <div class="fhd-bottom">
+                                        <div class="fhdb-image">
+                                            <img src="https://cdn.shopify.com/s/files/1/0752/8015/4881/files/image_69.png?v=1762435701" alt="">
+                                        </div>
+                                        <p>{{ block.settings.facts_heading }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  var splide = new Splide('.for-mobile .facts-data', {
+    perPage: 3,
+    perMove: 1,
+    arrows: true,
+    pagination: false,
+    gap: '60px',
+    drag: 'free',
+    flickPower: 300,
+    flickMaxPages: 1,
+    speed: 600,
+    waitForTransition: false,
+    breakpoints: {
+      1200: { perPage: 1 },
+      1000: { perPage: 1 },
+      600:  { perPage: 1, arrows: true },
+    },
+  });
+
+  splide.mount();
+
+  const track = document.querySelector('.facts-data .splide__track');
+
+  const STEP_THRESHOLD = 140;         // increase threshold for finer control
+  const COOLDOWN_MS = 140;            // prevent rapid consecutive jumps
+  let accum = 0;
+  let lastGo = 0;
+
+  function clampIndex(idx) {
+    const perPage = splide.options.perPage || 1;
+    const slides  = splide.root.querySelectorAll('.facts-data .splide__slide').length;
+    const maxIdx  = Math.max(0, slides - perPage);
+    return Math.max(0, Math.min(idx, maxIdx));
+  }
+
+  track.addEventListener('wheel', function (e) {
+    if (Math.abs(e.deltaX) <= Math.abs(e.deltaY)) return;
+
+    e.preventDefault();
+    accum += e.deltaX;
+
+    const now = performance.now();
+    if (now - lastGo < COOLDOWN_MS) return;
+
+    const rawSteps = Math.trunc(accum / STEP_THRESHOLD);
+    if (rawSteps !== 0) {
+      const step = Math.sign(rawSteps);        // clamp to -1 / +1 per tick
+      const target = clampIndex(splide.index + step);
+      if (target !== splide.index) {
+        splide.go(target);
+        lastGo = now;
+      }
+      // keep only the remainder but remove the step we just consumed
+      accum -= step * STEP_THRESHOLD;
+    }
+  }, { passive: false });
+});
+</script>
+
+{% schema %}
+  {
+    "name": "facts",
+    "tag": "section",
+    "settings": [
+        {
+            "type": "text",
+            "id": "heading",
+            "label": "Heading"
+        },
+        {
+            "type": "text",
+            "id": "subheading",
+            "label": "Paragraph"
+        }
+    ],
+    "blocks": [
+        {
+          "type": "title",
+          "name": "Title",
+          "limit": 3,
+          "settings": [
+            {
+              "type": "checkbox",
+              "id": "show_item",
+              "label": "Show Item On Screen (Uncheck after adding content)",
+              "default": false
+            },
+            {
+              "type": "richtext",
+              "id": "facts_top_data",
+              "label": "Facts top text"
+            },
+            {
+              "type": "richtext",
+              "id": "facts_bottom_data",
+              "label": "Facts bottom text"
+            },
+            {
+                "type": "text",
+                "id": "facts_heading",
+                "label": "Fact Item Heading"
+            }
+          ]
+        }
+      ],
+    "presets": [
+        {
+            "name": "facts",
+            "settings": {
+            }
+        }
+    ]
+  }
+{% endschema %}

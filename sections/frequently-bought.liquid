@@ -1,0 +1,135 @@
+<div class="frequently-bought">
+  <div class="container">
+    <div class="freqIn">
+      <div class="heading">
+        <h2
+          data-aos="fade-up"
+          data-aos-duration="1000"
+          class="aos-init aos-animate">{{ 'sections.frequently_bought.heading_html' | t: product_title: product.title }}
+        </h2>
+      </div>
+      <div class="freq-wrap"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* 1. FETCH AND RENDER RECOMMENDATIONS */
+document.addEventListener("DOMContentLoaded", function () {
+  const productId = {{ product.id }};
+  const container = document.querySelector(".freq-wrap");
+  const shopRoot = window.Shopify?.routes?.root || '/';
+  if (!container) return;
+
+  fetch(`/recommendations/products.json?product_id=${productId}&limit=5`)
+    .then(res => res.json())
+    .then(data => {
+      const filtered = data.products.filter(p => p.id !== productId).slice(0, 4);
+      container.innerHTML = ""; // Clear loader if any
+
+      filtered.forEach(product => {
+        const localizedProductUrl = new URL(`${shopRoot}products/${product.handle}`, window.location.origin);
+        localizedProductUrl.searchParams.set('section_id', 'product-card-primary');
+
+        fetch(localizedProductUrl.toString())
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(html, "text/html");
+            const card = doc.querySelector(".product-card-primary");
+
+            if (card) {
+              container.appendChild(card);
+
+              if (typeof syncSelectedDropdownItem === 'function') {
+                const dropdown = card.querySelector('.wrapper-dropdown');
+                if (dropdown) syncSelectedDropdownItem(dropdown);
+              }
+
+              if (typeof window.bindProductCardAddForms === 'function') {
+                window.bindProductCardAddForms(card);
+              }
+
+              initVariantLogic(card);
+            }
+          })
+          .catch(err => console.error("Error loading product card:", err));
+      });
+    });
+});
+
+function initVariantLogic(card) {
+  const variantItems = card.querySelectorAll(".fc_variant_item");
+  const cartWrapper = card.querySelector('.fc_add_to_cart');
+  const formVariantInput = card.querySelector('.product-card-add-form input[name="id"]');
+  
+  const sellingPrice = card.querySelector(".selling_price");
+  const comparePrice = card.querySelector("#compare_price") || card.querySelector("strike");
+  const weightText = card.querySelector(".fc_weight");
+  const inventoryText = card.querySelector(".fc_trust_text p:first-child");
+  const primaryImg = card.querySelector(".primary-img");
+
+  variantItems.forEach((variant) => {
+    variant.addEventListener("click", () => {
+      // 1. Toggle Active Class
+      variantItems.forEach((v) => v.classList.remove("active"));
+      variant.classList.add("active");
+
+      if (cartWrapper) {
+        cartWrapper.setAttribute('data-variant-id', variant.dataset.id);
+      }
+
+      if (formVariantInput) {
+        formVariantInput.value = variant.dataset.id;
+      }
+      
+      if (sellingPrice) sellingPrice.textContent = variant.dataset.price;
+      
+      if (comparePrice) {
+        const hasDiscount = variant.dataset.compare && variant.dataset.compare !== variant.dataset.price;
+        if (hasDiscount) {
+          comparePrice.textContent = variant.dataset.compare;
+          comparePrice.style.display = 'inline';
+        } else {
+          comparePrice.style.display = 'none';
+        }
+      }
+
+      if (weightText) {
+        if (variant.dataset.unit) {
+          weightText.textContent = variant.dataset.unit;
+          weightText.style.display = '';
+        } else {
+          weightText.textContent = '';
+          weightText.style.display = 'none';
+        }
+      }
+
+      if (inventoryText) {
+        const inventoryQty = parseInt(variant.dataset.inventory, 10) || 0;
+        const inventoryTemplate = window.themeStrings?.inventoryStatus || 'Only __COUNT__ left';
+        inventoryText.textContent = inventoryQty <= 0
+          ? (window.themeStrings?.outOfStock || 'Out of stock')
+          : inventoryQty < 100
+            ? inventoryTemplate.replace('__COUNT__', inventoryQty)
+            : (window.themeStrings?.inStock || 'In stock');
+        inventoryText.classList.toggle('low-stock', inventoryQty > 0 && inventoryQty < 100);
+      }
+
+      if (primaryImg && variant.dataset.image && variant.dataset.image.indexOf('no-image') === -1) {
+        primaryImg.src = variant.dataset.image;
+      }
+    });
+  });
+}
+</script>
+
+
+{% schema %}
+  {
+    "name": "Frequently Bought",
+    "tag": "section",
+    "class": "frequentlyBought",
+    "settings": []
+  }
+{% endschema %}

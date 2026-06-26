@@ -1,0 +1,27 @@
+{% assign schema_setting = section.settings.text %}
+{% assign collection_description = collection.description | strip_html | strip %}
+
+<div class="seo-section">
+  <div class="container">
+    <div class="seo-sec-wrapper">
+      {% if collection_description != blank %}
+        {{ collection.description }}
+      {% else %}
+        {{ schema_setting }}
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+  {
+    "name": "Seo Section",
+    "settings": [
+      {
+        "type": "richtext",
+        "id": "text",
+        "label": "Seo Text"
+      }
+    ]
+  }
+{% endschema %}

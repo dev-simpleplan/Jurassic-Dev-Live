@@ -1,0 +1,316 @@
+
+<section class="blog-details-page top-wrap">
+    <div class="container">
+        <div class="bdp-in">
+            <div class="breadcrumbs">
+              <a href="{{ blog.url }}">{{ 'blogs.general.title' | t }}</a>
+              <p>
+                >
+              </p>
+              <p>
+                {{  article.title }}
+              </p>
+            </div>
+            {% for block in section.blocks %}
+                <div class="bdp-head">
+                    {% case block.type %}
+                        {% when 'heading' %}
+                        <div class="bdp-heading-wrap">
+                            <h1 class="">{{ article.title }}</h1>
+                            <div class="other-details">
+                                {% assign date = article.published_at | time_tag: format: 'date' %}
+                                <p>{{ 'blog.article_metadata_html' | t: date: date, author: article.author }}</p>
+                                {% if article.metafields.custom.read_time != blank %}
+                                    <p>{{ article.metafields.custom.read_time }} Min Read</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% when 'img_block' %}
+                        <div class="bdp-banner">
+                            {% if article.image %}
+                                {{ article.image | image_url: width: 1000 | image_tag }}
+                            {% endif %}
+                        </div>
+                    {% endcase %}
+                </div>
+            
+                {% case block.type %}
+                    {% when 'content_block' %}
+                    <div class="bdp-content-wrap">
+                        <div class="bcw-left">
+                            <div class="bcw-content">
+                                {{ article.content }}
+                            </div>
+                            <div class="bcw-share">
+                                <div class="article-share">
+                                  <p>Share</p>
+                                  <div class="share-wrap">
+                                    {% comment %} Added 'share-copy' class and a data attribute for fallback {% endcomment %}
+                                    <a href="javascript:void(0)" class="share-copy" data-url="{{ shop.url | append: article.url }}">
+                                      <img src="https://cdn.shopify.com/s/files/1/0752/8015/4881/files/share-icon.svg?v=1776098637" alt="Copy Link">
+                                    </a>
+                                    
+                                    {% comment %} Improved Facebook Link {% endcomment %}
+                                    <a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u={{ shop.url | append: article.url | url_encode }}">
+                                      <img src="https://cdn.shopify.com/s/files/1/0752/8015/4881/files/facebook-icon.svg?v=1776098854" alt="Facebook">
+                                    </a>
+
+                                    {% comment %} Changed ID to a CLASS 'whatsapp-share' {% endcomment %}
+                                    <a target="_blank" href="#!" class="whatsapp-share">
+                                      <img src="https://cdn.shopify.com/s/files/1/0752/8015/4881/files/whatsapp-icon.svg?v=1776098840" alt="WhatsApp">
+                                    </a>
+                                  </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bcw-right">
+                            <div class="bcwright-in">
+                                <div class="bcw-subscribe-box">
+                                    <div class="bsb-subs-wrap">
+                                        <div class="bsbsubs-top">
+                                            <div class="bsb-logo">
+                                                <img src="{{ section.settings.subscribe_logo |  img_url: 'master'  }}" alt="">
+                                            </div>
+                                            <div class="bsb-data">
+                                                <h3>{{ section.settings.subscribe_heading }}</h3>
+                                                <p>{{ section.settings.subscribe_subheading }}</p>
+                                            </div>
+                                        </div>
+                                        <div class="bsbsubs-bottom">
+                                            <div class="form-text">
+                                                <p class="form-heading">{{ section.settings.form_heading }}</p>
+                                                <p class="form-subheading">{{ section.settings.form_subheading }}</p>
+                                            </div>
+                                            <div class="nl-form">
+                                                {% form 'customer' %}
+                                                <input type="hidden" name="return_to" value="{{ routes.root_url }}pages/thank-you">
+                                                <div class="form-in">
+                                                    <div class="email_input">
+                                                    <input
+                                                        type="email"
+                                                        name="contact[email]"
+                                                        class=""
+                                                        placeholder="Enter Email Address"
+                                                        required>
+                                                    </div>
+                                                    <div class="submit_btn">
+                                                    <input
+                                                        type="submit"
+                                                        class="custom-btn black"
+                                                        value="Subscribe">
+                                                    </div>
+                                                </div>
+                                                {% if form.posted_successfully? %}
+                                                <script>
+                                                    window.location.href = window.Shopify.routes.root + 'pages/thank-you';
+                                                </script>
+                                                {% elsif form.errors %}
+                                                    <div class="form-error">
+                                                    <p>There was an error submitting the form. Please check your email address and try again.</p>
+                                                    </div>
+                                                {% endif %}
+                                                {% endform %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="bcw-share">
+                                    <div class="article-share">
+                                      <p>Share</p>
+                                      <div class="share-wrap">
+                                        {% comment %} Added 'share-copy' class and a data attribute for fallback {% endcomment %}
+                                        <a href="javascript:void(0)" class="share-copy" data-url="{{ shop.url | append: article.url }}">
+                                          <img src="https://cdn.shopify.com/s/files/1/0752/8015/4881/files/share-icon.svg?v=1776098637" alt="Copy Link">
+                                        </a>
+                                        
+                                        {% comment %} Improved Facebook Link {% endcomment %}
+                                        <a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u={{ shop.url | append: article.url | url_encode }}">
+                                          <img src="https://cdn.shopify.com/s/files/1/0752/8015/4881/files/facebook-icon.svg?v=1776098854" alt="Facebook">
+                                        </a>
+
+                                        {% comment %} Changed ID to a CLASS 'whatsapp-share' {% endcomment %}
+                                        <a target="_blank" href="#!" class="whatsapp-share">
+                                          <img src="https://cdn.shopify.com/s/files/1/0752/8015/4881/files/whatsapp-icon.svg?v=1776098840" alt="WhatsApp">
+                                        </a>
+                                      </div>
+                                    </div>
+                                </div>
+                                <div class="bcw-product-box">
+                                    <div class="bcw-product-wrap">
+                                        <div class="bpw-top">
+                                            <div class="bpwt-heading">
+                                                <h3>{{ section.settings.productbox_heading }}</h3>
+                                                <span>
+                                                    <img src="https://cdn.shopify.com/s/files/1/0752/8015/4881/files/Group_66.svg?v=1765202267" alt="">
+                                                </span>
+                                            </div>
+                                            <div class="bpwt-para">
+                                              <p>{{ section.settings.productbox_para }}</p>
+                                            </div>
+                                        </div>
+                                        <div class="bpw-bottom">
+                                            {% assign product = section.settings.product %}
+                                            {% if product == blank %}
+                                                <p class="noproducts">No product selected.</p>
+                                            {% else %}
+                                                {% render 'product-card-primary', product: product %}
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                              </div>
+                          </div>
+                    </div>
+
+                    {% when 'subscribe_block' %}
+                    <div class="bdp-subscribe">
+                        <div class="bdps-in">
+                            
+                        </div>
+                    </div>
+                {% endcase %}
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+{% schema %}
+  {
+    "name": "Article",
+    "settings": [
+        {
+            "type": "image_picker",
+            "id": "subscribe_logo",
+            "label": "Logo Image"
+        },
+        {
+            "type": "text",
+            "id": "subscribe_heading",
+            "label": "Subscribe heading",
+            "default": "Untamed. Exotic. Organic"
+        },
+        {
+            "type": "text",
+            "id": "subscribe_subheading",
+            "label": "Subscribe Sub heading",
+            "default": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fermentum ultrices quis malesuada aliquam ac at. "
+        },
+        {
+            "type": "text",
+            "id": "form_heading",
+            "label": "Form heading",
+            "default": "stay updated!"
+        },
+        {
+            "type": "text",
+            "id": "form_subheading",
+            "label": "Form Sub Heading",
+            "default": "Subscribe to our newsletter for the latest updates, insights, and exclusive content."
+        },
+        {
+            "type": "text",
+            "id": "productbox_heading",
+            "label": "ProductBox heading",
+            "default": "Cocnut is a part of our discovery box"
+        },
+        {
+            "type": "text",
+            "id": "productbox_para",
+            "label": "ProductBox Sub heading",
+            "default": "New to Jurassic? This Discovery Box is your perfect start."
+        },
+        {
+            "type": "product",
+            "id": "product",
+            "label": "Select product"
+        },
+    ],
+    "blocks": [
+      {
+        "name": "Heading Block",
+        "type": "heading"
+      }, {
+        "name": "Image Block",
+        "type": "img_block"
+      }, {
+        "name": "Content Block",
+        "type": "content_block"
+      }
+    ]
+  }
+{% endschema %}
+
+<script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "BlogPosting",
+    "headline": {{ article.title | json }},
+    "articleBody": {{ article.content | strip_html | json }},
+    {% if article.excerpt != blank %}
+      "description": {{ article.excerpt | strip_html | json }},
+      {% endif %}
+      {% if article.image %}
+        "image" : [{{ article.image | img_url: "medium" | prepend: 'https:' | json }}],
+        {% endif %}
+        "datePublished": {{ article.published_at | date: format: "default" | json }},
+        "dateCreated": {{ article.created_at | date: format: "default" | json }},
+        "author": {
+          "@type": "Person",
+          "name": {{ article.author | json }}
+        },
+        "publisher": {
+          "@type": "Organization",
+          "name": {{ shop.name | json }}
+        }
+      }
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+
+  // --- 1. WHATSAPP SHARE LOGIC ---
+  // Use querySelectorAll to find all buttons with the class
+  document.querySelectorAll('.whatsapp-share').forEach(button => {
+    button.addEventListener('click', function(e) {
+      e.preventDefault();
+      const pageUrl = encodeURIComponent(window.location.href);
+      const shareText = encodeURIComponent("Check out this article: ");
+      const whatsappUrl = `https://api.whatsapp.com/send?text=${shareText}${pageUrl}`;
+      window.open(whatsappUrl, '_blank');
+    });
+  });
+
+  // --- 2. COPY / NATIVE SHARE LOGIC ---
+  const shareButtons = document.querySelectorAll(".share-copy");
+
+  shareButtons.forEach(button => {
+    button.addEventListener("click", async () => {
+      const urlToShare = window.location.href;
+
+      // Try Mobile Native Share first
+      if (navigator.share) {
+        try {
+          await navigator.share({
+            title: document.title,
+            url: urlToShare
+          });
+        } catch (err) {
+          console.log("Share cancelled or failed");
+        }
+      } else {
+        // Fallback: Copy to Clipboard for Desktop
+        navigator.clipboard.writeText(urlToShare).then(() => {
+          alert("Link copied to clipboard!");
+          
+          // Optional: Change icon or text temporarily
+          const originalText = button.innerHTML;
+          button.style.color = "#28a745"; // Success green
+          setTimeout(() => { button.style.color = ""; }, 2000);
+        }).catch(err => {
+          console.error('Could not copy text: ', err);
+        });
+      }
+    });
+  });
+});
+</script>

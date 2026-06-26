@@ -1,0 +1,589 @@
+<div class="top-bar">
+    <div class="container">
+        <div class="top-bar-in">
+            <div class="tb-rating">
+                <div class="tbr-icon">
+                    <img class="icon" src="{{ section.settings.rating_image | img_url: 'master' }}" alt="{{ section.settings.rating_image }}">
+                </div>
+                <div class="tbr-text">{{ section.settings.rating_text }}</div>
+            </div>
+            <div class="tb-text">
+                <p
+                  data-top-bar-shipping
+                  data-prefix="{{ section.settings.tbtext_prefix | default: 'Free shipping on orders above' | escape }}"
+                  data-default-amount="{{ section.settings.tbtext_amount | default: 450 }}"
+                  data-default-currency="{{ localization.country.currency.iso_code | default: cart.currency.iso_code | default: shop.currency }}"
+                >
+                  {{ section.settings.tbtext_prefix | default: 'Free shipping on orders above' }}
+                </p>
+            </div>
+            {% comment %} <div class="tb-lang-wrap">
+                {% if localization.available_countries.size > 1 %}
+                <div class="dropdown country-dropdown">
+                    <button class="dropdown-trigger" type="button">
+                    <span class="flag">
+                        <img
+                        src="https://flagcdn.com/w20/{{ localization.country.iso_code | downcase }}.png"
+                        alt="{{ localization.country.name }}"
+                        width="20"
+                        height="14"
+                        >
+                    </span>
+                    <span class="label">
+                        {{ localization.country.name }}
+                        ({{ localization.country.currency.iso_code }})
+                    </span>
+                    </button>
+
+                    <ul class="dropdown-menu">
+                    {% for country in localization.available_countries %}
+                        <li>
+                        <a href="{{ routes.root_url }}?country={{ country.iso_code }}">
+                            <img
+                            src="https://flagcdn.com/w20/{{ country.iso_code | downcase }}.png"
+                            alt="{{ country.name }}"
+                            width="20"
+                            height="14"
+                            >
+                            <span>
+                            {{ country.name }}
+                            ({{ country.currency.iso_code }})
+                            </span>
+                        </a>
+                        </li>
+                    {% endfor %}
+                    </ul>
+                </div>
+                {% endif %}
+
+                {% if localization.available_languages.size > 1 %}
+                {% assign lang_flags = 'en:gb,fr:fr,de:de' | split: ',' %}
+
+                <div class="dropdown language-dropdown">
+                    <button class="dropdown-trigger" type="button">
+                    {% for map in lang_flags %}
+                        {% assign pair = map | split: ':' %}
+                        {% if pair[0] == localization.language.iso_code %}
+                        <img
+                            src="https://flagcdn.com/w20/{{ pair[1] }}.png"
+                            alt="{{ localization.language.endonym_name }}"
+                            width="20"
+                            height="14"
+                        >
+                        {% endif %}
+                    {% endfor %}
+                    <span class="label">
+                        {{ localization.language.endonym_name }}
+                    </span>
+                    </button>
+
+                    <ul class="dropdown-menu">
+                    {% for language in localization.available_languages %}
+                        <li>
+                        <a href="{{ language.root_url }}">
+                            {% for map in lang_flags %}
+                            {% assign pair = map | split: ':' %}
+                            {% if pair[0] == language.iso_code %}
+                                <img
+                                src="https://flagcdn.com/w20/{{ pair[1] }}.png"
+                                alt="{{ language.endonym_name }}"
+                                width="20"
+                                height="14"
+                                >
+                            {% endif %}
+                            {% endfor %}
+                            <span>{{ language.endonym_name }}</span>
+                        </a>
+                        </li>
+                    {% endfor %}
+                    </ul>
+                </div>
+                {% endif %}
+            </div> {% endcomment %}
+            <div class="tb-lang-wrap">
+                <button class="locale-trigger" type="button" data-locale-open>
+                    <img
+                    src="https://flagcdn.com/w20/{{ localization.country.iso_code | downcase }}.png"
+                    alt="{{ localization.country.name }}"
+                    width="20"
+                    height="14"
+                    >
+                    <span>
+                    {{ localization.country.name }} |
+                    {{ localization.language.iso_code | upcase }}
+                    </span>
+                </button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div
+  class="locale-modal"
+  data-locale-modal
+  data-current-country="{{ localization.country.iso_code }}"
+  data-current-language="{{ localization.language.iso_code }}"
+  data-lenis-prevent
+>
+  <div class="locale-backdrop" data-locale-close></div>
+
+  <div class="locale-panel" data-lenis-prevent>
+    <button class="locale-close" type="button" data-locale-close>×</button>
+
+    <!-- COUNTRIES -->
+    <div class="countries-select">
+        {% if localization.available_countries.size > 1 %}
+        <p class="selecthead">Select country</p>
+        <ul class="locale-list">
+            {% for country in localization.available_countries %}
+            <li>
+                <a href="#" data-country="{{ country.iso_code }}">
+                <img
+                    src="https://flagcdn.com/w20/{{ country.iso_code | downcase }}.png"
+                    alt="{{ country.name }}"
+                    width="20"
+                    height="14"
+                >
+                <span>
+                    {{ country.name }}
+                    ({{ country.currency.iso_code }})
+                </span>
+                </a>
+            </li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+    </div>
+
+    <!-- LANGUAGES -->
+    <div class="language-select">
+        {% if localization.available_languages.size > 1 %}
+        <p class="selecthead">Select language</p>
+        <ul class="locale-list">
+            {% for language in localization.available_languages %}
+            <li>
+                <a
+                    href="#"
+                    data-language="{{ language.iso_code }}"
+                    data-language-url="{{ language.root_url }}"
+                >
+                <span class="lang-code">
+                    {{ language.iso_code | upcase }}
+                </span>
+                <span>{{ language.endonym_name }}</span>
+                </a>
+            </li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+    </div>
+    <div class="language-btn">
+        <button class="locale-apply custom-btn filled rounded" type="button" data-locale-apply>Apply</button>
+    </div>
+  </div>
+</div>
+
+{% form 'localization', id: 'LocaleSwitchForm', class: 'visually-hidden' %}
+  <input type="hidden" name="country_code" value="{{ localization.country.iso_code }}" data-locale-country-input>
+  <input type="hidden" name="locale_code" value="{{ localization.language.iso_code }}" data-locale-language-input>
+  <input type="hidden" name="return_to" value="{{ request.path }}" data-locale-return-input>
+{% endform %}
+
+
+{% comment %} <script>
+document.addEventListener('click', function (e) {
+  document.querySelectorAll('.dropdown').forEach(dropdown => {
+    const button = dropdown.querySelector('.dropdown-trigger');
+
+    if (button.contains(e.target)) {
+      dropdown.classList.toggle('open');
+    } else {
+      dropdown.classList.remove('open');
+    }
+  });
+});
+</script> {% endcomment %}
+
+<script>
+(function () {
+  const preferenceKey = 'jurassicLocalePreference';
+  const dismissedKey = 'jurassicLocalePromptDismissed';
+
+  function getLocaleModal() {
+    return document.querySelector('[data-locale-modal]');
+  }
+
+  function setLocaleSelection(modal, country, language) {
+    const selectedCountry = country || modal.dataset.currentCountry;
+    const selectedLanguage = language || modal.dataset.currentLanguage;
+
+    modal.dataset.selectedCountry = selectedCountry;
+    modal.dataset.selectedLanguage = selectedLanguage;
+
+    const languageEl = modal.querySelector(`[data-language="${selectedLanguage}"]`);
+    if (languageEl) {
+      modal.dataset.selectedLanguageUrl = languageEl.dataset.languageUrl;
+    } else {
+      delete modal.dataset.selectedLanguageUrl;
+    }
+
+    modal.querySelectorAll('[data-country]').forEach(el => {
+      el.classList.toggle('is-selected', el.dataset.country === selectedCountry);
+    });
+
+    modal.querySelectorAll('[data-language]').forEach(el => {
+      el.classList.toggle('is-selected', el.dataset.language === selectedLanguage);
+    });
+  }
+
+  function getLanguageUrl(modal, languageCode) {
+    const languageEl = modal.querySelector(`[data-language="${languageCode}"]`);
+    return languageEl?.dataset.languageUrl || '';
+  }
+
+  function getRootPath(urlLike) {
+    if (!urlLike) return '';
+
+    try {
+      const parsedUrl = new URL(urlLike, window.location.origin);
+      const pathname = parsedUrl.pathname.replace(/\/+$/, '');
+      return pathname === '/' ? '' : pathname;
+    } catch (error) {
+      return '';
+    }
+  }
+
+  function stripLocalePrefix(pathname, modal) {
+    const prefixes = Array.from(modal.querySelectorAll('[data-language-url]'))
+      .map(el => getRootPath(el.dataset.languageUrl))
+      .filter(Boolean)
+      .sort((a, b) => b.length - a.length);
+
+    for (const prefix of prefixes) {
+      if (pathname === prefix) {
+        return '/';
+      }
+
+      if (pathname.indexOf(`${prefix}/`) === 0) {
+        return pathname.slice(prefix.length) || '/';
+      }
+    }
+
+    return pathname || '/';
+  }
+
+  function buildLocalizedReturnPath(modal, languageCode) {
+    const currentUrl = new URL(window.location.href);
+    currentUrl.searchParams.delete('country');
+
+    const targetRoot = getRootPath(getLanguageUrl(modal, languageCode));
+    const basePath = stripLocalePrefix(currentUrl.pathname, modal);
+    const localizedPath = `${targetRoot}${basePath === '/' ? '' : basePath}` || '/';
+
+    return `${localizedPath}${currentUrl.search}${currentUrl.hash}`;
+  }
+
+  window.openLocaleModal = function (options = {}) {
+    const modal = getLocaleModal();
+    if (!modal) return;
+
+    setLocaleSelection(
+      modal,
+      options.country || modal.dataset.currentCountry,
+      options.language || modal.dataset.currentLanguage
+    );
+    modal.classList.add('is-open');
+  };
+
+  function closeLocaleModal(modal) {
+    modal.classList.remove('is-open');
+  }
+
+  document.addEventListener('click', function (e) {
+    const modal = getLocaleModal();
+    if (!modal) return;
+
+    /* ----------------------------
+       OPEN MODAL
+    ----------------------------- */
+    if (e.target.closest('[data-locale-open]')) {
+      window.openLocaleModal();
+      return;
+    }
+
+    /* ----------------------------
+       CLOSE MODAL
+    ----------------------------- */
+    if (e.target.closest('[data-locale-close]')) {
+      if (modal.dataset.autoPrompt === 'true') {
+        try {
+          sessionStorage.setItem(dismissedKey, 'true');
+        } catch (error) {}
+        delete modal.dataset.autoPrompt;
+      }
+      closeLocaleModal(modal);
+      return;
+    }
+
+    /* ----------------------------
+       SELECT COUNTRY
+    ----------------------------- */
+    const countryEl = e.target.closest('[data-country]');
+    if (countryEl) {
+      e.preventDefault();
+      modal.dataset.selectedCountry = countryEl.dataset.country;
+
+      modal.querySelectorAll('[data-country]').forEach(el =>
+        el.classList.remove('is-selected')
+      );
+      countryEl.classList.add('is-selected');
+      return;
+    }
+
+    /* ----------------------------
+       SELECT LANGUAGE
+    ----------------------------- */
+    const languageEl = e.target.closest('[data-language]');
+    if (languageEl) {
+      e.preventDefault();
+      modal.dataset.selectedLanguage = languageEl.dataset.language;
+      modal.dataset.selectedLanguageUrl = languageEl.dataset.languageUrl;
+
+      modal.querySelectorAll('[data-language]').forEach(el =>
+        el.classList.remove('is-selected')
+      );
+      languageEl.classList.add('is-selected');
+      return;
+    }
+
+    /* ----------------------------
+       APPLY
+    ----------------------------- */
+    if (e.target.closest('[data-locale-apply]')) {
+      const country = modal.dataset.selectedCountry;
+      const languageCode = modal.dataset.selectedLanguage;
+      const localeForm = document.getElementById('LocaleSwitchForm');
+      const countryInput = localeForm?.querySelector('[data-locale-country-input]');
+      const languageInput = localeForm?.querySelector('[data-locale-language-input]');
+      const returnInput = localeForm?.querySelector('[data-locale-return-input]');
+
+      if (!localeForm || !countryInput || !languageInput || !returnInput) return;
+
+      countryInput.value = country || modal.dataset.currentCountry;
+      languageInput.value = languageCode || modal.dataset.currentLanguage;
+      returnInput.value = buildLocalizedReturnPath(modal, languageInput.value);
+
+      try {
+        localStorage.setItem(preferenceKey, JSON.stringify({
+          country: countryInput.value,
+          language: languageInput.value,
+          savedAt: Date.now()
+        }));
+      } catch (error) {}
+
+      localeForm.submit();
+    }
+  });
+
+  document.addEventListener('DOMContentLoaded', function () {
+    const modal = getLocaleModal();
+    if (!modal) return;
+
+    const localeForm = document.getElementById('LocaleSwitchForm');
+    const countryInput = localeForm?.querySelector('[data-locale-country-input]');
+    const languageInput = localeForm?.querySelector('[data-locale-language-input]');
+    const returnInput = localeForm?.querySelector('[data-locale-return-input]');
+    const syncKey = 'jurassicLocalePreferenceSynced';
+
+    try {
+      const savedPreference = JSON.parse(localStorage.getItem(preferenceKey) || 'null');
+      const savedCountry = (savedPreference?.country || '').toLowerCase();
+      const savedLanguage = (savedPreference?.language || '').toLowerCase();
+      const currentCountry = (modal.dataset.currentCountry || '').toLowerCase();
+      const currentLanguage = (modal.dataset.currentLanguage || '').toLowerCase();
+      const savedSignature = `${savedCountry}:${savedLanguage}`;
+
+      if (
+        savedCountry &&
+        savedLanguage &&
+        localeForm &&
+        countryInput &&
+        languageInput &&
+        returnInput &&
+        savedSignature !== sessionStorage.getItem(syncKey) &&
+        (savedCountry !== currentCountry || savedLanguage !== currentLanguage)
+      ) {
+        countryInput.value = savedPreference.country;
+        languageInput.value = savedPreference.language;
+        returnInput.value = buildLocalizedReturnPath(modal, savedPreference.language);
+        sessionStorage.setItem(syncKey, savedSignature);
+        localeForm.submit();
+        return;
+      }
+    } catch (error) {}
+
+    const currentLanguage = (modal.dataset.currentLanguage || '').toLowerCase();
+    const browserLanguage = ((navigator.languages && navigator.languages[0]) || navigator.language || '').toLowerCase().split('-')[0];
+    if (!browserLanguage || browserLanguage === currentLanguage) return;
+
+    const browserLanguageOption = modal.querySelector(`[data-language="${browserLanguage}"]`);
+    if (!browserLanguageOption) return;
+
+    try {
+      const savedPreference = JSON.parse(localStorage.getItem(preferenceKey) || 'null');
+      if (savedPreference?.language) return;
+      if (sessionStorage.getItem(dismissedKey) === 'true') return;
+    } catch (error) {}
+
+    window.setTimeout(function () {
+      modal.dataset.autoPrompt = 'true';
+      window.openLocaleModal({
+        country: modal.dataset.currentCountry,
+        language: browserLanguage
+      });
+    }, 1000);
+  });
+})();
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  const topBarShipping = document.querySelector('[data-top-bar-shipping]');
+  if (!topBarShipping) return;
+
+  const marketThresholds = {
+    {% for block in section.blocks %}
+      {% if block.type == 'market_threshold' and block.settings.market_code != blank and block.settings.amount != blank %}
+        "{{ block.settings.market_code | downcase | strip }}": {{ block.settings.amount | json }},
+      {% endif %}
+    {% endfor %}
+  };
+
+  function resolveMarketKey() {
+    const urlParams = new URLSearchParams(window.location.search);
+    let market = window.corner?.sessionData?.market || urlParams.get('country') || '{{ localization.country.iso_code }}';
+    let marketKey = String(market || '').toLowerCase().trim();
+
+    const countryMap = {
+      france: 'fr',
+      germany: 'de',
+      austria: 'at',
+      'united kingdom': 'gb',
+      'united states': 'us',
+      india: 'in'
+    };
+
+    if (countryMap[marketKey]) {
+      marketKey = countryMap[marketKey];
+    }
+
+    return marketKey;
+  }
+
+  function formatThreshold(amount) {
+    const currencyCode =
+      window.activeCurrency ||
+      topBarShipping.dataset.defaultCurrency ||
+      '{{ shop.currency }}';
+
+    const numericAmount = Number(amount);
+    if (Number.isNaN(numericAmount)) {
+      return amount;
+    }
+
+    return new Intl.NumberFormat(document.documentElement.lang || undefined, {
+      style: 'currency',
+      currency: currencyCode,
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 2
+    }).format(numericAmount);
+  }
+
+  function updateTopBarShipping() {
+    const prefix = topBarShipping.dataset.prefix || 'Free shipping on orders above';
+    const marketKey = resolveMarketKey();
+    const amount = marketThresholds[marketKey] ?? topBarShipping.dataset.defaultAmount;
+
+    topBarShipping.textContent = `${prefix} ${formatThreshold(amount)}`;
+  }
+
+  updateTopBarShipping();
+
+  let attempts = 0;
+  const retryTimer = window.setInterval(() => {
+    attempts += 1;
+    updateTopBarShipping();
+
+    if (window.corner?.sessionData?.market || attempts >= 5) {
+      window.clearInterval(retryTimer);
+    }
+  }, 700);
+});
+</script>
+
+
+
+
+
+
+
+
+
+{% schema %}
+  {
+    "name": "top-bar",
+    "tag": "section",
+    "settings": [
+        {
+            "type": "image_picker",
+            "id": "rating_image",
+            "label": "Rating Image"
+        },
+        {
+            "type": "text",
+            "id": "rating_text",
+            "label": "Rating Text"
+        },
+        {
+            "type": "text",
+            "id": "tbtext_prefix",
+            "label": "Announcement Prefix",
+            "default": "Free shipping on orders above"
+        },
+        {
+            "type": "number",
+            "id": "tbtext_amount",
+            "label": "Free Shipping Threshold",
+            "default": 450
+        }
+
+    ],
+    "blocks": [
+        {
+            "type": "market_threshold",
+            "name": "Market Threshold",
+            "settings": [
+                {
+                    "type": "text",
+                    "id": "market_code",
+                    "label": "Country / Market Code",
+                    "info": "Use country codes like DE, IN, US, FR, GB"
+                },
+                {
+                    "type": "number",
+                    "id": "amount",
+                    "label": "Threshold Amount"
+                }
+            ]
+        }
+    ],
+    "presets": [
+        {
+            "name": "top-bar",
+            "settings": {
+            }
+        }
+    ]
+  }
+{% endschema %}

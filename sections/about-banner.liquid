@@ -1,0 +1,39 @@
+<section class="about-banner">
+    <div class="banner-image">
+        <picture>
+            {% if section.settings.banner_image_mobile != blank %}
+                <source media="(max-width: 767px)" srcset="{{ section.settings.banner_image_mobile | img_url: 'master' }}">
+            {% endif %}
+            <img class="cover" src="{{ section.settings.banner_image |  img_url: 'master'  }}" alt="">
+        </picture>
+    </div>
+    <div class="banner-bottom">
+        <img src="https://cdn.shopify.com/s/files/1/0752/8015/4881/files/footer-shape-top.svg?v=1761573912" alt="">
+    </div>
+</section>
+
+{% schema %}
+  {
+    "name": "about-banner",
+    "tag": "section",
+    "settings": [
+      {
+        "type": "image_picker",
+        "id": "banner_image",
+        "label": "Banner Image (Desktop)"
+      },
+      {
+        "type": "image_picker",
+        "id": "banner_image_mobile",
+        "label": "Banner Image (Mobile)"
+      }
+    ],
+    "presets": [
+      {
+        "name": "about-banner",
+        "settings": {
+        }
+      }
+    ]
+  }
+{% endschema %}

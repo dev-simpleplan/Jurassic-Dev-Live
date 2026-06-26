@@ -1,0 +1,72 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "article": {
+      "type": "template-article",
+      "blocks": {
+        "heading": {
+          "type": "heading",
+          "settings": {}
+        },
+        "image": {
+          "type": "img_block",
+          "settings": {}
+        },
+        "content": {
+          "type": "content_block",
+          "settings": {}
+        }
+      },
+      "block_order": [
+        "heading",
+        "image",
+        "content"
+      ],
+      "settings": {
+        "subscribe_logo": "shopify://shop_images/Jurassic_Fruit.svg",
+        "subscribe_heading": "Untamed. Exotic. Organic",
+        "subscribe_subheading": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fermentum ultrices quis malesuada aliquam ac at.",
+        "form_heading": "stay updated!",
+        "form_subheading": "Subscribe to our newsletter for the latest updates, insights, and exclusive content.",
+        "productbox_heading": "Cocnut is a part of our discovery box",
+        "productbox_para": "New to Jurassic? This Discovery Box is your perfect start.",
+        "product": "lala-box-test-product"
+      }
+    },
+    "spacer_EEDMUx": {
+      "type": "spacer",
+      "name": "Spacer",
+      "settings": {
+        "spacer_height": 80
+      }
+    },
+    "related_blogs_NCriJP": {
+      "type": "related-blogs",
+      "name": "Related blogs",
+      "settings": {
+        "head": "Other relevant blogs"
+      }
+    },
+    "spacer_iAatwR": {
+      "type": "spacer",
+      "name": "Spacer",
+      "settings": {
+        "spacer_height": 140
+      }
+    }
+  },
+  "order": [
+    "article",
+    "spacer_EEDMUx",
+    "related_blogs_NCriJP",
+    "spacer_iAatwR"
+  ]
+}

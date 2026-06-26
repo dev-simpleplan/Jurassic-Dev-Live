@@ -1,0 +1,240 @@
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+<script>
+  window.locationProductsData = {
+    {% for block in section.blocks %}
+      {% if block.settings.manual_products != blank %}
+        "{{ block.settings.country_name | handleize }}": [
+          {% for product in block.settings.manual_products %}
+            {
+              "id": {{ product.selected_or_first_available_variant.id | json }},
+              "title": {{ product.title | json }},
+              "image_url": {{ product.featured_image | img_url: 'medium' | json }},
+              "product_url": {{ product.url | json }},
+              "tags": {{ product.tags | json }},
+              "certificates": [
+                {% if product.metafields.custom.certificate != blank %}
+                  {% for item in product.metafields.custom.certificate.value %}
+                    {
+                      "image": {{ item.badge_image | img_url: 'master' | json }},
+                      "name": {{ item.display_name | json }}
+                    }{% unless forloop.last %},{% endunless %}
+                  {% endfor %}
+                {% endif %}
+              ]
+            }{% unless forloop.last %},{% endunless %}
+          {% endfor %}
+        ]{% unless forloop.last %},{% endunless %}
+      {% endif %}
+    {% endfor %}
+  };
+</script>
+
+<section class="worldMap">
+    <div class="container-fluid">
+        <div class="wmap-in">
+            <div class="wmap-head">
+                <div class="heading center small-width">
+                    <h2>{{ section.settings.heading }}</h2>
+                    <p class="small">{{ section.settings.subheading }}</p>
+                </div>
+            </div>
+            <div class="wmap-grid">
+            <div class="wmap-left">
+                <div class="wpl-wrap">
+                    <div class="wplw-top">
+                        <div class="heading left">
+                            <h2>{{ section.settings.heading }}</h2>
+                            <p class="small">{{ section.settings.subheading }}</p>
+                        </div>
+                    </div>
+                <div class="wplw-bottom">
+                    <div class="cards-slider">
+                        <div class="swiper mySwiper">
+                            <div class="swiper-wrapper">
+                              </div>
+                            <div class="swiper-button-next"></div>
+                            <div class="swiper-button-prev"></div>
+                        </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+            <div class="wmap-right">
+                <div class="map-image">
+                    <img src="https://cdn.shopify.com/s/files/1/0752/8015/4881/files/World.svg?v=1761908094" alt="">
+                </div>
+                <div class="map-points">
+                  {% for block in section.blocks %}
+                    {% assign country_slug = block.settings.country_name | handleize %}
+                    {% comment %} <div class="map-items{% if forloop.first %} active{% endif %}"  {% endcomment %}
+                    <div class="map-items active"
+                        style="top:{{ block.settings.top_position }}%;left:{{ block.settings.left_position }}%" 
+                        data-country="{{ country_slug }}">
+                        
+                        <div class="dot"></div>
+                        <div class="mapitem-image">
+                            <img class="icon collection-img"
+                                src="{{ block.settings.fruit_image | img_url: 'master' }}"
+                                alt="{{ block.settings.country_name }}" />
+                        </div>
+                    </div>
+                  {% endfor %}
+                </div>
+            </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+let swiperInstance = null;
+
+function renderProductCard(product) {
+  let certificateHtml = '';
+  if (product.certificates && product.certificates.length > 0) {
+    const certItems = product.certificates.map(cert => `
+      <div class="fc_organic_auth">
+        <img src="${cert.image}" alt="${cert.name}" class="img_sizing" onerror="this.style.display='none'">
+      </div>
+    `).join('');
+    certificateHtml = `<div class="certificates-wrapper" style="display:flex; gap:5px; z-index:10;">${certItems}</div>`;
+  }
+
+  return `
+    <div class="recommended-item">
+      <a href="${product.product_url}">
+        <div class="ri-img" style="position:relative;">
+          <img src="${product.image_url}" alt="${product.title}" class="product-card__image">
+          ${product.tags && product.tags.includes('Best Seller') ? `
+            <div class="fc_bestsell_tags" style="position:absolute;top:15px;right:0px;z-index:9"><span>Bestseller</span></div>
+          ` : ''}
+          ${certificateHtml} 
+        </div>
+      </a>
+      <div class="ri-txt"><p class="rit-title">${product.title}</p></div>
+      <div class="ri-form">
+        <form action="/cart/add" method="post">
+          <input type="hidden" name="id" value="${product.id}">
+          <input type="hidden" name="quantity" value="1">
+          <div class="fc_add_to_cart"><button type="submit" class="add-to-cart">Add to Cart</button></div>
+        </form>
+      </div>
+    </div>
+  `;
+}
+
+function initializeSwiper() {
+  swiperInstance = new Swiper(".mySwiper", {
+    effect: "cards",
+    grabCursor: true,
+    loop: false,
+    slidesPerView: 'auto',
+    navigation: {
+      nextEl: ".swiper-button-next",
+      prevEl: ".swiper-button-prev"
+    }
+  });
+}
+
+function fetchProductsByCountry(countrySlug) {
+  const products = window.locationProductsData[countrySlug] || [];
+  const swiperWrapper = document.querySelector('.mySwiper .swiper-wrapper');
+  if (!swiperWrapper) return;
+  
+  swiperWrapper.innerHTML = "";
+
+  if (products.length === 0) {
+    swiperWrapper.innerHTML = `<p style="padding:20px">No products assigned to this location.</p>`;
+  } else {
+    products.forEach(product => {
+      const slide = document.createElement('div');
+      slide.className = 'swiper-slide';
+      slide.innerHTML = renderProductCard(product);
+      swiperWrapper.appendChild(slide);
+    });
+  }
+
+  if (swiperInstance) swiperInstance.destroy(true, true);
+  initializeSwiper();
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+  const mapPoints = document.querySelector('.map-points');
+  if (mapPoints) {
+    mapPoints.addEventListener('click', function(e) {
+      const item = e.target.closest('.map-items');
+      if (!item) return;
+
+      const countrySlug = item.getAttribute('data-country');
+      fetchProductsByCountry(countrySlug);
+      
+      document.querySelectorAll('.map-items').forEach(i => i.classList.remove('active'));
+      item.classList.add('active');
+    });
+  }
+
+  const firstItem = document.querySelector('.map-items');
+  if (firstItem) {
+    fetchProductsByCountry(firstItem.getAttribute('data-country'));
+  }
+});
+</script>
+
+{% schema %}
+{
+  "name": "map",
+  "tag": "section",
+  "class" : "worldMap",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Section heading",
+      "default": "A World of Flavor in Your Hands"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Section subheading",
+      "default": "Follow the trail of flavor across the globe."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "location_point",
+      "name": "Map Location",
+      "settings": [
+        {
+          "type": "text",
+          "id": "country_name",
+          "label": "Country/Location Name"
+        },
+        {
+          "type": "product_list",
+          "id": "manual_products",
+          "label": "Select Products for this Location",
+          "limit": 20
+        },
+        {
+          "type": "image_picker",
+          "id": "fruit_image",
+          "label": "Fruit Image"
+        },
+        {
+          "type": "range",
+          "id": "top_position",
+          "min": 0, "max": 100, "step": 1, "unit": "%", "label": "Top Position", "default": 50
+        },
+        {
+          "type": "range",
+          "id": "left_position",
+          "min": 0, "max": 100, "step": 1, "unit": "%", "label": "Left Position", "default": 50
+        }
+      ]
+    }
+  ],
+  "presets": [{ "name": "map" }]
+}
+{% endschema %}

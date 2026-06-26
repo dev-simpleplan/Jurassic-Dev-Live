@@ -1,0 +1,299 @@
+<footer>
+    <div class="footer-top">
+        <div class="container">
+            <div class="footer-top-in">
+                <div class="fti-logo">
+                    <img src="{{ section.settings['footer-logo'] | img_url: 'master' }}" alt="Banner Image">
+                </div>
+                <div class="fti-center">
+                    <div class="fti-nav-wrap">
+                        {% for block in section.blocks %}
+                            {% assign menu = linklists[block.settings.menu_handle] %}
+                            {% if menu.links.size > 0 %}
+                                <div class="blocks">
+                                {% for link in menu.links %}
+                                    <p class="footer_title">{{ link.title }}</p>
+                                    {% if link.links.size > 0 %}
+                                    <div class="footer_link_wrap">
+                                        {% for sublink in link.links %}
+                                        <div class="footer_links">
+                                            <a href="{{ sublink.url }}">{{ sublink.title }}</a>
+                                        </div>
+                                        {% endfor %}
+                                    </div>
+                                    {% endif %}
+                                {% endfor %}
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                    <div class="fti-center-right">
+                        <div class="fti-cr-social">
+                            <div class="email-link">
+                                <a href="mailto:{{ section.settings.email_link }}">{{ section.settings.email_link }}</a>
+                            </div>
+                            <div class="email-link">
+                                <a href="tel:{{ section.settings.mob_number }}">{{ section.settings.mob_number }}</a>
+                            </div>
+                            <div class="social-icons">
+                              <ul class="social-list">
+                                {%- assign facebook_link = section.settings.facebook_url | default: settings.social_facebook_link -%}
+                                {% if section.settings.show_facebook and facebook_link != blank %}
+                                  <li>
+                                    <a href="{{ facebook_link }}" target="_blank" rel="noopener" aria-label="Facebook">
+                                      {% render 'icon-social', name: 'facebook' %}
+                                    </a>
+                                  </li>
+                                {% endif %}
+                            
+                                {%- assign instagram_link = section.settings.instagram_url | default: settings.social_instagram_link -%}
+                                {% if section.settings.show_instagram and instagram_link != blank %}
+                                  <li>
+                                    <a href="{{ instagram_link }}" target="_blank" rel="noopener" aria-label="Instagram">
+                                      {% render 'icon-social', name: 'instagram' %}
+                                    </a>
+                                  </li>
+                                {% endif %}
+                            
+                                {%- assign x_link = section.settings.x_url | default: settings.social_twitter_link -%}
+                                {% if section.settings.show_x and x_link != blank %}
+                                  <li>
+                                    <a href="{{ x_link }}" target="_blank" rel="noopener" aria-label="X (Twitter)">
+                                      {% render 'icon-social', name: 'x' %}
+                                    </a>
+                                  </li>
+                                {% endif %}
+                            
+                                {%- assign linkedin_link = section.settings.linkedin_url | default: settings.social_linkedin_link -%}
+                                {% if section.settings.show_linkedin and linkedin_link != blank %}
+                                  <li>
+                                    <a href="{{ linkedin_link }}" target="_blank" rel="noopener" aria-label="LinkedIn">
+                                      {% render 'icon-social', name: 'linkedin' %}
+                                    </a>
+                                  </li>
+                                {% endif %}
+                            
+                                {%- assign youtube_link = section.settings.youtube_url | default: settings.social_youtube_link -%}
+                                {% if section.settings.show_youtube and youtube_link != blank %}
+                                  <li>
+                                    <a href="{{ youtube_link }}" target="_blank" rel="noopener" aria-label="YouTube">
+                                      {% render 'icon-social', name: 'youtube' %}
+                                    </a>
+                                  </li>
+                                {% endif %}
+                            
+                                {%- assign whatsapp_link = section.settings.whatsapp_url -%}
+                                {% if section.settings.show_whatsapp and whatsapp_link != blank %}
+                                  <li>
+                                    <a href="{{ whatsapp_link }}" target="_blank" rel="noopener" aria-label="WhatsApp">
+                                      {% render 'icon-social', name: 'whatsapp' %}
+                                    </a>
+                                  </li>
+                                {% endif %}
+                                {%- assign telegram_link = section.settings.telegram_url -%}
+                                {% if section.settings.show_telegram and telegram_link != blank %}
+                                  <li>
+                                    <a href="{{ telegram_link }}" target="_blank" rel="noopener" aria-label="Telegram">
+                                      {% render 'icon-social', name: 'telegram' %}
+                                    </a>
+                                  </li>
+                                {% endif %}
+                              </ul>
+                            </div>
+                              
+                        </div>
+                        <div class="fti-cr-mark">
+                            <img src="{{ section.settings['jf-mark'] | img_url: 'master' }}" alt="Logo Mark Image">
+                        </div>
+                    </div>
+                </div>
+                <div class="fti-bottom">
+                    <div class="ftib-left">
+                        <div class="trust-icons"> 
+                            <ul class="trust-list"> 
+                                {% assign trust = section.blocks | where: 'type', 'trust-logos' %} 
+                                {% for block in trust %} 
+                                <li>
+                                    <div class="trust-image">
+                                        <img src="{{ block.settings.trust-image | img_url: 'master' }}" alt="" class="trust image">
+                                    </div> 
+                                    <div class="trust-text">
+                                      {{ block.settings.trust_text }}
+                                    </div>
+                                </li>
+                                {% endfor %} 
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="ftib-right">
+                        <div class="footer-shipping">
+                            <div class="partner-wrap">
+                                <p class="footer_title">Shipping</p>
+                                <ul class="partner-list trust">
+                                  {% assign partner = section.blocks | where: 'type', 'partner-logo' %}
+                                  {% for block in partner %}
+                                    <li>
+                                      <img
+                                        src="{{ block.settings.t-icon | img_url: 'master' }}"
+                                        alt=""
+                                        class="icon">
+                                    </li>
+                                  {% endfor %}
+                                </ul>
+                              </div>
+                        </div>
+                        <div class="footer-payment">
+                            {% if section.settings.show_payment_icons %}
+                            <p>Guaranteed Safe Checkout with Payment Options</p>
+                            <div class="fpay-icons">
+                                {% for type in shop.enabled_payment_types %}
+                                    {{ type | payment_type_svg_tag }}
+                                {% endfor %}
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <div class="container">
+            <div class="footer-bottom-in">
+                <div class="footer-links">
+                    {% assign bottom_menu = linklists[section.settings.bottom_menu] %}
+                    {% if bottom_menu == blank %}
+                      {% assign bottom_menu = menus[section.settings.bottom_menu] %}
+                    {% endif %}
+                  
+                    {% if bottom_menu and bottom_menu.links.size > 0 %}
+                      <div class="blocks">
+                        {% for link in bottom_menu.links %}
+                          <div class="footer_link_wrap">
+                            <div class="footer_links">
+                              <a href="{{ link.url }}">{{ link.title }}</a>
+                            </div>
+                          </div>
+                        {% endfor %}
+                      </div>
+                    {% endif %}
+                </div>
+                <div class="footer-base">
+                  <div class="footer__copyright">
+                    <p class="copyright-text">
+                        &copy;
+                        {{ shop.name | link_to: routes.root_url }}
+                        {{ 'now' | date: '%Y' }}
+                    </p>
+                    <p class="reserved"><span> | </span>All rights reserved.</p>
+                </div>
+                
+                {% comment %} <div class="footer-made-with">
+                    <p>Made with {% render 'red-heart' %} by <a href="https://www.simpleplanmedia.com/" target="_blank">SimplePlan</a></p>
+                </div> {% endcomment %}
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+
+{% schema %}
+{
+  "name": "footer",
+  "settings": [
+    {
+        "type": "image_picker",
+        "id": "footer-logo",
+        "label": "Footer Logo"
+    },
+    {
+        "type": "image_picker",
+        "id": "jf-mark",
+        "label": "Logo Mark Image"
+    },
+    {
+        "type": "link_list",
+        "id": "bottom_menu",
+        "label": "Footer links (bottom row)"
+    },
+    {
+        "type": "checkbox",
+        "id": "show_payment_icons",
+        "label": "t:labels.show_payment_icons",
+        "default": true
+    },
+    {
+        "type": "text",
+        "id": "email_link",
+        "label": "Email Link"
+    },
+    {
+        "type": "text",
+        "id": "mob_number",
+        "label": "Contanct Number"
+    },
+    { "type": "header", "content": "Social links" },
+    { "type": "checkbox", "id": "show_facebook", "label": "Show Facebook", "default": true },
+    { "type": "url", "id": "facebook_url", "label": "Facebook URL" },
+
+    { "type": "checkbox", "id": "show_instagram", "label": "Show Instagram", "default": true },
+    { "type": "url", "id": "instagram_url", "label": "Instagram URL" },
+
+    { "type": "checkbox", "id": "show_x", "label": "Show X (Twitter)", "default": true },
+    { "type": "url", "id": "x_url", "label": "X (Twitter) URL" },
+
+    { "type": "checkbox", "id": "show_linkedin", "label": "Show LinkedIn", "default": true },
+    { "type": "url", "id": "linkedin_url", "label": "LinkedIn URL" },
+
+    { "type": "checkbox", "id": "show_youtube", "label": "Show YouTube", "default": true },
+    { "type": "url", "id": "youtube_url", "label": "YouTube URL" },
+
+    { "type": "checkbox", "id": "show_whatsapp", "label": "Show WhatsApp", "default": false },
+    { "type": "url", "id": "whatsapp_url", "label": "WhatsApp URL (e.g., https://wa.me/91XXXXXXXXXX)" },
+
+    { "type": "checkbox", "id": "show_telegram", "label": "Show Telegram", "default": false },
+    { "type": "url", "id": "telegram_url", "label": "Telegram URL" }
+  ],
+  "blocks": [
+    {
+        "type": "menu_group",
+        "name": "Footer Menu Block",
+        "settings": [
+        {
+            "type": "link_list",
+            "id": "menu_handle",
+            "label": "Top area menu"
+        }
+        ]
+    }, 
+    {
+        "name": "Trusted Partner",
+        "type": "partner-logo",
+        "settings": [
+          {
+            "type": "image_picker",
+            "id": "t-icon",
+            "label": "Trusted partner Icon"
+          }
+        ]
+    },
+    {
+        "name": "Trust Logos",
+        "type": "trust-logos",
+        "settings": [
+          {
+            "type": "richtext",
+            "id": "trust_text",
+            "label": "Trust text"
+          },
+          {
+            "type": "image_picker",
+            "id": "trust-image",
+            "label": "Trust icon logo"
+          }
+        ]
+    }
+    ]
+}
+{% endschema %}

@@ -1,0 +1,51 @@
+<div class="featured-blog related-blogs">
+  <div class="container">
+    <div class="fb-in">
+      <div class="heading center">
+        <h1 class="small">{{ section.settings.head }}</h1>
+      </div>
+      
+      <div class="blog-banner-card-wrap">
+        {% assign current_article_handle = article.handle %}
+        {% assign posts_limit = 3 %}
+        {% assign counter = 0 %}
+
+        {% for related in blog.articles %}
+          {% if related.handle != current_article_handle and counter < posts_limit %}
+            {% render "blog-card", article: related %}
+            {% assign counter = counter | plus: 1 %}
+          {% endif %}
+          
+          {% comment %} Stop the loop entirely once we hit 3 posts for better performance {% endcomment %}
+          {% if counter == posts_limit %}
+            {% break %}
+          {% endif %}
+        {% endfor %}
+
+        {% if counter == 0 %}
+          <p class="center">No other articles found in this category.</p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Related blogs",
+  "settings": [
+    {
+      "type": "text",
+      "id": "head",
+      "label": "Heading",
+      "default": "Related Reads"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Related blogs"
+    }
+  ],
+  "tag": "section"
+}
+{% endschema %}

@@ -1,0 +1,50 @@
+<div class="featured-blog top-wrap">
+  <div class="container">
+    <div class="fb-in">
+      {% comment %} {% if section.setting.head != blank %} {% endcomment %}
+        <div class="heading center">
+          <h1 class="small">{{ section.settings.head }}</h1>
+        </div>
+      {% comment %} {% endif %} {% endcomment %}
+      <div class="blog-banner-card-wrap">
+        {% assign blog_handle = section.settings.blog_source %}
+        {% assign selected_blog = blogs[blog_handle] %}
+
+        {% if selected_blog and selected_blog.articles_count and selected_blog.articles_count > 0 %}
+        {% for article in selected_blog.articles limit: 3 %}
+        {% render "blog-card", article: article %}
+        {% endfor %}
+        {% else %}
+        <p>No blog articles found.</p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Blog Banner",
+  "settings": [
+    {
+      "type": "blog",
+      "id": "blog_source",
+      "label": "Select Blog"
+    },
+    {
+      "type": "text",
+      "id": "head",
+      "label": "Heading",
+      "default": "Featured Blogs"
+    }
+  ],
+  "presets": [
+      {
+          "name": "Blog Banner",
+          "settings": {
+          }
+      }
+  ],
+  "tag": "section"
+}
+{% endschema %}

@@ -1,0 +1,40 @@
+{% assign spacer_height = section.settings.spacer_height | divided_by: 2 %}
+{% assign spacer_height_mobile = section.settings.spacer_height | divided_by: 3 %}
+
+
+<div class="spacer-{{ section.id }}"></div>
+
+{%- style -%}
+  .spacer-{{ section.id }} {
+    padding: {{ spacer_height }}px 0;
+  }
+
+  @media(max-width: 767px) {
+    .spacer-{{ section.id }} {
+      padding: {{ spacer_height_mobile }}px 0;
+    }
+  }
+{%- endstyle -%}
+
+{% schema %}
+  {
+    "name": "Spacer",
+    "settings": [
+      {
+        "type": "range",
+        "id": "spacer_height",
+        "label": "Spacer Height",
+        "default": 90,
+        "min": 10,
+        "max": 300,
+        "step": 10
+      }
+    ],
+    "presets": [
+      {
+        "name": "Spacer",
+        "settings": {}
+      }
+    ]
+  }
+{% endschema %}

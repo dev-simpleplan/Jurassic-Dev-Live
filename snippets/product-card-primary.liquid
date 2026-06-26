@@ -1,0 +1,525 @@
+{% assign default_variant = nil %}
+
+{% for variant in product.variants %}
+  {% if variant.metafields.custom.is_prior == true and variant.available %}
+    {% assign default_variant = variant %}
+    {% break %}
+  {% endif %}
+{% endfor %}
+
+{% if default_variant == nil %}
+  {% for variant in product.variants %}
+    {% if variant.available %}
+      {% assign default_variant = variant %}
+      {% break %}
+    {% endif %}
+  {% endfor %}
+{% endif %}
+
+{% if default_variant == nil %}
+  {% assign default_variant = product.variants.first %}
+{% endif %}
+
+{% assign product_title_suffix = '' %}
+{% for cert in product.metafields.custom.certificate.value %}
+  {% if cert.system.handle == 'organic' %}
+    {% assign product_title_suffix = cert.key.value %}
+    {% break %}
+  {% endif %}
+{% endfor %}
+{% assign product_display_title = product.title %}
+{% if product_title_suffix != blank %}
+  {% assign product_display_title = product.title | append: ' ' | append: product_title_suffix %}
+{% endif %}
+
+{% assign has_available_variant = false %}
+{% for variant in product.variants %}
+  {% if variant.available %}
+    {% assign has_available_variant = true %}
+    {% break %}
+  {% endif %}
+{% endfor %}
+
+<div class="product-card-primary" data-product-available="{{ product.available }}">
+  <div class="fruits_card">
+      <div class="fc_top">
+        <a href="{{ product.url }}" class="card-link"></a>
+        {% assign images = product.images %}
+
+        <div class="fc_image {% if images.size > 1 %}has-hover-img{% endif %}">
+          {% if images.size > 0 %}
+            <img
+              src="{{ images.first | img_url: 'master' }}"
+              alt="{{ product.title | escape }}"
+              width="{{ images.first.width }}"
+              height="{{ images.first.height }}"
+              class="img_sizing primary-img">
+
+            {% if images.size > 1 %}
+              <img
+                src="{{ images[1] | img_url: 'master' }}"
+                alt="{{ product.title | escape }}"
+                width="{{ images[1].width }}"
+                height="{{ images[1].height }}"
+                class="img_sizing hover-img">
+            {% endif %}
+          {% else %}
+            <img
+              src="https://cdn.shopify.com/s/files/1/0752/8015/4881/files/jf-placeholder.png?v=1769522647"
+              alt="No Image Available"
+              width="800"
+              height="1000"
+              class="img_sizing primary-img">
+          {% endif %}
+        </div>
+
+        {% assign product_tags = product.tags | downcase %}
+        {% if product.tags.size > 0 or product.metafields.custom.certificate or product.metafields.custom.quality_label != blank %}
+          <div class="fc_category_tags">
+            {% if product.metafields.custom.certificate %}
+              {% assign certificate = product.metafields.custom.certificate.value %}
+              {% for item in product.metafields.custom.certificate.value %}
+                <div class="fc_organic_auth">
+                  <img
+                    src="{{ item.badge_image | img_url:'master' }}"
+                  alt="{{ item.display_name }}"
+                  class="img_sizing">
+                </div>
+              {% endfor %}
+            {% endif %}
+
+            {% if product.metafields.custom.quality_label != blank %}
+              <span>{{ product.metafields.custom.quality_label.value | default: product.metafields.custom.quality_label }}</span>
+            {% endif %}
+
+            {% comment %}
+              {% for tag in product.tags %}
+                {% unless tag == 'Best Seller' %}
+                  <span>{{ tag }}</span>
+                {% endunless %}
+              {% endfor %}
+            {% endcomment %}
+          </div>
+        {% endif %}
+
+        {% assign is_bestseller_product = false %}
+        {% if product.tags contains 'Best Seller' %}
+          {% assign is_bestseller_product = true %}
+        {% endif %}
+        {% comment %} <div
+          class="fc_bestsell_tags{% unless is_bestseller_product %} red{% endunless %}"
+          data-card-top-badge
+          data-is-bestseller="{% if is_bestseller_product %}true{% else %}false{% endif %}"
+          style="{% unless is_bestseller_product or default_variant.compare_at_price > default_variant.price %}display:none;{% endunless %}">
+          <span data-card-top-badge-text>
+            {% if is_bestseller_product %}
+              Bestseller
+            {% elsif default_variant.compare_at_price > default_variant.price %}
+              -{{ default_variant.compare_at_price | minus: default_variant.price | times: 100 | divided_by: default_variant.compare_at_price | round }}%
+            {% endif %}
+          </span>
+        </div> {% endcomment %}
+        <div
+          class="fc_bestsell_tags{% unless is_bestseller_product %} red{% endunless %}"
+          data-card-top-badge
+          data-is-bestseller="{% if is_bestseller_product %}true{% else %}false{% endif %}"
+          style="{% unless is_bestseller_product %}display:none;{% endunless %}">
+          <span data-card-top-badge-text>
+            {% if is_bestseller_product %}
+              {{ 'sections.product.best_seller' | t }}
+            {% endif %}
+            {% comment %}
+              Future use:
+              {% elsif default_variant.compare_at_price > default_variant.price %}
+                -{{ default_variant.compare_at_price | minus: default_variant.price | times: 100 | divided_by: default_variant.compare_at_price | round }}%
+            {% endcomment %}
+          </span>
+        </div>
+      </div>
+
+    <div class="fc_bottom_outer">
+      <div class="fc_bottom">
+
+        <div class="fc_bottom_top">
+
+          {% assign country = product.metafields.custom.country_of_origin.value.country_name %}
+
+          {% assign okendo_listing_snippet = product.metafields.okendo.ProductListingSnippet.value %}
+          {% if okendo_listing_snippet == blank %}
+            {% assign okendo_listing_snippet = product.metafields.okendo.ProductListingSnippet %}
+          {% endif %}
+
+          {% assign review_rating_object = product.metafields.reviews.rating.value %}
+          {% assign review_rating_value = review_rating_object.rating | default: product.metafields.reviews.rating | default: product.metafields.okendo.RatingAndReviewAverageValue.value | default: product.metafields.okendo.RatingAndReviewAverageValue | default: 0 | plus: 0 %}
+          {% assign review_count = product.metafields.reviews.rating_count.value | default: product.metafields.reviews.rating_count | default: product.metafields.okendo.RatingAndReviewCount.value | default: product.metafields.okendo.RatingAndReviewCount | default: 0 | plus: 0 %}
+          {% assign review_rating_display = review_rating_value | times: 10 | round | divided_by: 10.0 %}
+
+<div class="star_review">
+  {% comment %} <div class="star_rating">
+    {% if okendo_listing_snippet != blank %}
+      <div class="okendo-listing-rating-fallback" data-okendo-listing-rating-fallback>
+        {{ okendo_listing_snippet }}
+      </div>
+    {% elsif review_count > 0 %}
+      <div class="star-rating-fallback" data-star-rating-fallback>
+        <span class="star-rating-fallback__star" aria-hidden="true">★</span>
+        <span class="star-rating-fallback__rating">{{ review_rating_display }}</span>
+        <span class="star-rating-fallback__count">({{ review_count }})</span>
+      </div>
+    {% endif %}
+    <p data-oke-star-rating data-oke-reviews-product-id="shopify-{{ product.id }}"></p>
+  </div> {% endcomment %}
+
+  <div class="star_rating">
+    {% if review_count > 0 %}
+      <div class="star-rating-fallback">
+        <span class="star-rating-fallback__star">★</span>
+        <span class="star-rating-fallback__rating">{{ review_rating_display }}</span>
+        <span class="star-rating-fallback__count">({{ review_count }})</span>
+      </div>
+    {% endif %}
+  </div>
+
+  <div class="rating_info">
+    {% if country %}
+      <span class="dot_seperator dynamic-review-dot"></span>
+      <p>{{ country }}</p>
+    {% endif %}
+  </div>
+          </div>
+          <p class="fc_product_title">
+            <a href="{{ product.url }}">{{ product_display_title | truncate: 65 }}</a>
+          </p>
+        </div>
+
+        <div class="fc_bottom_bottom">
+          <div class="fc_bottom_center">
+            <div class="fc_variant_outer">
+              <div class="fc_variant_wrap">
+                <div class="wrapper-dropdown" id="dropdown-{{ product.id }}">
+                  <span class="selected-display">
+                    <b>{{ default_variant.title }} </b>
+                    {% comment %} {% if default_variant.metafields.custom.pieces %}({{ default_variant.metafields.custom.pieces }}){% endif %}
+                    — {{ default_variant.price | money }} {% endcomment %}
+                  </span>
+                  
+                  <ul class="dropdown" data-lenis-prevent>
+                    {% for variant in product.variants %}
+                      {% if has_available_variant %}
+                        {% unless variant.available %}
+                          {% continue %}
+                        {% endunless %}
+                      {% endif %}
+                      <li 
+                        class="dropdown-item{% if variant.id == default_variant.id %} is-selected{% endif %}"
+                        data-id="{{ variant.id }}"
+                        data-selected-title="{{ variant.title | escape }}"
+                        data-price="{{ variant.price | money_without_currency }} {{ cart.currency.symbol }}"
+                        data-compare="{% if variant.compare_at_price > variant.price %}{{ variant.compare_at_price | money_without_currency }} {{ cart.currency.symbol }}{% endif %}"
+                        data-unit="{% if variant.unit_price_measurement %}{{ variant.unit_price | money_without_currency }} {{ cart.currency.symbol }} / {{ variant.unit_price_measurement.reference_unit }}{% endif %}"
+                        data-inventory="{{ variant.inventory_quantity }}"
+                        data-available="{{ variant.available }}"
+                      >
+                        <a href="javascript:void(0)">
+                          {% if variant.metafields.custom.bestseller == true %}
+                              <div class="vv-bestseller">{{ 'sections.product.best_seller' | t }}</div>
+                            {% endif %}
+                          <div class="item-details">
+                            <span class="item-title">
+                              {{ variant.title }} 
+                            </span>
+                            {% if variant.metafields.custom.pieces %}
+                                <span class="item-pieces">( {{ variant.metafields.custom.pieces }} )</span>
+                              {% endif %}
+                          </div>
+                          <span class="pull-right">
+                            {{ variant.price | money }}
+                            {% if variant.unit_price_measurement %}
+                              <span class="item-unit-price">{{ variant.unit_price | money }} / {{ variant.unit_price_measurement.reference_unit }}</span>
+                            {% endif %}
+                          </span>
+                        </a>
+                      </li>
+                    {% endfor %}
+                  </ul>
+                  <input type="hidden" name="id" value="{{ default_variant.id }}" class="custom-variant-id">
+                </div>
+              </div>
+              <div class="selected_variant_dropdown" data-lenis-prevent></div>
+            </div>
+          </div>
+
+          <div class="fc_bottom_end">
+            <div class="fc_price_weight">
+              {% assign current_variant = nil %}
+              {% assign current_variant = default_variant %}
+
+              <div class="flex-row">
+                <p>
+                  {% comment %} The selling price always exists {% endcomment %}
+                  <span class="selling_price {% unless current_variant.compare_at_price > current_variant.price %}withoutbg{% endunless %}">
+                    {{ current_variant.price | money_without_currency }} {{ cart.currency.symbol }}
+                  </span>
+
+                  {% comment %} 
+                    CRITICAL: Always render the strike tag so JS can find it. 
+                    Use inline CSS to hide it if there is no initial discount.
+                  {% endcomment %}
+                  <strike id="compare_price" style="{% unless current_variant.compare_at_price > current_variant.price %}display:none;{% endunless %}">
+                    {% if current_variant.compare_at_price > current_variant.price %}
+                      {{ current_variant.compare_at_price | money_without_currency }} {{ cart.currency.symbol }}
+                    {% endif %}
+                  </strike>
+                </p>
+
+                <span class="off-percent-badge" data-card-off-percent style="{% unless current_variant.compare_at_price > current_variant.price %}display:none;{% endunless %}">
+                  {% if current_variant.compare_at_price > current_variant.price %}
+                    -{{ current_variant.compare_at_price | minus: current_variant.price | times: 100 | divided_by: current_variant.compare_at_price | round }}%
+                  {% endif %}
+                </span>
+              </div>
+
+              <p class="fc_weight" {% unless current_variant.unit_price_measurement %}style="display:none;"{% endunless %}>
+                {% if current_variant.unit_price_measurement %}
+                  {{ current_variant.unit_price | money_without_currency }} {{ cart.currency.symbol }} / {{ current_variant.unit_price_measurement.reference_unit }}
+                {% endif %}
+              </p>
+
+
+            </div>
+            <div class="fc_add_to_cart_outer">
+              <form action="/cart/add" method="post" enctype="multipart/form-data" class="product-card-add-form">
+                <input type="hidden" name="id" value="{{ current_variant.id }}">
+                <input type="hidden" name="quantity" value="1">
+
+                <div class="fc_add_to_cart"
+                  data-variant-id="{{ current_variant.id }}"
+                  data-available="{{ current_variant.available }}"
+                  data-inventory="{{ current_variant.inventory_quantity }}">
+
+                  <button
+                    type="submit"
+                    class="add-to-cart-btn"
+                    {% unless current_variant.available %}disabled{% endunless %}>
+                    <span class="btn-text">
+                      <span class="btn-label">
+                        {% if current_variant.available %}
+                          {{ 'products.product.add_to_cart' | t }}
+                        {% else %}
+                          {{ 'products.product.sold_out' | t }}
+                        {% endif %}
+                      </span>
+                    </span>
+                    <span class="btn-spinner" aria-hidden="true"></span>
+                    <span class="btn-check" aria-hidden="true">✓</span>
+                  </button>
+                  {% comment %} {% unless product.available %}
+                    <button class="open-my-form BIS_trigger">
+                      Email when available
+                    </button>
+                  {% endunless %} {% endcomment %}
+                </div>
+              </form>
+            </div>
+            <div class="fc_trust_text">
+              <p class="{% if current_variant.available and current_variant.inventory_quantity > 0 and current_variant.inventory_quantity < 100 %}low-stock{% endif %}">
+                {% if current_variant.available == false or current_variant.inventory_quantity <= 0 %}
+                  {{ 'products.product.out_of_stock' | t }}
+                {% elsif current_variant.inventory_quantity < 100 %}
+                  {{ 'products.product.inventory_status' | t: count: current_variant.inventory_quantity }}
+                {% else %}
+                  {{ 'products.product.in_stock' | t }}
+                {% endif %}
+              </p>
+              {% comment %} <span class="dot_seperator"></span>
+              <p>Ships in 24 hrs</p> {% endcomment %}
+              
+              {% comment %} <p>{{ product.metafields.custom.benefit | default: 'Product Benefit' }}</p> {% endcomment %}
+               {%- capture benefit_text -%}
+                {%- if product.tags contains 'Fresh fruit' -%}
+                  {{ 'benefits.freshly_picked' | t }}
+                {%- elsif product.tags contains 'New' -%}
+                  {{ 'benefits.rare_handpicked' | t }}
+                {%- elsif product.tags contains 'Dried Fruit' or product.tags contains 'Date' -%}
+                  {{ 'benefits.pure_raw' | t }}
+                {%- elsif product.tags contains 'Fine food' or product.tags contains 'Honey' -%}
+                  {{ 'benefits.artisanal' | t }}
+                {%- else -%}
+                  {{ product.metafields.custom.benefit }}
+                {%- endif -%}
+              {%- endcapture -%}
+
+              {%- assign benefit_text = benefit_text | strip -%}
+
+              {%- if benefit_text != blank -%}
+                <span class="dot_seperator"></span>
+                <p>{{ benefit_text }}</p>
+              {%- endif -%}
+
+              {% comment %} {%- assign benefit_text = benefit_text | strip -%}
+
+              {%- if benefit_text != blank -%}
+                <span class="dot_seperator"></span>
+                <p>{{ benefit_text }}</p>
+              {%- endif -%} {% endcomment %}
+            </div>
+          </div>
+        </div>
+
+
+      </div>
+    </div>
+  </div>
+</div>
+
+{% comment %} <script>
+document.addEventListener('DOMContentLoaded', () => {
+
+  async function addToCart(id, qty = 1) {
+    return fetch('/cart/add.js', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id, quantity: qty })
+    }).then(r => r.json());
+  }
+
+  function openSideCartDirectly() {
+    const sideCart = document.querySelector('.sideCart');
+    if (!sideCart) return;
+
+    sideCart.classList.add('active');
+    document.body.classList.add('stay');
+    document.documentElement.classList.add('stay');
+
+    // 🔑 ENSURE CONTENT IS RENDERED
+    // 🔑 Call the correct function from your side cart script
+    if (typeof window.loadCartItems === 'function') {
+      window.loadCartItems();
+    }
+  }
+
+
+  async function updateHeaderCartCount() {
+    const cart = await fetch('/cart.js').then(r => r.json());
+    const el = document.querySelector('.header__cart-quantity');
+    if (!el) return;
+    el.textContent = cart.item_count;
+    el.classList.toggle('is-hidden', cart.item_count === 0);
+  }
+
+  /* ---------------- VARIANT SWITCH ---------------- */
+  document.querySelectorAll('.fc_variant_item').forEach(variant => {
+    variant.addEventListener('click', () => {
+      const card = variant.closest('.product-card-primary');
+      if (!card) return;
+
+      // active state
+      variant
+        .parentElement
+        .querySelectorAll('.fc_variant_item')
+        .forEach(v => v.classList.remove('active'));
+
+      variant.classList.add('active');
+
+      const variantId = variant.dataset.id;
+      const price = variant.dataset.price;
+      const compare = variant.dataset.compare;
+      const unit = variant.dataset.unit;
+      {% comment %} const image = variant.dataset.image; {% endcomment %}
+
+      // update price
+      const priceWrap = card.querySelector('.fc_price_weight');
+      if (priceWrap) {
+        priceWrap.querySelector('.selling_price').innerText = price;
+        const compareEl = priceWrap.querySelector('#compare_price');
+        if (compareEl) compareEl.innerText = compare;
+      }
+
+      // update image
+      {% comment %} const img = card.querySelector('.primary-img');
+      if (img && image) img.src = image; {% endcomment %}
+
+      // update add to cart button variant
+      const addWrap = card.querySelector('.fc_add_to_cart');
+      if (addWrap) {
+        addWrap.dataset.variantId = variantId;
+      }
+    });
+  });
+
+  /* ---------------- ADD TO CART ---------------- */
+  document.querySelectorAll('.fc_add_to_cart .add-to-cart-btn').forEach(btn => {
+    btn.addEventListener('click', async (e) => {
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      const wrap = btn.closest('.fc_add_to_cart');
+      if (!wrap) return;
+
+      const variantId = Number(wrap.dataset.variantId);
+      if (!variantId) return;
+
+      btn.disabled = true;
+      btn.textContent = 'Adding…';
+
+      try {
+        await addToCart(variantId, 1);
+        openSideCartDirectly();
+
+        // This is redundant if you fixed the function above, 
+        // but it's good practice to call the refresh logic here.
+        if (typeof window.loadCartItems === 'function') {
+          await window.loadCartItems();
+        }
+
+      } catch (err) {
+        console.error('Add to cart failed', err);
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Add to Cart';
+      }
+    });
+  });
+
+});
+</script> {% endcomment %}
+
+<script>
+  window.themeStrings = {
+    ...(window.themeStrings || {}),
+    addToCart: "{{ 'products.product.add_to_cart' | t }}",
+    soldOut: "{{ 'products.product.sold_out' | t }}",
+    addedToCart: "{{ 'products.product.added_to_cart' | t }}"
+  };
+</script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+
+  function updateCardButtonState(card) {
+    const wrap = card.querySelector('.fc_add_to_cart');
+    const btn = card.querySelector('.add-to-cart-btn');
+
+    if (!wrap || !btn) return;
+
+    const available = wrap.dataset.available === 'true';
+    const label = btn.querySelector('.btn-label');
+
+    btn.classList.remove('loading', 'success');
+
+    if (!available) {
+      btn.disabled = true;
+      btn.classList.add('out-of-stock');
+      if (label) label.textContent = window.themeStrings.soldOut;
+    } else {
+      btn.disabled = false;
+      btn.classList.remove('out-of-stock');
+      if (label) label.textContent = window.themeStrings.addToCart;
+    }
+  }
+
+  // 🔁 Run on page load
+  document.querySelectorAll('.product-card-primary').forEach(card => {
+    updateCardButtonState(card);
+  });
+
+});
+</script>

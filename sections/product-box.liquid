@@ -1,0 +1,1798 @@
+<link
+  rel="stylesheet"
+  type="text/css"
+  href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css" />
+<script
+  type="text/javascript"
+  src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"
+  defer></script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css" />
+<script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js"></script>
+
+<div class="pro-breadcrumbs">
+  <div class="container">
+      <div class="bcrum-in">
+        <ul>
+          <li><a href="{{ routes.root_url }}">Home</a></li>
+
+          {%- liquid
+            assign selected_col = nil
+            # Define the handles you want to skip
+            assign generic_handles = "all,all-products,all-fruits,all-fruit,all-collections,shop-all,alle-produkte,alle-fruchte,alle-fruechte,tous-les-produits,tous-les-fruits,frontpage,best-seller" | split: ","
+            
+            # 1. Check if we are currently in a valid collection
+            if collection
+              assign is_generic = false
+              if generic_handles contains collection.handle or collection.handle contains 'all-' or collection.handle contains 'alle-' or collection.handle contains 'tous-les-'
+                assign is_generic = true
+              endif
+
+              if is_generic == false
+                assign selected_col = collection
+              endif
+            endif
+
+            # 2. If no collection selected yet, loop through product collections
+            if selected_col == nil
+              for col in product.collections
+                if generic_handles contains col.handle or col.handle contains 'all-' or col.handle contains 'alle-' or col.handle contains 'tous-les-'
+                  continue
+                else
+                  assign selected_col = col
+                  break
+                endif
+              endfor
+            endif
+          -%}
+
+          {%- if selected_col -%}
+            <li>
+              <a href="{{ selected_col.url }}">
+                {{ selected_col.title }}
+              </a>
+            </li>
+          {%- endif -%}
+
+          <li>
+            <span>{{ product.title }}</span>
+          </li>
+        </ul>
+      </div>
+  </div>
+</div>
+
+{% assign default_variant = nil %}
+
+{% for variant in product.variants %}
+  {% if variant.metafields.custom.is_prior == true and variant.available %}
+    {% assign default_variant = variant %}
+    {% break %}
+  {% endif %}
+{% endfor %}
+
+{% if default_variant == nil %}
+  {% for variant in product.variants %}
+    {% if variant.available %}
+      {% assign default_variant = variant %}
+      {% break %}
+    {% endif %}
+  {% endfor %}
+{% endif %}
+
+{% if default_variant == nil %}
+  {% assign default_variant = product.variants.first %}
+{% endif %}
+
+{% assign selected_variant = default_variant %}
+{% assign show_product_testimonial = false %}
+{% for testimonial_block in section.blocks %}
+  {% if testimonial_block.settings.show_testimonial and product.metafields.custom.title_testimonial != blank %}
+    {% assign show_product_testimonial = true %}
+    {% break %}
+  {% endif %}
+{% endfor %}
+<div class="product-info">
+  <div class="container">
+    <div class="pro-grid">
+      <div class="pro-img-wrap">
+          <div class="pro-img">
+            <div class="pro-right-side">
+              <div class="prs-data">
+                {% if product.tags.size > 0 %}
+                    <div class="fc_category_tags">
+                      {% if product.metafields.custom.certificate %}
+                        {% assign certificate = product.metafields.custom.certificate.value %}
+                        {% for item in product.metafields.custom.certificate.value %}
+                          <div class="fc_organic_auth">
+                            <img
+                              src="{{ item.badge_image | img_url:'master' }}"
+                              alt="{{ item.display_name }}"
+                              class="img_sizing">
+                          </div>
+                        {% endfor %}
+                      {% endif %}
+
+                      {% if product.metafields.custom.quality_label != blank %}
+                        <span>{{ product.metafields.custom.quality_label.value | default: product.metafields.custom.quality_label }}</span>
+                      {% endif %}
+
+                      {% comment %}
+                        {% for tag in product.tags %}
+                          {% unless tag == 'Best Seller' %}
+                            <span>{{ tag }}</span>
+                          {% endunless %}
+                        {% endfor %}
+                      {% endcomment %}
+                    </div>
+                  {% endif %}
+
+                  {% if product.tags contains 'Best Seller' %}
+                    <div class="fc_bestsell_tags">
+                      <span>Bestseller</span>
+                    </div>
+                  {% endif %}
+              </div>
+              <div class="prod-main-image">
+                {% if product.media.size > 0 %}
+                  {% for media in product.media %}
+                    <div class="item" data-media-id="{{ media.id }}">
+                      <div class="prod-main">
+                        <a href="{{ media | img_url: 'master' }}" data-fancybox="gallery-box" class="zoom-wrapper">
+                          {% render 'product-media', media: media %}
+                        </a>
+                      </div>
+                    </div>
+                  {% endfor %}
+                {% else %}
+                  {% comment %} This renders ONLY if there are no images/videos {% endcomment %}
+                  <div class="item">
+                    <div class="prod-main">
+                      <img
+                        src="https://cdn.shopify.com/s/files/1/0752/8015/4881/files/jf-placeholder.png?v=1769522647"
+                        alt="{{ product.title }}"
+                        class="image-custom"
+                        loading="lazy">
+                    </div>
+                  </div>
+                {% endif %}
+              </div>
+              <div class="product-gallery-counter" aria-live="polite">
+                <span data-gallery-current>1</span>/<span data-gallery-total>{% if product.media.size > 0 %}{{ product.media.size }}{% else %}1{% endif %}</span>
+              </div>
+              <div class="btn-wrap">
+                <button class="custom-prev">
+                  {%- render 'arrow-prev' -%}
+                </button>
+                <button class="custom-next">
+                  {%- render 'arrow-next' -%}
+                </button>
+              </div>
+            </div>
+            <div class="prod-thumb-image">
+              {% if product.media.size > 0 %}
+                {% for media in product.media %}
+                  <div class="item" data-media-id="{{ media.id }}">
+                    <div class="prod-thumb">
+                      {% render 'product-media', media: media %}
+                    </div>
+                  </div>
+                {% endfor %}
+              {% else %}
+                {% comment %} Show a small thumbnail placeholder if no media exists {% endcomment %}
+                <div class="item">
+                  <div class="prod-thumb">
+                    <img
+                      src="https://cdn.shopify.com/s/files/1/0752/8015/4881/files/jf-placeholder.png?v=1769522647"
+                      alt="Placeholder"
+                      class="image-custom thumb-placeholder"
+                      loading="lazy">
+                  </div>
+                </div>
+              {% endif %}
+            </div>
+          </div>
+          {% if show_product_testimonial %}
+            <div class="pro-test">
+              {% for block in section.blocks %}
+                {% if block.settings.show_testimonial and product.metafields.custom.title_testimonial != blank %}
+                  <div class="tr-testimonial">
+                    {% render 'testimonial-icon' %}
+                    {{ product.metafields.custom.title_testimonial | metafield_tag }}
+                  </div>
+                {% endif %}
+              {% endfor %}
+            </div>
+          {% endif %}
+       </div>
+      <div class="pro-desp">
+        {% form 'product'
+          , product
+          , id: 'product-form'
+          , novalidate: 'novalidate' %}
+          <input
+            type="hidden"
+            name="id"
+            value="{{ selected_variant.id }}">
+
+            {% for block in section.blocks %}
+            {% case block.type %}
+              {% when 'title' %}
+                <div class="title">
+                  <div class="title-review">
+                    {% comment %} {% if block.settings.show_testimonial 
+                      and product.metafields.custom.title_testimonial != blank %}
+                      <div class="tr-testimonial">
+                        {% render 'testimonial-icon' %}
+                        {{ product.metafields.custom.title_testimonial | metafield_tag }}
+                      </div>
+                    {% endif %} {% endcomment %}
+
+                    <!-- OKENDO APP BLOCK BESIDE TESTIMONIAL -->
+                    <div class="tr-okendo">
+                      <p data-oke-star-rating data-oke-reviews-product-id="shopify-{{ product.id }}"></p>
+                    </div>
+
+                    {% assign certificate = product.metafields.custom.certificate %}
+                    <div class="tr-review-certi">
+                      <div class="ts-certificate">
+                        {% if certificate != '' %}
+                          {% for item in certificate.value %}
+                            <div class="tsc-img">
+                              <img src="{{ item.badge_image |  img_url: 'master' }}" alt="{{ item.display_name }}" class="img">
+                            </div>
+                          {% endfor %}
+                        {% endif %}
+                      </div>
+                    </div>
+                  </div>
+                  <h1>{{ product.title }}</h1>
+                    <div class="price" id="price-{{ section.id }}">
+                      <div class="price-detailsss"> 
+
+                        <div class="pd-top">
+                          {% assign currency_suffix = cart.currency.symbol %}
+                         <div class="sell-price {% unless selected_variant.compare_at_price > selected_variant.price %}withoutbg{% endunless %}">
+                            {{ selected_variant.price | money_without_currency }} {{ cart.currency.symbol }}
+                          </div>
+
+                          <strike class="real-price">
+                            {{ selected_variant.compare_at_price | money_without_currency }} {{ cart.currency.symbol }}
+                          </strike>
+
+                          {% if selected_variant.compare_at_price > selected_variant.price %}
+                            <span class="off-percent" data-price-off-percent>
+                              -{{ selected_variant.compare_at_price | minus: selected_variant.price | times: 100 | divided_by: selected_variant.compare_at_price | round }}%
+                            </span>
+                          {% endif %}
+                        </div>
+
+                        <div class="pd-bottom" {% unless selected_variant.unit_price_measurement %}style="display:none;"{% endunless %}>
+                          <span class="sell-price-variant-perkg">
+                            {% if selected_variant.unit_price_measurement %}
+                              {{ selected_variant.unit_price | money_without_currency }} {{ cart.currency.symbol }} / {{ selected_variant.unit_price_measurement.reference_unit }}
+                            {% endif %}
+                          </span>
+                        </div>
+                        <!-- ALWAYS present -->
+                      </div>
+
+                      <span class="price-txt">
+                        {{ 'sections.product.price_includes_vat' | t }} <a href="javascript:void()">{{ 'sections.product.shipping_costs' | t }}</a>
+                      </span>
+                    </div>
+
+                </div>
+
+              {% when 'product_info' %}
+                <div class="product-info-block">
+                  {% if show_product_testimonial %}
+                    <div class="pro-test formobile">
+                      {% for block in section.blocks %}
+                        {% if block.settings.show_testimonial
+                          and product.metafields.custom.title_testimonial != blank %}
+                          {% comment %} <div class="tr-okendo">
+                            <p data-oke-star-rating data-oke-reviews-product-id="shopify-{{ product.id }}"></p>
+                          </div> {% endcomment %}
+                          <div class="tr-testimonial">
+                            {% render 'testimonial-icon' %}
+                            {{ product.metafields.custom.title_testimonial | metafield_tag }}
+                          </div>
+                        {% endif %}
+                      {% endfor %}
+                    </div>
+                  {% endif %}
+                  {% comment %} For Origin {% endcomment %}
+                  {% comment %} <div class="pi-item">
+                    {% render 'green-tick' %}
+                    <div class="pii-info">
+                      <p>
+                        <strong>Origin:</strong>
+                        {{ product.metafields.custom.country_of_origin.value.country_name }}
+                      </p>
+                    </div>
+                  </div> {% endcomment %}
+                  {% comment %} Seasonality {% endcomment %}
+                  {% comment %} <div class="pi-item">
+                    {% render 'green-tick' %}
+                    <div class="pii-info">
+                      <p>
+                        <strong>Seasonality:</strong>
+                        {{ product.metafields.custom.country_season.value.season.value.seasonality }}
+                      </p>
+                    </div>
+                  </div> {% endcomment %}
+
+                  {% comment %} Additional Information {% endcomment %}
+
+                  {% for item in product.metafields.custom.additional_information.value %}
+                    <div class="pi-item">
+                      {% render 'green-tick' %}
+                      <div class="pii-info">
+                        <p>
+                          <strong>{{ item.inforamation_title }}</strong>
+                          {{ item.information_paragraph }}
+                        </p>
+                      </div>
+                    </div>
+                  {% endfor %}
+
+                </div>
+
+              {% when 'box_content' %}
+                <div class="boxIn">
+                  {% comment %} Main Box Content {% endcomment %}
+                  {% if product.metafields.custom.main_box_content.value != blank %}
+                    <div class="box-content">
+                      <div class="box-content-title">
+                        Main Fruits
+                      </div>
+                      <div class="box-content-in">
+                        {% for item in product.metafields.custom.main_box_content.value %}
+                          <div class="cotent-item">{{ item.title }}</div>
+                        {% endfor %}
+                      </div>
+                    </div>
+                  {% endif %}
+                  {% comment %} Additional Box Content {% endcomment %}
+                  {% if product.metafields.custom.additional_box_content.value != blank %}
+                    <div class="box-content">
+                      <div class="box-content-title">
+                        Additional Fruits
+                      </div>
+                      <div class="box-content-in">
+                        {% for item in product.metafields.custom.additional_box_content.value %}
+                          <div class="cotent-item">{{ item.title }}</div>
+                        {% endfor %}
+                      </div>
+                    </div>
+                  {% endif %}
+                </div>
+
+              {% when 'store_usp' %}
+                <div class="store-usp">
+                  {% comment %} For Shipping USP {% endcomment %}
+                  <div class="su-item">
+                    <div class="sui-icon">
+                      <img src="{{ block.settings.shipping_usp_icon |  img_url: 'master' }}" alt="{{ block.settings.shipping_usp_text }}">
+                    </div>
+                    {% comment %} <div class="sui-txt">
+                      <a href="{{ block.settings.shipping_usp_page.url }}">{{ block.settings.shipping_usp_text }}</a>
+                    </div> {% endcomment %}
+                    <div class="sui-txt">
+                      <span
+                        id="delivery-data"
+                        class="shipping-policy-popup usp-modal-trigger"
+                        data-modal-target="shipping-modal-box">
+                        {{ block.settings.shipping_usp_text }}
+                      </span>
+                    </div>
+
+                    <div id="shipping-modal-box" class="shipping-modal-overlay" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="shipping-modal-title-box">
+                      <div class="shipping-modal-container">
+                        <div class="shipping-modal-header">
+                          <h2 id="shipping-modal-title-box">{{ 'general.shipping_policy' | t | default: 'Shipping Policy' }}</h2>
+                          <span class="shipping-modal-close" aria-label="Close modal" role="button" tabindex="0">&times;</span>
+                        </div>
+                        <div class="shipping-modal-body" data-lenis-prevent>
+                          <div class="shipping-modal-content">
+                            {{ shop.shipping_policy.body }}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+
+
+                    <script>
+                      (function () {
+                        const trigger = document.querySelector('.shipping-policy-popup');
+                        const modal = document.getElementById('shipping-modal-box');
+                        if (!trigger || !modal) return;
+
+                        const closeBtn = modal.querySelector('.shipping-modal-close');
+
+                        function openModal(e) {
+                          e.preventDefault();
+                          modal.classList.add('is-open');
+                          modal.setAttribute('aria-hidden', 'false');
+                          document.body.style.overflow = 'hidden';
+                          closeBtn.focus();
+                        }
+
+                        function closeModal() {
+                          modal.classList.remove('is-open');
+                          modal.setAttribute('aria-hidden', 'true');
+                          document.body.style.overflow = '';
+                          trigger.focus();
+                        }
+
+                        trigger.addEventListener('click', openModal);
+                        closeBtn.addEventListener('click', closeModal);
+
+                        modal.addEventListener('click', function (e) {
+                          if (e.target === modal) closeModal();
+                        });
+
+                        document.addEventListener('keydown', function (e) {
+                          if (e.key === 'Escape' && modal.classList.contains('is-open')) closeModal();
+                        });
+                      })();
+                    </script>
+                  </div>
+
+                  {% comment %} For Freshness USP {% endcomment %}
+                  {% if product.metafields.custom.fresh_product != true %}
+
+                  {% else %}
+                    <div class="su-item">
+                      <div class="sui-icon">
+                        <img src="{{ block.settings.freshness_icon |  img_url: 'master' }}" alt="{{ 'sections.product.freshness_usp' | t | default: block.settings.freshness_text }}">
+                      </div>
+                      <div class="sui-txt">
+                        <span
+                          class="usp-modal-trigger"
+                          role="button"
+                          tabindex="0"
+                          data-modal-target="freshness-modal-box-{{ section.id }}">
+                          {{ 'sections.product.freshness_usp' | t | default: block.settings.freshness_text }}
+                        </span>
+                      </div>
+                    </div>
+                  {% endif %}
+
+                  {% comment %} For Payment USP {% endcomment %}
+                  <div class="su-item">
+                    <div class="sui-icon">
+                      <img src="{{ block.settings.payment_usp_icon |  img_url: 'master' }}" alt="{{ 'sections.product.payment_usp' | t | default: block.settings.payment_usp_text }}">
+                    </div>
+                    <div class="sui-txt">
+                      <span
+                        class="usp-modal-trigger"
+                        role="button"
+                        tabindex="0"
+                        data-modal-target="payment-modal-box-{{ section.id }}">
+                        {{ 'sections.product.payment_usp' | t | default: block.settings.payment_usp_text }}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div id="freshness-modal-box-{{ section.id }}" class="shipping-modal-overlay" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="freshness-modal-title-box-{{ section.id }}">
+                    <div class="shipping-modal-container">
+                      <div class="shipping-modal-header">
+                        <h2 id="freshness-modal-title-box-{{ section.id }}">{{ 'sections.product.freshness_modal_title' | t }}</h2>
+                        <span class="shipping-modal-close" aria-label="Close modal" role="button" tabindex="0">&times;</span>
+                      </div>
+                      <div class="shipping-modal-body" data-lenis-prevent>
+                        <div class="shipping-modal-content">
+                          <p>{{ 'sections.product.freshness_modal_body' | t }}</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div id="payment-modal-box-{{ section.id }}" class="shipping-modal-overlay" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="payment-modal-title-box-{{ section.id }}">
+                    <div class="shipping-modal-container">
+                      <div class="shipping-modal-header">
+                        <h2 id="payment-modal-title-box-{{ section.id }}">{{ 'sections.product.payment_modal_title' | t }}</h2>
+                        <span class="shipping-modal-close" aria-label="Close modal" role="button" tabindex="0">&times;</span>
+                      </div>
+                      <div class="shipping-modal-body" data-lenis-prevent>
+                        <div class="shipping-modal-content">
+                          <p>{{ 'sections.product.payment_modal_body' | t }}</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <script>
+                    (function () {
+                      document.querySelectorAll('.usp-modal-trigger').forEach(function (trigger) {
+                        if (trigger.dataset.uspModalBound === 'true') return;
+
+                        const modal = document.getElementById(trigger.dataset.modalTarget);
+                        if (!modal) return;
+
+                        const closeBtn = modal.querySelector('.shipping-modal-close');
+                        if (!closeBtn) return;
+
+                        function openModal(e) {
+                          e.preventDefault();
+                          modal.classList.add('is-open');
+                          modal.setAttribute('aria-hidden', 'false');
+                          document.body.style.overflow = 'hidden';
+                          closeBtn.focus();
+                        }
+
+                        function closeModal() {
+                          modal.classList.remove('is-open');
+                          modal.setAttribute('aria-hidden', 'true');
+                          document.body.style.overflow = '';
+                          trigger.focus();
+                        }
+
+                        trigger.dataset.uspModalBound = 'true';
+                        trigger.addEventListener('click', openModal);
+                        trigger.addEventListener('keydown', function (e) {
+                          if (e.key === 'Enter' || e.key === ' ') openModal(e);
+                        });
+                        closeBtn.addEventListener('click', closeModal);
+                        closeBtn.addEventListener('keydown', function (e) {
+                          if (e.key === 'Enter' || e.key === ' ') closeModal();
+                        });
+                        modal.addEventListener('click', function (e) {
+                          if (e.target === modal) closeModal();
+                        });
+                        document.addEventListener('keydown', function (e) {
+                          if (e.key === 'Escape' && modal.classList.contains('is-open')) closeModal();
+                        });
+                      });
+                    })();
+                  </script>
+                </div>
+
+              {% when 'variant_selector' %}
+                <div class="variant">
+                  <div class="variant-wrapper">
+                    {% unless product.has_only_default_variant %}
+                    <div class="select_variant">
+                        <variant-selector data-url="{{ product.url }}" data-section="{{ section.id }}">
+                          <div class="sv-perKg">
+                            <p>{{ 'sections.product.select_variant' | t }}</p>
+                            <div class="perKg">
+                              {% comment %} Kept for layout parity; button state below becomes the source of truth. {% endcomment %}
+                              {% assign selected_variant_pieces = selected_variant.metafields.custom.pieces.value | default: selected_variant.metafields.custom.pieces %}
+                              {% if selected_variant_pieces != blank %}
+                                ( {{ selected_variant_pieces }} )
+                              {% endif %}
+                            </div>
+                          </div>
+                          {% for option in product.options_with_values %}
+                            {% assign option_index = forloop.index0 %}
+                            {% assign selected_option_value = selected_variant.options[option_index] %}
+                            <div class="variant-option" data-option="{{ option.name }}">
+                              <ul class="variant-values" data-index="{{ forloop.index0 }}">
+                                {% for value in option.values %}
+                                  {% assign matched_variant = nil %}
+                                  {% assign available_matched_variant = nil %}
+
+                                  {% for variant in product.variants %}
+                                    {% case option.position %}
+                                      {% when 1 %}
+                                        {% if variant.option1 == value %}
+                                          {% if matched_variant == nil %}
+                                            {% assign matched_variant = variant %}
+                                          {% endif %}
+                                          {% if variant.available %}
+                                            {% assign available_matched_variant = variant %}
+                                            {% break %}
+                                          {% endif %}
+                                        {% endif %}
+                                      {% when 2 %}
+                                        {% if variant.option2 == value %}
+                                          {% if matched_variant == nil %}
+                                            {% assign matched_variant = variant %}
+                                          {% endif %}
+                                          {% if variant.available %}
+                                            {% assign available_matched_variant = variant %}
+                                            {% break %}
+                                          {% endif %}
+                                        {% endif %}
+                                      {% when 3 %}
+                                        {% if variant.option3 == value %}
+                                          {% if matched_variant == nil %}
+                                            {% assign matched_variant = variant %}
+                                          {% endif %}
+                                          {% if variant.available %}
+                                            {% assign available_matched_variant = variant %}
+                                            {% break %}
+                                          {% endif %}
+                                        {% endif %}
+                                    {% endcase %}
+                                  {% endfor %}
+                                  {% assign matched_variant = available_matched_variant | default: matched_variant %}
+
+                                  {% if matched_variant == nil %}
+                                    {% continue %}
+                                  {% endif %}
+
+                                  {% if product.available and matched_variant.available != true %}
+                                    {% continue %}
+                                  {% endif %}
+
+                                  {% assign matched_variant_pieces = matched_variant.metafields.custom.pieces.value | default: matched_variant.metafields.custom.pieces %}
+
+                                  <li
+                                    class="variant-value {% if selected_option_value == value %}active{% endif %}{% unless matched_variant.available %} is-sold-out{% endunless %}"
+                                    data-value="{{ value | escape }}"
+                                    data-available="{{ matched_variant.available }}"
+                                    {% if matched_variant.metafields.custom.bestseller == true %}
+                                    data-best="bestseller"
+                                    {% endif %}>
+                                    {% if matched_variant.metafields.custom.bestseller == true %}
+                                      <div class="vv-bestseller">{{ 'sections.product.best_seller' | t }}</div>
+                                    {% endif %}
+                                    <div class="vv-value">
+                                      <div class="vvv-value">
+                                        {{ value }}
+                                      </div>
+                                      <div class="perKg">
+                                        {% comment %} {% if matched_variant.unit_price_measurement %}
+                                          {{ matched_variant.unit_price | money }} / {{ matched_variant.unit_price_measurement.reference_unit }}
+                                        {% comment %} {{ matched_variant.unit_price_measurement.reference_value }} {% endcomment %}
+                                        {% else %}
+                                          {{ matched_variant.price | money }} / unit
+                                        {% endif %} {% endcomment %}
+                                        {% if matched_variant_pieces != blank %}
+                                          ( {{ matched_variant_pieces }} )
+                                        {% endif %}
+                                      </div>
+                                    </div>
+                                    {% if matched_variant.unit_price_measurement %}
+                                    <div class="vv-peices">
+                                      {% assign currency_suffix = cart.currency.symbol %}
+                                      {{ matched_variant.unit_price | money_without_currency }} {{ currency_suffix }} / {{ matched_variant.unit_price_measurement.reference_unit }}
+                                    </div>
+                                    {% endif %}
+                                  </li>
+                                {% endfor %}
+                              </ul>
+                            </div>
+                          {% endfor %}
+
+                          <script type="application/json">
+                            [
+                              {% for variant in product.variants %}
+                                {
+                                  "id": {{ variant.id | json }},
+                                  "available": {{ variant.available | json }},
+                                  "price": {{ variant.price | json }},
+                                  "compare_at_price": {{ variant.compare_at_price | json }},
+                                  "unit_price": {{ variant.unit_price | json }},
+                                  "unit_price_reference_unit": {{ variant.unit_price_measurement.reference_unit | json }},
+                                  "featured_media_id": {{ variant.featured_media.id | json }},
+                                  "options": {{ variant.options | json }}
+                                }{% unless forloop.last %},{% endunless %}
+                              {% endfor %}
+                            ]
+                          </script>
+                        </variant-selector>
+                    </div>
+                    {% endunless %}
+                    <div class="priceCheckout">
+                      
+                      <div class="submit submit--with-qty">
+                        <div class="qty-selector">
+                          <button type="button" class="qty-btn minus" data-action="decrease">−</button>
+                          <input
+                            type="number"
+                            name="quantity"
+                            id="Quantity"
+                            value="1"
+                            min="1"
+                          >
+                          <button type="button" class="qty-btn plus" data-action="increase">+</button>
+                        </div>
+
+                        <button
+                          type="submit"
+                          class="custom-btn filled"
+                          id="add-to-cart"
+                        >
+                          <span class="btn-text">
+                            <span class="btn-label">
+                              {%- if selected_variant.available -%}
+                                {{ 'products.product.add_to_cart' | t }}
+                              {%- else -%}
+                                {{ 'products.product.sold_out' | t }}
+                              {%- endif -%}
+                            </span>
+                            <span class="btn-separator"> - </span><span class="btn-price">—</span>
+                          </span>
+
+                          <span class="btn-spinner" aria-hidden="true"></span>
+                          <span class="btn-check" aria-hidden="true">✓</span>
+                        </button>
+                      </div>
+
+                    </div>
+                    {% comment %} <div class="payment-options">
+                      <p>Guaranteed safe checkout with payment options</p>
+                      <div class="po-icon-wrap">
+                        {%- unless shop.enabled_payment_types == empty -%}
+                          {%- for type in shop.enabled_payment_types -%}
+                            {{ type | payment_type_svg_tag: class: 'icon icon--full-color' }}
+                          {%- endfor -%}
+                        {%- endunless -%}
+                      </div>
+                    </div> {% endcomment %}
+                  </div>
+                </div>
+
+              {% when 'offer' %}
+                {%- comment -%} Calculate indices for peeking at previous/next blocks {%- endcomment -%}
+                {% assign prev_index = forloop.index0 | minus: 1 %}
+                {% assign next_index = forloop.index0 | plus: 1 %}
+                
+                {%- comment -%} 
+                  Only open the container if this is the FIRST offer in a consecutive row.
+                {%- endcomment -%}
+                {% if forloop.first or section.blocks[prev_index].type != 'offer' %}
+                  <div class="product-offers">
+                    <div class="offers-head">Offers</div>
+                    <div class="offers-list">
+                {% endif %}
+
+                    <div class="offer-card" {{ block.shopify_attributes }}>
+                      <div class="offer-left">
+                        <span class="offer-icon">{% render 'icon-offer' %}</span>
+                        <div>
+                          <p class="offer-code">{{ block.settings.code }}</p>
+                          <p class="offer-text">{{ block.settings.text }}</p>
+                        </div>
+                      </div>
+                      <button type="button" class="offer-copy-btn" data-code="{{ block.settings.code }}">
+                        {{ block.settings.code }}{% render 'icon-copy' %}
+                      </button>
+                    </div>
+
+                {%- comment -%} 
+                  Only close the container if the NEXT block is NOT an offer, or it's the last block.
+                {%- endcomment -%}
+                {% if forloop.last or section.blocks[next_index].type != 'offer' %}
+                    </div>
+                  </div>
+                {% endif %}
+
+              {% comment %} {% when 'pair_with' %}
+                {% comment %} {% assign paired_product = product.metafields.custom.pair_with_product.value %}
+                {% if paired_product != blank %}
+                  <div class="pair-with">
+                    <div class="freqIn">
+                        <div class="heading">
+                          <h3>{{ block.settings.head }}</h3>
+                        </div>
+                        <div class="freq-wrap">
+                          <div class="paired-item-container">
+                            {% render 'product-card-primary', product: paired_product %}
+                          </div>
+                        </div>
+                      </div>
+                    </div> {% endcomment %}
+                {% endif %} {% endcomment %}
+
+              {% when '@app' %}
+                <div class="app-block">{% render block %}</div>
+
+            {% endcase %}
+          {% endfor %}
+
+
+
+
+          {% endform %}
+
+          
+          {% for block in section.blocks %}
+            {% if block.type == 'pair_with' %}
+              {% assign paired_product = product.metafields.custom.pair_with_product.value %}
+              {% if paired_product != blank %}
+                <div class="pair-with">
+                  <div class="freqIn">
+                    <div class="heading"><h3>{{ block.settings.head }}</h3></div>
+                    <div class="freq-wrap">
+                      <div class="paired-item-container">
+                        {% render 'product-card-primary', product: paired_product %}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              {% endif %}
+            {% endif %}
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+    <script type="application/ld+json">
+      {{ product | structured_data }}
+    </script>
+  </div>
+
+  {% assign description_data = product.metafields.custom.new_description %}
+  {% assign technical_details_data = product.metafields.custom.technical_details %}
+  {% assign selected_variant_shipped_by = selected_variant.metafields.custom.shipped_by.value | default: selected_variant.metafields.custom.shipped_by | default: product.metafields.custom.shipped_by.value | default: product.metafields.custom.shipped_by | downcase | strip %}
+
+  {% assign show_description = false %}
+  {% if description_data != blank %}
+    {% assign show_description = true %}
+  {% endif %}
+
+  {% assign show_technical_details = false %}
+  {% if technical_details_data != blank
+    or product.metafields.custom.alternative_name != blank
+    or product.metafields.custom.country_of_origin.value != blank
+    or selected_variant_shipped_by != blank
+    or product.metafields.custom.weight_per_piece != blank
+    or product.metafields.custom.ingredients.value != blank
+    or product.metafields.custom.manufacturing.value != blank
+    or product.metafields.shopify.allergen_information.value != blank
+    or product.metafields.shopify.allergens.value != blank
+    or product.metafields.standard.allergen_information.value != blank
+    or product.metafields.standard.allergens.value != blank
+    or product.metafields.custom.cross_contamination.value != blank
+    or product.metafields.custom.best_before_date.value != blank
+    or product.metafields.custom.net_quantity.value != blank
+    or product.metafields.custom.storage_conditions.value != blank
+    or product.metafields.custom.quality_label != blank
+    or product.metafields.custom.certificate.value != blank %}
+    {% assign show_technical_details = true %}
+  {% endif %}
+
+  {% if show_description or show_technical_details %}
+    <div class="product-accordion">
+      <div class="container">
+        <div class="pa-wrapper">
+          {% if show_description %}
+            <div class="pa-item">
+              <div class="pa-ques-wrap">
+                <div class="pa-ques">
+                  {{ 'sections.product.description' | t }}
+                </div>
+                <div class="pa-icon">
+                  {%- render 'product-accordian-icon' -%}
+                </div>
+              </div>
+              <div class="pa-div">
+                <div class="product-desc">
+                  {{ description_data | metafield_tag }}
+                </div>
+              </div>
+            </div>
+          {% endif %}
+
+          {% if show_technical_details %}
+            <div class="pa-item">
+              <div class="pa-ques-wrap">
+                <div class="pa-ques">
+                  {{ 'sections.product.technical_details' | t }}
+                </div>
+                <div class="pa-icon">
+                  {%- render 'product-accordian-icon' -%}
+                </div>
+              </div>
+              <div class="pa-div">
+                <div class="product-desc">
+                  {% assign shipped_by = selected_variant_shipped_by %}
+                  {% assign shipped_by_key = shipped_by %}
+                  {% if shipped_by == 'luft' or shipped_by == 'air' %}
+                    {% assign shipped_by_key = 'air' %}
+                  {% elsif shipped_by == 'see' or shipped_by == 'sea' %}
+                    {% assign shipped_by_key = 'sea' %}
+                  {% elsif shipped_by == 'straße' or shipped_by == 'strasse' or shipped_by == 'road' %}
+                    {% assign shipped_by_key = 'road' %}
+                  {% endif %}
+
+                  <div class="tech-list">
+                    {%- if product.metafields.custom.alternative_name != blank -%}
+                      <div class="tech-item">
+                        <div class="ti-name">{{ 'sections.product.scientific_name' | t }}:</div>
+                        <div class="ti-data">{{ product.metafields.custom.alternative_name }}</div>
+                      </div>
+                    {%- endif -%}
+
+                    {%- if product.metafields.custom.country_of_origin.value != blank -%}
+                      <div class="tech-item">
+                        <div class="ti-name">{{ 'sections.product.origin' | t }}:</div>
+                        <div class="ti-data">{{ product.metafields.custom.country_of_origin.value.country_name }}</div>
+                      </div>
+                    {%- endif -%}
+
+                    {%- if shipped_by != blank -%}
+                      <div class="tech-item">
+                        <div class="ti-name">Shipping:</div>
+                        <div class="ti-data">
+                          <div
+                            class="pas-shipping"
+                            data-product-shipping
+                            data-shipping-value="{{ shipped_by_key }}"
+                            data-shipping-label="{{ shipped_by }}">
+                            <span class="pas-shipping-icon" data-shipping-icon>
+                              {% if shipped_by_key == 'air' %}
+                                {% render 'air' %}
+                              {% elsif shipped_by_key == 'sea' %}
+                                {% render 'sea' %}
+                              {% elsif shipped_by_key == 'road' %}
+                                {% render 'road' %}
+                              {% endif %}
+                            </span>
+                            <span class="pas-shipping-text" data-shipping-text>by {{ shipped_by }}</span>
+                          </div>
+                        </div>
+                      </div>
+                    {%- endif -%}
+
+                    {%- if product.metafields.custom.weight_per_piece != blank -%}
+                      <div class="tech-item">
+                        <div class="ti-name">{{ 'sections.product.weight_per_piece' | t }}:</div>
+                        <div class="ti-data">{{ product.metafields.custom.weight_per_piece }}</div>
+                      </div>
+                    {%- endif -%}
+
+                    {%- if product.metafields.custom.ingredients.value != blank -%}
+                      <div class="tech-item">
+                        <div class="ti-name">{{ 'sections.product.ingredients' | t }}:</div>
+                        <div class="ti-data">{{ product.metafields.custom.ingredients.value | newline_to_br }}</div>
+                      </div>
+                    {%- endif -%}
+
+                    {%- assign manufacturing_text = '' -%}
+                    {%- assign manufacturing_metafield = product.metafields.custom.manufacturing -%}
+                    {%- if manufacturing_metafield != blank and manufacturing_metafield.value != blank -%}
+                      {%- if manufacturing_metafield.type contains 'list.' -%}
+                        {%- assign manufacturing_text = manufacturing_metafield.value | join: ', ' -%}
+                      {%- else -%}
+                        {%- assign manufacturing_text = manufacturing_metafield.value -%}
+                      {%- endif -%}
+                    {%- endif -%}
+
+                    {%- if manufacturing_text != blank -%}
+                      <div class="tech-item">
+                        <div class="ti-name">{{ 'sections.product.manufacturing' | t }}:</div>
+                        <div class="ti-data">{{ manufacturing_text }}</div>
+                      </div>
+                    {%- endif -%}
+
+                    {%- assign allergens_text = '' -%}
+                    {%- assign allergens_metafield = product.metafields.shopify.allergen_information -%}
+                    {%- if allergens_metafield == blank -%}
+                      {%- assign allergens_metafield = product.metafields.shopify.allergens -%}
+                    {%- endif -%}
+                    {%- if allergens_metafield == blank -%}
+                      {%- assign allergens_metafield = product.metafields.standard.allergen_information -%}
+                    {%- endif -%}
+                    {%- if allergens_metafield == blank -%}
+                      {%- assign allergens_metafield = product.metafields.standard.allergens -%}
+                    {%- endif -%}
+                    {%- if allergens_metafield != blank and allergens_metafield.value != blank -%}
+                      {%- if allergens_metafield.type contains 'list.' -%}
+                        {%- assign allergens_text = allergens_metafield.value | join: ', ' -%}
+                      {%- else -%}
+                        {%- assign allergens_text = allergens_metafield.value -%}
+                      {%- endif -%}
+                    {%- endif -%}
+
+                    {%- if allergens_text != blank -%}
+                      <div class="tech-item">
+                        <div class="ti-name">{{ 'sections.product.allergens' | t }}:</div>
+                        <div class="ti-data">{{ allergens_text }}</div>
+                      </div>
+                    {%- endif -%}
+
+                    {%- if product.metafields.custom.cross_contamination.value != blank -%}
+                      <div class="tech-item">
+                        <div class="ti-name">{{ 'sections.product.cross_contamination' | t }}:</div>
+                        <div class="ti-data">{{ product.metafields.custom.cross_contamination.value | newline_to_br }}</div>
+                      </div>
+                    {%- endif -%}
+
+                    {%- if product.metafields.custom.best_before_date.value != blank -%}
+                      <div class="tech-item">
+                        <div class="ti-name">{{ 'sections.product.best_before_date' | t }}:</div>
+                        <div class="ti-data">{{ product.metafields.custom.best_before_date.value | date: "%d.%m.%Y" }}</div>
+                      </div>
+                    {%- endif -%}
+
+                    {%- if product.metafields.custom.net_quantity.value != blank -%}
+                      <div class="tech-item">
+                        <div class="ti-name">{{ 'sections.product.net_quantity' | t }}:</div>
+                        <div class="ti-data">{{ product.metafields.custom.net_quantity.value }}</div>
+                      </div>
+                    {%- endif -%}
+
+                    {%- if product.metafields.custom.storage_conditions.value != blank -%}
+                      <div class="tech-item">
+                        <div class="ti-name">{{ 'sections.product.storage_conditions' | t }}:</div>
+                        <div class="ti-data">{{ product.metafields.custom.storage_conditions.value | newline_to_br }}</div>
+                      </div>
+                    {%- endif -%}
+
+                    {%- if product.metafields.custom.quality_label != blank -%}
+                      <div class="tech-item">
+                        <div class="ti-name">{{ 'sections.product.quality_label' | t }}:</div>
+                        <div class="ti-data">{{ product.metafields.custom.quality_label }}</div>
+                      </div>
+                    {%- endif -%}
+
+                    {%- assign certificate_names = '' -%}
+                    {%- if product.metafields.custom.certificate.value != blank -%}
+                      {%- for item in product.metafields.custom.certificate.value -%}
+                        {%- if item.display_name != blank -%}
+                          {%- if certificate_names != blank -%}
+                            {%- assign certificate_names = certificate_names | append: ', ' -%}
+                          {%- endif -%}
+                          {%- assign certificate_names = certificate_names | append: item.display_name -%}
+                        {%- endif -%}
+                      {%- endfor -%}
+                    {%- endif -%}
+
+                    {%- if certificate_names != blank -%}
+                      <div class="tech-item">
+                        <div class="ti-name">{{ 'sections.product.certificate' | t }}:</div>
+                        <div class="ti-data">{{ certificate_names }}</div>
+                      </div>
+                    {%- endif -%}
+                  </div>
+                </div>
+              </div>
+            </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  {% endif %}
+
+  {% assign deliveryBlock = section.blocks | where: 'type', 'delivery-info' | first %}
+  <div class="product_delivery_modal_container modal fade">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="delivery-cost-title">How much does delivery cost and how long does it take?</h5>
+          <button
+            type="button"
+            class="close"
+            data-dismiss="modal"
+            aria-label="Close">
+            <svg
+              width="15px"
+              height="15px"
+              fill="none"
+              class="icon icon-close"
+              viewBox="0 0 18 17">
+              <path fill="#000" d="M.865 15.978a.5.5 0 0 0 .707.707l7.433-7.431 7.579 7.282a.501.501 0 0 0 .846-.37.5.5 0 0 0-.153-.351L9.712 8.546l7.417-7.416a.5.5 0 1 0-.707-.708L8.991 7.853 1.413.573a.5.5 0 1 0-.693.72l7.563 7.268z" />
+            </svg>
+          </button>
+        </div>
+        <div class="modal-body" data-load="/en/_faq/42/delivery-cost">
+          <div>
+            <p style='margin:0;'>
+              <span class="product_delivery_modal_deliver_to">{{ 'sections.product.deliver_to' | t }}</span>
+              {{ localization.country }}:
+              <span class="calculated-delivery-date-price">9,90 €</span>
+            </p>
+            <p style='margin:0;'>
+              <span class="product_delivery_modal_order_today">{{ 'sections.product.order_today_delivery_from' | t }}</span>
+              <span class="calculated-delivery-date"></span>
+            </p>
+          </div>
+          {{ deliveryBlock.settings.page.content }}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+  /* ======================================================
+     GLOBAL MONEY FORMATTER (USED EVERYWHERE)
+  ====================================================== */
+  window.formatMoneySafe = function (cents) {
+    if (typeof cents !== 'number') return '';
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: Shopify?.currency?.active || '{{ shop.currency }}',
+      minimumFractionDigits: 2
+    }).format(cents / 100);
+  };
+  </script>
+
+  <script>
+  /* ======================================================
+     QUANTITY CONTROLLER (NO PRICE LOGIC HERE)
+  ====================================================== */
+  document.addEventListener('DOMContentLoaded', () => {
+    const qtyInput = document.getElementById('Quantity');
+    if (!qtyInput) return;
+
+    document.querySelectorAll('.qty-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        let qty = parseInt(qtyInput.value, 10) || 1;
+        qty = btn.dataset.action === 'increase' ? qty + 1 : Math.max(1, qty - 1);
+        qtyInput.value = qty;
+        document.dispatchEvent(new Event('quantity:change'));
+      });
+    });
+
+    qtyInput.addEventListener('change', () => {
+      document.dispatchEvent(new Event('quantity:change'));
+    });
+  });
+  </script>
+
+  <script>
+  /* ======================================================
+     ADD TO CART BUTTON STATE
+  ====================================================== */
+  document.addEventListener('DOMContentLoaded', () => {
+    const btn = document.getElementById('add-to-cart');
+    const form = document.getElementById('product-form');
+
+    if (!btn || !form) return;
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+
+      if (btn.classList.contains('loading')) return;
+
+      btn.classList.remove('success');
+      btn.classList.add('loading');
+      btn.disabled = true;
+
+      try {
+        const response = await fetch('/cart/add.js', {
+          method: 'POST',
+          body: new FormData(form),
+          headers: {
+            Accept: 'application/json'
+          }
+        });
+
+        if (!response.ok) {
+          throw new Error(`Add to cart failed: ${response.status}`);
+        }
+
+              /* Update cart count */
+      const cart = await fetch('/cart.js').then(r => r.json());
+
+      document.querySelectorAll('[data-ajax-cart-bind="item_count"]').forEach(el => {
+        el.textContent = cart.item_count;
+        el.classList.toggle('is-hidden', cart.item_count === 0);
+      });
+
+      btn.classList.remove('loading');
+      btn.classList.add('success');
+
+      document.dispatchEvent(new CustomEvent('cart:updated'));
+        window.setTimeout(() => {
+          document.querySelector('.cart-open, #corner-cowi-open-primary-card')?.click();
+        }, 100);
+      } catch (error) {
+        console.error('Product box add to cart failed', error);
+        btn.classList.remove('loading');
+        btn.disabled = false;
+        return;
+      }
+
+      window.setTimeout(() => {
+        btn.classList.remove('loading', 'success');
+        btn.disabled = false;
+      }, 1200);
+    });
+  });
+  </script>
+
+  <script defer>
+  /* ======================================================
+     VARIANT SELECTOR (SINGLE SOURCE OF TRUTH)
+  ====================================================== */
+  class VariantSelector extends HTMLElement {
+    constructor() {
+      super();
+      this.addEventListener('click', this.onVariantClick.bind(this));
+    }
+
+    connectedCallback() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const initialVariantId =
+        Number(urlParams.get('variant')) || {{ selected_variant.id }};
+
+      const variants = this.getVariantJSON();
+      this.currentVariant = variants.find(v => v.id === initialVariantId);
+      if (!this.currentVariant || this.currentVariant.available !== true) {
+        const firstAvailableVariant = variants.find(v => v.available);
+        this.currentVariant = firstAvailableVariant || this.currentVariant;
+      }
+      if (!this.currentVariant) return;
+
+      if (this.currentVariant.available === true && this.currentVariant.id !== initialVariantId) {
+        this.updateURL();
+      }
+
+      this.currentVariant.options.forEach((value, index) => {
+        const ul = this.querySelectorAll('.variant-values')[index];
+        if (!ul) return;
+        ul.querySelectorAll('.variant-value').forEach(li => {
+          li.classList.toggle('active', li.dataset.value === value);
+        });
+      });
+
+      this.updateFormID();
+      this.updatePriceInstant();
+      this.updateMedia();
+      this.updateAddToCartButton();
+
+      document.addEventListener('quantity:change', () => {
+        this.updateAddToCartButton();
+      });
+    }
+
+    onVariantClick(e) {
+      const clickedLi = e.target.closest('.variant-value');
+      if (!clickedLi) return;
+
+      const parentUl = clickedLi.closest('.variant-values');
+      parentUl.querySelectorAll('.variant-value').forEach(li =>
+        li.classList.remove('active')
+      );
+      clickedLi.classList.add('active');
+
+      this.getSelectedOptions();
+      this.getSelectedVariant();
+      if (!this.currentVariant) return;
+
+      this.updateURL();
+      this.updateFormID();
+      this.updatePriceInstant();
+      this.updateMedia();
+      this.updateAddToCartButton();
+    }
+
+    getVariantJSON() {
+      return (
+        this.variantData ||
+        (this.variantData = JSON.parse(
+          this.querySelector('[type="application/json"]').textContent
+        ))
+      );
+    }
+
+    getSelectedOptions() {
+      this.options = Array.from(this.querySelectorAll('.variant-values'))
+        .map(ul => ul.querySelector('.variant-value.active')?.dataset.value)
+        .filter(Boolean);
+    }
+
+    getSelectedVariant() {
+      const variants = this.getVariantJSON();
+      this.currentVariant = variants.find(v =>
+        v.options.every((opt, i) => opt === this.options[i])
+      );
+    }
+
+    updateURL() {
+      window.history.replaceState(
+        {},
+        '',
+        `${this.dataset.url}?variant=${this.currentVariant.id}`
+      );
+    }
+
+    updateFormID() {
+      const input = document.querySelector('#product-form input[name="id"]');
+      if (input) input.value = this.currentVariant.id;
+    }
+
+    updatePriceInstant() {
+      if (!this.currentVariant) return;
+
+      const priceWrap = document.getElementById('price-{{ section.id }}');
+      if (!priceWrap) return;
+
+      const sellPriceEl = priceWrap.querySelector('.sell-price');
+      const comparePriceEl = priceWrap.querySelector('.real-price');
+      const unitPriceEl = priceWrap.querySelector('.sell-price-variant-perkg');
+      const unitPriceWrap = unitPriceEl?.closest('.pd-bottom');
+      const percentBadge = priceWrap.querySelector('[data-price-off-percent]');
+
+      const price = this.currentVariant.price;
+      const compare = this.currentVariant.compare_at_price;
+      const currencySuffix = " {{ cart.currency.symbol }}";
+
+      if (sellPriceEl) {
+        let cleanPrice = formatMoneySafe(price).replace(/[^\d.,]/g, '').trim();
+        sellPriceEl.textContent = cleanPrice + currencySuffix;
+        sellPriceEl.classList.toggle('withoutbg', !(compare && compare > price));
+      }
+
+      if (comparePriceEl) {
+        if (compare && compare > price) {
+          let cleanCompare = formatMoneySafe(compare).replace(/[^\d.,]/g, '').trim();
+          comparePriceEl.textContent = cleanCompare + currencySuffix;
+          comparePriceEl.style.display = 'inline-block';
+        } else {
+          comparePriceEl.style.display = 'none';
+        }
+      }
+
+      if (percentBadge) {
+        if (compare && compare > price) {
+          const saving = compare - price;
+          const percentOff = Math.round((saving * 100) / compare);
+          percentBadge.textContent = `-${percentOff}%`;
+          percentBadge.style.display = 'inline-block';
+        } else {
+          percentBadge.style.display = 'none';
+        }
+      }
+
+      if (unitPriceEl) {
+        if (this.currentVariant.unit_price && this.currentVariant.unit_price_reference_unit) {
+          const cleanUnitPrice = formatMoneySafe(this.currentVariant.unit_price).replace(/[^\d.,]/g, '').trim();
+          unitPriceEl.textContent = `${cleanUnitPrice}${currencySuffix} / ${this.currentVariant.unit_price_reference_unit}`;
+          unitPriceEl.style.display = '';
+          if (unitPriceWrap) unitPriceWrap.style.display = '';
+        } else {
+          unitPriceEl.textContent = '';
+          unitPriceEl.style.display = 'none';
+          if (unitPriceWrap) unitPriceWrap.style.display = 'none';
+        }
+      }
+    }
+
+    updateMedia() {
+      if (!this.currentVariant?.featured_media_id) return;
+
+      const mediaId = this.currentVariant.featured_media_id;
+      window.updateProductMediaById?.(mediaId);
+      document.dispatchEvent(new CustomEvent('variant:media-change', {
+        detail: { mediaId }
+      }));
+    }
+
+    updateAddToCartButton() {
+      window.themeStrings = {
+        ...(window.themeStrings || {}),
+        addToCart: "{{ 'products.product.add_to_cart' | t }}",
+        addedToCart: "{{ 'products.product.added_to_cart' | t }}",
+        soldOut: "{{ 'products.product.sold_out' | t }}"
+      };
+
+      const btn = document.getElementById('add-to-cart');
+      const qtyInput = document.getElementById('Quantity');
+      if (!btn || !qtyInput || !this.currentVariant) return;
+
+      const label = btn.querySelector('.btn-label');
+      const priceEl = btn.querySelector('.btn-price');
+      const separatorEl = btn.querySelector('.btn-separator');
+
+      if (!this.currentVariant.available) {
+        btn.classList.remove('loading', 'success');
+        btn.disabled = true;
+        btn.classList.add('out-of-stock');
+
+        if (label) label.textContent = window.themeStrings.soldOut;
+        if (priceEl) priceEl.textContent = '';
+        if (separatorEl) separatorEl.style.display = 'none';
+
+        return;
+      }
+
+      btn.classList.remove('out-of-stock');
+      btn.disabled = false;
+
+      const qty = parseInt(qtyInput.value, 10) || 1;
+      const total = this.currentVariant.price * qty;
+
+      if (label) label.textContent = window.themeStrings.addToCart;
+      if (separatorEl) separatorEl.style.display = '';
+
+      if (priceEl) {
+        const currencySuffix = " {{ cart.currency.symbol }}";
+        let cleanTotal = formatMoneySafe(total).replace(/[^\d.,]/g, '').trim();
+        priceEl.textContent = cleanTotal + currencySuffix;
+      }
+    }
+  }
+
+  customElements.define('variant-selector', VariantSelector);
+  </script>
+
+  <script>
+  /* ======================================================
+     URL FALLBACK (KEEP YOUR EXISTING BEHAVIOR)
+  ====================================================== */
+  document.addEventListener('DOMContentLoaded', () => {
+    const hasVariant = new URLSearchParams(window.location.search).has('variant');
+    const defaultVariantId = {{ default_variant.id }};
+
+    if (!hasVariant) {
+      const url = new URL(window.location.href);
+      url.searchParams.set('variant', defaultVariantId);
+      window.history.replaceState({}, '', url.toString());
+    }
+  });
+  </script>
+
+  <script>
+  document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.box-content-in').forEach((slider) => {
+      let isDragging = false;
+      let startX = 0;
+      let scrollLeft = 0;
+      let dragMoved = false;
+
+      const stopDragging = () => {
+        isDragging = false;
+        slider.classList.remove('dragging');
+        document.body.classList.remove('box-dragging');
+      };
+
+      const onPointerMove = (event) => {
+        if (!isDragging) return;
+
+        const delta = event.clientX - startX;
+        if (Math.abs(delta) > 3) {
+          dragMoved = true;
+        }
+
+        event.preventDefault();
+        slider.scrollLeft = scrollLeft - delta;
+      };
+
+      const onPointerUp = () => {
+        stopDragging();
+        window.removeEventListener('pointermove', onPointerMove);
+        window.removeEventListener('pointerup', onPointerUp);
+        window.removeEventListener('pointercancel', onPointerUp);
+      };
+
+      slider.addEventListener('pointerdown', (event) => {
+        if (event.pointerType === 'mouse' && event.button !== 0) return;
+
+        isDragging = true;
+        dragMoved = false;
+        startX = event.clientX;
+        scrollLeft = slider.scrollLeft;
+        slider.classList.add('dragging');
+        document.body.classList.add('box-dragging');
+
+        window.addEventListener('pointermove', onPointerMove, { passive: false });
+        window.addEventListener('pointerup', onPointerUp);
+        window.addEventListener('pointercancel', onPointerUp);
+      });
+
+      slider.addEventListener('click', (event) => {
+        if (!dragMoved) return;
+        event.preventDefault();
+        event.stopPropagation();
+        dragMoved = false;
+      }, true);
+    });
+  });
+  </script>
+
+  <script>
+      $(document).ready(function () {
+    const $mainSlider = $('.prod-main-image');
+    const $galleryWrap = $('.pro-right-side');
+    const $prevArrow = $galleryWrap.find('.custom-prev');
+    const $nextArrow = $galleryWrap.find('.custom-next');
+    const galleryTransitionSpeed = 180;
+    const updateGalleryCounter = (event, slick, currentSlide) => {
+      const counter = document.querySelector('.product-gallery-counter');
+      if (!counter || !slick) return;
+
+      const currentEl = counter.querySelector('[data-gallery-current]');
+      const totalEl = counter.querySelector('[data-gallery-total]');
+      const currentIndex = typeof currentSlide === 'number' ? currentSlide : slick.currentSlide || 0;
+
+      if (currentEl) currentEl.textContent = currentIndex + 1;
+      if (totalEl) totalEl.textContent = slick.slideCount;
+    };
+
+    const updateGalleryArrowState = (event, slick, currentSlide) => {
+      if (!slick) return;
+
+      const currentIndex = typeof currentSlide === 'number' ? currentSlide : slick.currentSlide || 0;
+      const lastIndex = Math.max((slick.slideCount || 1) - 1, 0);
+      const atStart = currentIndex <= 0;
+      const atEnd = currentIndex >= lastIndex;
+
+      $prevArrow
+        .toggleClass('disabled', atStart)
+        .prop('disabled', atStart)
+        .attr('aria-disabled', atStart ? 'true' : 'false');
+
+      $nextArrow
+        .toggleClass('disabled', atEnd)
+        .prop('disabled', atEnd)
+        .attr('aria-disabled', atEnd ? 'true' : 'false');
+    };
+
+    $mainSlider.on('init reInit afterChange', (event, slick, currentSlide) => {
+      updateGalleryCounter(event, slick, currentSlide);
+      updateGalleryArrowState(event, slick, currentSlide);
+    });
+
+    $mainSlider.slick({
+      slidesToShow: 1,
+      slidesToScroll: 1,
+      arrows: false,
+      fade: true,
+      speed: galleryTransitionSpeed,
+      cssEase: 'ease-out',
+      draggable: true,
+      swipe: true,
+      touchMove: true,
+      touchThreshold: 8,
+      infinite: false,
+      asNavFor: '.prod-thumb-image',
+    });
+    $('.prod-thumb-image').slick({
+      slidesToShow: 4,
+      slidesToScroll: 1,
+      asNavFor: '.prod-main-image',
+      focusOnSelect: true,
+      centerMode: false,
+      vertical: true,
+      verticalSwiping: true,
+      draggable: true,
+      swipe: true,
+      touchMove: true,
+      swipeToSlide: true,
+      infinite: false,
+      arrows: false,
+      responsive: [
+        {
+          breakpoint: 768,
+          settings: {
+            vertical: false,
+            verticalSwiping: false,
+            slidesToShow: 5,
+            focusOnSelect: true,
+            centerMode: false,
+          }
+        }
+      ]
+    });
+
+    $prevArrow.click(function () {
+      if ($(this).hasClass('disabled')) return;
+      $mainSlider.slick('slickPrev');
+    });
+    $nextArrow.click(function () {
+      if ($(this).hasClass('disabled')) return;
+      $mainSlider.slick('slickNext');
+    });
+
+    const goToVariantMedia = (mediaId) => {
+      if (!mediaId) return;
+
+      const mainSlider = document.querySelector('.prod-main-image');
+      if (!mainSlider) return;
+
+      if (!$mainSlider.hasClass('slick-initialized')) return;
+
+      const targetSlide = mainSlider.querySelector(`.slick-slide[data-media-id="${mediaId}"]`);
+      if (!targetSlide) return;
+
+      const slideIndex = Number(targetSlide.getAttribute('data-slick-index'));
+      if (Number.isNaN(slideIndex) || slideIndex < 0) return;
+
+      $mainSlider.slick('slickGoTo', slideIndex);
+    };
+
+    window.updateProductMediaById = goToVariantMedia;
+    document.addEventListener('variant:media-change', (event) => {
+      goToVariantMedia(event.detail?.mediaId);
+    });
+
+    const initialVariantSelector = document.querySelector('variant-selector');
+    if (initialVariantSelector?.currentVariant?.featured_media_id) {
+      goToVariantMedia(initialVariantSelector.currentVariant.featured_media_id);
+    }
+      });
+
+    Fancybox.bind("[data-fancybox='gallery-box']", {
+      Hash: false,
+      Thumbs: {
+        autoStart: false,
+      },
+    });
+  </script>
+
+  <script>
+    $(document).ready(function(){
+      $(document).on('click', '.product-accordion .pa-ques-wrap', function() {
+        const $clickedItem = $(this).closest('.pa-item');
+        const $clickedAnswer = $clickedItem.children('.pa-div');
+
+        if ($clickedItem.hasClass('active')) {
+          $clickedItem.removeClass('active');
+          $clickedAnswer.stop(true, true).slideUp(300);
+          return;
+        }
+
+        $clickedItem.addClass('active');
+        $clickedAnswer.stop(true, true).slideDown(300);
+      });
+    });
+
+  </script>
+
+  <script>
+    document.addEventListener('click', function (e) {
+      const btn = e.target.closest('.offer-copy-btn');
+      if (!btn) return;
+
+      navigator.clipboard.writeText(btn.dataset.code).then(() => {
+        btn.textContent = 'Copied';
+        btn.classList.add('copied');
+
+        setTimeout(() => {
+          btn.textContent = 'Copy';
+          btn.classList.remove('copied');
+        }, 2000);
+      });
+    });
+  </script>
+
+  {% schema %}
+    {
+      "name": "Product",
+      "blocks": [
+        {
+          "type": "title",
+          "name": "Title",
+          "limit": 1,
+          "settings": [
+            {
+              "type": "checkbox",
+              "id": "show_testimonial",
+              "label": "Show Title Testimonial",
+              "default": true
+            }, {
+              "type": "richtext",
+              "id": "title_testimonial",
+              "label": "Testimonial Above Tilte"
+            }
+          ]
+        },
+        {
+          "type": "product_info",
+          "name": "Product Information",
+          "limit": 1
+        },
+        {
+          "type": "box_content",
+          "name": "Box Content",
+          "limit": 1
+        },
+        {
+          "type": "store_usp",
+          "name": "Store USP",
+          "limit": 1,
+          "settings": [
+            {
+              "type": "image_picker",
+              "id": "shipping_usp_icon",
+              "label": "Shipping USP Icon"
+            },
+            {
+              "type": "page",
+              "id": "shipping_usp_page",
+              "label": "Shipping Page"
+            },
+            {
+              "type": "text",
+              "id": "shipping_usp_text",
+              "label": "Shipping USP Text"
+            },
+            {
+              "type": "image_picker",
+              "id": "freshness_icon",
+              "label": "Freshness Icon"
+            }, {
+              "type": "text",
+              "id": "freshness_text",
+              "label": "Freshness Text"
+            }, {
+              "type": "image_picker",
+              "id": "payment_usp_icon",
+              "label": "Payment USP Icon"
+            }, {
+              "type": "text",
+              "id": "payment_usp_text",
+              "label": "Payment USP Text"
+            }
+          ]
+        }, 
+        {
+          "type": "variant_selector",
+          "name": "Variant Selector",
+          "limit": 1
+        }, 
+        {
+          "type": "delivery-info",
+          "name": "Delivery information",
+          "settings": [
+            {
+              "type": "text",
+              "id": "delivery_message",
+              "label": "Delivery message",
+              "default": "Max. freshness, min. waste — we harvest after you order."
+            }, {
+              "type": "text",
+              "id": "popup_button",
+              "label": "Popup button text",
+              "default": "click here to get delivery information (cost, delay)"
+            }, {
+              "type": "page",
+              "id": "page",
+              "label": "Modal content"
+            }
+          ]
+        },
+        {
+          "type": "offer",
+          "name": "Offer / Coupon",
+          "settings": [
+            {
+              "type": "text",
+              "id": "code",
+              "label": "Coupon Code",
+              "default": "JURASSIC222"
+            },
+            {
+              "type": "text",
+              "id": "text",
+              "label": "Offer Text",
+              "default": "Buy 3 @ $350 + Free Gifts"
+            }
+          ]
+        },
+        {
+          "type": "pair_with",
+          "name": "Pair With",
+          "settings": [
+            {
+              "type": "text",
+              "id": "head",
+              "label": "Pair with heading",
+              "default": "pair it with"
+            }
+          ]
+        },
+        {
+          "type": "@app"
+        }
+      ],
+      "settings": [
+        {
+          "type": "text",
+          "id": "acc_1",
+          "label": "Accordion 1 Label",
+          "default": "How to eat & Store"
+        }, {
+          "type": "text",
+          "id": "acc_2",
+          "label": "Accordion 2 Label",
+          "default": "Seasonal Calendar - fruit origin"
+        }, {
+          "type": "text",
+          "id": "acc_3",
+          "label": "Accordion 3 Label",
+          "default": "taste profile"
+        }
+      ]
+    }
+  {% endschema %}

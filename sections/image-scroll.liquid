@@ -1,0 +1,176 @@
+<section class="imagescroll" id="imagescroll-{{ section.id }}" data-image-scroll-section>
+    <div class="container-fluid">
+        <div class="imgcroll-in">
+            <div class="sec-heading small">
+                <div class="heading center">
+                    <h2>{{ section.settings.heading }}</h2>
+                    <p>{{ section.settings.subheading }}</p>
+                </div>
+            </div>
+            <div class="stacking-gallery">
+                <div class="scrollimg-wrap">
+                    <div class="gallery__grid">
+                        {% for block in section.blocks %}
+                            <div class="scroll-image index-{{ forloop.index }}">
+                                <img class="icon collection-img" src="{{ block.settings.image | img_url: 'master' }}" alt="{{ block.settings.image.alt }}" />
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+  (() => {
+    const sectionId = 'imagescroll-{{ section.id }}';
+    const wrapper = document.getElementById(sectionId);
+    if (!wrapper) return;
+
+    let mm;
+    let refreshTimer;
+
+    function initImageScroll() {
+      if (!window.gsap || !window.ScrollTrigger) return;
+
+      if (wrapper.dataset.imageScrollReady === 'true') {
+        return;
+      }
+
+      wrapper.dataset.imageScrollReady = 'true';
+
+      gsap.registerPlugin(ScrollTrigger);
+      mm = gsap.matchMedia();
+
+      mm.add('(min-width: 768px)', () => {
+        const cards = wrapper.querySelectorAll('.scroll-image');
+        const grid = wrapper.querySelector('.gallery__grid');
+
+        if (!cards.length || !grid) return;
+
+        gsap.set(cards, { clearProps: 'transform' });
+        gsap.set(wrapper.querySelector('.index-1'), { yPercent: 20, rotate: -5 });
+        gsap.set(wrapper.querySelector('.index-2'), { yPercent: 60, rotate: 8 });
+        gsap.set(wrapper.querySelector('.index-3'), { yPercent: 40, rotate: -5 });
+
+        const tl = gsap.timeline({
+          defaults: { ease: 'none' },
+          scrollTrigger: {
+            id: `${sectionId}-trigger`,
+            trigger: wrapper,
+            start: 'top top',
+            end: '+=50%',
+            scrub: 0.1,
+            pin: true,
+            pinSpacing: true,
+            invalidateOnRefresh: true,
+            anticipatePin: 1
+          }
+        });
+
+        cards.forEach((card) => {
+          tl.to(card, { yPercent: 0, rotate: 0 }, 0);
+        });
+
+        tl.from(grid, { yPercent: 6 }, 0);
+
+        return () => {
+          tl.scrollTrigger && tl.scrollTrigger.kill();
+          tl.kill();
+          gsap.set(cards, { clearProps: 'transform' });
+          gsap.set(grid, { clearProps: 'transform' });
+        };
+      });
+
+      const queueRefresh = () => {
+        clearTimeout(refreshTimer);
+        refreshTimer = setTimeout(() => {
+          if (window.lenis) window.lenis.resize();
+          ScrollTrigger.refresh();
+          ScrollTrigger.update();
+        }, 60);
+      };
+
+      const queueDeferredRefresh = () => {
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            queueRefresh();
+            setTimeout(queueRefresh, 150);
+            setTimeout(queueRefresh, 500);
+          });
+        });
+      };
+
+      wrapper.querySelectorAll('img').forEach((img) => {
+        if (!img.complete) {
+          img.addEventListener('load', queueRefresh, { once: true });
+          img.addEventListener('error', queueRefresh, { once: true });
+        }
+      });
+
+      window.addEventListener('resize', queueRefresh);
+      window.addEventListener('load', queueDeferredRefresh, { once: true });
+      window.addEventListener('pageshow', queueDeferredRefresh);
+
+      if (document.fonts?.ready) {
+        document.fonts.ready.then(queueDeferredRefresh);
+      }
+
+      queueDeferredRefresh();
+    }
+
+    if (document.readyState === 'complete') {
+      initImageScroll();
+    } else {
+      window.addEventListener('load', initImageScroll, { once: true });
+    }
+
+    document.addEventListener('shopify:section:load', (event) => {
+      if (event.target?.id === `shopify-section-{{ section.id }}`) {
+        initImageScroll();
+      }
+    });
+  })();
+</script>
+
+{% schema %}
+  {
+    "name": "imagesscroll",
+    "tag": "section",
+    "settings": [
+        {
+            "type": "text",
+            "id": "heading",
+            "label": "Section heading",
+            "default": "The Crew Behind Your Journey to Wild Taste"
+        },
+        {
+            "type": "text",
+            "id": "subheading",
+            "label": "Section subheading",
+            "default": "We’re the hands and hearts behind the flavor — driven by purpose, powered by fruit. Everyone leads, everyone cares. We move fast, laugh loud, and never lose sight of what matters."
+        }
+    ],
+    "blocks": [
+        {
+            "type": "slide",
+            "name": "slide",
+            "settings": [
+                {
+                    "type": "image_picker",
+                    "id": "image",
+                    "label": "Select Image"
+                }   
+            ]
+        }
+    ],
+    "presets": [
+      {
+        "name": "imagesscroll",
+        "settings": {
+        }
+      }
+    ]
+  }
+{% endschema %}

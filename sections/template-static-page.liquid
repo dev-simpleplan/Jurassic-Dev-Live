@@ -1,0 +1,47 @@
+<section class="static-pages top-wrap">
+  <div class="static-container">
+    <div class="static-wrapper">
+      <div class="head">
+        <h1>
+          {{ page.title }}
+        </h1>
+      </div>
+      <div class="static-content">
+        {% for block in section.blocks %}
+          <div class="item">
+            <div class="head">
+              <h2>{{ block.settings.head }}</h2>
+            </div>
+            <div class="para">
+              {{ block.settings.para }}
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+  {
+    "name": "Static Data",
+    "settings": [],
+    "blocks": [
+      {
+        "name": "Static Content",
+        "type": "static-content",
+        "settings": [
+          {
+            "type": "text",
+            "id": "head",
+            "label": "Heading"
+          }, {
+            "type": "richtext",
+            "id": "para",
+            "label": "Paragraph"
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}

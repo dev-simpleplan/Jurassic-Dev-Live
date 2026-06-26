@@ -1,0 +1,31 @@
+{% render 'product-card-primary', product: product, collection: collection %}
+
+<script>
+  (function() {
+    const checkOkendoRating = () => {
+      const containers = document.querySelectorAll('.star_review');
+
+      containers.forEach(container => {
+        const dot = container.querySelector('.dynamic-review-dot');
+        const jsonData = container.querySelector('script[type="application/json"]');
+
+        if (jsonData && dot) {
+          try {
+            const data = JSON.parse(jsonData.innerHTML);
+            if (data.reviewCount > 0) {
+              dot.style.setProperty('display', 'inline-block', 'important');
+            } else {
+              dot.style.setProperty('display', 'none', 'important');
+            }
+          } catch (e) {
+            dot.style.display = 'none';
+          }
+        }
+      });
+    };
+
+    const timer = setInterval(checkOkendoRating, 500);
+    setTimeout(() => clearInterval(timer), 5000);
+    window.addEventListener('load', checkOkendoRating);
+  })();
+</script>

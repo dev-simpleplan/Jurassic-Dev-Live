@@ -1,0 +1,111 @@
+<section class="vid-img pos-rel">
+    <div class="container">
+        <div class="vid-img-wrap">
+            <div class="sec-with-space">
+                <div class="heading center">
+                    <h2>{{ section.settings.heading }}</h2>
+                    <p class="small">{{ section.settings.para }}</p>
+                </div>
+                <div class="vidimage-in">
+                    {% if section.settings.video_link != blank %}
+                        {%- assign poster_url = nil -%}
+  
+                        {%- if section.settings.video_poster != blank -%}
+                            {%- assign poster_url = section.settings.video_poster | img_url: 'master' -%}
+                        {%- endif -%}
+
+                        {{ section.settings.video_link | video_tag: 
+                            class: 'img ab',
+                            autoplay: false,
+                            loop: true,
+                            muted: false,
+                            controls: true,
+                            playsinline: true,
+                            poster: poster_url
+                        }}
+                        <button type="button" class="video-control" aria-label="Play video">
+                            <span class="video-control-play">
+                                <span class="video-control-symbol" aria-hidden="true"><img src="https://cdn.shopify.com/s/files/1/0752/8015/4881/files/Polygon_1.svg?v=1759301174" alt=""></span>
+                            </span>
+                        </button>
+                    {% endif %}
+                    {% if section.settings.video_img != blank and section.settings.video_link == blank %}
+                        <img src="{{ section.settings.video_img |  img_url: 'master' }}" alt="{{ section.settings.video_img.title }}" class="img ab">
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const wraps = document.querySelectorAll(".vidimage-in");
+
+  wraps.forEach((wrap) => {
+    const video = wrap.querySelector("video");
+    const btn = wrap.querySelector("button.video-control");
+    if (!video || !btn) return;
+
+    const hideButton = () => {
+      wrap.classList.add("is-playing");
+      btn.classList.add("is-hidden");
+      btn.setAttribute("aria-hidden", "true");
+    };
+
+    const showButton = () => {
+      wrap.classList.remove("is-playing");
+      btn.classList.remove("is-hidden");
+      btn.setAttribute("aria-hidden", "false");
+    };
+
+    btn.addEventListener("click", () => {
+      if (video.paused || video.ended) {
+        document.querySelectorAll(".vidimage-in video").forEach((v) => {
+          if (v !== video && !v.paused) v.pause();
+        });
+        video.play().then(hideButton).catch(() => {});
+      }
+    });
+
+    video.addEventListener("play", hideButton);
+    video.addEventListener("playing", hideButton);
+    video.addEventListener("pause", showButton);
+    video.addEventListener("ended", showButton);
+  });
+});
+</script>
+
+
+{% schema %}
+{
+    "name": "Video-Section",
+    "settings": [
+        {
+            "type": "text",
+            "id": "heading",
+            "label": "Heading"
+        },
+        {
+            "type": "text",
+            "id": "para",
+            "label": "Paragraph"
+        },
+        {
+            "type": "image_picker",
+            "id": "video_img",
+            "label": "Upload Image"
+        },
+        {
+            "type": "image_picker",
+            "id": "video_poster",
+            "label": "Upload Video Poster"
+        },
+        {
+            "type": "video",
+            "id": "video_link",
+            "label": "Upload Video"
+        }
+    ]
+}
+{% endschema %}

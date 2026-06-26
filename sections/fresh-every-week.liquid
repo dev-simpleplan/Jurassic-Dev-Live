@@ -1,0 +1,86 @@
+<section class="few">
+    <div class="container">
+        <div class="few-in">
+            <div class="sec-with-space">
+                <div class="heading center small-width">
+                    <h2 data-aos="fade-up" data-aos-duration="1000">{{ section.settings.heading }}</h2>
+                    <p class="small" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="50">{{ section.settings.para }}</p>
+                </div>
+                <div class="few-grid">
+                    <div class="fewgrid-in">
+                        {% for block in section.blocks %}
+                        <div class="fg-item">
+                            <div class="fgitem-in">
+                                <div class="fgi-left">
+                                    <div class="fgil-image">
+                                        <img src="{{ block.settings['image'] | img_url: 'master' }}" alt="">
+                                    </div>
+                                </div>
+                                <div class="fgi-right">
+                                    <div class="fgir-day">{{ block.settings.day }}</div>
+                                    <div class="fgir-head">
+                                        <h3>{{ block.settings.head }}</h3>
+                                    </div>
+                                    <div class="fgir-para">
+                                        <p>{{ block.settings.paragraph }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% schema %}
+{
+  "name": "Fresh Every Week",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading"
+    },
+    {
+      "type": "text",
+      "id": "para",
+      "label": "Paragraph"
+    }
+  ],
+  "blocks": [
+    {
+      "name": "FreshItems",
+      "type": "cards",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Card Image"
+        },
+        {
+          "type": "text",
+          "id": "day",
+          "label": "Day Range",
+          "default": "Thursday"
+        },
+        {
+          "type": "text",
+          "id": "head",
+          "label": "Card Heading"
+        },
+        {
+          "type": "text",
+          "id": "paragraph",
+          "label": "Card Content"
+        },
+      ]
+    }
+  ],
+  "presets": [
+    { "name": "Fresh Every Week" }
+  ]
+}
+{% endschema %}

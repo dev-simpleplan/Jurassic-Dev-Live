@@ -1,0 +1,624 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "template": {
+      "type": "product-box",
+      "blocks": {
+        "title": {
+          "type": "title",
+          "settings": {
+            "show_testimonial": true,
+            "title_testimonial": ""
+          }
+        },
+        "box_content": {
+          "type": "box_content",
+          "settings": {}
+        },
+        "variant_selector": {
+          "type": "variant_selector",
+          "settings": {}
+        },
+        "delivery_info_WFVGrD": {
+          "type": "delivery-info",
+          "settings": {
+            "delivery_message": "Max. freshness, min. waste — we harvest after you order.",
+            "popup_button": "click here to get delivery information (cost, delay)",
+            "page": "delivery-popup"
+          }
+        },
+        "staging_delivery_date_app_product_delivery_info_jGcmjQ": {
+          "type": "shopify://apps/staging-delivery-date-app/blocks/product-delivery-info/f5eebd54-3726-4096-a681-6d536d3a08d8",
+          "settings": {
+            "page": ""
+          }
+        },
+        "store_usp": {
+          "type": "store_usp",
+          "settings": {
+            "shipping_usp_icon": "shopify://shop_images/truck.svg",
+            "shipping_usp_page": "",
+            "shipping_usp_text": "Free shipping from 89 €*",
+            "freshness_icon": "shopify://shop_images/box.svg",
+            "freshness_text": "24h freshness guarantee",
+            "payment_usp_icon": "shopify://shop_images/refresh-ccw.svg",
+            "payment_usp_text": "Secure Payment"
+          }
+        },
+        "product_info": {
+          "type": "product_info",
+          "settings": {}
+        },
+        "pair_with_UwJtYY": {
+          "type": "pair_with",
+          "settings": {
+            "head": "Pair it with"
+          }
+        }
+      },
+      "block_order": [
+        "title",
+        "box_content",
+        "variant_selector",
+        "delivery_info_WFVGrD",
+        "staging_delivery_date_app_product_delivery_info_jGcmjQ",
+        "store_usp",
+        "product_info",
+        "pair_with_UwJtYY"
+      ],
+      "settings": {
+        "acc_1": "How to eat & Store",
+        "acc_2": "Seasonal Calendar - fruit origin",
+        "acc_3": "taste profile"
+      }
+    },
+    "spacer0": {
+      "type": "Spacer",
+      "settings": {
+        "spacer_height": 90
+      }
+    },
+    "video_carousel_YJxU7F": {
+      "type": "video-carousel",
+      "blocks": {
+        "ugc_videos_zR8mng": {
+          "type": "ugc-videos",
+          "settings": {
+            "video_link": "shopify://files/videos/853754-hd_1280_720_50fps.mp4"
+          }
+        },
+        "ugc_videos_eDAaYP": {
+          "type": "ugc-videos",
+          "settings": {
+            "video_link": "shopify://files/videos/853754-hd_1280_720_50fps.mp4"
+          }
+        },
+        "ugc_videos_hiVjVf": {
+          "type": "ugc-videos",
+          "settings": {
+            "video_link": "shopify://files/videos/853754-hd_1280_720_50fps.mp4"
+          }
+        },
+        "ugc_videos_p34at3": {
+          "type": "ugc-videos",
+          "settings": {
+            "video_link": "shopify://files/videos/853754-hd_1280_720_50fps.mp4"
+          }
+        },
+        "ugc_videos_3t9tyg": {
+          "type": "ugc-videos",
+          "settings": {
+            "video_link": "shopify://files/videos/853754-hd_1280_720_50fps.mp4"
+          }
+        },
+        "ugc_videos_R3WRXz": {
+          "type": "ugc-videos",
+          "settings": {
+            "video_link": "shopify://files/videos/853754-hd_1280_720_50fps.mp4"
+          }
+        },
+        "ugc_videos_QhrUaJ": {
+          "type": "ugc-videos",
+          "settings": {
+            "video_link": "shopify://files/videos/853754-hd_1280_720_50fps.mp4"
+          }
+        }
+      },
+      "block_order": [
+        "ugc_videos_zR8mng",
+        "ugc_videos_eDAaYP",
+        "ugc_videos_hiVjVf",
+        "ugc_videos_p34at3",
+        "ugc_videos_3t9tyg",
+        "ugc_videos_R3WRXz",
+        "ugc_videos_QhrUaJ"
+      ],
+      "name": "Video-Section",
+      "settings": {
+        "heading_top": "Bite into the",
+        "heading_bottom": "Wild with us",
+        "heading_color": "#dbd7c8",
+        "background_color": "#1a1a1a",
+        "use_product_videos": true,
+        "product_videos_metafield": "product_videos"
+      }
+    },
+    "box-fruits": {
+      "type": "box-fruits",
+      "settings": {
+        "heading": "What You Might Discover Inside",
+        "subheading": "Each box brings together fruits we genuinely think people should experience at least once. Please note that the selection changes with the seasons and is not guaranteed, depending on what’s tasting best at the time."
+      }
+    },
+    "spacer_Nh7Bj": {
+      "type": "spacer",
+      "name": "Spacer",
+      "settings": {
+        "spacer_height": 90
+      }
+    },
+    "spacer_BmkhaA": {
+      "type": "spacer",
+      "disabled": true,
+      "name": "Spacer",
+      "settings": {
+        "spacer_height": 140
+      }
+    },
+    "order_sample_4EfCUL": {
+      "type": "order-sample",
+      "disabled": true,
+      "name": "order-sample",
+      "settings": {
+        "heading": "Your First Bite of the Wild",
+        "para": "Not sure where to begin? This sampler box brings four handpicked fruits to help you discover the untamed side of flavor.",
+        "cta_url": "#!",
+        "cta_text": "Order Sampler",
+        "first_image": "shopify://shop_images/image_71.png",
+        "second_image": "shopify://shop_images/image_72.png"
+      }
+    },
+    "spacer_tVjKyf": {
+      "type": "spacer",
+      "disabled": true,
+      "name": "Spacer",
+      "settings": {
+        "spacer_height": 140
+      }
+    },
+    "three_image_box_menw3P": {
+      "type": "three-image-box",
+      "blocks": {
+        "cards_qnVCYU": {
+          "type": "cards",
+          "settings": {
+            "pointer_icon": "shopify://shop_images/Vector-4.svg",
+            "pointer_heading": "DIRECTLY SOURCED FROM SMALL GROWERS",
+            "pointer_description": "We work closely with small farms around the world that share our focus on careful growing practices and real flavor. By keeping supply chains short and moving quickly after harvest, we help preserve the freshness and character of each fruit."
+          }
+        },
+        "cards_YbG9xH": {
+          "type": "cards",
+          "settings": {
+            "pointer_icon": "shopify://shop_images/Vector_-_2025-11-24T154608.626.svg",
+            "pointer_heading": "PACKED FRESH AT JURASSIC FRUIT",
+            "pointer_description": "Fresh arrivals from our growers are carefully selected and packed in our warehouse shortly before shipping. This allows us to build each box around what’s tasting best and deliver the fruits with maximum freshness."
+          }
+        },
+        "cards_9mrgbe": {
+          "type": "cards",
+          "settings": {
+            "pointer_icon": "shopify://shop_images/Vector_-_2025-11-24T154602.594.svg",
+            "pointer_heading": "Smart, Minimal Packaging",
+            "pointer_description": "We use just enough to protect perfectly your fruit. Our materials are recyclable, compostable, or reusable whenever possible."
+          }
+        }
+      },
+      "block_order": [
+        "cards_qnVCYU",
+        "cards_YbG9xH",
+        "cards_9mrgbe"
+      ],
+      "name": "three-images-box",
+      "settings": {
+        "heading": "How your box gets to you",
+        "first_image": "shopify://shop_images/Farm-Rambutan-Alix-Bali-Indonesia-5870-JurassicFruit-JurassicFruit.jpg",
+        "second_image": "shopify://shop_images/PXL_20240913_091924687.MP.jpg",
+        "third_image": "shopify://shop_images/UGC-naominoller-Winner-Giveaway-Rohvolution_3.jpg"
+      }
+    },
+    "spacer_D4C9kF": {
+      "type": "spacer",
+      "disabled": true,
+      "name": "Spacer",
+      "settings": {
+        "spacer_height": 140
+      }
+    },
+    "reviews_dwN4k7": {
+      "type": "reviews",
+      "blocks": {
+        "review_item_eeDVM9": {
+          "type": "review_item",
+          "settings": {
+            "user_image": "shopify://shop_images/952ea62b328def55e572140d3b90a0750a2d3bbd.jpg",
+            "comment": "Rare exotic fruits assorted box from Jurassic Fruit was amazing!",
+            "review_star": 4.7,
+            "user_name": "Denny Silver",
+            "user_desig": "Father of 3"
+          }
+        },
+        "review_item_tnqTU4": {
+          "type": "review_item",
+          "settings": {
+            "user_image": "shopify://shop_images/952ea62b328def55e572140d3b90a0750a2d3bbd.jpg",
+            "comment": "Rare exotic fruits assorted box from Jurassic Fruit was amazing!",
+            "review_star": 4.7,
+            "user_name": "Denny Silver",
+            "user_desig": "Father of 3"
+          }
+        },
+        "review_item_4Jhy7W": {
+          "type": "review_item",
+          "settings": {
+            "user_image": "shopify://shop_images/952ea62b328def55e572140d3b90a0750a2d3bbd.jpg",
+            "comment": "Rare exotic fruits assorted box from Jurassic Fruit was amazing!",
+            "review_star": 4.7,
+            "user_name": "Denny Silver",
+            "user_desig": "Father of 3"
+          }
+        },
+        "review_item_t6NH4D": {
+          "type": "review_item",
+          "settings": {
+            "user_image": "shopify://shop_images/952ea62b328def55e572140d3b90a0750a2d3bbd.jpg",
+            "comment": "Rare exotic fruits assorted box from Jurassic Fruit was amazing!",
+            "review_star": 4.7,
+            "user_name": "Denny Silver",
+            "user_desig": "Father of 3"
+          }
+        },
+        "review_item_WciDXg": {
+          "type": "review_item",
+          "settings": {
+            "user_image": "shopify://shop_images/952ea62b328def55e572140d3b90a0750a2d3bbd.jpg",
+            "comment": "Rare exotic fruits assorted box from Jurassic Fruit was amazing!",
+            "review_star": 4.7,
+            "user_name": "Denny Silver",
+            "user_desig": "Father of 3"
+          }
+        },
+        "review_item_hmEGFf": {
+          "type": "review_item",
+          "settings": {
+            "user_image": "shopify://shop_images/952ea62b328def55e572140d3b90a0750a2d3bbd.jpg",
+            "comment": "Rare exotic fruits assorted box from Jurassic Fruit was amazing!",
+            "review_star": 4.7,
+            "user_name": "Denny Silver",
+            "user_desig": "Father of 3"
+          }
+        }
+      },
+      "block_order": [
+        "review_item_eeDVM9",
+        "review_item_tnqTU4",
+        "review_item_4Jhy7W",
+        "review_item_t6NH4D",
+        "review_item_WciDXg",
+        "review_item_hmEGFf"
+      ],
+      "disabled": true,
+      "name": "Reviews Section",
+      "settings": {
+        "heading": "What Explorers Are Saying"
+      }
+    },
+    "three-icon-sec": {
+      "type": "three-icon-sec",
+      "blocks": {
+        "cards_P3Btyy": {
+          "type": "cards",
+          "settings": {
+            "icon": "shopify://shop_images/Vector_-_2025-11-10T162939.731.svg",
+            "text": "See exactly what you’re paying for — down to the gram. Fair pricing by box size and weight."
+          }
+        },
+        "cards_47PU9w": {
+          "type": "cards",
+          "settings": {
+            "icon": "shopify://shop_images/Vector_-_2025-11-10T162944.693.svg",
+            "text": "We source rare fruits from remote regions. Each price reflects distance, seasonality, and what it takes to get them to you."
+          }
+        },
+        "cards_kb9bFP": {
+          "type": "cards",
+          "settings": {
+            "icon": "shopify://shop_images/Group_427322701.svg",
+            "text": "Know your delivery cost upfront. Clear timelines and options that work for you"
+          }
+        }
+      },
+      "block_order": [
+        "cards_P3Btyy",
+        "cards_47PU9w",
+        "cards_kb9bFP"
+      ],
+      "disabled": true,
+      "name": "three-icon-sec",
+      "settings": {
+        "bg-image": "shopify://shop_images/counter-bg.jpg",
+        "heading": "The Honest Price Tag",
+        "para": "Our prices are as clear as our produce—no hidden costs, just the best value."
+      }
+    },
+    "usp-ticker": {
+      "type": "usp-ticker",
+      "blocks": {
+        "cards_LUJjzq": {
+          "type": "cards",
+          "settings": {
+            "ticker_icon": "shopify://shop_images/Group_427322776.svg",
+            "ticker_text": "800 Farmers Supported"
+          }
+        },
+        "cards_f78J3x": {
+          "type": "cards",
+          "settings": {
+            "ticker_icon": "shopify://shop_images/Vector_-_2025-11-05T163138.290.svg",
+            "ticker_text": "1000+ 5-Star Reviews"
+          }
+        },
+        "cards_4tRDRB": {
+          "type": "cards",
+          "settings": {
+            "ticker_icon": "shopify://shop_images/Vector_-_2025-11-05T163144.506.svg",
+            "ticker_text": "Free Shipping above 89 €"
+          }
+        },
+        "cards_YemYXY": {
+          "type": "cards",
+          "settings": {
+            "ticker_icon": "shopify://shop_images/Group_427322776.svg",
+            "ticker_text": "800 Farmers Supported"
+          }
+        },
+        "cards_xerDPJ": {
+          "type": "cards",
+          "settings": {
+            "ticker_icon": "shopify://shop_images/Vector_-_2025-11-05T163138.290.svg",
+            "ticker_text": "1000+ 5-Star Reviews"
+          }
+        },
+        "cards_EkaPMQ": {
+          "type": "cards",
+          "settings": {
+            "ticker_icon": "shopify://shop_images/Vector_-_2025-11-05T163144.506.svg",
+            "ticker_text": "Free Shipping above 89 €"
+          }
+        },
+        "cards_7MHNaB": {
+          "type": "cards",
+          "settings": {
+            "ticker_icon": "shopify://shop_images/Group_427322776.svg",
+            "ticker_text": "800 Farmers Supported"
+          }
+        },
+        "cards_gKwDPP": {
+          "type": "cards",
+          "settings": {
+            "ticker_icon": "shopify://shop_images/Vector_-_2025-11-05T163138.290.svg",
+            "ticker_text": "1000+ 5-Star Reviews"
+          }
+        },
+        "cards_PcKgVt": {
+          "type": "cards",
+          "settings": {
+            "ticker_icon": "shopify://shop_images/Vector_-_2025-11-05T163144.506.svg",
+            "ticker_text": "Free Shipping above 89 €"
+          }
+        }
+      },
+      "block_order": [
+        "cards_LUJjzq",
+        "cards_f78J3x",
+        "cards_4tRDRB",
+        "cards_YemYXY",
+        "cards_xerDPJ",
+        "cards_EkaPMQ",
+        "cards_7MHNaB",
+        "cards_gKwDPP",
+        "cards_PcKgVt"
+      ],
+      "disabled": true,
+      "settings": {}
+    },
+    "left-image-with-items": {
+      "type": "left-image-with-items",
+      "blocks": {
+        "cards_FEmMR3": {
+          "type": "cards",
+          "settings": {
+            "head_text": "Guardians of the Land",
+            "para_text": "Our farmers grow with care, tending to wild groves and heritage orchards using age-old, chemical-free methods."
+          }
+        },
+        "cards_wxQ7xD": {
+          "type": "cards",
+          "settings": {
+            "head_text": "Ripe with Intention",
+            "para_text": "Every fruit is handpicked at peak maturity—never rushed, never forced—ensuring real flavor and real nourishment."
+          }
+        },
+        "cards_eGXAwz": {
+          "type": "cards",
+          "settings": {
+            "head_text": "Guardians of the Land",
+            "para_text": "Our farmers grow with care, tending to wild groves and heritage orchards using age-old, chemical-free methods."
+          }
+        },
+        "cards_Mi37EN": {
+          "type": "cards",
+          "settings": {
+            "head_text": "Ripe with Intention",
+            "para_text": "Every fruit is handpicked at peak maturity—never rushed, never forced—ensuring real flavor and real nourishment."
+          }
+        }
+      },
+      "block_order": [
+        "cards_FEmMR3",
+        "cards_wxQ7xD",
+        "cards_eGXAwz",
+        "cards_Mi37EN"
+      ],
+      "disabled": true,
+      "name": "left-image-with-items",
+      "settings": {
+        "video_img": "shopify://shop_images/76278d276a8a940ed77edfd1f1af3a8abade21cd.jpg",
+        "video_link": "shopify://files/videos/853754-hd_1280_720_50fps.mp4",
+        "heading": "​​The Hands That Harvest Paradise",
+        "sub_heading": "From sun-drenched mornings to mindful harvests—meet the growers behind your cravings."
+      }
+    },
+    "spacer_2": {
+      "type": "spacer",
+      "name": "Spacer",
+      "settings": {
+        "spacer_height": 90
+      }
+    },
+    "headingsec_xm9gbY": {
+      "type": "headingsec",
+      "name": "headingsec",
+      "settings": {
+        "heading": "Customer reviews",
+        "para": "Every review on this page is written by a real customer. We believe honest feedback matters, so we don’t hide negative reviews unless they’re abusive, fraudulent or unrelated to the product."
+      }
+    },
+    "spacer_6b6rdm": {
+      "type": "spacer",
+      "name": "Spacer",
+      "settings": {
+        "spacer_height": 20
+      }
+    },
+    "17789334995fba728d": {
+      "type": "apps",
+      "blocks": {
+        "okendo_reviews_widget_E8PWzq": {
+          "type": "shopify://apps/okendo/blocks/reviews-widget/bb689e69-ea70-4661-8fb7-ad24a2e23c29",
+          "settings": {
+            "product": "{{product}}",
+            "widget_type": "reviews_widget"
+          }
+        }
+      },
+      "block_order": [
+        "okendo_reviews_widget_E8PWzq"
+      ],
+      "settings": {}
+    },
+    "spacer_Nh7Bjn": {
+      "type": "spacer",
+      "name": "Spacer",
+      "settings": {
+        "spacer_height": 80
+      }
+    },
+    "faq": {
+      "type": "faq",
+      "name": "faq",
+      "settings": {
+        "heading": "Frequently Asked Questions",
+        "cta_url": "",
+        "cta_text": "All FAQs",
+        "faq_image": "shopify://shop_images/e674c04ea0d7f3a319ab0027c0e08b9ce30c559b.jpg",
+        "faq_image_alt": ""
+      }
+    },
+    "bestsellercarousel": {
+      "type": "bestseller-carousel",
+      "name": "BestsellerCarousel",
+      "settings": {
+        "collection": "fruit",
+        "heading": "This week’s bestsellers"
+      }
+    },
+    "spacer_awrgBa": {
+      "type": "spacer",
+      "name": "Spacer",
+      "settings": {
+        "spacer_height": 90
+      }
+    },
+    "1763732275cf946bf5": {
+      "type": "apps",
+      "blocks": {
+        "instafeed_app_block_WdKCQa": {
+          "type": "shopify://apps/instafeed/blocks/app-block/c447db20-095d-4a10-9725-b5977662c9d5",
+          "disabled": true,
+          "settings": {
+            "title": "Social Media Presence",
+            "title_color": "",
+            "title_size_v2": 0,
+            "alignment": "center",
+            "instafeed_margin_top": 0,
+            "instafeed_margin_bottom": 0,
+            "instafeed_margin_sides": 0,
+            "show_instagram_link": false,
+            "link_alignment": "left",
+            "link_color": "#000000",
+            "background_color": "",
+            "feed_id": "",
+            "html_area": ""
+          }
+        }
+      },
+      "block_order": [
+        "instafeed_app_block_WdKCQa"
+      ],
+      "settings": {}
+    },
+    "spacer_x7yJX8": {
+      "type": "spacer",
+      "disabled": true,
+      "name": "Spacer",
+      "settings": {
+        "spacer_height": 140
+      }
+    }
+  },
+  "order": [
+    "template",
+    "spacer0",
+    "video_carousel_YJxU7F",
+    "box-fruits",
+    "spacer_Nh7Bj",
+    "spacer_BmkhaA",
+    "order_sample_4EfCUL",
+    "spacer_tVjKyf",
+    "three_image_box_menw3P",
+    "spacer_D4C9kF",
+    "reviews_dwN4k7",
+    "three-icon-sec",
+    "usp-ticker",
+    "left-image-with-items",
+    "spacer_2",
+    "headingsec_xm9gbY",
+    "spacer_6b6rdm",
+    "17789334995fba728d",
+    "spacer_Nh7Bjn",
+    "faq",
+    "bestsellercarousel",
+    "spacer_awrgBa",
+    "1763732275cf946bf5",
+    "spacer_x7yJX8"
+  ]
+}

@@ -1,0 +1,190 @@
+<section class="faq-page">
+    <div class="faq-head">
+        <div class="container-fluid">
+            <div class="head center">
+                <h1>{{ section.settings.head }}</h1>
+            </div>
+        </div>
+    </div>
+    <div class="faq-inner category-faq">
+        <div class="faq-main-content">
+            <div class="faq-category-wrapper">
+                <ul>
+                    {% assign category_index = 0 %}
+                    {% for block in section.blocks %}
+                    {% if block.type == 'faq_category' %}
+                    {% assign category_index = category_index | plus: 1 %}
+                    <li data-category="{{ category_index }}" id="">
+                        <a href="#category-{{ category_index }}" id="anchor-{{ category_index }}">
+                            {{ block.settings.category_name }}
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="faq-accordian">
+                <div class="container-fluid">
+                    <div class="faq-all-in">
+                        {% assign category_index = 0 %}
+                        {% for category_block in section.blocks %}
+                        {% if category_block.type == 'faq_category' %}
+                        {% assign category_index = category_index | plus: 1 %}
+                        <div class="faq-wrapper" id="category-{{ category_index }}">
+                            <div class="faq-cat-head">
+                                <h4>{{ category_block.settings.category_name }}</h4>
+                            </div>
+                            <div class="faq-accordian-wrapper">
+                                {% assign item_index = 0 %}
+                                {% for item in section.blocks %}
+                                {% if item.type == 'faq_item' and item.settings.category_number == category_index %}
+                                {% assign item_index = item_index | plus: 1 %}
+                                <div class="faq-item">
+                                    <div class="faq-question">
+                                        <div class="faq-question-left">
+                                            <div class="f-question">
+                                                <h6>{{ item.settings.question }}</h6>
+                                            </div>
+                                        </div>
+                                        <div class="faq-question-right">
+                                            {% render 'plus' %}
+                                        </div>
+                                    </div>
+                                    <div class="faq-answer">
+                                        <div class="f-answer aukera-desc">
+                                            {{ item.settings.answer }}
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endif %}
+                                {% endfor %}
+                            </div>
+                        </div>
+                        {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const navLinks = document.querySelectorAll(".faq-category-wrapper a");
+        const wrapper = document.querySelector(".faq-category-wrapper");
+
+        navLinks.forEach(link => {
+            link.addEventListener("click", function (e) {
+                e.preventDefault();
+
+                const targetId = this.getAttribute("href").substring(1); // Remove the "#" character
+                const targetSection = document.getElementById(targetId);
+
+                if (targetSection) {
+                    const offset = targetSection.offsetTop - (window.innerHeight * 0.20); // 20% above the section
+                    window.scrollTo({ top: offset, behavior: "smooth" });
+                }
+            });
+        });
+        window.addEventListener("scroll", function () {
+            if (window.scrollY > 320) {
+                wrapper.classList.add("backdrop");
+            } else {
+                wrapper.classList.remove("backdrop");
+            }
+        });
+    });
+</script>
+
+<script>
+    // faq accordion
+
+    $(document).ready(function () {
+        $('.faq-question').click(function () {
+            var $faqItem = $(this).parent('.faq-item');
+            var $faqAnswer = $faqItem.find('.faq-answer');
+
+            if ($faqItem.hasClass('active')) {
+                $faqItem.removeClass('active');
+                $faqAnswer.slideUp();
+            } else {
+                $('.faq-item').removeClass('active');
+                $('.faq-answer').slideUp();
+                $faqItem.addClass('active');
+                $faqAnswer.slideDown();
+            }
+        });
+    });
+
+</script>
+
+
+{% schema %}
+    {
+        "name": "FAQ Page",
+        "settings": [
+            {
+                "type": "text",
+                "id": "head",
+                "label": "Heading",
+                "default": "Frequently Asked Questions"
+            }
+        ],
+        "blocks": [
+        {
+            "type": "faq_category",
+            "name": "FAQ Category",
+            "settings": [
+                {
+                    "type": "text",
+                    "id": "category_name",
+                    "label": "Category Name",
+                    "default": "Category"
+                }
+            ]
+        }, 
+        {
+            "type": "faq_item",
+            "name": "FAQ Item",
+            "settings": [
+                {
+                    "type": "text",
+                    "id": "question",
+                    "label": "Question",
+                    "default": "Frequently asked question"
+                }, 
+                {
+                    "type": "richtext",
+                    "id": "answer",
+                    "label": "Answer",
+                    "default": "<p>Answer to the frequently asked question goes here.</p>"
+                }, 
+                {
+                    "type": "number",
+                    "id": "category_number",
+                    "label": "Category Number",
+                    "default": 1,
+                    "info": "Enter the number of the category this FAQ belongs to (1, 2, 3, etc.)"
+                }
+            ]
+        }
+        ],
+        "presets": [
+        {
+            "name": "FAQ Section",
+            "blocks": [
+                {
+                    "type": "faq_category"
+                }, 
+                {
+                    "type": "faq_item"
+                }, 
+                {
+                    "type": "faq_item"
+                }
+            ]
+        }
+        ]
+    }
+{% endschema %}

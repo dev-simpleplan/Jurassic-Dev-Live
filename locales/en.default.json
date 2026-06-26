@@ -1,0 +1,167 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin language editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "404": {
+    "title": "404",
+    "not_found": "Page not found.",
+    "back_to_shopping": "Back to shopping"
+  },
+  "blog": {
+    "article_comments": "Comments",
+    "article_metadata_html": "{{ date }} by {{ author }}",
+    "comment_form_body": "Comment",
+    "comment_form_email": "Email",
+    "comment_form_name": "Name",
+    "comment_form_submit": "Post",
+    "comment_form_title": "Add a comment"
+  },
+  "blogs": {
+    "general": {
+      "title": "Blogs"
+    }
+  },
+  "cart": {
+    "checkout": "Checkout",
+    "title": "Cart",
+    "update": "Update",
+    "remove": "Remove"
+  },
+  "customers": {
+    "login": {
+      "email": "Email",
+      "password": "Password",
+      "submit": "Sign in",
+      "title": "Login"
+    }
+  },
+  "quick_filters": {
+    "organic": "Organic",
+    "bestseller": "Bestseller",
+    "bestsellers": "Bestsellers",
+    "asia": "Asia",
+    "europe": "Europe",
+    "america": "America",
+    "africa": "Africa",
+    "untreated": "Untreated",
+    "clear_all": "Clear All",
+    "products_count": "{{ count }} products",
+    "products_count_filtered": "{{ count }} products out of {{ total }}"
+  },
+  "collections": {
+    "title": "Collections"
+  },
+  "thank_you_page": {
+    "heading": "Thank you",
+    "subheading": "Your form was successfully submitted.",
+    "body_intro": "Welcome in.",
+    "body_text": "You’ll now hear about rare finds, fresh arrivals, and what’s truly worth trying. We’ll only reach out when it matters.",
+    "cta": "Go Back To Homepage"
+  },
+  "gift_card": {
+    "add_to_apple_wallet": "Add to Apple Wallet",
+    "card": "Gift card",
+    "expired": "This gift card has expired",
+    "expires_on": "Expires on {{ expires_on }}",
+    "use_at_checkout": "Use this gift card at checkout"
+  },
+  "general": {
+    "shipping_policy": "Shipping Policy"
+  },
+  "password": {
+    "title": "This shop is private",
+    "password": "Password",
+    "enter": "Enter"
+  },
+  "search": {
+    "title": "Search",
+    "placeholder": "Search articles, pages, or products",
+    "placeholder_fruits": "Search for fruits",
+    "submit": "Search",
+    "no_results_html": "No results found for {{ terms }}",
+    "results_for_html": "{{ count }} results found for {{ terms }}"
+  },
+  "products": {
+    "product": {
+      "from": "From",
+      "add_to_cart": "Add to Cart",
+      "select_product": "Select",
+      "added_to_cart": "Added",
+      "sold_out": "Unavailable",
+      "in_stock": "In stock",
+      "out_of_stock": "Unavailable",
+      "inventory_status": "Only {{ count }} left"
+    }
+  },
+  "benefits": {
+    "freshly_picked": "Freshly Picked",
+    "rare_handpicked": "Rare & Handpicked",
+    "pure_raw": "Pure & Raw",
+    "artisanal": "Small-Batch · Artisanal"
+  },
+  "sections": {
+    "newsletter": {
+      "email_placeholder": "Enter Email Address",
+      "subscribe": "Subscribe"
+    },
+    "frequently_bought": {
+      "heading_html": "Frequently bought together"
+    },
+    "product": {
+      "price_includes_vat": "Prices include VAT, excluding",
+      "shipping_costs": "shipping costs.",
+      "select_variant": "Select variant",
+      "best_seller": "Bestseller",
+      "deliver_to": "Deliver to",
+      "delivery_by": "by",
+      "details": "Details",
+      "free_shipping_from": "Free shipping from",
+      "shipping_starts_from": "Shipping starts from",
+      "final_prices_checkout": "Final prices will be calculated at checkout.",
+      "freshness_usp": "Arrives fresh or refunded",
+      "payment_usp": "Pay after 30 days",
+      "freshness_modal_title": "Freshness Guarantee",
+      "freshness_modal_body": "If your fruit doesn’t arrive in great condition, we take responsibility. Just send us a photo within 24 hours of delivery per email at support@jurassicfruit.com, and we’ll refund the affected items—no hassle, no back-and-forth. We work hard to ship fruit at the right moment so it reaches you at its best. But fruit is alive, and sometimes things go wrong in transit. When they do, you’re covered.",
+      "payment_modal_title": "Pay After 30 Days",
+      "payment_modal_body": "Pick “Pay after 30 days” with PayPal and keep your money in your pocket for now. You only pay later—after your fruit has arrived and you’ve had time to taste it.",
+      "technical_details": "Technical Details",
+      "description": "Description",
+      "how_to_eat_store": "How To Eat & Store",
+      "nutrition_benefits": "Nutrition & Benefits",
+      "origin_sourcing": "Origin & Sourcing",
+      "taste_profile": "Taste Profile",
+      "seasonal_calendar_sourcing": "Seasonal Calendar And Sourcing",
+      "scientific_name": "Other Names",
+      "origin": "Origin",
+      "weight_per_piece": "Weight per piece",
+      "ingredients": "Ingredients",
+      "manufacturing": "Manufacturing",
+      "allergens": "Allergens",
+      "cross_contamination": "Cross contamination",
+      "best_before_date": "Best before date",
+      "net_quantity": "Net quantity",
+      "storage_conditions": "Storage Conditions",
+      "quality_label": "Quality",
+      "certificate":"Certification",
+      "texture": "Texture",
+      "sweetness": "Sweetness",
+      "sourness": "Sourness",
+      "juiciness": "Juiciness",
+      "texture_low": "Silky",
+      "texture_high": "Crunchy",
+      "sweetness_low": "Delicate",
+      "sweetness_high": "Syrupy",
+      "sourness_low": "Smooth",
+      "sourness_high": "Zesty",
+      "juiciness_low": "Firm",
+      "juiciness_high": "Bursty",
+      "order_today_delivery_from": "Order today to get it from"
+    }
+  }
+}

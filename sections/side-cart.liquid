@@ -1,0 +1,685 @@
+<div class="side-cart">
+  <div class="cart-loader">
+    <div class="loader-spinner"></div>
+  </div>
+  
+  <div class="cart-recommendation-wrapper">
+    <div class="cr-head">you may also like</div>
+    <div class="cart-recommendation" data-lenis-prevent></div>
+  </div>
+  <div class="sc-wrapper">
+    <div class="sc-head">
+      <div class="sch-left">
+        <p>
+          Cart
+          <span id="cart_item_count">({{ cart.item_count }} items)</span>
+        </p>
+        {% if cart.item_count > 0 %}
+          <a href="{{ routes.cart_url }}">View Cart</a>
+        {% endif %}
+      </div>
+      <div class="sc-close">
+        {% render 'cross' %}
+      </div>
+    </div>
+    <div
+      class="sc-shipping-arrival"
+      data-user-language="{{ request.locale.name }}"
+      data-user-iso="{{ request.locale.iso_code }}"
+      data-user-selected-country={{ localization.country.iso_code | json }}>
+      {% render 'shipping-icon' %}
+      <p>Arrives
+        <span id="arrival-date">Sep 2 - Sep 4</span>
+      </p>
+    </div>
+    <div class="sc-in">
+      <div class="side-cart-with-items" data-lenis-prevent></div>
+    </div>
+    <div class="sc-footer">
+      {% render 'discount-code-field' %}
+      <div class="cart-totals">
+        <div class="cart-subtotal">
+          <p class="cs-title">Subtotal</p>
+          <p class="subtotal-amount cs-res">0.00</p>
+        </div>
+
+        <div class="cart-discount" style="display:none;">
+          <p class="cs-title">Discount:</p>
+          <p class="discount-amount cs-res">-0.00</p>
+        </div>
+
+        <div class="cart-shipping">
+          <p class="cs-title">Shipping
+            <span>(calc. at the checkout)</span>
+          </p>
+          <p class="shipping-amount cs-res">Calculated at checkout</p>
+        </div>
+
+        <div class="cart-total">
+          <p class="cs-title">Total <span>incl. VAT</span></p>
+          <p class="total-amount cs-res">0.00</p>
+        </div>
+      </div>
+      <form action="/checkout" method="post">
+        <button
+          name="checkout"
+          type="submit"
+          class="checkout-btn custom-btn filled"
+          style="width: 100%;">
+          <span class="checkout-txt">Checkout</span>
+          <span class="checkout-total">0.00</span>
+        </button>
+      </form>
+    </div>
+  </div>
+</div>
+<div class="sidecart-bg"></div>
+
+
+<script id="cart_function">
+(function () {
+  if (document.body.classList.contains('template-cart')) {
+    console.log('🛑 Side cart disabled on cart page');
+    return;
+  }
+
+  let initialized = false;
+  let loadCartItemsPromise = null;
+
+  document.addEventListener('DOMContentLoaded', initSideCart);
+
+  function initSideCart() {
+    if (initialized) return;
+    initialized = true;
+
+    window.Shopify = window.Shopify || {};
+    window.Shopify.cart_ajax_enabled = true;
+
+    const REQUEST_LIMITS = {
+      maxPerMinute: 30,
+      requestTimestamps: []
+    };
+
+    function canMakeRequest() {
+      const now = Date.now();
+      const oneMinuteAgo = now - 60000;
+      
+      REQUEST_LIMITS.requestTimestamps = REQUEST_LIMITS.requestTimestamps.filter(
+        ts => ts > oneMinuteAgo
+      );
+      
+      if (REQUEST_LIMITS.requestTimestamps.length >= REQUEST_LIMITS.maxPerMinute) {
+        console.warn('⚠️ [SideCart] Rate limit reached');
+        return false;
+      }
+      
+      REQUEST_LIMITS.requestTimestamps.push(now);
+      return true;
+    }
+
+    // ✅ SIMPLIFIED: Remove complex state management
+    let isUpdating = false;
+
+    function formatMoney(cents) {
+      return `${window.currencySymbol || ''}${(cents / 100).toFixed(2)} ${window.activeCurrency || ''}`;
+    }
+
+    const sideCart = document.querySelector('.sideCart');
+    const cartItemsContainer = document.querySelector('.sc-in');
+    const cartFooter = document.querySelector('.sc-footer');
+    const loader = document.querySelector('.cart-loader');
+
+    if (!sideCart) {
+      console.warn('❌ Side cart container not found');
+      return;
+    }
+
+    function showLoader() { 
+      if (loader) loader.classList.add('active'); 
+    }
+    
+    function hideLoader() { 
+      if (loader) loader.classList.remove('active'); 
+    }
+
+    document.querySelector('.cart-open')?.addEventListener('click', async () => {
+      sideCart.classList.add('active');
+      document.body.classList.add('stay');
+      document.documentElement.classList.add('stay');
+      
+      await loadCartItems();
+      startCartMonitoring();
+    });
+
+    document.querySelector('.sc-close')?.addEventListener('click', () => {
+      sideCart.classList.remove('active');
+      document.body.classList.remove('stay');
+      document.documentElement.classList.remove('stay');
+      stopCartMonitoring();
+    });
+
+    document.querySelector('.sidecart-bg')?.addEventListener('click', () => {
+      sideCart.classList.remove('active');
+      document.body.classList.remove('stay');
+      document.documentElement.classList.remove('stay');
+      stopCartMonitoring();
+    });
+
+    window.recommendedCart = async function (cart) {
+      const wrapper = document.querySelector('.cart-recommendation');
+      const container = document.querySelector('.cart-recommendation-wrapper');
+      if (!wrapper || !container) return;
+
+      try {
+        const render = (products) => {
+          if (!products?.length) {
+            container.style.display = 'none';
+            return;
+          }
+
+          container.style.display = 'flex';
+
+          wrapper.innerHTML = products.map(p => {
+            const img =
+              typeof p.featured_image === 'string'
+                ? p.featured_image
+                : p.featured_image?.src || p.images?.[0]?.src || '';
+
+            const variantId = p.variants?.[0]?.id;
+            if (!variantId) return '';
+
+            return `
+              <div class="recommended-item">
+                <div class="ri-img">
+                  <img src="${img}" alt="${p.title}" class="product-card__image">
+                </div>
+                <div class="ri-txt">
+                  <p class="rit-title">${p.title}</p>
+                </div>
+                <div class="ri-form">
+                  <form action="/cart/add" method="post" data-external-add>
+                    <input type="hidden" name="id" value="${variantId}">
+                    <input type="hidden" name="quantity" value="1">
+                    <div class="fc_add_to_cart">
+                      <span class="remove_product">-</span>
+                      <button type="submit" class="add-to-cart">Add to Cart</button>
+                      <span class="add_product">+</span>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            `;
+          }).join('');
+
+          attachAddToCartListeners(wrapper);
+        };
+
+        if (cart.items.length) {
+          const res = await fetch(`/recommendations/products.json?product_id=${cart.items[0].product_id}&limit=8`);
+          const data = await res.json();
+          render(data.products);
+        } else {
+          const res = await fetch('/collections/fruit/products.json?limit=8');
+          const data = await res.json();
+          render(data.products || data);
+        }
+      } catch (e) {
+        console.error('Recommended cart error', e);
+      }
+    };
+
+    let lastCartSnapshot = null;
+    let cartMonitorInterval = null;
+    let monitoringActive = false;
+
+    let cartUpdateTimeout = null;
+    
+    document.addEventListener('cart:updated', async (e) => {
+      console.log('🎁 [SideCart] cart:updated event received');
+      
+      if (cartUpdateTimeout) {
+        clearTimeout(cartUpdateTimeout);
+      }
+      
+      cartUpdateTimeout = setTimeout(async () => {
+        if (sideCart.classList.contains('active')) {
+          await loadCartItems();
+        } else {
+          try {
+            if (!canMakeRequest()) return;
+            
+            const res = await fetch('/cart.js');
+            if (res.ok) {
+              const cart = await res.json();
+              lastCartSnapshot = JSON.stringify(
+                cart.items.map(i => ({
+                  key: i.key,
+                  qty: i.quantity,
+                  price: i.final_line_price
+                }))
+              );
+            }
+          } catch (e) {
+            console.error('[SideCart] Error updating snapshot', e);
+          }
+        }
+      }, 300);
+    }, { passive: true });
+
+    function startCartMonitoring() {
+      if (cartMonitorInterval || monitoringActive) return;
+      
+      monitoringActive = true;
+      console.log('👀 [SideCart] Starting cart monitoring');
+      
+      cartMonitorInterval = setInterval(async () => {
+        if (!sideCart.classList.contains('active')) {
+          stopCartMonitoring();
+          return;
+        }
+
+        if (isUpdating) {
+          return;
+        }
+
+        if (!canMakeRequest()) {
+          return;
+        }
+
+        try {
+          const res = await fetch('/cart.js');
+          
+          if (res.status === 429) {
+            console.warn('⚠️ [SideCart] Rate limit hit');
+            stopCartMonitoring();
+            setTimeout(() => {
+              if (sideCart.classList.contains('active')) {
+                startCartMonitoring();
+              }
+            }, 10000);
+            return;
+          }
+
+          if (!res.ok) return;
+
+          const cart = await res.json();
+
+          const currentSnapshot = JSON.stringify(
+            cart.items.map(i => ({
+              key: i.key,
+              qty: i.quantity,
+              price: i.final_line_price
+            }))
+          );
+
+          if (lastCartSnapshot && currentSnapshot !== lastCartSnapshot) {
+            console.log('🎁 [SideCart] Cart changed externally, refreshing...');
+            lastCartSnapshot = currentSnapshot;
+            await loadCartItems();
+          } else if (!lastCartSnapshot) {
+            lastCartSnapshot = currentSnapshot;
+          }
+        } catch (e) {
+          console.error('[SideCart] Monitoring error', e);
+        }
+      }, 5000);
+    }
+
+    function stopCartMonitoring() {
+      if (cartMonitorInterval) {
+        console.log('🛑 [SideCart] Stopping cart monitoring');
+        clearInterval(cartMonitorInterval);
+        cartMonitorInterval = null;
+        monitoringActive = false;
+      }
+    }
+
+    /* =======================
+       ✅ CRITICAL FIX: SIMPLIFIED LOAD CART
+    ======================= */
+    window.loadCartItems = async function () {
+      if (loadCartItemsPromise) {
+        return loadCartItemsPromise;
+      }
+
+      loadCartItemsPromise = (async () => {
+        console.log('🔄 [SideCart] loadCartItems called');
+        
+        if (!canMakeRequest()) {
+          console.warn('⚠️ [SideCart] Rate limit - skipping');
+          return;
+        }
+        
+        showLoader();
+
+        try {
+          console.log('📡 [SideCart] Fetching /cart.js...');
+          const res = await fetch('/cart.js');
+          
+          if (res.status === 429) {
+            console.error('⚠️ [SideCart] Rate limit hit');
+            return;
+          }
+
+          if (!res.ok) {
+            throw new Error(`Cart fetch failed: ${res.status}`);
+          }
+
+          const cart = await res.json();
+          console.log('📦 [SideCart] Cart loaded:', cart.item_count, 'items', cart);
+
+          const snapshot = JSON.stringify(
+            cart.items.map(i => ({
+              key: i.key,
+              qty: i.quantity,
+              price: i.final_line_price
+            }))
+          );
+
+          lastCartSnapshot = snapshot;
+
+          const cartCount = document.getElementById('cart_item_count');
+          if (cartCount) {
+            cartCount.textContent = `(${cart.item_count} items)`;
+          }
+
+          document.querySelectorAll('discount-field')
+            .forEach(df => df.updateFromCart?.(cart));
+
+          await recommendedCart(cart);
+
+        // Clear empty state
+          const emptyState = cartItemsContainer.querySelector('.side-cart-empty');
+          if (emptyState) {
+            emptyState.remove();
+            console.log('🗑️ [SideCart] Removed empty state');
+          }
+
+          if (!cart.items.length) {
+            const existingWrapper = cartItemsContainer.querySelector('.side-cart-with-items');
+            if (existingWrapper) {
+              existingWrapper.remove();
+            }
+            
+            if (cartFooter) {
+              cartFooter.style.display = 'none';
+            }
+            
+            cartItemsContainer.innerHTML = `
+              <div class="side-cart-empty">
+                <div class="jf-icon">{% render 'jf' %}</div>
+                <div class="sce-txt">
+                  <h3>uh-oh!</h3>
+                  <p>You have an empty basket.</p>
+                </div>
+              </div>`;
+            console.log('📝 [SideCart] Showing empty cart');
+            return;
+          }
+
+          console.log('🔧 [SideCart] Recreating cart items wrapper');
+          
+          const oldWrapper = cartItemsContainer.querySelector('.side-cart-with-items');
+          if (oldWrapper) {
+            oldWrapper.remove();
+          }
+          
+          const newWrapper = document.createElement('div');
+          newWrapper.className = 'side-cart-with-items';
+          newWrapper.setAttribute('data-lenis-prevent', '');
+          cartItemsContainer.appendChild(newWrapper);
+
+          if (cartFooter) {
+            cartFooter.style.display = 'block';
+          }
+
+          console.log('📝 [SideCart] Rendering', cart.items.length, 'items');
+          newWrapper.innerHTML = cart.items.map((item, index) => {
+          const isFreeGift =
+            item.final_line_price === 0 &&
+            item.original_line_price > 0;
+
+          return `
+            <div class="cart-item" data-key="${item.key}">
+              <div class="cart-item-left">
+                <div class="cart-item-image">
+                  <a href="${item.url}">
+                    <img src="${item.image}" alt="${item.product_title}" class="cart-image" />
+                  </a>
+                </div>
+                <div class="cart-item-info">
+                  <div class="cii-top">
+                    <a href="${item.url}">
+                      <p class="cart-item-title">${item.product_title}</p>
+                    </a>
+                    <p class="cart-price">
+                      ${isFreeGift ? 'FREE' : formatMoney(item.final_line_price)}
+                    </p>
+                  </div>
+                  <div class="cii-bottom">
+                    ${item.options_with_values?.length
+                      ? item.options_with_values
+                          .map(opt => `<p class="cart-variant">${opt.value}</p>`)
+                          .join('')
+                      : ''}
+                  </div>
+                </div>
+              </div>
+
+              <div class="cart-qty">
+                <button class="qty-btn minus" data-line="${index + 1}" data-key="${item.key}" data-qty="${item.quantity}">
+                  ${item.quantity > 1 ? `{% render 'minus-icon' %}` : `{% render 'bin-icon' %}`}
+                </button>
+                <span class="qty-count">${item.quantity}</span>
+                <button class="qty-btn plus" data-line="${index + 1}" data-key="${item.key}" data-qty="${item.quantity}">
+                  {% render 'plus-icon' %}
+                </button>
+              </div>
+            </div>
+          `;
+          }).join('');
+
+          const originalSubtotal = cart.items.reduce(
+            (sum, item) => sum + item.original_line_price,
+            0
+          );
+
+          document.querySelectorAll('.subtotal-amount')
+            .forEach(el => el.textContent = formatMoney(originalSubtotal));
+
+          document.querySelectorAll('.total-amount, .checkout-total')
+            .forEach(el => el.textContent = formatMoney(cart.total_price));
+
+          const discountRow = document.querySelector('.cart-discount');
+          const discountAmountEl = document.querySelector('.discount-amount');
+          const discount = originalSubtotal - cart.total_price;
+
+          if (discount > 0 && discountRow && discountAmountEl) {
+            discountRow.style.display = 'flex';
+            discountAmountEl.textContent = `- ${formatMoney(discount)}`;
+          } else if (discountRow) {
+            discountRow.style.display = 'none';
+          }
+
+          attachQtyHandlers();
+          
+          console.log('✅ [SideCart] Render complete');
+
+        } catch (e) {
+          console.error('❌ [SideCart] Error loading cart', e);
+        } finally {
+          hideLoader();
+          loadCartItemsPromise = null;
+        }
+      })();
+
+      return loadCartItemsPromise;
+    };
+
+    let qtyUpdateTimeout = null;
+    
+    function attachQtyHandlers() {
+      document.querySelectorAll('.plus').forEach(btn => {
+        btn.onclick = () => {
+          if (qtyUpdateTimeout) clearTimeout(qtyUpdateTimeout);
+          qtyUpdateTimeout = setTimeout(() => {
+            updateCartItem(btn.dataset.key, Number(btn.dataset.qty) + 1);
+          }, 200);
+        };
+      });
+      
+      document.querySelectorAll('.minus').forEach(btn => {
+        btn.onclick = () => {
+          if (qtyUpdateTimeout) clearTimeout(qtyUpdateTimeout);
+          qtyUpdateTimeout = setTimeout(() => {
+            updateCartItem(btn.dataset.key, Math.max(0, Number(btn.dataset.qty) - 1));
+          }, 200);
+        };
+      });
+    }
+
+    async function updateCartItem(key, qty) {
+      if (isUpdating) {
+        console.log('⏳ [SideCart] Update already in progress');
+        return;
+      }
+
+      if (!canMakeRequest()) {
+        alert('Too many requests. Please wait a moment.');
+        return;
+      }
+
+      console.log(`🔄 [SideCart] Updating item ${key} to qty ${qty}`);
+      isUpdating = true;
+      showLoader();
+
+      try {
+        const response = await fetch('/cart/change.js', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id: key, quantity: qty })
+        });
+
+        if (response.status === 429) {
+          alert('Too many requests. Please wait a moment.');
+          return;
+        }
+
+        if (!response.ok) {
+          throw new Error(`Cart update failed: ${response.status}`);
+        }
+
+        console.log('✅ [SideCart] Update successful, waiting for gift app...');
+        await new Promise(resolve => setTimeout(resolve, 1500));
+
+        await loadCartItems();
+
+      } catch (e) {
+        console.error('❌ [SideCart] Update error', e);
+        await loadCartItems();
+      } finally {
+        hideLoader();
+        isUpdating = false;
+      }
+    }
+
+    /* =======================
+       ✅ CRITICAL FIX: SIMPLIFIED ADD TO CART
+    ======================= */
+    function attachAddToCartListeners(scope = document) {
+      const forms = scope.querySelectorAll('form[action$="/cart/add"]:not(.product-card-add-form)');
+      
+      forms.forEach((form) => {
+        if (form.dataset.cartBound) return;
+        form.dataset.cartBound = 'true';
+
+        const submitHandler = async e => {
+          e.preventDefault();
+          e.stopPropagation();
+          e.stopImmediatePropagation();
+          
+          if (isUpdating) {
+            console.log('⏳ [SideCart] Add already in progress');
+            return;
+          }
+
+          if (!canMakeRequest()) {
+            alert('Too many requests. Please wait a moment.');
+            return;
+          }
+
+          console.log('➕ [SideCart] Adding to cart...');
+          isUpdating = true;
+          showLoader();
+
+          try {
+            const response = await fetch('/cart/add.js', { 
+              method: 'POST', 
+              body: new FormData(form) 
+            });
+
+            if (response.status === 429) {
+              alert('Too many requests. Please wait a moment.');
+              return;
+            }
+
+            if (!response.ok) {
+              throw new Error('Failed to add to cart');
+            }
+
+            const data = await response.json();
+            console.log('✅ [SideCart] Product added:', data);
+            
+            // Open cart
+            sideCart.classList.add('active');
+            document.body.classList.add('stay');
+            document.documentElement.classList.add('stay');
+
+            // ✅ CRITICAL: Call loadCartItems WITHOUT any delay
+            console.log('🔄 [SideCart] Loading cart immediately...');
+            await loadCartItems();
+            
+            // Start monitoring
+            if (!monitoringActive) {
+              startCartMonitoring();
+            }
+            
+            // Second refresh for gift app
+            setTimeout(async () => {
+              if (sideCart.classList.contains('active')) {
+                console.log('🔄 [SideCart] Second refresh for gift app...');
+                await loadCartItems();
+              }
+            }, 1500);
+
+          } catch (e) {
+            console.error('❌ [SideCart] Add to cart error', e);
+          } finally {
+            hideLoader();
+            isUpdating = false;
+          }
+        };
+
+        form.addEventListener('submit', submitHandler, { capture: true });
+        
+        const button = form.querySelector('button[type="submit"], .add-to-cart');
+        if (button) {
+          button.addEventListener('click', submitHandler, { capture: true });
+        }
+      });
+    }
+
+    attachAddToCartListeners();
+    loadCartItems();
+  }
+})();
+</script>
+
+{% schema %}
+  {
+    "name": "Side Cart",
+    "class": "sideCart",
+    "tag": "section",
+    "settings": []
+  }
+{% endschema %}

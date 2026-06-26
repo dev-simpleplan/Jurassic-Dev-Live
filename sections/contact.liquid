@@ -1,0 +1,266 @@
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+<section class="contact-page">
+    <div class="banner-bg">
+        <img src="{{ section.settings['banner-bg'] | img_url: 'master' }}" alt="Banner Image" class="img">
+    </div>
+    <div class="contactpage-in">
+        <div class="container">
+            <div class="cpi-in">
+                <div class="cpi-grid-wrap">
+                    <div class="cgw-left">
+                        <div class="cgwl-top">
+                            <div class="cgwlt-top">
+                                <h1 data-aos="fade-up" data-aos-duration="1000">{{ section.settings.head }}</h1>
+                                <p data-aos="fade-up" data-aos-duration="1000" data-aos-delay="50">{{ section.settings.para }}</p>
+                            </div>
+                            <div class="cgwlt-bottom">
+
+                                {% if section.settings.email != blank %}
+                                <div class="cgwlt-item">
+                                    <div class="cgwlt-item-label">email</div>
+                                    <div class="cgwlt-item-data">
+                                        <a class="line" href="mailto:{{ section.settings.email }}">{{ section.settings.email }}</a>
+                                    </div>
+                                </div>
+                                {% endif %}
+
+                                {% if section.settings.phone != blank or section.settings.phone_data != blank %}
+                                <div class="cgwlt-item">
+                                    <div class="cgwlt-item-label">Phone</div>
+                                    <div class="cgwlt-item-data">
+                                        {% if section.settings.phone != blank %}
+                                            <a href="tel:{{ section.settings.phone }}">{{ section.settings.phone }}</a>
+                                        {% endif %}
+                                        {% if section.settings.phone_data != blank %}
+                                            <p>{{ section.settings.phone_data }}</p>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                {% endif %}
+
+                                {% if section.settings.address != blank %}
+                                <div class="cgwlt-item">
+                                    <div class="cgwlt-item-label">Address</div>
+                                    <div class="cgwlt-item-data">
+                                        <p>{{ section.settings.address }}</p>
+                                    </div>
+                                </div>
+                                {% endif %}
+
+                                {% if section.settings.social_link != blank and section.settings.social_link_text != blank %}
+                                <div class="cgwlt-item">
+                                    <div class="cgwlt-item-label with-link">
+                                        <a href="{{ section.settings.social_link }}" target="_blank">{{ section.settings.social_link_text }}</a>
+                                    </div>
+                                </div>
+                                {% endif %}
+
+                                {% assign social_blocks = section.blocks | where: "type", "social_icon" %}
+                                {% if social_blocks.size > 0 %}
+                                <div class="cgwlt-item">
+                                    <div class="cgwlt-item-social">
+                                    {% for block in social_blocks %}
+                                        {% if block.settings.social_icon_link != blank or block.settings.social_icon != blank %}
+                                        <div class="cis-item">
+                                            <a href="{{ block.settings.social_icon_link }}">
+                                            <img 
+                                                src="{{ block.settings.social_icon | img_url: 'master' }}" 
+                                                alt="Social Media Image" 
+                                                class="img">
+                                            </a>
+                                        </div>
+                                        {% endif %}
+                                    {% endfor %}
+                                    </div>
+                                </div>
+                                {% endif %}
+
+                            </div>
+
+                        </div>
+                        <div class="cgwl-bottom">
+                            {% assign review_blocks = section.blocks | where: "type", "reviews" %}
+                            {% if review_blocks.size > 0 %}
+                            <div class="bcb-reviews-wrap">
+                                {% for block in review_blocks %}
+                                <div class="bcbr-item" {{ block.shopify_attributes }}>
+                                    <div class="bcbri-top">{{ block.settings['review-top'] }}</div>
+                                    <div class="bcbri-bottom">
+                                    {% render 'rating-stars-fa', rating: block.settings.review_star %}
+                                    <div class="rating-text" aria-hidden="true">
+                                        {{ block.settings.review_star }}
+                                    </div>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                            {% endif %}
+
+                        </div>
+                    </div>
+                    <div class="cgw-right">
+                        <div class="cgwr-form">
+                            {% form 'contact', id: 'contactID' %}
+                            <input type="hidden" name="return_to" value="{{ routes.root_url }}pages/thank-you">
+                            {% if form.posted_successfully? %}
+                                <script>
+                                    window.location = window.Shopify.routes.root + "pages/thank-you";
+                                </script>
+                            {% else %}
+                                {{ form.errors | default_errors }}
+                            {% endif %}
+                            <div class="form-group">
+                                <label for="name">your name</label>
+                                <input id="name" type="text" required name="contact[name]" placeholder="Enter full name">
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Your Email</label>
+                                <input type="text" id="email" required name="contact[email]" placeholder="Enter email id">
+                            </div>
+                            <div class="form-group">
+                                <label for="phone">your phone number (Optional)</label>
+                                <input type="tel" id="phone" placeholder="Enter phone number" minlength="0" maxlength="10" name="contact[phone]">
+                            </div>
+                            <div class="form-group">
+                                <label for="subject">Subject</label>
+                                <select name="contact[subject]" id="subject" required>
+                                    <option value="0">Please select one listed department division</option>
+                                    <option value="My current order">My current order</option>
+                                    <option value="Custom design">Custom design</option>
+                                    <option value="Payment">Payment</option>
+                                    <option value="Warranty">Warranty</option>
+                                    <option value="Resizes">Resizes</option>
+                                </select>
+                            </div>
+                            <div class="contact-form-btn">
+                                <input type="submit" placeholder="submit" class="custom-btn black">
+                            </div>
+                            {% endform %}
+                        </div>
+                        <div class="cgwl-bottom">
+                            {% assign review_blocks = section.blocks | where: "type", "reviews" %}
+                            {% if review_blocks.size > 0 %}
+                            <div class="bcb-reviews-wrap">
+                                {% for block in review_blocks %}
+                                <div class="bcbr-item" {{ block.shopify_attributes }}>
+                                    <div class="bcbri-top">{{ block.settings['review-top'] }}</div>
+                                    <div class="bcbri-bottom">
+                                    {% render 'rating-stars-fa', rating: block.settings.review_star %}
+                                    <div class="rating-text" aria-hidden="true">
+                                        {{ block.settings.review_star }}
+                                    </div>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                            {% endif %}
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+ 
+</section>
+
+
+
+{% schema %}
+  {
+    "name": "Contact Template",
+    "settings": [
+        {
+            "type": "image_picker",
+            "id": "banner-bg",
+            "label": "Banner Image"
+        },
+        {
+            "type": "text",
+            "id": "head",
+            "label": "Heading"
+        },
+        {
+            "type": "text",
+            "id": "para",
+            "label": "Paragraph"
+        },
+        {
+            "type": "text",
+            "id": "email",
+            "label": "Email"
+        },
+        {
+            "type": "text",
+            "id": "phone",
+            "label": "Phone (tel)"
+        },
+        {
+            "type": "text",
+            "id": "phone_data",
+            "label": "Phone additional info (displayed under number)"
+        },
+        {
+            "type": "text",
+            "id": "address",
+            "label": "Address"
+        },
+        {
+            "type": "url",
+            "id": "social_link",
+            "label": "Social Link (single link area)"
+        },
+        {
+            "type": "text",
+            "id": "social_link_text",
+            "label": "Social Link Text"
+        }
+    ],
+    "blocks": [
+      {
+        "name": "Reviews",
+        "type": "reviews",
+        "settings": [
+            {
+                "type": "text",
+                "id": "review-top",
+                "label": "Platform Name",
+                "default": "Google Reviews"
+            },
+            {
+                "type": "range",
+                "id": "review_star",
+                "min": 0,
+                "max": 5,
+                "step": 0.1,
+                "label": "Star Ratings",
+                "default": 4.7
+            }
+        ]
+      },
+      {
+        "name": "Social Icon",
+        "type": "social_icon",
+        "settings": [
+            {
+                "type": "url",
+                "id": "social_icon_link",
+                "label": "Social URL"
+            },
+            {
+                "type": "image_picker",
+                "id": "social_icon",
+                "label": "Social Icon (image)"
+            }
+        ]
+      }
+    ],
+    "presets": [
+        {
+        "name": "Contact Template",
+        "category": "Contact"
+        }
+    ]
+  }
+{% endschema %}

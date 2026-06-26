@@ -1,0 +1,416 @@
+{%- liquid
+  assign use_product_media = false
+  assign product_video_count = 0
+  assign product_video_metafield = blank
+
+  if product != blank and section.settings.use_product_videos and section.settings.product_videos_metafield != blank
+    assign product_video_metafield = product.metafields.custom[section.settings.product_videos_metafield]
+
+    if product_video_metafield != blank
+      for media_item in product_video_metafield.value
+        if media_item.media_type == 'video'
+          assign product_video_count = product_video_count | plus: 1
+        endif
+      endfor
+    endif
+
+    if product_video_count >= 3
+      assign use_product_media = true
+    endif
+  endif
+
+  assign show_section = true
+
+  if product != blank and section.settings.use_product_videos
+    assign show_section = false
+
+    if use_product_media
+      assign show_section = true
+    endif
+  endif
+-%}
+
+{% if show_section %}
+<section class="video-carousel{% if product != blank %} video-carousel--product{% endif %}"{% if product != blank %} data-product-video-carousel="{{ section.id }}"{% endif %} style="background-color: {{ section.settings.background_color }};">
+  <div class="vc-heading">
+    <div class="container">
+      <div class="vcheading-in">
+        <h2 style="color: {{ section.settings.heading_color }}">
+          <span data-aos="fade-up" data-aos-duration="1000">{{ section.settings.heading_top }}</span>
+          <span data-aos="fade-up" data-aos-duration="1000" data-aos-delay="50">{{ section.settings.heading_bottom }}</span>
+        </h2>
+      </div>
+    </div>
+  </div>
+  <div class="vc-carousel">
+    <div class="owl-carousel owl-theme">
+      {% if use_product_media %}
+        {% for media_item in product_video_metafield.value %}
+          {% if media_item.media_type == 'video' %}
+            <div class="item">
+              <div class="vci-item">
+                <div class="vcitem-video">
+                  {{ media_item | video_tag:
+                      autoplay: false,
+                      loop: true,
+                      muted: true,
+                      controls: false,
+                      playsinline: true,
+                      class: 'img ab',
+                      image_size: 'master'
+                  }}
+
+                  <div class="video-control-group">
+                    <button class="video-control" aria-label="Video Play Button">
+                      <span class="video-control-play">
+                        <span class="video-control-symbol" aria-hidden="true">
+                          <img width="100%" height="auto" src="https://cdn.shopify.com/s/files/1/0752/8015/4881/files/Polygon_1.svg?v=1759301174" alt="">
+                        </span>
+                      </span>
+                      <span class="video-control-pause">
+                        <span class="video-control-symbol" aria-hidden="true">
+                          <img width="100%" height="auto" src="https://cdn.shopify.com/s/files/1/0752/8015/4881/files/pause-svgrepo-com.svg?v=1759998102" alt="">
+                        </span>
+                      </span>
+                    </button>
+
+                    <button class="video-audio-control is-muted" aria-label="Unmute video" aria-pressed="false" type="button">
+                      <span class="video-audio-on" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none">
+                          <path d="M5 9V15H9L14 19V5L9 9H5Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+                          <path d="M18 9C19.3333 10.2 20 11.5333 20 13C20 14.4667 19.3333 15.8 18 17" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                        </svg>
+                      </span>
+                      <span class="video-audio-off" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none">
+                          <path d="M5 9V15H9L14 19V5L9 9H5Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+                          <path d="M17 9L21 13M21 9L17 13" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                        </svg>
+                      </span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          {% endif %}
+        {% endfor %}
+      {% else %}
+        {% for block in section.blocks %}
+        <div class="item">
+          <div class="vci-item">
+            <div class="vcitem-video">
+              {% if block.settings.video_img != blank %}
+                <img
+                  width="100%"
+                  src="{{ block.settings.video_img | img_url: 'master' }}"
+                  alt="{{ block.settings.video_img.alt | default: block.settings.video_img.title }}"
+                  class="img ab"
+                  loading="lazy">
+              {% elsif block.settings.video_link != blank %}
+                {{ block.settings.video_link | video_tag:
+                    autoplay: false,
+                    loop: true,
+                    muted: true,
+                    controls: false,
+                    playsinline: true,
+                    class: 'img ab',
+                    image_size: 'master'
+                }}
+
+                <div class="video-control-group">
+                  <button class="video-control" aria-label="Video Play Button">
+                    <span class="video-control-play">
+                      <span class="video-control-symbol" aria-hidden="true">
+                        <img width="100%" height="auto" src="https://cdn.shopify.com/s/files/1/0752/8015/4881/files/Polygon_1.svg?v=1759301174" alt="">
+                      </span>
+                    </span>
+                    <span class="video-control-pause">
+                      <span class="video-control-symbol" aria-hidden="true">
+                        <img width="100%" height="auto" src="https://cdn.shopify.com/s/files/1/0752/8015/4881/files/pause-svgrepo-com.svg?v=1759998102" alt="">
+                      </span>
+                    </span>
+                  </button>
+
+                  <button class="video-audio-control is-muted" aria-label="Unmute video" aria-pressed="false" type="button">
+                    <span class="video-audio-on" aria-hidden="true">
+                      <svg viewBox="0 0 24 24" fill="none">
+                        <path d="M5 9V15H9L14 19V5L9 9H5Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+                        <path d="M18 9C19.3333 10.2 20 11.5333 20 13C20 14.4667 19.3333 15.8 18 17" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                      </svg>
+                    </span>
+                    <span class="video-audio-off" aria-hidden="true">
+                      <svg viewBox="0 0 24 24" fill="none">
+                        <path d="M5 9V15H9L14 19V5L9 9H5Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+                        <path d="M17 9L21 13M21 9L17 13" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                      </svg>
+                    </span>
+                  </button>
+                </div>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      {% endif %}
+    </div>
+    <div class="vc-carousel-controls" aria-label="Carousel navigation">
+      <button type="button" class="vc-carousel-arrow vc-carousel-arrow--prev">
+        {%- render 'arrow-prev' -%}
+      </button>
+
+      <button type="button" class="vc-carousel-arrow vc-carousel-arrow--next">
+        {%- render 'arrow-next' -%}
+      </button>
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<script>
+
+
+document.addEventListener("DOMContentLoaded", () => {
+  if (window.jQuery && window.jQuery.fn && window.jQuery.fn.owlCarousel) {
+    window.jQuery('.video-carousel').each(function () {
+      const $section = window.jQuery(this);
+      const $carousel = $section.find('.vc-carousel .owl-carousel');
+
+      function updateActiveVideo($carousel) {
+        const activeVideos = $carousel.find('.owl-item.active video');
+
+        // Pause all videos first
+        document.querySelectorAll('.vcitem-video video').forEach(video => {
+          video.pause();
+          video.currentTime = 0;
+        });
+
+        // Play center video on desktop
+        let targetVideo = null;
+
+        const centerItem = $carousel.find('.owl-item.center video');
+
+        if (centerItem.length) {
+          targetVideo = centerItem[0];
+        } else if (activeVideos.length) {
+          targetVideo = activeVideos[0];
+        }
+
+        if (targetVideo) {
+          targetVideo.play().catch(() => {});
+        }
+      }
+
+      if (!$carousel.length || $carousel.hasClass('owl-loaded')) return;
+
+      $carousel.owlCarousel({
+        items: 3,
+        center: true,
+        loop: $carousel.children().length > 3,
+        margin: 48,
+        nav: false,
+        dots: false,
+        responsive: {
+          0: {
+            items: 2,
+            margin: 16
+          },
+          768: {
+            items: 2,
+            margin: 32
+          },
+          1200: {
+            items: 4,
+            margin: 48
+          }
+        }
+      });
+
+      updateActiveVideo($carousel);
+
+      $carousel.on(
+        'initialized.owl.carousel translated.owl.carousel changed.owl.carousel',
+        function () {
+          updateActiveVideo($carousel);
+        }
+      );
+
+      $section.find('.vc-carousel-arrow--prev').off('click').on('click', function () {
+        $carousel.trigger('prev.owl.carousel');
+      });
+
+      $section.find('.vc-carousel-arrow--next').off('click').on('click', function () {
+        $carousel.trigger('next.owl.carousel');
+      });
+    });
+  }
+
+  const wraps = document.querySelectorAll(".vcitem-video");
+
+  wraps.forEach((wrap) => {
+    const video = wrap.querySelector("video");
+    const btn = wrap.querySelector("button.video-control");
+    const audioBtn = wrap.querySelector("button.video-audio-control");
+    if (!video || !btn) return;
+
+    let hideTimer = null;
+
+    const showBtn = () => {
+      wrap.classList.remove("controls-hidden");
+      if (hideTimer) clearTimeout(hideTimer);
+    };
+
+    const scheduleHide = () => {
+      if (hideTimer) clearTimeout(hideTimer);
+      hideTimer = setTimeout(() => {
+        if (!video.paused && !video.ended) {
+          wrap.classList.add("controls-hidden");
+        }
+      }, 10); // hide after 1s of playing
+    };
+
+    const setState = (playing) => {
+      btn.classList.toggle("playing", playing);
+      btn.setAttribute("aria-pressed", playing ? "true" : "false");
+      if (playing) scheduleHide(); else showBtn();
+    };
+
+    const syncAudioState = () => {
+      if (!audioBtn) return;
+      const muted = video.muted;
+      audioBtn.classList.toggle("is-muted", muted);
+      audioBtn.classList.toggle("is-unmuted", !muted);
+      audioBtn.setAttribute("aria-pressed", muted ? "false" : "true");
+      audioBtn.setAttribute("aria-label", muted ? "Unmute video" : "Mute video");
+    };
+
+    // Click to play/pause
+    btn.addEventListener("click", () => {
+      if (video.paused || video.ended) {
+        // optional: pause others
+        document.querySelectorAll(".vcitem-video video").forEach((v) => {
+          if (v !== video && !v.paused) v.pause();
+          if (v !== video) v.muted = true;
+        });
+        document.querySelectorAll(".vcitem-video .video-audio-control").forEach((control) => {
+          control.classList.add("is-muted");
+          control.classList.remove("is-unmuted");
+          control.setAttribute("aria-pressed", "false");
+          control.setAttribute("aria-label", "Unmute video");
+        });
+        video.play().catch(() => {});
+      } else {
+        video.pause();
+      }
+    });
+
+    if (audioBtn) {
+      audioBtn.addEventListener("click", () => {
+        const shouldUnmute = video.muted;
+        video.muted = !shouldUnmute ? true : false;
+
+        if (shouldUnmute && (video.paused || video.ended)) {
+          video.play().catch(() => {});
+        }
+
+        syncAudioState();
+        showBtn();
+      });
+    }
+
+    // Sync state with native controls/autoplay
+    video.addEventListener("play",   () => setState(true));
+    video.addEventListener("pause",  () => setState(false));
+    video.addEventListener("ended",  () => setState(false));
+    video.addEventListener("volumechange", syncAudioState);
+
+    // Show on hover/move; re-hide after mouse leaves if still playing
+    wrap.addEventListener("mouseenter", showBtn);
+    wrap.addEventListener("mousemove", showBtn);
+    wrap.addEventListener("mouseleave", () => {
+      if (!video.paused && !video.ended) scheduleHide();
+    });
+
+    // Keep visible while keyboard focusing the button
+    btn.addEventListener("focusin", showBtn);
+    btn.addEventListener("focusout", () => {
+      if (!video.paused && !video.ended) scheduleHide();
+    });
+
+    if (audioBtn) {
+      audioBtn.addEventListener("focusin", showBtn);
+      audioBtn.addEventListener("focusout", () => {
+        if (!video.paused && !video.ended) scheduleHide();
+      });
+    }
+
+    syncAudioState();
+  });
+});
+</script>
+
+
+
+{% schema %}
+  {
+    "name": "Video-Section",
+    "settings": [
+      {
+        "type": "text",
+        "id": "heading_top",
+        "label": "Top Heading"
+      }, {
+        "type": "text",
+        "id": "heading_bottom",
+        "label": "Bottom Heading"
+      },
+      {
+        "type": "color",
+        "id": "heading_color",
+        "label": "Heading Color",
+        "default": "#1A1A1A"
+      },
+      {
+        "type": "color",
+        "id": "background_color",
+        "label": "Background Color",
+        "default": "#dbd7c8"
+      },
+      {
+        "type": "checkbox",
+        "id": "use_product_videos",
+        "label": "Use product-specific videos",
+        "default": false,
+        "info": "When enabled on product templates, this section uses a product metafield instead of section blocks and hides unless at least 3 videos are added."
+      },
+      {
+        "type": "text",
+        "id": "product_videos_metafield",
+        "label": "Product videos metafield key",
+        "default": "product_videos",
+        "info": "Create a product metafield in the custom namespace with this key. Use a list of video files."
+      }
+    ],
+    "blocks": [
+      {
+        "name": "UGC Videos",
+        "type": "ugc-videos",
+        "settings": [
+          {
+            "type": "image_picker",
+            "id": "video_img",
+            "label": "Upload Image"
+          }, {
+            "type": "video",
+            "id": "video_link",
+            "label": "Upload Video"
+          }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "name": "Video-Section"
+      }
+    ]
+  }
+{% endschema %}

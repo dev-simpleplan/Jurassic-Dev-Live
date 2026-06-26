@@ -1,0 +1,846 @@
+{% comment %}
+  Cart page section for /cart
+{% endcomment %}
+
+<section id="cart-page-{{ section.id }}" class="top-wrap cart-page-section">
+  <div class="cart-page">
+    <div class="container-fluid">
+      <div class="cardp-details">
+        <div class="cart-header">
+          <div class="carthead-left">
+            <h1>My {{ 'cart.title' | t }}</h1>
+            <div class="sch-left">
+              <p>
+                <span id="cart_item_count">({{ cart.item_count }} items)</span>
+              </p>
+            </div>
+          </div>
+          <div class="carthead-right">
+            <a href="{{ collections['all-fruits'].url }}" class="custom-btn line rounded">
+              Continue Shopping
+            </a>
+          </div>
+        </div>
+
+        <div class="cart-page-data" data-cart-page>
+          <div class="cart-page-items-wrapper">
+            <div class="cart-page-items" data-cart-page-items></div>
+          </div>
+          <div class="cart-page-details">
+                <div class="cpd-footer">
+                    <div class="cpd-coupon">
+                        <p class="coupon-toggle-text">Have a coupon code?</p>
+                        <div class="coupon-field-container" style="display:none;">
+                            {% render 'discount-code-field' %}
+                        </div>
+                    </div>
+                    <div class="cart-totals">
+                        <div class="cart-subtotal">
+                          <p class="cs-title">Subtotal</p>
+                          <p class="subtotal-amount cs-res">0.00</p>
+                        </div>
+                        <div class="cart-discount" style="display:none;">
+                          <p class="cs-title">Discount:</p>
+                          <p class="discount-amount cs-res">-0.00</p>
+                        </div>
+
+                        <div class="cart-shipping">
+                          <p class="cs-title">shipping
+                              <span>(calc. at the checkout)</span>
+                          </p>
+                          <p class="shipping-amount cs-res">Calculated at checkout</p>
+                        </div>
+                        <div class="cart-total">
+                          <p class="cs-title">Total
+                              <span>incl. VAT</span>
+                          </p>
+                          <p class="total-amount cs-res">0.00</p>
+                        </div>
+                    </div>
+                    <form action="/checkout" method="post">
+                        <button
+                        name="checkout"
+                        type="submit"
+                        class="checkout-btn custom-btn filled"
+                        style="width: 100%;">
+                        <span class="checkout-txt">Checkout</span>
+                        <span class="checkout-total">0.00</span>
+                        </button>
+                    </form>
+
+                    <div class="cpd-fields-sec">
+
+                    </div>
+                </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+
+  // 🛡️ NAVIGATION SHIELD
+  (function() {
+      // #region agent log
+      fetch('http://127.0.0.1:7242/ingest/47234631-13c2-4a59-b641-9ffa84c0bc6e',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'cart.liquid:83',message:'Navigation shield initialized',data:{isCartUpdating:window.isCartUpdating},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'A'})}).catch(()=>{});
+      // #endregion
+      
+      // Store original fetch for logging (before we override it)
+      const originalFetchForLogging = window.fetch;
+      
+      // 1. Block the standard reload - ALWAYS block on cart page
+      const originalReload = window.location.reload;
+      window.location.reload = function(forceReload) {
+          // #region agent log
+          originalFetchForLogging('http://127.0.0.1:7242/ingest/47234631-13c2-4a59-b641-9ffa84c0bc6e',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'cart.liquid:93',message:'location.reload called',data:{isCartUpdating:window.isCartUpdating,forceReload,isCartPage:document.body.classList.contains('template-cart'),stack:new Error().stack.split('\n').slice(1,4).join('|')},timestamp:Date.now(),sessionId:'debug-session',runId:'run2',hypothesisId:'A'})}).catch(()=>{});
+          // #endregion
+          
+          // ALWAYS block reloads on cart page - never allow them
+          if (document.body.classList.contains('template-cart')) {
+              console.log("🚫 [CartPage] Reload blocked. Refreshing UI via AJAX...");
+              // #region agent log
+              originalFetchForLogging('http://127.0.0.1:7242/ingest/47234631-13c2-4a59-b641-9ffa84c0bc6e',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'cart.liquid:100',message:'Reload blocked on cart page, refreshing via AJAX',data:{hasLoadCartPageItems:!!window.loadCartPageItems},timestamp:Date.now(),sessionId:'debug-session',runId:'run2',hypothesisId:'A'})}).catch(()=>{});
+              // #endregion
+              if (window.loadCartPageItems) {
+                  window.loadCartPageItems();
+              }
+              return; // CRITICAL: Don't call originalReload
+          } else if (window.isCartUpdating) {
+              console.log("🚫 [CartPage] Reload blocked (cart updating). Refreshing UI...");
+              // #region agent log
+              originalFetchForLogging('http://127.0.0.1:7242/ingest/47234631-13c2-4a59-b641-9ffa84c0bc6e',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'cart.liquid:108',message:'Reload blocked (cart updating)',data:{hasLoadCartPageItems:!!window.loadCartPageItems},timestamp:Date.now(),sessionId:'debug-session',runId:'run2',hypothesisId:'A'})}).catch(()=>{});
+              // #endregion
+              if (window.loadCartPageItems) window.loadCartPageItems();
+              return; // CRITICAL: Don't call originalReload
+          } else {
+              // #region agent log
+              originalFetchForLogging('http://127.0.0.1:7242/ingest/47234631-13c2-4a59-b641-9ffa84c0bc6e',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'cart.liquid:115',message:'Reload allowed (not cart page)',data:{isCartUpdating:window.isCartUpdating},timestamp:Date.now(),sessionId:'debug-session',runId:'run2',hypothesisId:'A'})}).catch(()=>{});
+              // #endregion
+              originalReload.call(window.location);
+          }
+      };
+
+      // 2. Monitor beforeunload - if on cart page, try to prevent navigation
+      window.addEventListener('beforeunload', (event) => {
+          // #region agent log
+          originalFetchForLogging('http://127.0.0.1:7242/ingest/47234631-13c2-4a59-b641-9ffa84c0bc6e',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'cart.liquid:124',message:'beforeunload event detected',data:{isCartUpdating:window.isCartUpdating,isCartPage:document.body.classList.contains('template-cart'),referrer:document.referrer},timestamp:Date.now(),sessionId:'debug-session',runId:'run2',hypothesisId:'B'})}).catch(()=>{});
+          // #endregion
+          
+          // On cart page, if cart is updating, try to prevent navigation
+          // Note: Modern browsers only show dialog if returnValue is set, but we can't silently prevent
+          if (document.body.classList.contains('template-cart') && window.isCartUpdating) {
+              // #region agent log
+              originalFetchForLogging('http://127.0.0.1:7242/ingest/47234631-13c2-4a59-b641-9ffa84c0bc6e',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'cart.liquid:131',message:'Attempting to prevent beforeunload on cart page',data:{isCartUpdating:window.isCartUpdating},timestamp:Date.now(),sessionId:'debug-session',runId:'run2',hypothesisId:'B'})}).catch(()=>{});
+              // #endregion
+              // Try to cancel - but this might not work for all navigation types
+              // The location.reload() override should handle most cases
+          }
+      });
+      
+      // 3. Intercept location.href assignments (another way to reload)
+      // This is tricky - we need to intercept both getter and setter
+      try {
+        const locationDescriptor = Object.getOwnPropertyDescriptor(window, 'location');
+        if (locationDescriptor) {
+          const originalLocationGetter = locationDescriptor.get;
+          const originalLocationSetter = locationDescriptor.set;
+          
+          Object.defineProperty(window, 'location', {
+            get: function() {
+              return originalLocationGetter ? originalLocationGetter.call(window) : window.location;
+            },
+            set: function(value) {
+              // #region agent log
+              originalFetchForLogging('http://127.0.0.1:7242/ingest/47234631-13c2-4a59-b641-9ffa84c0bc6e',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'cart.liquid:140',message:'location.href assignment detected',data:{value,isCartUpdating:window.isCartUpdating,isCartPage:document.body.classList.contains('template-cart'),currentHref:window.location.href},timestamp:Date.now(),sessionId:'debug-session',runId:'run2',hypothesisId:'K'})}).catch(()=>{});
+              // #endregion
+              
+              // Block location changes on cart page (reload attempts)
+              if (document.body.classList.contains('template-cart')) {
+                  // If trying to reload to same page, block it
+                  if (value === window.location.href || value === window.location.href.split('?')[0]) {
+                      console.log("🚫 [CartPage] Location reload blocked. Refreshing UI...");
+                      if (window.loadCartPageItems) {
+                          window.loadCartPageItems();
+                      }
+                      return; // Don't change location
+                  }
+              }
+              
+              // Allow navigation to different pages
+              if (originalLocationSetter) {
+                  originalLocationSetter.call(window, value);
+              } else {
+                  window.location.href = value;
+              }
+            },
+            configurable: true,
+            enumerable: true
+          });
+        }
+      } catch (e) {
+          console.warn('⚠️ [CartPage] Could not intercept location.href:', e);
+      }
+      
+      // 4. Also intercept history.pushState/replaceState in case gift app uses those
+      const originalPushState = history.pushState;
+      const originalReplaceState = history.replaceState;
+      
+      history.pushState = function(...args) {
+          // #region agent log
+          originalFetchForLogging('http://127.0.0.1:7242/ingest/47234631-13c2-4a59-b641-9ffa84c0bc6e',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'cart.liquid:170',message:'history.pushState called',data:{isCartUpdating:window.isCartUpdating,isCartPage:document.body.classList.contains('template-cart')},timestamp:Date.now(),sessionId:'debug-session',runId:'run2',hypothesisId:'J'})}).catch(()=>{});
+          // #endregion
+          return originalPushState.apply(history, args);
+      };
+      
+      history.replaceState = function(...args) {
+          // #region agent log
+          originalFetchForLogging('http://127.0.0.1:7242/ingest/47234631-13c2-4a59-b641-9ffa84c0bc6e',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'cart.liquid:176',message:'history.replaceState called',data:{isCartUpdating:window.isCartUpdating,isCartPage:document.body.classList.contains('template-cart')},timestamp:Date.now(),sessionId:'debug-session',runId:'run2',hypothesisId:'J'})}).catch(()=>{});
+          // #endregion
+          return originalReplaceState.apply(history, args);
+      };
+
+      // 3. Intercept window.location.href changes (redirects) - simplified approach
+      // Note: This is tricky to implement safely, so we'll rely on reload blocking instead
+
+      // 4. Block meta refresh tags (another way to reload)
+      const metaRefresh = document.querySelector('meta[http-equiv="refresh"]');
+      if (metaRefresh) {
+          // #region agent log
+          originalFetchForLogging('http://127.0.0.1:7242/ingest/47234631-13c2-4a59-b641-9ffa84c0bc6e',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'cart.liquid:185',message:'Meta refresh tag found, removing',data:{content:metaRefresh.content},timestamp:Date.now(),sessionId:'debug-session',runId:'run2',hypothesisId:'L'})}).catch(()=>{});
+          // #endregion
+          metaRefresh.remove();
+      }
+      
+      // Monitor for dynamically added meta refresh tags
+      const observer = new MutationObserver((mutations) => {
+          mutations.forEach((mutation) => {
+              mutation.addedNodes.forEach((node) => {
+                  if (node.nodeName === 'META' && node.getAttribute('http-equiv') === 'refresh') {
+                      // #region agent log
+                      originalFetchForLogging('http://127.0.0.1:7242/ingest/47234631-13c2-4a59-b641-9ffa84c0bc6e',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'cart.liquid:193',message:'Meta refresh tag added dynamically, removing',data:{content:node.content},timestamp:Date.now(),sessionId:'debug-session',runId:'run2',hypothesisId:'L'})}).catch(()=>{});
+                      // #endregion
+                      node.remove();
+                  }
+              });
+          });
+      });
+      
+      observer.observe(document.head, { childList: true, subtree: true });
+
+      // 5. Global AJAX Signal
+      window.Shopify = window.Shopify || {};
+      window.Shopify.cart_ajax_enabled = true;
+  })();
+
+
+  document.addEventListener('DOMContentLoaded', function () {
+
+    function hydrateDiscountFields(cart) {
+      cartSection
+        .querySelectorAll('discount-field')
+        .forEach(df => {
+          if (typeof df.updateFromCart === 'function') {
+            df.updateFromCart(cart);
+          }
+        });
+    }
+
+
+    function getDiscountCodesFromCart(cart) {
+      const codes = [];
+
+      // Cart-level discounts
+      if (cart.cart_level_discount_applications?.length) {
+        cart.cart_level_discount_applications.forEach(d => {
+          if (d.type === 'discount_code') {
+            codes.push(d.title);
+          }
+        });
+      }
+
+      // Line-level discounts
+      cart.items.forEach(item => {
+        item.line_level_discount_allocations?.forEach(allocation => {
+          if (allocation.discount_application.type === 'discount_code') {
+            codes.push(allocation.discount_application.title);
+          }
+        });
+      });
+
+      return [...new Set(codes)];
+    }
+
+
+    // 🔒 Scope everything to THIS section only
+    const cartSection = document.getElementById('cart-page-{{ section.id }}');
+    if (!cartSection) {
+      console.warn('Cart page section not found');
+      return;
+    }
+
+    const itemsWrapper = cartSection.querySelector('[data-cart-page-items]');
+    const cartCountSpan = cartSection.querySelector('#cart_item_count');
+    const subtotalDiv = cartSection.querySelector('.subtotal-amount');
+    const shippingAmountDiv = cartSection.querySelector('.shipping-amount');
+    const totalAmountDivs = cartSection.querySelectorAll('.total-amount, .checkout-total');
+
+    if (!itemsWrapper) {
+      console.warn('Cart page items wrapper not found');
+      return;
+    }
+
+    function formatMoney(cents) {
+      if (typeof cents !== 'number') cents = Number(cents) || 0;
+      const value = (cents / 100).toFixed(2);
+      const symbol = window.currencySymbol || '';
+      const code = window.activeCurrency || '';
+      return `${symbol}${value} ${code}`;
+    }
+
+    // ✅ NEW: Cart monitoring variables
+    let lastCartSnapshot = null;
+    let cartMonitorInterval = null;
+    let isMonitoring = false;
+
+    // ✅ NEW: Start monitoring for external cart changes (like gift app)
+    function startCartPageMonitoring() {
+      if (cartMonitorInterval || isMonitoring) return;
+      
+      isMonitoring = true;
+      console.log('👀 [CartPage] Starting cart monitoring');
+      
+      cartMonitorInterval = setInterval(async () => {
+        // Skip if user is actively updating cart
+        if (window.isCartUpdating) {
+          return;
+        }
+
+        try {
+          const res = await fetch('/cart.js');
+          
+          // Handle rate limit
+          if (res.status === 429) {
+            console.warn('⚠️ [CartPage] Rate limit hit');
+            stopCartPageMonitoring();
+            setTimeout(() => startCartPageMonitoring(), 5000);
+            return;
+          }
+
+          const cart = await res.json();
+
+          const currentSnapshot = JSON.stringify(
+            cart.items.map(i => ({
+              key: i.key,
+              qty: i.quantity,
+              price: i.final_line_price
+            }))
+          );
+
+          // Detect external changes (like gift app)
+          if (lastCartSnapshot && currentSnapshot !== lastCartSnapshot) {
+            console.log('🎁 [CartPage] Cart changed externally (gift app?), refreshing...');
+            // Set flag to prevent reloads
+            window.isCartUpdating = true;
+            lastCartSnapshot = currentSnapshot;
+            await loadCartPageItems();
+            // Reset flag after refresh - keep blocking longer
+            setTimeout(() => {
+              window.isCartUpdating = false;
+              // #region agent log
+              const logFetch = window.fetch;
+              logFetch('http://127.0.0.1:7242/ingest/47234631-13c2-4a59-b641-9ffa84c0bc6e',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'cart.liquid:255',message:'isCartUpdating reset after monitoring refresh',data:{},timestamp:Date.now(),sessionId:'debug-session',runId:'run2',hypothesisId:'I'})}).catch(()=>{});
+              // #endregion
+            }, 5000); // Keep blocking for 5 seconds - gift app might reload late
+          } else if (!lastCartSnapshot) {
+            // First load - just store snapshot
+            lastCartSnapshot = currentSnapshot;
+          }
+        } catch (e) {
+          console.error('❌ [CartPage] Monitoring error:', e);
+        }
+      }, 3000); // Check every 3 seconds
+    }
+
+    // ✅ NEW: Stop monitoring
+    function stopCartPageMonitoring() {
+      if (cartMonitorInterval) {
+        console.log('🛑 [CartPage] Stopping cart monitoring');
+        clearInterval(cartMonitorInterval);
+        cartMonitorInterval = null;
+        isMonitoring = false;
+      }
+    }
+
+    // 🚚 Load & render cart items (cart PAGE only)
+    const loadCartPageItems = async () => {
+      // #region agent log
+      const logFetch = window.fetch;
+      logFetch('http://127.0.0.1:7242/ingest/47234631-13c2-4a59-b641-9ffa84c0bc6e',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'cart.liquid:235',message:'loadCartPageItems called',data:{hasItemsWrapper:!!itemsWrapper},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'H'})}).catch(()=>{});
+      // #endregion
+      
+      try {
+        console.log('🛒 [CartPage] Loading cart items...');
+        const res = await fetch((window.Shopify?.routes?.root || '/') + 'cart.js');
+        
+        if (res.status === 429) {
+          console.error('⚠️ [CartPage] Rate limit while loading');
+          return;
+        }
+
+        const cart = await res.json();
+
+        // ✅ Update snapshot
+        const snapshot = JSON.stringify(
+          cart.items.map(i => ({
+            key: i.key,
+            qty: i.quantity,
+            price: i.final_line_price
+          }))
+        );
+        lastCartSnapshot = snapshot;
+
+        hydrateDiscountFields(cart);
+        console.log('🛒 [CartPage] Cart Data:', cart);
+
+        // 1. Calculate Original Price (before any discounts)
+        let totalOriginalPrice = 0;
+        cart.items.forEach(item => {
+          totalOriginalPrice += item.original_line_price;
+        });
+
+        // 2. The subtotal usually shown is the one AFTER product discounts
+        if (subtotalDiv) {
+          subtotalDiv.textContent = formatMoney(cart.items_subtotal_price);
+        }
+
+        // 3. Match the Side Cart's discount logic
+        const discountRow = cartSection.querySelector('.cart-discount');
+        const discountAmountEl = cartSection.querySelector('.discount-amount');
+        const totalSavings = totalOriginalPrice - cart.total_price;
+
+        if (totalSavings > 0) {
+          discountRow.style.display = 'flex';
+          discountAmountEl.textContent = `- ${formatMoney(totalSavings)}`;
+        } else {
+          discountRow.style.display = 'none';
+        }
+
+
+        if (totalAmountDivs && totalAmountDivs.length) {
+        totalAmountDivs.forEach(el => {
+            el.textContent = formatMoney(cart.total_price);
+        });
+        }
+
+        if (!cart.items.length) {
+          if (itemsWrapper) {
+            itemsWrapper.innerHTML = `
+              <div class="cart-page-empty">
+                <h3>Your cart is empty</h3>
+                <p>Add some products to see them here.</p>
+              </div>
+            `;
+          }
+          if (cartCountSpan) cartCountSpan.textContent = '(0 items)';
+          if (subtotalDiv) subtotalDiv.textContent = formatMoney(0);
+          if (totalAmountDivs && totalAmountDivs.length) {
+            totalAmountDivs.forEach(el => (el.textContent = formatMoney(0)));
+          }
+          return;
+        }
+        
+        if (!itemsWrapper) {
+          console.error('❌ [CartPage] itemsWrapper not found!');
+          return;
+        }
+
+        const itemsHTML = cart.items.map((item, index) => {
+            const line = index + 1;
+            const priceEach = item.final_line_price / item.quantity;
+
+            const compareAtPrice = item.variant_id && item.original_line_price ? item.original_line_price : null;
+            const hasDiscount = item.original_line_price > item.final_line_price;
+
+            let discountPercent = 0;
+            if (hasDiscount) {
+              discountPercent = Math.round(
+                ((item.original_line_price - item.final_line_price) / item.original_line_price) * 100
+              );
+            }
+
+          return `
+            <div class="cart-page-item" data-line="${line}">
+              <div class="cart-page-item-left">
+                <div class="cart-page-item-image">
+                  <img src="${item.image}" alt="${item.title}" class="cart-image" />
+                </div>
+                <div class="cart-page-item-info">
+                  <p class="cart-item-title">${item.title}</p>
+                  <div class="other-cart-info">
+                    <div class="oci-item">
+                        <div class="oci-label">Quantity</div>
+                        <div class="oci-data">
+                            <p class="cart-quantity">
+                              ${item.options_with_values?.length
+                                ? item.options_with_values
+                                    .map(opt => `<p class="cart-variant">${opt.value}</p>`)
+                                    .join('')
+                                : ''}
+                            </p>
+                        </div>
+                    </div>
+                    <div class="oci-item">
+                        <div class="oci-label">Unit price</div>
+                        <div class="oci-data">
+                            <p class="cart-price">${formatMoney(priceEach)}</p>
+                        </div>
+                    </div>
+                    <div class="oci-item">
+                        <div class="oci-label">Unit</div>
+                        <div class="oci-data">
+                            <div class="cart-page-qty">
+                                <button class="cart-page-qty-btn minus" data-line="${line}" data-qty="${item.quantity}">
+                                ${item.quantity > 1 ? `{% render 'minus-icon' %}` : `{% render 'bin-icon' %}`}
+                                </button>
+                                <span class="cart-page-qty-count">${item.quantity}</span>
+                                <button class="cart-page-qty-btn plus" data-line="${line}" data-qty="${item.quantity}">
+                                {% render 'plus-icon' %}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="oci-item">
+                        <div class="oci-label">Discount</div>
+                        <div class="oci-data">
+                            <p class="cart-price">
+                                ${hasDiscount ? `<span class="cart-discount-label">${discountPercent}% Off</span>` : '0%'}
+                            </p>
+                        </div>
+                    </div>
+                    <div class="oci-item">
+                        <div class="oci-label">Total price</div>
+                        <div class="oci-data">
+                            <p class="cart-price">
+                                ${hasDiscount ? `<span class="cart-compare-price">${formatMoney(item.original_line_price)}</span>` : ''} 
+                                ${formatMoney(item.final_line_price)}
+                            </p>
+                        </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          `;
+        });
+
+        itemsWrapper.innerHTML = itemsHTML.join('');
+
+        // Update item count text
+        if (cartCountSpan) {
+          cartCountSpan.textContent =
+            cart.item_count === 1 ? '(1 item)' : `(${cart.item_count} items)`;
+        }
+
+        attachCartPageQtyHandlers();
+      } 
+      catch (error) {
+        console.error('❌ [CartPage] Error loading cart items:', error);
+        itemsWrapper.innerHTML = '<p>Could not load cart items.</p>';
+      }
+    };
+
+    // 🔁 Sync cart page when the cart is updated anywhere (side cart, product card, gift app, etc.)
+    document.addEventListener('cart:updated', async (e) => {
+      // #region agent log
+      const logFetch = window.fetch;
+      logFetch('http://127.0.0.1:7242/ingest/47234631-13c2-4a59-b641-9ffa84c0bc6e',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'cart.liquid:443',message:'cart:updated event received',data:{hasDetail:!!e.detail,itemCount:e.detail?.item_count,isCartUpdating:window.isCartUpdating},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'E'})}).catch(()=>{});
+      // #endregion
+      
+      console.log('🔄 [CartPage] Global update detected, refreshing page data...');
+      
+      // Set flag to prevent any reload attempts
+      window.isCartUpdating = true;
+      
+      const cart = e.detail;
+
+      // 1. Re-render cart page items, totals, and counts
+      await loadCartPageItems();
+
+      // 2. Sync discount pills
+      document.querySelectorAll('discount-field').forEach(df => {
+        if (typeof df.updateFromCart === 'function') {
+          df.updateFromCart(cart);
+        }
+      });
+      
+      // 3. Sync all product cards (if they are visible on this page)
+      if (window.syncAllCardsWithCart) {
+        window.syncAllCardsWithCart(cart);
+      }
+      
+      // Reset flag after a longer delay to prevent gift app reloads
+      setTimeout(() => {
+        window.isCartUpdating = false;
+        // #region agent log
+        const logFetch = window.fetch;
+        logFetch('http://127.0.0.1:7242/ingest/47234631-13c2-4a59-b641-9ffa84c0bc6e',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'cart.liquid:500',message:'isCartUpdating reset after cart:updated event',data:{},timestamp:Date.now(),sessionId:'debug-session',runId:'run2',hypothesisId:'E'})}).catch(()=>{});
+        // #endregion
+      }, 5000); // Keep blocking for 5 seconds - gift app might reload late
+    });
+    
+    // Intercept fetch calls to cart endpoints to prevent reloads
+    // Only intercept POST requests, not GET requests (like /cart.js)
+    const originalFetch = window.fetch;
+    window.fetch = async function(...args) {
+      const url = args[0];
+      const method = args[1]?.method || 'GET';
+      const isCartChange = typeof url === 'string' && method === 'POST' && (
+        url.includes('/cart/change.js') || 
+        url.includes('/cart/add.js') ||
+        url.includes('/cart/update.js')
+      );
+      
+      // Only intercept POST requests to cart change endpoints
+      if (isCartChange) {
+        // #region agent log
+        originalFetch('http://127.0.0.1:7242/ingest/47234631-13c2-4a59-b641-9ffa84c0bc6e',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'cart.liquid:470',message:'Intercepted cart fetch request',data:{url,method,isCartUpdating:window.isCartUpdating},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'F'})}).catch(()=>{});
+        // #endregion
+        
+        // Set flag to prevent reloads - this will block location.reload() calls
+        window.isCartUpdating = true;
+      }
+      
+      const response = await originalFetch.apply(this, args);
+      
+      if (isCartChange && response.ok) {
+        // #region agent log
+        originalFetch('http://127.0.0.1:7242/ingest/47234631-13c2-4a59-b641-9ffa84c0bc6e',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'cart.liquid:490',message:'Cart fetch successful, will refresh via AJAX',data:{url,isCartUpdating:window.isCartUpdating},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'F'})}).catch(()=>{});
+        // #endregion
+        
+        // Refresh cart page after a delay to let gift app process
+        // Keep isCartUpdating true longer - gift app might try to reload after our refresh
+        setTimeout(async () => {
+          if (document.body.classList.contains('template-cart') && window.loadCartPageItems) {
+            await window.loadCartPageItems();
+            // Keep flag true for much longer - gift app often reloads 1-2 seconds after changes
+            setTimeout(() => {
+              window.isCartUpdating = false;
+              // #region agent log
+              originalFetch('http://127.0.0.1:7242/ingest/47234631-13c2-4a59-b641-9ffa84c0bc6e',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'cart.liquid:539',message:'isCartUpdating reset to false after fetch interceptor',data:{url},timestamp:Date.now(),sessionId:'debug-session',runId:'run2',hypothesisId:'F'})}).catch(()=>{});
+              // #endregion
+            }, 5000); // Keep blocking for 5 seconds - gift app might reload late
+          } else {
+            window.isCartUpdating = false;
+          }
+        }, 500);
+      } else if (isCartChange && !response.ok) {
+        // Reset flag if request failed
+        window.isCartUpdating = false;
+      }
+      
+      return response;
+    };
+    
+    // Note: location.href interception is complex and can cause issues
+    // We rely on location.reload() blocking and cart monitoring instead
+
+    // Change to global variable
+    window.isCartUpdating = false; 
+
+    const updateCartPageItem = async (line, quantity) => {
+      // #region agent log
+      fetch('http://127.0.0.1:7242/ingest/47234631-13c2-4a59-b641-9ffa84c0bc6e',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'cart.liquid:412',message:'updateCartPageItem called',data:{line,quantity,isCartUpdating:window.isCartUpdating},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'D'})}).catch(()=>{});
+      // #endregion
+      
+      if (window.isCartUpdating) {
+        console.log('⏳ [CartPage] Update already in progress');
+        // #region agent log
+        fetch('http://127.0.0.1:7242/ingest/47234631-13c2-4a59-b641-9ffa84c0bc6e',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'cart.liquid:415',message:'Update blocked - already in progress',data:{isCartUpdating:window.isCartUpdating},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'D'})}).catch(()=>{});
+        // #endregion
+        return;
+      }
+      
+      window.isCartUpdating = true;
+      document.body.style.cursor = 'wait';
+
+      // #region agent log
+      fetch('http://127.0.0.1:7242/ingest/47234631-13c2-4a59-b641-9ffa84c0bc6e',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'cart.liquid:421',message:'Before cart/change.js request',data:{line,quantity},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'D'})}).catch(()=>{});
+      // #endregion
+
+      try {
+        const res = await fetch('/cart/change.js', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ line, quantity })
+        });
+
+        // #region agent log
+        fetch('http://127.0.0.1:7242/ingest/47234631-13c2-4a59-b641-9ffa84c0bc6e',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'cart.liquid:428',message:'cart/change.js response received',data:{status:res.status,ok:res.ok},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'D'})}).catch(()=>{});
+        // #endregion
+
+        if (res.status === 429) {
+          console.error('⚠️ [CartPage] Rate limit hit');
+          alert('Too many requests. Please wait a moment.');
+          window.isCartUpdating = false;
+          document.body.style.cursor = 'default';
+          return;
+        }
+
+        const cart = await res.json();
+
+        // #region agent log
+        fetch('http://127.0.0.1:7242/ingest/47234631-13c2-4a59-b641-9ffa84c0bc6e',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'cart.liquid:437',message:'Cart updated, dispatching event',data:{itemCount:cart.item_count,isCartUpdating:window.isCartUpdating},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'D'})}).catch(()=>{});
+        // #endregion
+
+        // 📣 Notify globally (Side cart / discounts / product cards)
+        document.dispatchEvent(new CustomEvent('cart:updated', { detail: cart }));
+        if (window.jQuery) window.jQuery(document).trigger('cart:updated', [cart]);
+
+        // ✅ Wait for gift app to process
+        // #region agent log
+        fetch('http://127.0.0.1:7242/ingest/47234631-13c2-4a59-b641-9ffa84c0bc6e',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'cart.liquid:444',message:'Waiting for gift app',data:{isCartUpdating:window.isCartUpdating},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'D'})}).catch(()=>{});
+        // #endregion
+        await new Promise(resolve => setTimeout(resolve, 1500));
+
+        // Refresh cart
+        // #region agent log
+        fetch('http://127.0.0.1:7242/ingest/47234631-13c2-4a59-b641-9ffa84c0bc6e',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'cart.liquid:628',message:'Refreshing cart page',data:{isCartUpdating:window.isCartUpdating},timestamp:Date.now(),sessionId:'debug-session',runId:'run2',hypothesisId:'D'})}).catch(()=>{});
+        // #endregion
+        await loadCartPageItems();
+
+      } catch (error) {
+        console.error('❌ [CartPage] Update failed:', error);
+        // #region agent log
+        fetch('http://127.0.0.1:7242/ingest/47234631-13c2-4a59-b641-9ffa84c0bc6e',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'cart.liquid:631',message:'Update error',data:{error:error.message,isCartUpdating:window.isCartUpdating},timestamp:Date.now(),sessionId:'debug-session',runId:'run2',hypothesisId:'D'})}).catch(()=>{});
+        // #endregion
+        await loadCartPageItems(); // Still refresh on error
+      } finally {
+        document.body.style.cursor = 'default';
+        // Don't reset isCartUpdating here - let the timeout handle it
+        // This keeps the flag true longer to prevent gift app reloads
+        setTimeout(() => {
+          window.isCartUpdating = false;
+          // #region agent log
+          fetch('http://127.0.0.1:7242/ingest/47234631-13c2-4a59-b641-9ffa84c0bc6e',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'cart.liquid:640',message:'Update completed, isCartUpdating reset',data:{},timestamp:Date.now(),sessionId:'debug-session',runId:'run2',hypothesisId:'D'})}).catch(()=>{});
+          // #endregion
+        }, 5000); // Keep blocking for 5 seconds after update
+      }
+    };
+
+    // ➕➖ Qty handlers (cart PAGE only)
+    const attachCartPageQtyHandlers = () => {
+
+      const plusBtns = cartSection.querySelectorAll('.cart-page-qty-btn.plus');
+      const minusBtns = cartSection.querySelectorAll('.cart-page-qty-btn.minus');
+
+      plusBtns.forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const line = Number(btn.dataset.line);
+          const itemEl = btn.closest('.cart-page-item');
+          const qtyEl = itemEl.querySelector('.cart-page-qty-count');
+          const currentQty = Number(qtyEl.textContent);
+          updateCartPageItem(line, currentQty + 1);
+        });
+      });
+
+      minusBtns.forEach((btn) => {
+        btn.addEventListener('click', async () => {
+          const line = Number(btn.dataset.line);
+          const itemEl = btn.closest('.cart-page-item');
+          const qtyEl = itemEl.querySelector('.cart-page-qty-count');
+          const currentQty = Number(qtyEl.textContent);
+          
+          const newQty = currentQty > 1 ? currentQty - 1 : 0;
+          await updateCartPageItem(line, newQty);
+        });
+      });
+    };
+
+    // Intercept form submissions to prevent page reloads
+    document.addEventListener('submit', (e) => {
+      const form = e.target;
+      if (form.tagName === 'FORM' && form.action && (
+        form.action.includes('/cart') || 
+        form.action.includes('/checkout')
+      )) {
+        // #region agent log
+        fetch('http://127.0.0.1:7242/ingest/47234631-13c2-4a59-b641-9ffa84c0bc6e',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'cart.liquid:485',message:'Form submission detected',data:{action:form.action,method:form.method,isCartUpdating:window.isCartUpdating},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'G'})}).catch(()=>{});
+        // #endregion
+        
+        // Only prevent if it's a cart update form (not checkout)
+        if (form.action.includes('/cart') && !form.action.includes('/checkout')) {
+          e.preventDefault();
+          // #region agent log
+          fetch('http://127.0.0.1:7242/ingest/47234631-13c2-4a59-b641-9ffa84c0bc6e',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'cart.liquid:490',message:'Cart form submission prevented',data:{action:form.action},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'G'})}).catch(()=>{});
+          // #endregion
+          console.log('🚫 [CartPage] Cart form submission prevented. Use AJAX instead.');
+        }
+      }
+    }, true); // Use capture phase
+
+    // 🟢 Init (cart page only)
+    // Add error handling to ensure cart loads even if there are issues
+    try {
+      loadCartPageItems();
+    } catch (error) {
+      console.error('❌ [CartPage] Error initializing cart:', error);
+      // Try again after a short delay
+      setTimeout(() => {
+        try {
+          loadCartPageItems();
+        } catch (e) {
+          console.error('❌ [CartPage] Retry failed:', e);
+        }
+      }, 500);
+    }
+    
+    // ✅ NEW: Start monitoring for external changes
+    startCartPageMonitoring();
+
+    // ✅ NEW: Stop monitoring when leaving the page
+    window.addEventListener('beforeunload', () => {
+      stopCartPageMonitoring();
+    });
+
+    // Coupon toggle logic (cart page only)
+    const couponToggleText = cartSection.querySelector('.coupon-toggle-text');
+    const couponFieldContainer = cartSection.querySelector('.coupon-field-container');
+
+    if (couponToggleText && couponFieldContainer) {
+      couponToggleText.addEventListener('click', function () {
+        couponToggleText.style.display = 'none';
+        couponFieldContainer.style.display = 'block';
+      });
+    }
+
+    // Make loadCartPageItems available globally
+    window.loadCartPageItems = loadCartPageItems;
+
+    window.initializeCartFunction = async function (cartData) {
+      const cart =
+        cartData ||
+        (await fetch('/cart.js').then(r => r.json()));
+
+      await loadCartPageItems();
+
+      cartSection
+        .querySelectorAll('discount-field')
+        .forEach(df => {
+          if (typeof df.updateFromCart === 'function') {
+            df.updateFromCart(cart);
+          }
+        });
+    };
+
+  });
+
+</script>
+
+{% schema %}
+{
+  "name": "t:general.cart",
+  "settings": []
+}
+{% endschema %}

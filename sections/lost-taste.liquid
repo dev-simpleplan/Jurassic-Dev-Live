@@ -1,0 +1,102 @@
+<section class="lost-taste">
+    <div class="container">
+        <div class="custom-heading heading">
+            <h1>{{ section.settings.section_heading }}</h1>
+            <p class="small">{{ section.settings.section_content }}</p>
+            <div class="logo-icon">
+                <img src="https://cdn.shopify.com/s/files/1/0752/8015/4881/files/Group_64.svg?v=1761738417" alt="">
+            </div>
+        </div>
+    </div>
+    <div class="lt-top">
+        <div class="container">
+            <div class="lttop-in">
+                <div class="lttop-image">
+                    <img src="{{ section.settings.slide1_image | img_url:'master' }}" alt="">
+                </div>
+                <div class="lttop-content">
+                    <h2>{{ section.settings.slide1_heading }}</h2>
+                    <p>{{ section.settings.slide1_content }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="lt-bottom" style="background-image: url({{ section.settings.slide2_background | img_url:'master' }});">
+        {% comment %} <div class="ltbackground-image">
+            <img src="{{ section.settings.slide2_background | img_url:'master' }}" alt="">
+        </div> {% endcomment %}
+        <div class="container">
+            <div class="ltbottom-in">
+                <div class="ltbot-grid">
+                    <div class="ltbot-left">    
+                        <p>{{ section.settings.slide2_content }}</p>
+                    </div>
+                    <div class="ltbot-right">
+                        <div class="ltbotr-image">
+                            <img src="{{ section.settings.slide2_image | img_url:'master' }}" alt="">
+                        </div>
+                        <div class="ltbotr-image hidden">
+                            <img src="{{ section.settings.slide1_image | img_url:'master' }}" alt="">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% schema %}
+    {
+    "name": "lost-taste",
+    "tag": "section",
+    "settings": [
+        {
+            "type": "text",
+            "id": "section_heading",
+            "label": "Section Heading"
+        },
+        {
+            "type": "text",
+            "id": "section_content",
+            "label": "Banner Image"
+        },
+        {
+            "type": "image_picker",
+            "id": "slide1_image",
+            "label": "Slide 1 Image"
+        },
+        {
+            "type": "text",
+            "id": "slide1_heading",
+            "label": "Slide 1 Heading"
+        },
+        { 
+            "type": "textarea",
+            "id": "slide1_content", 
+            "label": "Slide 1 Content" 
+        },
+        {
+            "type": "image_picker",
+            "id": "slide2_background",
+            "label": "Slide 2 Bg Image"
+        },
+        {
+            "type": "image_picker",
+            "id": "slide2_image",
+            "label": "Slide 2 Image"
+        },
+        { 
+            "type": "textarea",
+            "id": "slide2_content", 
+            "label": "Slide 2 Content" 
+        }
+    ],
+    "presets": [
+      {
+        "name": "about-banner",
+        "settings": {
+        }
+      }
+    ]
+  }
+{% endschema %}

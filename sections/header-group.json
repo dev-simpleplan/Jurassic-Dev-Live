@@ -33,11 +33,12 @@
         "nav_menu_right_HJeRQQ": {
           "type": "nav_menu_right",
           "settings": {
-            "nav_items_right": "",
-            "product_list_heading": "",
+            "nav_items_right": "fruit",
+            "product_list_heading": "Fruit",
             "product_list": [
+              "young-fresh-coconut-pagode",
               "mangosteen",
-              "mango-osteen"
+              "mango-kent"
             ]
           }
         },

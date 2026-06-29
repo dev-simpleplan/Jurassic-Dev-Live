@@ -1,1 +1,622 @@
-{"sections":{"banner":{"type":"home-banner","blocks":{"item1":{"type":"reviews","settings":{"review-top":"Google","review_star":4.6}},"reviews_KR7MhK":{"type":"reviews","settings":{"review-top":"Facebook","review_star":4.3}},"reviews_EEYp6c":{"type":"reviews","settings":{"review-top":"Trustpilot","review_star":4.5}},"reviews_FXWz8j":{"type":"reviews","settings":{"review-top":"Okendo","review_star":4.7}}},"block_order":["item1","reviews_KR7MhK","reviews_EEYp6c","reviews_FXWz8j"],"settings":{"banner-bg":"shopify:\/\/shop_images\/Farm-Durian-Kane-Mon-Thong-JavFre-Bali-Indonesia-6116-JurassicFruit-JurassicFruit_5a14cf13-48ba-4298-9f7d-ff212f48fe7b.webp","banner_bg_mobile":"shopify:\/\/shop_images\/ChatGPT_Mobile_Banner_Aspect_Ratio_Jun_5_2026_1.webp","review_star_rating":"200,000 happy customers","review_star_star":5,"head":"Your most delicious adventure on Earth","para":"Discover how good life tastes when your fruit comes straight from the jungle.","button_text":"Start your journey","button_link":"shopify:\/\/products\/exotic-fruit-discovery-box"}},"spacer0":{"type":"spacer","settings":{"spacer_height":90}},"bestseller":{"type":"bestseller","settings":{"collection":"best-seller","heading":"What’s best this week","subheading":"These are the four freshly picked fruits we’re most excited about this week.","cta_url":"shopify:\/\/collections\/fruit","cta_text":"All fruits in season"}},"spacer":{"type":"spacer","settings":{"spacer_height":90}},"discovery-box":{"type":"discovery-box","settings":{"product":"exotic-fruit-discovery-box","bg-image":"shopify:\/\/shop_images\/8.jpg","heading":"Embark on a Flavor Adventure with our Discovery Box","para":"New to Jurassic Fruit? The Discovery Box is your perfect start.","user_image":"shopify:\/\/shop_images\/c0a0a587c74f5cfa420fa4ba1cf06894c0c01d00.jpg","review_star":4.6,"user_name":"Ghica I. on the Discovery Box of Jurassic Fruit","user_comment":"\"I just loved the whole box! The fruits were delicious and I found so many new fruits that were so tasty 😋\""}},"spacer7":{"type":"spacer","settings":{"spacer_height":90}},"all-categories":{"type":"category-grid-sec","blocks":{"collection_block_6hFaDw":{"type":"collection_block","settings":{"collection":"fruit"}},"collection_block_JnrDEX":{"type":"collection_block","settings":{"collection":"fruit-boxes"}},"collection_block_YpVyhY":{"type":"collection_block","settings":{"collection":"dates"}},"collection_block_xGihdd":{"type":"collection_block","settings":{"collection":"dried-fruit"}},"collection_block_AwVC9h":{"type":"collection_block","settings":{"collection":"nuts"}},"collection_block_YBMcAk":{"type":"collection_block","settings":{"collection":"honey"}},"collection_block_c3LLEz":{"type":"collection_block","settings":{"collection":"new"}},"collection_block_pYmrTj":{"type":"collection_block","settings":{"collection":"all-products"}}},"block_order":["collection_block_6hFaDw","collection_block_JnrDEX","collection_block_YpVyhY","collection_block_xGihdd","collection_block_AwVC9h","collection_block_YBMcAk","collection_block_c3LLEz","collection_block_pYmrTj"],"settings":{"heading":"Main categories"}},"spacer8":{"type":"spacer","settings":{"spacer_height":90}},"video-carousel":{"type":"video-carousel","blocks":{"ugc_videos_NrQzL4":{"type":"ugc-videos","settings":{"video_link":"shopify:\/\/files\/videos\/202108-UGC-Anna-Kollmann-DragonFruit-Dried-Mango-Cashew-Medjool-Date-DE.MOV"}},"ugc_videos_UXLNi4":{"type":"ugc-videos","settings":{"video_link":"shopify:\/\/files\/videos\/StorySaver.net-partof.ju-Video-1779014475612.mp4"}},"ugc_videos_kBLy7n":{"type":"ugc-videos","settings":{"video_link":"shopify:\/\/files\/videos\/Discovery box UGC DE Tik Tok-edited-20260521.MP4"}},"ugc_videos_3TBr6y":{"type":"ugc-videos","settings":{"video_link":"shopify:\/\/files\/videos\/20220523-UGC-Young-Coconut-Rohvolution-DE.mp4"}},"ugc_videos_JG9Xta":{"type":"ugc-videos","settings":{"video_link":"shopify:\/\/files\/videos\/UGC-Dani-In-The-Raw-edited-20260523.MP4"}},"ugc_videos_inDUwA":{"type":"ugc-videos","settings":{"video_link":"shopify:\/\/files\/videos\/20221025-UGC-Testimonial DE Julia Neumeister-edited.mp4"}}},"block_order":["ugc_videos_NrQzL4","ugc_videos_UXLNi4","ugc_videos_kBLy7n","ugc_videos_3TBr6y","ugc_videos_JG9Xta","ugc_videos_inDUwA"],"settings":{"heading_top":"Bite into the","heading_bottom":"wild with us","heading_color":"#1a1a1a","background_color":"#dbd7c8","use_product_videos":false,"product_videos_metafield":"product_videos"}},"spacer6":{"type":"spacer","settings":{"spacer_height":90}},"bestseller_MEec7q":{"type":"bestseller","name":"Bestseller","settings":{"collection":"dried-fruit","heading":"Our most loved dried fruits","subheading":"Just as wild and flavorful as our fresh fruits, made for snacking.","cta_url":"shopify:\/\/collections\/dried-fruit","cta_text":"All jungle's snacks"}},"spacer1":{"type":"spacer","settings":{"spacer_height":90}},"scroll-section":{"type":"scroll-section","blocks":{"slide1_YajRTe":{"type":"slide1","settings":{"side_heading":"Grown with Purpose","side_content":"We partner directly with small-scale farmers who care deeply for their land, their people, and their fruit. Through close relationships and shared values — organic practices, regenerative soils, and real hard work — we source rare, often heirloom fruits filled with flavor and story.","main_image":"shopify:\/\/shop_images\/4_f1beb876-d947-4068-927e-cd51e0c17cea.jpg","scroll_image":"shopify:\/\/shop_images\/scroll-image-jf.png"}},"slide2_ncKMPY":{"type":"slide2","settings":{"side_heading":"Naturally Grown, Always Carefully Sourced","side_content":"Many of our fruits are organically certified. Others come from wild groves or small farms that can’t access certification. In those cases, we go further: visiting farms, checking practices, and ensuring they meet organic standards. When no organic option exists, we choose the best alternatives, often with GlobalGAP (Good Agricultural Practices) certification.","main_image":"shopify:\/\/shop_images\/roar_1.jpg","image_label":"We visit our farmers.","fruit1":"shopify:\/\/shop_images\/fruit-appear-1.png","fruit2":"shopify:\/\/shop_images\/fruit-appear-2.png","fruit3":"shopify:\/\/shop_images\/fruit-appear-3.png","fruit4":"shopify:\/\/shop_images\/fruit-appear-4.png"}},"slide3_UzHckJ":{"type":"slide3","settings":{"side_heading":"Picked After You Click","side_content":"We encourage you to place your order before Thursday at 8:00 PM. At that point, many of the fruits are still soaking in the sun and ripening on the tree. Only after your order do our farmers begin harvesting, allowing us to deliver fruit that’s fresher, fuller, and bursting with flavor. Deliveries then begin from the following Tuesday.","main_image":"shopify:\/\/shop_images\/Organic-Farm-Com-Si-TMF-Rambutan-Mangosteen-Longkong-Durian-Thailand-May2023-3555-JurassicFruit.jpg","image_label":"Harvested only after you order","image_heading":"Harvested at Full Maturity","image_content":"Unlike supermarket fruit, ours are harvested at physiological maturity, when nutrients and flavor are fully developed. Some fruits (like avocados or mangoes) ripen post-harvest, so we ship them slightly firm. This ensures they arrive safe and natural, needing just 2–3 days at room temperature to reach perfect ripeness.","scroll_image":"shopify:\/\/shop_images\/scroll-image-jf.png","side_image":"shopify:\/\/shop_images\/Farm-Mangosteen-JavFre-Bali-Indonesia-6334-JurassicFruit-JurassicFruit.jpg","main_image_label":"Picked at peak natural ripeness"}},"slide4_hq3aeX":{"type":"slide4","settings":{"left_heading":"Harvested at Full Maturity","left_content":"Unlike supermarket fruit, ours are harvested at physiological maturity, when nutrients and flavor are fully developed. Some fruits (like avocados or bananas) ripen post-harvest, so we ship them slightly firm. This ensures they arrive safe and natural, needing just 2–3 days at room temperature to reach perfect ripeness.","main_image":"shopify:\/\/shop_images\/IMG_7984-JurassicFruit.jpg","side_heading":"Ultra-Fresh Delivery","side_content":"From the moment you place an order, your fruits are harvested, packed, and shipped with great care. We minimize the time between picking and delivery, so your fruits arrive fresh, on average 5 to 6 days after being picked up from the tree. Straight from the farm to your plate.","side_image_label":"Reaches you in 5-6 days"}}},"block_order":["slide1_YajRTe","slide2_ncKMPY","slide3_UzHckJ","slide4_hq3aeX"],"disabled":true,"settings":{"section_heading":"This Is What Wild Tastes Like","section_subheading":"Taste the difference in every bite, harvested at the peak of ripeness, delivered at the peak of freshness."}},"spacer9":{"type":"spacer","disabled":true,"custom_css":["@media (max-width: 767px) {}"],"settings":{"spacer_height":90}},"durianShape":{"type":"image-text-scroll","settings":{"heading":"Why Jurassic Fruit?","para":"Some of the world’s best fruits have stayed unknown for too long. Jurassic Fruit was built to bring them back, guided by three simple principles:","img1":"shopify:\/\/shop_images\/raw_1.jpg","head1":"Raw.","para1":"Naturally grown and harvested when truly ripe. No artificial ripening, no unnecessary processing, just real fruits full of flavor.","img2":"shopify:\/\/shop_images\/Leon-Child-Dragonfruit-Forest-09730-07072018-JurassicFruit-JurassicFruit.jpg","head2":"Real.","para2":"Directly sourced from small farms and delivered 2 to 3 times faster than normal supply chains, for fruits that taste fresher and closer to nature.","img3":"shopify:\/\/shop_images\/Discovery-Box-Geo-Sonja-Mobile_bbaf045b-8fb4-46ae-963f-40a18fe6fc28.jpg","head3":"Roar!","para3":"Grown to be shared, discovered, and remembered. Because few things feel as alive as eating a truly great fruit.","cta_link":"about","cta_txt":"discover our story"}},"spacer2":{"type":"spacer","settings":{"spacer_height":90}},"fresh":{"type":"fresh-every-week","blocks":{"item1":{"type":"cards","settings":{"image":"shopify:\/\/shop_images\/Discovery-Box-Exotic-Fruit-Medium-2466-02042026-JurassicFruit-JurassicFruit.jpg","day":"1","head":"Order (ideally until Thursday, 20:00)","paragraph":"While you decide, your fruits are still ripening on the tree, gently receiving sun, and growing flavor."}},"item2":{"type":"cards","settings":{"image":"shopify:\/\/shop_images\/c13eb6c42fe91a0c297c90fa402edf3e542e66a9.jpg","day":"2","head":"Harvested Just for You","paragraph":"We pick your fruits at peak physiological maturity — most of the time the day before transportation — for full nutrition and taste."}},"item3":{"type":"cards","settings":{"image":"shopify:\/\/shop_images\/Pitaya-Yello-UGC.jpg","day":"3","head":"Fresh at Your Door","paragraph":"Your fruits arrive around 5 days after harvest, ready to ripen naturally at home for perfect flavor when you bite in."}}},"block_order":["item1","item2","item3"],"settings":{"heading":"Delivered fresh every week","para":"Picked at peak ripeness and shipped without delay. So it reaches you fresh, ready to ripen naturally at home."}},"counter":{"type":"counter-sec","blocks":{"cards_GtULhz":{"type":"cards","settings":{"number":3600,"expression":"+","content":"Smallholder families supported since day one"}},"cards_7LY4Am":{"type":"cards","settings":{"number":50,"expression":"+","content":"Tons of fruit saved from waste through low-impact sourcing"}},"cards_W4qKGH":{"type":"cards","settings":{"number":8000,"expression":"+","content":"Days of local work created through our operations"}}},"block_order":["cards_GtULhz","cards_7LY4Am","cards_W4qKGH"],"disabled":true,"settings":{"bg-image":"shopify:\/\/shop_images\/counter-bg.jpg","heading":"The Impact Behind Every Bite","para":"Behind every bite is a network of growers, caretakers, and conscious choices that protect people and the planet."}},"spacer3":{"type":"spacer","settings":{"spacer_height":90}},"reviews":{"type":"reviews","blocks":{"review_item_QhgrqC":{"type":"review_item","settings":{"user_image":"shopify:\/\/shop_images\/Sarah.webp","comment":"We ordered from Jurassic Fruit for the first time and chose the discovery box. Almost all were ready to eat and very delicious. We will likely order again.","review_star":4.5,"user_name":"Sarah Z.","user_desig":"Verified Buyer"}},"review_item_qJcBmX":{"type":"review_item","settings":{"user_image":"shopify:\/\/shop_images\/Ireneusz.webp","comment":"The sapote amarillos were fine. The flavor is excellent. I blended the sapote amarillo pulp with Greek yogurt — it created a delicious cream.","review_star":5,"user_name":"Ireneusz S.","user_desig":"Verified Buyer"}},"review_item_8zJDHk":{"type":"review_item","settings":{"user_image":"shopify:\/\/shop_images\/Ana-C.webp","comment":"The fruits were delivered quickly and the quality is simply great! We can only recommend it!","review_star":5,"user_name":"Ana C.","user_desig":"Verified Buyer"}},"review_item_THCCkn":{"type":"review_item","settings":{"user_image":"shopify:\/\/shop_images\/Andrea_A.webp","comment":"Mango Bowan is very tasty, juicy and has a slightly orange flesh. It is also fibre-free. It tastes great and is nice and firm.","review_star":5,"user_name":"Andrea A.","user_desig":"Verified Buyer"}},"review_item_6nVY7V":{"type":"review_item","settings":{"user_image":"shopify:\/\/shop_images\/Anjani-P.webp","comment":"The jackfruit from Phet Fruits was excellent. It was delivered in good condition, tasted delicious, and the flavor was absolutely awesome.","review_star":5,"user_name":"Anjani P.","user_desig":"Verified Buyer"}},"review_item_FMWLx3":{"type":"review_item","settings":{"user_image":"shopify:\/\/shop_images\/Michael.webp","comment":"Yummy, sweet, and delicious!","review_star":5,"user_name":"Michael I.","user_desig":"Verified Buyer"}},"review_item_JfYYbz":{"type":"review_item","settings":{"user_image":"shopify:\/\/shop_images\/Diana-s.webp","comment":"Very tasty and fresh.","review_star":5,"user_name":"Diana S.","user_desig":"Verified Buyer"}},"review_item_X6kWgB":{"type":"review_item","settings":{"user_image":"shopify:\/\/shop_images\/FH.webp","comment":"I drank coconut juice for the first time in my 39 years and thought it was pretty good! I also liked the delivery and the good customer service.","review_star":4,"user_name":"F H.","user_desig":"Verified Buyer"}}},"block_order":["review_item_QhgrqC","review_item_qJcBmX","review_item_8zJDHk","review_item_THCCkn","review_item_6nVY7V","review_item_FMWLx3","review_item_JfYYbz","review_item_X6kWgB"],"disabled":true,"settings":{"heading":"What fruit explorers are saying"}},"17640536864cbd5f05":{"type":"apps","blocks":{"okendo_reviews_carousel_Ciajpr":{"type":"shopify:\/\/apps\/okendo\/blocks\/reviews-carousel\/bb689e69-ea70-4661-8fb7-ad24a2e23c29","settings":{"show_heading":true,"heading":"What fruit explorers are saying","badge_link":"","product":""}},"instafeed_app_block_ah3Dgf":{"type":"shopify:\/\/apps\/instafeed\/blocks\/app-block\/c447db20-095d-4a10-9725-b5977662c9d5","disabled":true,"settings":{"title":"Follow Our Flavor Journey","title_color":"","title_size_v2":0,"alignment":"center","instafeed_margin_top":0,"instafeed_margin_bottom":0,"instafeed_margin_sides":0,"show_instagram_link":false,"link_alignment":"left","link_color":"#000000","background_color":"","feed_id":"","html_area":""}}},"block_order":["okendo_reviews_carousel_Ciajpr","instafeed_app_block_ah3Dgf"],"custom_css":["h2 {font-family: \"scale-variable\", sans-serif; font-size: 52px;}"],"settings":{}},"spacer10":{"type":"spacer","settings":{"spacer_height":90}},"video":{"type":"video-section","settings":{"heading":"Jurassic Fruit on National TV","para":"Galileo, Germany’s leading science and discovery show, featured Jurassic Fruit and our mission to bring real flavor back.","video_poster":"shopify:\/\/shop_images\/Screenshot_2026-02-17_at_2.38.44_PM.png","video_link":"shopify:\/\/files\/videos\/Mangos frisch vom Baum - Dieser Online-Shop macht's möglich _ Galileo _ ProSieben.mp4"}},"spacer4":{"type":"spacer","settings":{"spacer_height":90}},"177141177583efc3d8":{"type":"apps","blocks":{"omnisend_email_marketing_sms_embedded_form_HXMtcq":{"type":"shopify:\/\/apps\/omnisend-email-marketing-sms\/blocks\/embedded-form\/44704aa2-794f-4c5d-8c8e-039c841158e9","settings":{"form_id":"69958495faf307608c8f52f5"}}},"block_order":["omnisend_email_marketing_sms_embedded_form_HXMtcq"],"settings":{}}},"order":["banner","spacer0","bestseller","spacer","discovery-box","spacer7","all-categories","spacer8","video-carousel","spacer6","bestseller_MEec7q","spacer1","scroll-section","spacer9","durianShape","spacer2","fresh","counter","spacer3","reviews","17640536864cbd5f05","spacer10","video","spacer4","177141177583efc3d8"]}
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "banner": {
+      "type": "home-banner",
+      "blocks": {
+        "item1": {
+          "type": "reviews",
+          "settings": {
+            "review-top": "Google",
+            "review_star": 4.6
+          }
+        },
+        "reviews_KR7MhK": {
+          "type": "reviews",
+          "settings": {
+            "review-top": "Facebook",
+            "review_star": 4.3
+          }
+        },
+        "reviews_EEYp6c": {
+          "type": "reviews",
+          "settings": {
+            "review-top": "Trustpilot",
+            "review_star": 4.5
+          }
+        },
+        "reviews_FXWz8j": {
+          "type": "reviews",
+          "settings": {
+            "review-top": "Okendo",
+            "review_star": 4.7
+          }
+        }
+      },
+      "block_order": [
+        "item1",
+        "reviews_KR7MhK",
+        "reviews_EEYp6c",
+        "reviews_FXWz8j"
+      ],
+      "settings": {
+        "banner-bg": "shopify://shop_images/Farm-Durian-Kane-Mon-Thong-JavFre-Bali-Indonesia-6116-JurassicFruit-JurassicFruit_5a14cf13-48ba-4298-9f7d-ff212f48fe7b.jpg",
+        "banner_bg_mobile": "shopify://shop_images/ChatGPT_Mobile_Banner_Aspect_Ratio_Jun_5_2026_1.png",
+        "review_star_rating": "200,000 happy customers",
+        "review_star_star": 5,
+        "head": "Your most delicious adventure on Earth",
+        "para": "Discover how good life tastes when your fruit comes straight from the jungle.",
+        "button_text": "Start your journey",
+        "button_link": "shopify://products/exotic-fruit-discovery-box"
+      }
+    },
+    "spacer0": {
+      "type": "spacer",
+      "settings": {
+        "spacer_height": 90
+      }
+    },
+    "bestseller": {
+      "type": "bestseller",
+      "settings": {
+        "collection": "best-seller",
+        "heading": "What’s best this week",
+        "subheading": "These are the four freshly picked fruits we’re most excited about this week.",
+        "cta_url": "shopify://collections/fruit",
+        "cta_text": "All fruits in season"
+      }
+    },
+    "spacer": {
+      "type": "spacer",
+      "settings": {
+        "spacer_height": 90
+      }
+    },
+    "discovery-box": {
+      "type": "discovery-box",
+      "settings": {
+        "product": "exotic-fruit-discovery-box",
+        "bg-image": "shopify://shop_images/8.jpg",
+        "heading": "Embark on a Flavor Adventure with our Discovery Box",
+        "para": "New to Jurassic Fruit? The Discovery Box is your perfect start.",
+        "user_image": "shopify://shop_images/c0a0a587c74f5cfa420fa4ba1cf06894c0c01d00.jpg",
+        "review_star": 4.6,
+        "user_name": "Ghica I. on the Discovery Box of Jurassic Fruit",
+        "user_comment": "\"I just loved the whole box! The fruits were delicious and I found so many new fruits that were so tasty 😋\""
+      }
+    },
+    "spacer7": {
+      "type": "spacer",
+      "settings": {
+        "spacer_height": 90
+      }
+    },
+    "all-categories": {
+      "type": "category-grid-sec",
+      "blocks": {
+        "collection_block_6hFaDw": {
+          "type": "collection_block",
+          "settings": {
+            "collection": "fruit"
+          }
+        },
+        "collection_block_JnrDEX": {
+          "type": "collection_block",
+          "settings": {
+            "collection": "fruit-boxes"
+          }
+        },
+        "collection_block_YpVyhY": {
+          "type": "collection_block",
+          "settings": {
+            "collection": "dates"
+          }
+        },
+        "collection_block_xGihdd": {
+          "type": "collection_block",
+          "settings": {
+            "collection": "dried-fruit"
+          }
+        },
+        "collection_block_AwVC9h": {
+          "type": "collection_block",
+          "settings": {
+            "collection": "nuts"
+          }
+        },
+        "collection_block_YBMcAk": {
+          "type": "collection_block",
+          "settings": {
+            "collection": "honey"
+          }
+        },
+        "collection_block_c3LLEz": {
+          "type": "collection_block",
+          "settings": {
+            "collection": "new"
+          }
+        },
+        "collection_block_pYmrTj": {
+          "type": "collection_block",
+          "settings": {
+            "collection": "all-products"
+          }
+        }
+      },
+      "block_order": [
+        "collection_block_6hFaDw",
+        "collection_block_JnrDEX",
+        "collection_block_YpVyhY",
+        "collection_block_xGihdd",
+        "collection_block_AwVC9h",
+        "collection_block_YBMcAk",
+        "collection_block_c3LLEz",
+        "collection_block_pYmrTj"
+      ],
+      "settings": {
+        "heading": "Main categories"
+      }
+    },
+    "spacer8": {
+      "type": "spacer",
+      "settings": {
+        "spacer_height": 90
+      }
+    },
+    "video-carousel": {
+      "type": "video-carousel",
+      "blocks": {
+        "ugc_videos_NrQzL4": {
+          "type": "ugc-videos",
+          "settings": {
+            "video_link": "shopify://files/videos/202108-UGC-Anna-Kollmann-DragonFruit-Dried-Mango-Cashew-Medjool-Date-DE.MOV"
+          }
+        },
+        "ugc_videos_UXLNi4": {
+          "type": "ugc-videos",
+          "settings": {
+            "video_link": "shopify://files/videos/StorySaver.net-partof.ju-Video-1779014475612.mp4"
+          }
+        },
+        "ugc_videos_kBLy7n": {
+          "type": "ugc-videos",
+          "settings": {
+            "video_link": "shopify://files/videos/Discovery box UGC DE Tik Tok-edited-20260521.MP4"
+          }
+        },
+        "ugc_videos_3TBr6y": {
+          "type": "ugc-videos",
+          "settings": {
+            "video_link": "shopify://files/videos/20220523-UGC-Young-Coconut-Rohvolution-DE.mp4"
+          }
+        },
+        "ugc_videos_JG9Xta": {
+          "type": "ugc-videos",
+          "settings": {
+            "video_link": "shopify://files/videos/UGC-Dani-In-The-Raw-edited-20260523.MP4"
+          }
+        },
+        "ugc_videos_inDUwA": {
+          "type": "ugc-videos",
+          "settings": {
+            "video_link": "shopify://files/videos/20221025-UGC-Testimonial DE Julia Neumeister-edited.mp4"
+          }
+        }
+      },
+      "block_order": [
+        "ugc_videos_NrQzL4",
+        "ugc_videos_UXLNi4",
+        "ugc_videos_kBLy7n",
+        "ugc_videos_3TBr6y",
+        "ugc_videos_JG9Xta",
+        "ugc_videos_inDUwA"
+      ],
+      "settings": {
+        "heading_top": "Bite into the",
+        "heading_bottom": "wild with us",
+        "heading_color": "#1a1a1a",
+        "background_color": "#dbd7c8",
+        "use_product_videos": false,
+        "product_videos_metafield": "product_videos"
+      }
+    },
+    "spacer6": {
+      "type": "spacer",
+      "settings": {
+        "spacer_height": 90
+      }
+    },
+    "bestseller_MEec7q": {
+      "type": "bestseller",
+      "name": "Bestseller",
+      "settings": {
+        "collection": "dried-fruit",
+        "heading": "Our most loved dried fruits",
+        "subheading": "Just as wild and flavorful as our fresh fruits, made for snacking.",
+        "cta_url": "shopify://collections/dried-fruit",
+        "cta_text": "All jungle's snacks"
+      }
+    },
+    "spacer1": {
+      "type": "spacer",
+      "settings": {
+        "spacer_height": 90
+      }
+    },
+    "scroll-section": {
+      "type": "scroll-section",
+      "blocks": {
+        "slide1_YajRTe": {
+          "type": "slide1",
+          "settings": {
+            "side_heading": "Grown with Purpose",
+            "side_content": "We partner directly with small-scale farmers who care deeply for their land, their people, and their fruit. Through close relationships and shared values — organic practices, regenerative soils, and real hard work — we source rare, often heirloom fruits filled with flavor and story.",
+            "main_image": "shopify://shop_images/4_f1beb876-d947-4068-927e-cd51e0c17cea.jpg",
+            "scroll_image": "shopify://shop_images/scroll-image-jf.png"
+          }
+        },
+        "slide2_ncKMPY": {
+          "type": "slide2",
+          "settings": {
+            "side_heading": "Naturally Grown, Always Carefully Sourced",
+            "side_content": "Many of our fruits are organically certified. Others come from wild groves or small farms that can’t access certification. In those cases, we go further: visiting farms, checking practices, and ensuring they meet organic standards. When no organic option exists, we choose the best alternatives, often with GlobalGAP (Good Agricultural Practices) certification.",
+            "main_image": "shopify://shop_images/roar_1.jpg",
+            "image_label": "We visit our farmers.",
+            "fruit1": "shopify://shop_images/fruit-appear-1.png",
+            "fruit2": "shopify://shop_images/fruit-appear-2.png",
+            "fruit3": "shopify://shop_images/fruit-appear-3.png",
+            "fruit4": "shopify://shop_images/fruit-appear-4.png"
+          }
+        },
+        "slide3_UzHckJ": {
+          "type": "slide3",
+          "settings": {
+            "side_heading": "Picked After You Click",
+            "side_content": "We encourage you to place your order before Thursday at 8:00 PM. At that point, many of the fruits are still soaking in the sun and ripening on the tree. Only after your order do our farmers begin harvesting, allowing us to deliver fruit that’s fresher, fuller, and bursting with flavor. Deliveries then begin from the following Tuesday.",
+            "main_image": "shopify://shop_images/Organic-Farm-Com-Si-TMF-Rambutan-Mangosteen-Longkong-Durian-Thailand-May2023-3555-JurassicFruit.jpg",
+            "image_label": "Harvested only after you order",
+            "image_heading": "Harvested at Full Maturity",
+            "image_content": "Unlike supermarket fruit, ours are harvested at physiological maturity, when nutrients and flavor are fully developed. Some fruits (like avocados or mangoes) ripen post-harvest, so we ship them slightly firm. This ensures they arrive safe and natural, needing just 2–3 days at room temperature to reach perfect ripeness.",
+            "scroll_image": "shopify://shop_images/scroll-image-jf.png",
+            "side_image": "shopify://shop_images/Farm-Mangosteen-JavFre-Bali-Indonesia-6334-JurassicFruit-JurassicFruit.jpg",
+            "main_image_label": "Picked at peak natural ripeness"
+          }
+        },
+        "slide4_hq3aeX": {
+          "type": "slide4",
+          "settings": {
+            "left_heading": "Harvested at Full Maturity",
+            "left_content": "Unlike supermarket fruit, ours are harvested at physiological maturity, when nutrients and flavor are fully developed. Some fruits (like avocados or bananas) ripen post-harvest, so we ship them slightly firm. This ensures they arrive safe and natural, needing just 2–3 days at room temperature to reach perfect ripeness.",
+            "main_image": "shopify://shop_images/IMG_7984-JurassicFruit.jpg",
+            "side_heading": "Ultra-Fresh Delivery",
+            "side_content": "From the moment you place an order, your fruits are harvested, packed, and shipped with great care. We minimize the time between picking and delivery, so your fruits arrive fresh, on average 5 to 6 days after being picked up from the tree. Straight from the farm to your plate.",
+            "side_image_label": "Reaches you in 5-6 days"
+          }
+        }
+      },
+      "block_order": [
+        "slide1_YajRTe",
+        "slide2_ncKMPY",
+        "slide3_UzHckJ",
+        "slide4_hq3aeX"
+      ],
+      "disabled": true,
+      "settings": {
+        "section_heading": "This Is What Wild Tastes Like",
+        "section_subheading": "Taste the difference in every bite, harvested at the peak of ripeness, delivered at the peak of freshness."
+      }
+    },
+    "spacer9": {
+      "type": "spacer",
+      "disabled": true,
+      "custom_css": [
+        "@media (max-width: 767px) {}"
+      ],
+      "settings": {
+        "spacer_height": 90
+      }
+    },
+    "durianShape": {
+      "type": "image-text-scroll",
+      "settings": {
+        "heading": "Why Jurassic Fruit?",
+        "para": "Some of the world’s best fruits have stayed unknown for too long. Jurassic Fruit was built to bring them back, guided by three simple principles:",
+        "img1": "shopify://shop_images/raw_1.jpg",
+        "head1": "Raw.",
+        "para1": "Naturally grown and harvested when truly ripe. No artificial ripening, no unnecessary processing, just real fruits full of flavor.",
+        "img2": "shopify://shop_images/Leon-Child-Dragonfruit-Forest-09730-07072018-JurassicFruit-JurassicFruit.jpg",
+        "head2": "Real.",
+        "para2": "Directly sourced from small farms and delivered 2 to 3 times faster than normal supply chains, for fruits that taste fresher and closer to nature.",
+        "img3": "shopify://shop_images/Discovery-Box-Geo-Sonja-Mobile_bbaf045b-8fb4-46ae-963f-40a18fe6fc28.jpg",
+        "head3": "Roar!",
+        "para3": "Grown to be shared, discovered, and remembered. Because few things feel as alive as eating a truly great fruit.",
+        "cta_link": "about",
+        "cta_txt": "discover our story"
+      }
+    },
+    "spacer2": {
+      "type": "spacer",
+      "settings": {
+        "spacer_height": 90
+      }
+    },
+    "fresh": {
+      "type": "fresh-every-week",
+      "blocks": {
+        "item1": {
+          "type": "cards",
+          "settings": {
+            "image": "shopify://shop_images/Discovery-Box-Exotic-Fruit-Medium-2466-02042026-JurassicFruit-JurassicFruit.jpg",
+            "day": "1",
+            "head": "Order (ideally until Thursday, 20:00)",
+            "paragraph": "While you decide, your fruits are still ripening on the tree, gently receiving sun, and growing flavor."
+          }
+        },
+        "item2": {
+          "type": "cards",
+          "settings": {
+            "image": "shopify://shop_images/c13eb6c42fe91a0c297c90fa402edf3e542e66a9.jpg",
+            "day": "2",
+            "head": "Harvested Just for You",
+            "paragraph": "We pick your fruits at peak physiological maturity — most of the time the day before transportation — for full nutrition and taste."
+          }
+        },
+        "item3": {
+          "type": "cards",
+          "settings": {
+            "image": "shopify://shop_images/Pitaya-Yello-UGC.jpg",
+            "day": "3",
+            "head": "Fresh at Your Door",
+            "paragraph": "Your fruits arrive around 5 days after harvest, ready to ripen naturally at home for perfect flavor when you bite in."
+          }
+        }
+      },
+      "block_order": [
+        "item1",
+        "item2",
+        "item3"
+      ],
+      "settings": {
+        "heading": "Delivered fresh every week",
+        "para": "Picked at peak ripeness and shipped without delay. So it reaches you fresh, ready to ripen naturally at home."
+      }
+    },
+    "counter": {
+      "type": "counter-sec",
+      "blocks": {
+        "cards_GtULhz": {
+          "type": "cards",
+          "settings": {
+            "number": 3600,
+            "expression": "+",
+            "content": "Smallholder families supported since day one"
+          }
+        },
+        "cards_7LY4Am": {
+          "type": "cards",
+          "settings": {
+            "number": 50,
+            "expression": "+",
+            "content": "Tons of fruit saved from waste through low-impact sourcing"
+          }
+        },
+        "cards_W4qKGH": {
+          "type": "cards",
+          "settings": {
+            "number": 8000,
+            "expression": "+",
+            "content": "Days of local work created through our operations"
+          }
+        }
+      },
+      "block_order": [
+        "cards_GtULhz",
+        "cards_7LY4Am",
+        "cards_W4qKGH"
+      ],
+      "disabled": true,
+      "settings": {
+        "bg-image": "shopify://shop_images/counter-bg.jpg",
+        "heading": "The Impact Behind Every Bite",
+        "para": "Behind every bite is a network of growers, caretakers, and conscious choices that protect people and the planet."
+      }
+    },
+    "spacer3": {
+      "type": "spacer",
+      "settings": {
+        "spacer_height": 90
+      }
+    },
+    "reviews": {
+      "type": "reviews",
+      "blocks": {
+        "review_item_QhgrqC": {
+          "type": "review_item",
+          "settings": {
+            "user_image": "shopify://shop_images/Sarah.webp",
+            "comment": "We ordered from Jurassic Fruit for the first time and chose the discovery box. Almost all were ready to eat and very delicious. We will likely order again.",
+            "review_star": 4.5,
+            "user_name": "Sarah Z.",
+            "user_desig": "Verified Buyer"
+          }
+        },
+        "review_item_qJcBmX": {
+          "type": "review_item",
+          "settings": {
+            "user_image": "shopify://shop_images/Ireneusz.webp",
+            "comment": "The sapote amarillos were fine. The flavor is excellent. I blended the sapote amarillo pulp with Greek yogurt — it created a delicious cream.",
+            "review_star": 5,
+            "user_name": "Ireneusz S.",
+            "user_desig": "Verified Buyer"
+          }
+        },
+        "review_item_8zJDHk": {
+          "type": "review_item",
+          "settings": {
+            "user_image": "shopify://shop_images/Ana-C.webp",
+            "comment": "The fruits were delivered quickly and the quality is simply great! We can only recommend it!",
+            "review_star": 5,
+            "user_name": "Ana C.",
+            "user_desig": "Verified Buyer"
+          }
+        },
+        "review_item_THCCkn": {
+          "type": "review_item",
+          "settings": {
+            "user_image": "shopify://shop_images/Andrea_A.webp",
+            "comment": "Mango Bowan is very tasty, juicy and has a slightly orange flesh. It is also fibre-free. It tastes great and is nice and firm.",
+            "review_star": 5,
+            "user_name": "Andrea A.",
+            "user_desig": "Verified Buyer"
+          }
+        },
+        "review_item_6nVY7V": {
+          "type": "review_item",
+          "settings": {
+            "user_image": "shopify://shop_images/Anjani-P.webp",
+            "comment": "The jackfruit from Phet Fruits was excellent. It was delivered in good condition, tasted delicious, and the flavor was absolutely awesome.",
+            "review_star": 5,
+            "user_name": "Anjani P.",
+            "user_desig": "Verified Buyer"
+          }
+        },
+        "review_item_FMWLx3": {
+          "type": "review_item",
+          "settings": {
+            "user_image": "shopify://shop_images/Michael.webp",
+            "comment": "Yummy, sweet, and delicious!",
+            "review_star": 5,
+            "user_name": "Michael I.",
+            "user_desig": "Verified Buyer"
+          }
+        },
+        "review_item_JfYYbz": {
+          "type": "review_item",
+          "settings": {
+            "user_image": "shopify://shop_images/Diana-s.webp",
+            "comment": "Very tasty and fresh.",
+            "review_star": 5,
+            "user_name": "Diana S.",
+            "user_desig": "Verified Buyer"
+          }
+        },
+        "review_item_X6kWgB": {
+          "type": "review_item",
+          "settings": {
+            "user_image": "shopify://shop_images/FH.webp",
+            "comment": "I drank coconut juice for the first time in my 39 years and thought it was pretty good! I also liked the delivery and the good customer service.",
+            "review_star": 4,
+            "user_name": "F H.",
+            "user_desig": "Verified Buyer"
+          }
+        }
+      },
+      "block_order": [
+        "review_item_QhgrqC",
+        "review_item_qJcBmX",
+        "review_item_8zJDHk",
+        "review_item_THCCkn",
+        "review_item_6nVY7V",
+        "review_item_FMWLx3",
+        "review_item_JfYYbz",
+        "review_item_X6kWgB"
+      ],
+      "disabled": true,
+      "settings": {
+        "heading": "What fruit explorers are saying"
+      }
+    },
+    "17640536864cbd5f05": {
+      "type": "apps",
+      "blocks": {
+        "okendo_reviews_carousel_Ciajpr": {
+          "type": "shopify://apps/okendo/blocks/reviews-carousel/bb689e69-ea70-4661-8fb7-ad24a2e23c29",
+          "settings": {
+            "show_heading": true,
+            "heading": "What fruit explorers are saying",
+            "badge_link": "",
+            "product": ""
+          }
+        }
+      },
+      "block_order": [
+        "okendo_reviews_carousel_Ciajpr"
+      ],
+      "custom_css": [
+        "h2 {font-family: \"scale-variable\", sans-serif; font-size: 52px;}"
+      ],
+      "settings": {}
+    },
+    "spacer10": {
+      "type": "spacer",
+      "settings": {
+        "spacer_height": 90
+      }
+    },
+    "video": {
+      "type": "video-section",
+      "settings": {
+        "heading": "Jurassic Fruit on National TV",
+        "para": "Galileo, Germany’s leading science and discovery show, featured Jurassic Fruit and our mission to bring real flavor back.",
+        "video_poster": "shopify://shop_images/Screenshot_2026-02-17_at_2.38.44_PM.png",
+        "video_link": "shopify://files/videos/Mangos frisch vom Baum - Dieser Online-Shop macht's möglich _ Galileo _ ProSieben.mp4"
+      }
+    },
+    "spacer4": {
+      "type": "spacer",
+      "settings": {
+        "spacer_height": 90
+      }
+    },
+    "177141177583efc3d8": {
+      "type": "apps",
+      "blocks": {
+        "omnisend_email_marketing_sms_embedded_form_HXMtcq": {
+          "type": "shopify://apps/omnisend-email-marketing-sms/blocks/embedded-form/44704aa2-794f-4c5d-8c8e-039c841158e9",
+          "settings": {
+            "form_id": "69958495faf307608c8f52f5"
+          }
+        }
+      },
+      "block_order": [
+        "omnisend_email_marketing_sms_embedded_form_HXMtcq"
+      ],
+      "settings": {}
+    }
+  },
+  "order": [
+    "banner",
+    "spacer0",
+    "bestseller",
+    "spacer",
+    "discovery-box",
+    "spacer7",
+    "all-categories",
+    "spacer8",
+    "video-carousel",
+    "spacer6",
+    "bestseller_MEec7q",
+    "spacer1",
+    "scroll-section",
+    "spacer9",
+    "durianShape",
+    "spacer2",
+    "fresh",
+    "counter",
+    "spacer3",
+    "reviews",
+    "17640536864cbd5f05",
+    "spacer10",
+    "video",
+    "spacer4",
+    "177141177583efc3d8"
+  ]
+}

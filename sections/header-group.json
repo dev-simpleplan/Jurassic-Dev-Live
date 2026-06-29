@@ -25,8 +25,8 @@
         "nav_menu_right_CfQzEw": {
           "type": "nav_menu_right",
           "settings": {
-            "nav_items_right": "",
-            "product_list_heading": "",
+            "nav_items_right": "boxes-direct-link",
+            "product_list_heading": "Boxes",
             "product_list": []
           }
         },

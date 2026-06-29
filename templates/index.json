@@ -67,7 +67,7 @@
     "bestseller": {
       "type": "bestseller",
       "settings": {
-        "collection": "best-seller",
+        "collection": "best-this-week",
         "heading": "What’s best this week",
         "subheading": "These are the four freshly picked fruits we’re most excited about this week.",
         "cta_url": "shopify://collections/fruit",

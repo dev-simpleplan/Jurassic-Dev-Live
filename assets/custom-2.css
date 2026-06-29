@@ -1122,7 +1122,7 @@ span.cart-compare-price {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 107px 0 38px 0;
+  padding: 110px 0 38px 0;
 }
 .collection-banner h1 {
   font-size: clamp(32px, 4vw, 46px);

@@ -51,7 +51,7 @@
           {%- if selected_col -%}
             <li>
               <a href="{{ selected_col.url }}">
-                {{ selected_col.title }}
+                {{ selected_col.metafields.custom.collection_short_name.value | default: selected_col.title }}
               </a>
             </li>
           {%- endif -%}

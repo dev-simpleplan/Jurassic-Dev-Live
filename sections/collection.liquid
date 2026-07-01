@@ -45,7 +45,7 @@
               {% if collection.handle == 'all' %}
                 All {{ collection.title }}
               {% else %}
-                {{ collection.title }}
+                {{ collection.metafields.custom.collection_short_name.value | default: collection.title }}
               {% endif %}
             </p>
           </div>

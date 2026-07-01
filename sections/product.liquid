@@ -262,7 +262,7 @@
 
                   {% for cert in product.metafields.custom.certificate.value %}
                     {% if cert.system.handle == 'organic' %}
-                      {{ cert.type.value }}{% comment %} was cert.key.value {% endcomment %}
+                      {{ cert.type.value }}
                       {% break %}
                     {% endif %}
                   {% endfor %}

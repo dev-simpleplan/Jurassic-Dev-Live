@@ -651,8 +651,11 @@
                                       </div>
                                     </div>
                                     {% if matched_variant.unit_price_measurement %}
-                                    <div class="vv-peices">
-                                        {% comment %} This gets the actual symbol ($, €, Rs.) directly from your store settings {% endcomment %}
+                                    <div class="vv-peices"
+                                         data-unit-price="{{ matched_variant.unit_price }}"
+                                         data-unit-symbol="{{ cart.currency.symbol }}"
+                                         data-unit-ref="{{ matched_variant.unit_price_measurement.reference_unit }}">
+                                        {% comment %} Initial render; reformatted to the active locale by JS on load. {% endcomment %}
                                         {% assign currency_suffix = cart.currency.symbol %}
 
                                         {{ matched_variant.unit_price | money_without_currency }} {{ currency_suffix }} / {{ matched_variant.unit_price_measurement.reference_unit }}
@@ -1471,12 +1474,26 @@
 ====================================================== */
 window.formatMoneySafe = function (cents) {
   if (typeof cents !== 'number') return '';
-  return new Intl.NumberFormat('en-US', {
+  // Use the active storefront language so decimal/thousand separators and
+  // symbol placement follow the locale (de/fr -> "24,90 €", en -> "€24.90").
+  var locale = document.documentElement.lang || '{{ request.locale.iso_code }}' || 'en';
+  return new Intl.NumberFormat(locale, {
     style: 'currency',
     currency: Shopify?.currency?.active || '{{ shop.currency }}',
     minimumFractionDigits: 2
   }).format(cents / 100);
 };
+
+// Re-render the static swatch unit prices ("… €/kg") in the active locale so
+// they match the JS-formatted main price (EN "23.83 €/kg", DE "23,83 €/kg").
+document.addEventListener('DOMContentLoaded', function () {
+  document.querySelectorAll('.vv-peices[data-unit-price]').forEach(function (el) {
+    var cents = Number(el.dataset.unitPrice);
+    if (!Number.isFinite(cents)) return;
+    var num = formatMoneySafe(cents).replace(/[^\d.,]/g, '').trim();
+    el.textContent = num + ' ' + el.dataset.unitSymbol + ' / ' + el.dataset.unitRef;
+  });
+});
 </script>
 
 

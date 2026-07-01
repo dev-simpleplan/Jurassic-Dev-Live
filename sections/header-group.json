@@ -46,18 +46,18 @@
           "type": "nav_menu_right",
           "settings": {
             "nav_items_right": "dried",
-            "product_list_heading": "Bestsellers",
+            "product_list_heading": "Dried",
             "product_list": [
+              "date-barhi-gold-fresh-and-juicy",
               "fig-white-dried",
-              "macadamia-nut",
-              "almond-honey"
+              "macadamia-nut"
             ]
           }
         },
         "nav_menu_right_BVgXx8": {
           "type": "nav_menu_right",
           "settings": {
-            "nav_items_right": "new-direct-link",
+            "nav_items_right": "",
             "product_list_heading": "New",
             "product_list": []
           }

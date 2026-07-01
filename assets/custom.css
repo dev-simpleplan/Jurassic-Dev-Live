@@ -503,7 +503,7 @@
   background: none;
   border: none;
   box-shadow: none;
-  text-transform: capitalize;
+  /* text-transform: capitalize; */
   outline: none;
   color: #2c2c2c;
   font-size: 14px;

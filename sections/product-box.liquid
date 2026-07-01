@@ -572,6 +572,7 @@
                             {% assign selected_option_value = selected_variant.options[option_index] %}
                             <div class="variant-option" data-option="{{ option.name }}">
                               <ul class="variant-values" data-index="{{ forloop.index0 }}">
+                                {% assign rendered_values = '' %}
                                 {% for value in option.values %}
                                   {% assign matched_variant = nil %}
                                   {% assign available_matched_variant = nil %}
@@ -620,11 +621,20 @@
                                     {% continue %}
                                   {% endif %}
 
+                                  {% comment %} Skip values that would render identically (e.g. a translation collision) so we never show the same swatch twice. {% endcomment %}
+                                  {% capture value_key %}||{{ value }}||{% endcapture %}
+                                  {% if rendered_values contains value_key %}
+                                    {% continue %}
+                                  {% endif %}
+                                  {% assign rendered_values = rendered_values | append: value_key %}
+
                                   {% assign matched_variant_pieces = matched_variant.metafields.custom.pieces.value | default: matched_variant.metafields.custom.pieces %}
 
                                   <li
                                     class="variant-value {% if selected_option_value == value %}active{% endif %}{% unless matched_variant.available %} is-sold-out{% endunless %}"
                                     data-value="{{ value | escape }}"
+                                    data-variant-id="{{ matched_variant.id }}"
+                                    data-option-position="{{ option.position }}"
                                     data-available="{{ matched_variant.available }}"
                                     {% if matched_variant.metafields.custom.bestseller == true %}
                                     data-best="bestseller"
@@ -1217,13 +1227,7 @@
         this.updateURL();
       }
 
-      this.currentVariant.options.forEach((value, index) => {
-        const ul = this.querySelectorAll('.variant-values')[index];
-        if (!ul) return;
-        ul.querySelectorAll('.variant-value').forEach(li => {
-          li.classList.toggle('active', li.dataset.value === value);
-        });
-      });
+      this.syncActiveSwatches();
 
       this.updateFormID();
       this.updatePriceInstant();
@@ -1273,9 +1277,48 @@
 
     getSelectedVariant() {
       const variants = this.getVariantJSON();
+      const groups = this.querySelectorAll('.variant-values');
+
+      // Single-option products: match strictly by variant id so a duplicated /
+      // translated option label can never select the wrong (or two) variants.
+      if (groups.length === 1) {
+        const activeLi = groups[0].querySelector('.variant-value.active');
+        const id = activeLi ? Number(activeLi.dataset.variantId) : null;
+        this.currentVariant =
+          variants.find(v => v.id === id) ||
+          variants.find(v => v.options.every((opt, i) => opt === this.options[i]));
+        return;
+      }
+
       this.currentVariant = variants.find(v =>
         v.options.every((opt, i) => opt === this.options[i])
       );
+    }
+
+    // Highlight the swatch(es) that correspond to the current variant. For a
+    // single-option product we key off the variant id (collision-proof); for
+    // multi-option products we fall back to per-option value matching.
+    syncActiveSwatches() {
+      if (!this.currentVariant) return;
+      const groups = this.querySelectorAll('.variant-values');
+
+      if (groups.length === 1) {
+        groups[0].querySelectorAll('.variant-value').forEach(li => {
+          li.classList.toggle(
+            'active',
+            Number(li.dataset.variantId) === this.currentVariant.id
+          );
+        });
+        return;
+      }
+
+      this.currentVariant.options.forEach((value, index) => {
+        const ul = groups[index];
+        if (!ul) return;
+        ul.querySelectorAll('.variant-value').forEach(li => {
+          li.classList.toggle('active', li.dataset.value === value);
+        });
+      });
     }
 
     updateURL() {

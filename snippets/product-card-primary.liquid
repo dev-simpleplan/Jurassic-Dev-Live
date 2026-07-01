@@ -23,7 +23,7 @@
 {% assign product_title_suffix = '' %}
 {% for cert in product.metafields.custom.certificate.value %}
   {% if cert.system.handle == 'organic' %}
-    {% assign product_title_suffix = cert.key.value %}
+    {% assign product_title_suffix = cert.display_name.value %}
     {% break %}
   {% endif %}
 {% endfor %}

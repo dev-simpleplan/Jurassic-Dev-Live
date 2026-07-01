@@ -679,6 +679,9 @@
                                   "unit_price_reference_unit": {{ variant.unit_price_measurement.reference_unit | json }},
                                   "featured_media_id": {{ variant.featured_media.id | json }},
                                   "options": {{ variant.options | json }},
+                                  "price_display": {{ variant.price | money_without_currency | append: ' ' | append: cart.currency.symbol | json }},
+                                  "compare_display": {{ variant.compare_at_price | money_without_currency | append: ' ' | append: cart.currency.symbol | json }},
+                                  "unit_display": {% if variant.unit_price_measurement %}{{ variant.unit_price | money_without_currency | append: ' ' | append: cart.currency.symbol | append: ' / ' | append: variant.unit_price_measurement.reference_unit | json }}{% else %}""{% endif %},
                                   "shipped_by": {{ variant.metafields.custom.shipped_by.value | default: variant.metafields.custom.shipped_by | default: product.metafields.custom.shipped_by.value | default: product.metafields.custom.shipped_by | json }}
                                 }{% unless forloop.last %},{% endunless %}
                               {% endfor %}
@@ -1472,28 +1475,26 @@
 /* ======================================================
    GLOBAL MONEY FORMATTER (USED EVERYWHERE)
 ====================================================== */
+/* Detect the market's number format from a Liquid-rendered sample so JS totals
+   match the server-rendered prices exactly, for ANY market (DE/FR "1.234,56",
+   IN "1,234.56", etc.). Not language-based — mirrors the money filter output. */
+window.moneySeparators = (function () {
+  var sample = {{ 123456789 | money_without_currency | json }}; // 1,234,567.89 in some format
+  var nonDigits = sample.replace(/\d/g, '');
+  var decimal = nonDigits.slice(-1) || '.';
+  var group = nonDigits.length > 1 ? nonDigits.charAt(0) : (decimal === '.' ? ',' : '.');
+  return { decimal: decimal, group: group };
+})();
+
 window.formatMoneySafe = function (cents) {
   if (typeof cents !== 'number') return '';
-  // Use the active storefront language so decimal/thousand separators and
-  // symbol placement follow the locale (de/fr -> "24,90 €", en -> "€24.90").
-  var locale = document.documentElement.lang || '{{ request.locale.iso_code }}' || 'en';
-  return new Intl.NumberFormat(locale, {
-    style: 'currency',
-    currency: Shopify?.currency?.active || '{{ shop.currency }}',
-    minimumFractionDigits: 2
-  }).format(cents / 100);
+  // Amount only (no symbol); callers append cart.currency.symbol, matching cards.
+  var sep = window.moneySeparators;
+  var fixed = (cents / 100).toFixed(2);              // "1234.56"
+  var parts = fixed.split('.');
+  var intPart = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, sep.group);
+  return intPart + sep.decimal + parts[1];
 };
-
-// Re-render the static swatch unit prices ("… €/kg") in the active locale so
-// they match the JS-formatted main price (EN "23.83 €/kg", DE "23,83 €/kg").
-document.addEventListener('DOMContentLoaded', function () {
-  document.querySelectorAll('.vv-peices[data-unit-price]').forEach(function (el) {
-    var cents = Number(el.dataset.unitPrice);
-    if (!Number.isFinite(cents)) return;
-    var num = formatMoneySafe(cents).replace(/[^\d.,]/g, '').trim();
-    el.textContent = num + ' ' + el.dataset.unitSymbol + ' / ' + el.dataset.unitRef;
-  });
-});
 </script>
 
 
@@ -1758,20 +1759,17 @@ class VariantSelector extends HTMLElement {
     const price = this.currentVariant.price;
     const compare = this.currentVariant.compare_at_price;
 
-    const currencySuffix = " {{ cart.currency.symbol }}";
-
-    /* 1. Update Selling Price */
+    /* 1. Update Selling Price — use the Liquid-formatted string so it matches
+          the product cards exactly (market-correct separators). */
     if (sellPriceEl) {
-      let cleanPrice = formatMoneySafe(price).replace(/[^\d.,]/g, '').trim();
-      sellPriceEl.textContent = cleanPrice + currencySuffix;
+      sellPriceEl.textContent = this.currentVariant.price_display;
       sellPriceEl.classList.toggle('withoutbg', !(compare && compare > price));
     }
 
     /* 2. Update Compare Price */
     if (comparePriceEl) {
       if (compare && compare > price) {
-        let cleanCompare = formatMoneySafe(compare).replace(/[^\d.,]/g, '').trim();
-        comparePriceEl.textContent = cleanCompare + currencySuffix;
+        comparePriceEl.textContent = this.currentVariant.compare_display;
         comparePriceEl.style.display = 'inline-block';
       } else {
         comparePriceEl.style.display = 'none';
@@ -1793,8 +1791,7 @@ class VariantSelector extends HTMLElement {
     /* 4. Update Unit Price / Per Unit Line */
     if (unitPriceEl) {
       if (this.currentVariant.unit_price && this.currentVariant.unit_price_reference_unit) {
-        const cleanUnitPrice = formatMoneySafe(this.currentVariant.unit_price).replace(/[^\d.,]/g, '').trim();
-        unitPriceEl.textContent = `${cleanUnitPrice}${currencySuffix} / ${this.currentVariant.unit_price_reference_unit}`;
+        unitPriceEl.textContent = this.currentVariant.unit_display;
         unitPriceEl.style.display = '';
         if (unitPriceWrap) unitPriceWrap.style.display = '';
       } else {

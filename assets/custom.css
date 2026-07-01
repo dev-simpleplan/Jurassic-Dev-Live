@@ -504,7 +504,7 @@
   border: none;
   box-shadow: none;
   /* text-transform: capitalize; */
-  outline: none;
+  outline: none; 
   color: #2c2c2c;
   font-size: 14px;
   line-height: 100%;

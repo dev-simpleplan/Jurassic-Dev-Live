@@ -4088,7 +4088,13 @@ section.imagescroll {
     display: flex;
     align-items: center;
     justify-content: flex-start;
+    flex-wrap: nowrap;
     gap: 20px;
+}
+/* Home / collection crumbs keep their full width; only the product name truncates */
+.bcrum-in ul li:not(:last-child) {
+    flex: 0 0 auto;
+    white-space: nowrap;
 }
 .bcrum-in ul li {
     position: relative;
@@ -4123,6 +4129,18 @@ section.imagescroll {
     font-weight: 400;
     font-size: 12px;
     letter-spacing: 0.32px;
+}
+/* Keep a long product name on one line and truncate it with an ellipsis */
+.bcrum-in ul li:last-child {
+    min-width: 0;
+    flex: 0 1 auto;
+}
+.bcrum-in ul li:last-child span {
+    display: block;
+    max-width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 .fruits_card_section.full-width {
     display: flex;

@@ -33,7 +33,15 @@
               endif
             endif
 
-            # 2. If no collection selected yet, loop through product collections
+            # 2. If no path context, use the product's defined main collection metafield
+            if selected_col == nil
+              assign main_col = product.metafields.custom.main_collection.value
+              if main_col != blank
+                assign selected_col = main_col
+              endif
+            endif
+
+            # 3. Otherwise, fall back to the first non-generic product collection
             if selected_col == nil
               for col in product.collections
                 if generic_handles contains col.handle or col.handle contains 'all-' or col.handle contains 'alle-' or col.handle contains 'tous-les-'

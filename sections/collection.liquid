@@ -414,7 +414,7 @@
                 {% for product in collection.products %}
                   {% unless product.available %}
                     {%- assign has_unavailable_products = true -%}
-                    {% render 'product-card-primary', product: product %}
+                    {% render 'product-card-primary', product: product, collection: collection %}
                   {% endunless %}
                 {% endfor %}
 
@@ -463,7 +463,7 @@
 
                   {% if matches_custom_filters and product.available %}
                     {%- assign has_custom_filtered_products = true -%}
-                    {% render 'product-card-primary', product: product %}
+                    {% render 'product-card-primary', product: product, collection: collection %}
                   {% endif %}
                 {% endfor %}
                 {% for product in collection.products %}
@@ -502,7 +502,7 @@
 
                   {% if matches_custom_filters and product.available != true %}
                     {%- assign has_custom_filtered_products = true -%}
-                    {% render 'product-card-primary', product: product %}
+                    {% render 'product-card-primary', product: product, collection: collection %}
                   {% endif %}
                 {% endfor %}
 
@@ -516,12 +516,12 @@
               {% else %}
                 {% for product in collection.products %}
                   {% if product.available %}
-                    {% render 'product-card-primary', product: product %}
+                    {% render 'product-card-primary', product: product, collection: collection %}
                   {% endif %}
                 {% endfor %}
                 {% for product in collection.products %}
                   {% unless product.available %}
-                    {% render 'product-card-primary', product: product %}
+                    {% render 'product-card-primary', product: product, collection: collection %}
                   {% endunless %}
                 {% endfor %}
                 {% render 'pagination' | pagination: paginate %}

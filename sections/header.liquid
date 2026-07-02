@@ -429,6 +429,11 @@
                 </form>
               </predictive-search>
              </div>
+
+            {% comment %} For APP {% endcomment %}
+             <div class="test"></div>
+             {% comment %} For APP {% endcomment %}
+
             {% if customer %}
               <a href="{{ routes.account_url }}" class="cust-login">{% render 'icon-profile' %}</a>
             {% else %}

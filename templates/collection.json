@@ -1,1 +1,265 @@
-{"sections":{"main":{"type":"collection","blocks":{"collection_zp8hR7":{"type":"collection","settings":{"col":"coconuts","parent_collections":["fruit"],"hide_on_generic_collections":true,"col_name":""}},"collection_Fnbewh":{"type":"collection","settings":{"col":"avocados","parent_collections":["fruit"],"hide_on_generic_collections":true,"col_name":""}},"collection_JKYHMB":{"type":"collection","settings":{"col":"mangoes","parent_collections":["fruit"],"hide_on_generic_collections":true,"col_name":""}},"collection_fMayaE":{"type":"collection","settings":{"col":"fruit","parent_collections":[],"hide_on_generic_collections":false,"col_name":"Fruits"}},"collection_rxVwVF":{"type":"collection","settings":{"col":"fruit-boxes","parent_collections":[],"hide_on_generic_collections":false,"col_name":"Boxes"}},"collection_NUyX4d":{"type":"collection","settings":{"col":"dates","parent_collections":[],"hide_on_generic_collections":false,"col_name":""}},"collection_XAzdgK":{"type":"collection","settings":{"col":"dried-fruit","parent_collections":[],"hide_on_generic_collections":false,"col_name":""}},"collection_m7RmEV":{"type":"collection","settings":{"col":"nuts","parent_collections":[],"hide_on_generic_collections":false,"col_name":"Nuts"}},"collection_Hixxmw":{"type":"collection","settings":{"col":"honey","parent_collections":[],"hide_on_generic_collections":false,"col_name":""}},"collection_nnUfpe":{"type":"collection","settings":{"col":"fine-food","parent_collections":[],"hide_on_generic_collections":false,"col_name":""}},"collection_C7k3BY":{"type":"collection","settings":{"col":"new","parent_collections":[],"hide_on_generic_collections":false,"col_name":"New"}},"collection_JiN3yp":{"type":"collection","settings":{"col":"all-products","parent_collections":[],"hide_on_generic_collections":false,"col_name":""}}},"block_order":["collection_zp8hR7","collection_Fnbewh","collection_JKYHMB","collection_fMayaE","collection_rxVwVF","collection_NUyX4d","collection_XAzdgK","collection_m7RmEV","collection_Hixxmw","collection_nnUfpe","collection_C7k3BY","collection_JiN3yp"],"settings":{"head":"Exotic fruits in season"}},"spacer_Kqf4M3":{"type":"spacer","name":"Spacer","settings":{"spacer_height":50}},"headingsec_ATiVep":{"type":"headingsec","name":"headingsec","settings":{"heading":"What explorers are saying","para":""}},"spacer_E3UqMA":{"type":"spacer","name":"Spacer","settings":{"spacer_height":50}},"17658703763bf5fc11":{"type":"apps","blocks":{"okendo_reviews_carousel_T9RnMR":{"type":"shopify:\/\/apps\/okendo\/blocks\/reviews-carousel\/bb689e69-ea70-4661-8fb7-ad24a2e23c29","settings":{"show_heading":false,"heading":"Reviews","badge_link":"","product":""}}},"block_order":["okendo_reviews_carousel_T9RnMR"],"settings":{}},"spacer_tafrLK":{"type":"spacer","name":"Spacer","settings":{"spacer_height":90}},"faq_pages_FmiYAa":{"type":"faq-pages","blocks":{"faq_LcRUbQ":{"type":"faq","settings":{"question":"Where do you deliver? ","answer":"<p>We deliver to Austria, Belgium, Bulgaria, Croatia, Czechia, Denmark, Estonia, Finland, France, Germany, Greece, Hungary, Ireland, Italy, Latvia, Lithuania, Luxembourg, Netherlands, Poland, Portugal, Romania, Slovakia, Slovenia, Spain, Sweden, Switzerland.<br\/>Contact us if your country is not in this list.<\/p>","faq_image":"shopify:\/\/shop_images\/Dragonfruits-Thailand-09989-JurassicFruit.jpg"}},"faq_gBpRfJ":{"type":"faq","settings":{"question":"How much does delivery cost and how long does it take?","answer":"<p>Find all shipping options here: <a href=\"https:\/\/www.jurassicfruit.com\/en\/policies\/shipping-policy\" title=\"https:\/\/www.jurassicfruit.com\/en\/policies\/shipping-policy\">Shipping policy<\/a> The indicated delivery times start from the shipping date (not the order date, due to our weekly schedule).The delivery delays are not guaranteed except for Express.<\/p>","faq_image":"shopify:\/\/shop_images\/Discovery_20Date_20Gift_hash_escaped_06.jpg"}},"faq_ACCaTB":{"type":"faq","settings":{"question":"When will it be delivered?","answer":"<p>It depends on when you pass your order.<\/p><p>Order <strong>until Thursday 20:00<\/strong> so that your fruits will be shipped the next Monday, Tuesday or Wednesday (delivery one to two days after). If you order after Thursday 19:00 (and before Thursday 20:00 the next week) your fruits will be shipped the second next Monday, Tuesday or Wednesday.<\/p><p>This weekly schedule allows us to have minimum waste (we ask our producers to gather the exact quantities our customers need) and to have the freshest fruits possible (our producers pick the fruits at the very last minute).<br\/><br\/>Please note that the shipping delay indicated by your chosen carrier affects only the delivery time, not the shipping day itself. We do not store fruits; they are harvested once a week. Therefore, even if you select express shipping, the shipment will not leave earlier than the date indicated at checkout.<\/p>","faq_image":"shopify:\/\/shop_images\/Mango_20Kafro_hash_escaped_02.webp"}},"faq_kEbLiV":{"type":"faq","settings":{"question":"Must I be at home to receive the delivery?","answer":"<p>It is the best, but it is not mandatory! If you are not at home, you have different options:<\/p><p>You can deliver to another address, such as your office, a small local store, a neighbour's home, a relative's home, etc.<\/p><p>You can set that when you are not at home, you want the parcel to be delivered to another address or to be left at your doorstep. To set your personal options, you just have to sign in at <strong>UPS My Choice<\/strong>.<\/p>","faq_image":"shopify:\/\/shop_images\/Fig_20white_20half-fresh_hash_escaped_04.webp"}},"faq_LV6Jjz":{"type":"faq","settings":{"question":"Can I come and pick up my order?","answer":"<p>Yes, you can pick up your order in Essen and save on shipping costs.<\/p><p>As we do not have a physical store, orders must still be <strong>placed online<\/strong> so you can choose your payment method and so we can pre-order the fresh fruits. We order everything fresh each week and do not sell from stock.<br\/>For the best availability, we recommend placing your order by Thursday at 8:00 PM.<\/p><p>Pickup is possible once you receive the <strong>shipping confirmation email<\/strong> (this is sent automatically and <strong>looks the same as for regular shipping orders<\/strong>). After that, you can collect your package:<br\/>Monday to Sunday (except Thursday), ideally as soon as possible, between 8:00 AM and 12:00 PM.<\/p>","faq_image":"shopify:\/\/shop_images\/Mango-Gedong-Indonesia-beach-4.jpg"}}},"block_order":["faq_LcRUbQ","faq_gBpRfJ","faq_ACCaTB","faq_kEbLiV","faq_LV6Jjz"],"name":"FAQ Page Section","settings":{"heading":"Frequently Asked Questions","cta_url":"","cta_text":"","fallback_image":"shopify:\/\/shop_images\/image_8.png"}}},"order":["main","spacer_Kqf4M3","headingsec_ATiVep","spacer_E3UqMA","17658703763bf5fc11","spacer_tafrLK","faq_pages_FmiYAa"]}
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "collection",
+      "blocks": {
+        "collection_zp8hR7": {
+          "type": "collection",
+          "settings": {
+            "col": "coconuts",
+            "parent_collections": [
+              "fruit"
+            ],
+            "hide_on_generic_collections": true,
+            "col_name": ""
+          }
+        },
+        "collection_Fnbewh": {
+          "type": "collection",
+          "settings": {
+            "col": "avocados",
+            "parent_collections": [
+              "fruit"
+            ],
+            "hide_on_generic_collections": true,
+            "col_name": ""
+          }
+        },
+        "collection_JKYHMB": {
+          "type": "collection",
+          "settings": {
+            "col": "mangoes",
+            "parent_collections": [
+              "fruit"
+            ],
+            "hide_on_generic_collections": true,
+            "col_name": ""
+          }
+        },
+        "collection_fMayaE": {
+          "type": "collection",
+          "settings": {
+            "col": "fruit",
+            "parent_collections": [],
+            "hide_on_generic_collections": false,
+            "col_name": "Fruits"
+          }
+        },
+        "collection_rxVwVF": {
+          "type": "collection",
+          "settings": {
+            "col": "fruit-boxes",
+            "parent_collections": [
+              "fruit",
+              "all-products"
+            ],
+            "hide_on_generic_collections": false,
+            "col_name": "Boxes"
+          }
+        },
+        "collection_NUyX4d": {
+          "type": "collection",
+          "settings": {
+            "col": "dates",
+            "parent_collections": [],
+            "hide_on_generic_collections": false,
+            "col_name": ""
+          }
+        },
+        "collection_XAzdgK": {
+          "type": "collection",
+          "settings": {
+            "col": "dried-fruit",
+            "parent_collections": [],
+            "hide_on_generic_collections": false,
+            "col_name": ""
+          }
+        },
+        "collection_m7RmEV": {
+          "type": "collection",
+          "settings": {
+            "col": "nuts",
+            "parent_collections": [],
+            "hide_on_generic_collections": false,
+            "col_name": "Nuts"
+          }
+        },
+        "collection_Hixxmw": {
+          "type": "collection",
+          "settings": {
+            "col": "honey",
+            "parent_collections": [],
+            "hide_on_generic_collections": false,
+            "col_name": ""
+          }
+        },
+        "collection_nnUfpe": {
+          "type": "collection",
+          "settings": {
+            "col": "fine-food",
+            "parent_collections": [],
+            "hide_on_generic_collections": false,
+            "col_name": ""
+          }
+        },
+        "collection_C7k3BY": {
+          "type": "collection",
+          "settings": {
+            "col": "new",
+            "parent_collections": [],
+            "hide_on_generic_collections": false,
+            "col_name": "New"
+          }
+        },
+        "collection_JiN3yp": {
+          "type": "collection",
+          "settings": {
+            "col": "all-products",
+            "parent_collections": [],
+            "hide_on_generic_collections": false,
+            "col_name": ""
+          }
+        }
+      },
+      "block_order": [
+        "collection_zp8hR7",
+        "collection_Fnbewh",
+        "collection_JKYHMB",
+        "collection_fMayaE",
+        "collection_rxVwVF",
+        "collection_NUyX4d",
+        "collection_XAzdgK",
+        "collection_m7RmEV",
+        "collection_Hixxmw",
+        "collection_nnUfpe",
+        "collection_C7k3BY",
+        "collection_JiN3yp"
+      ],
+      "settings": {
+        "head": "Exotic fruits in season"
+      }
+    },
+    "spacer_Kqf4M3": {
+      "type": "spacer",
+      "name": "Spacer",
+      "settings": {
+        "spacer_height": 50
+      }
+    },
+    "headingsec_ATiVep": {
+      "type": "headingsec",
+      "name": "headingsec",
+      "settings": {
+        "heading": "What explorers are saying",
+        "para": ""
+      }
+    },
+    "spacer_E3UqMA": {
+      "type": "spacer",
+      "name": "Spacer",
+      "settings": {
+        "spacer_height": 50
+      }
+    },
+    "17658703763bf5fc11": {
+      "type": "apps",
+      "blocks": {
+        "okendo_reviews_carousel_T9RnMR": {
+          "type": "shopify://apps/okendo/blocks/reviews-carousel/bb689e69-ea70-4661-8fb7-ad24a2e23c29",
+          "settings": {
+            "show_heading": false,
+            "heading": "Reviews",
+            "badge_link": "",
+            "product": ""
+          }
+        }
+      },
+      "block_order": [
+        "okendo_reviews_carousel_T9RnMR"
+      ],
+      "settings": {}
+    },
+    "spacer_tafrLK": {
+      "type": "spacer",
+      "name": "Spacer",
+      "settings": {
+        "spacer_height": 90
+      }
+    },
+    "faq_pages_FmiYAa": {
+      "type": "faq-pages",
+      "blocks": {
+        "faq_LcRUbQ": {
+          "type": "faq",
+          "settings": {
+            "question": "Where do you deliver? ",
+            "answer": "<p>We deliver to Austria, Belgium, Bulgaria, Croatia, Czechia, Denmark, Estonia, Finland, France, Germany, Greece, Hungary, Ireland, Italy, Latvia, Lithuania, Luxembourg, Netherlands, Poland, Portugal, Romania, Slovakia, Slovenia, Spain, Sweden, Switzerland.<br/>Contact us if your country is not in this list.</p>",
+            "faq_image": "shopify://shop_images/Dragonfruits-Thailand-09989-JurassicFruit.jpg"
+          }
+        },
+        "faq_gBpRfJ": {
+          "type": "faq",
+          "settings": {
+            "question": "How much does delivery cost and how long does it take?",
+            "answer": "<p>Find all shipping options here: <a href=\"https://www.jurassicfruit.com/en/policies/shipping-policy\" title=\"https://www.jurassicfruit.com/en/policies/shipping-policy\">Shipping policy</a> The indicated delivery times start from the shipping date (not the order date, due to our weekly schedule).The delivery delays are not guaranteed except for Express.</p>",
+            "faq_image": "shopify://shop_images/Discovery_20Date_20Gift_hash_escaped_06.jpg"
+          }
+        },
+        "faq_ACCaTB": {
+          "type": "faq",
+          "settings": {
+            "question": "When will it be delivered?",
+            "answer": "<p>It depends on when you pass your order.</p><p>Order <strong>until Thursday 20:00</strong> so that your fruits will be shipped the next Monday, Tuesday or Wednesday (delivery one to two days after). If you order after Thursday 19:00 (and before Thursday 20:00 the next week) your fruits will be shipped the second next Monday, Tuesday or Wednesday.</p><p>This weekly schedule allows us to have minimum waste (we ask our producers to gather the exact quantities our customers need) and to have the freshest fruits possible (our producers pick the fruits at the very last minute).<br/><br/>Please note that the shipping delay indicated by your chosen carrier affects only the delivery time, not the shipping day itself. We do not store fruits; they are harvested once a week. Therefore, even if you select express shipping, the shipment will not leave earlier than the date indicated at checkout.</p>"
+          }
+        },
+        "faq_kEbLiV": {
+          "type": "faq",
+          "settings": {
+            "question": "Must I be at home to receive the delivery?",
+            "answer": "<p>It is the best, but it is not mandatory! If you are not at home, you have different options:</p><p>You can deliver to another address, such as your office, a small local store, a neighbour's home, a relative's home, etc.</p><p>You can set that when you are not at home, you want the parcel to be delivered to another address or to be left at your doorstep. To set your personal options, you just have to sign in at <strong>UPS My Choice</strong>.</p>"
+          }
+        },
+        "faq_LV6Jjz": {
+          "type": "faq",
+          "settings": {
+            "question": "Can I come and pick up my order?",
+            "answer": "<p>Yes, you can pick up your order in Essen and save on shipping costs.</p><p>As we do not have a physical store, orders must still be <strong>placed online</strong> so you can choose your payment method and so we can pre-order the fresh fruits. We order everything fresh each week and do not sell from stock.<br/>For the best availability, we recommend placing your order by Thursday at 8:00 PM.</p><p>Pickup is possible once you receive the <strong>shipping confirmation email</strong> (this is sent automatically and <strong>looks the same as for regular shipping orders</strong>). After that, you can collect your package:<br/>Monday to Sunday (except Thursday), ideally as soon as possible, between 8:00 AM and 12:00 PM.</p>",
+            "faq_image": "shopify://shop_images/Mango-Gedong-Indonesia-beach-4.jpg"
+          }
+        }
+      },
+      "block_order": [
+        "faq_LcRUbQ",
+        "faq_gBpRfJ",
+        "faq_ACCaTB",
+        "faq_kEbLiV",
+        "faq_LV6Jjz"
+      ],
+      "name": "FAQ Page Section",
+      "settings": {
+        "heading": "Frequently Asked Questions",
+        "cta_url": "",
+        "cta_text": "",
+        "fallback_image": "shopify://shop_images/image_8.png"
+      }
+    }
+  },
+  "order": [
+    "main",
+    "spacer_Kqf4M3",
+    "headingsec_ATiVep",
+    "spacer_E3UqMA",
+    "17658703763bf5fc11",
+    "spacer_tafrLK",
+    "faq_pages_FmiYAa"
+  ]
+}

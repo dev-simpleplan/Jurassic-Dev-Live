@@ -1,4 +1,13 @@
-<div class="faq-sec"> 
+{% comment %}
+  FAQs are pulled from the collection metafield custom.collection_faq (list of
+  "FAQ item" metaobjects), mirroring how the product page uses custom.faqs.
+  Field keys are read with fallbacks so either naming works
+  (question/answer/faq_image or faq_label/faq_data/faq_image).
+  If the collection has no metafield set, the section's own blocks are used.
+{% endcomment %}
+{% assign faq_meta_items = collection.metafields.custom.collection_faq.value %}
+
+<div class="faq-sec">
     <div class="container-fluid">
         <div class="heading with-link">
             <h2>{{ section.settings.heading }}</h2>
@@ -10,32 +19,61 @@
         </div>
         <div class="faq-wrap">
             <div class="faq-accordian-wrapper">
-                {% for block in section.blocks %}
-                    <div class="faq-item" {{ block.shopify_attributes }} data-image="{{ block.settings.faq_image | img_url: 'master' }}">
-                        <div class="faq-question">
-                            <div class="faq-question-left">
-                                <div class="f-question">
-                                  <h3>{{ block.settings.question }}</h3>
+                {% if faq_meta_items != blank %}
+                    {% for item in faq_meta_items %}
+                        {% assign faq_q = item.question | default: item.faq_label %}
+                        {% assign faq_a = item.answer | default: item.faq_data %}
+                        {% assign faq_img = item.faq_image | default: item.image %}
+                        <div class="faq-item" data-image="{{ faq_img | img_url: 'master' }}">
+                            <div class="faq-question">
+                                <div class="faq-question-left">
+                                    <div class="f-question">
+                                      <h3>{{ faq_q }}</h3>
+                                    </div>
+                                </div>
+                                <div class="faq-question-right">
+                                    {% render 'plus' %}
                                 </div>
                             </div>
-                            <div class="faq-question-right">
-                                {% render 'plus' %}
+                            <div class="faq-answer">
+                                <div class="f-answer">
+                                    {{ faq_a | metafield_tag }}
+                                </div>
                             </div>
                         </div>
-                        <div class="faq-answer">
-                            <div class="f-answer">
-                                {{ block.settings.answer }}
+                    {% endfor %}
+                {% else %}
+                    {% for block in section.blocks %}
+                        <div class="faq-item" {{ block.shopify_attributes }} data-image="{{ block.settings.faq_image | img_url: 'master' }}">
+                            <div class="faq-question">
+                                <div class="faq-question-left">
+                                    <div class="f-question">
+                                      <h3>{{ block.settings.question }}</h3>
+                                    </div>
+                                </div>
+                                <div class="faq-question-right">
+                                    {% render 'plus' %}
+                                </div>
+                            </div>
+                            <div class="faq-answer">
+                                <div class="f-answer">
+                                    {{ block.settings.answer }}
+                                </div>
                             </div>
                         </div>
-                    </div>
-                {% endfor %}
+                    {% endfor %}
+                {% endif %}
             </div>
             <div class="faq-image">
-                {% comment %} Initial image is taken from the first block or the section setting fallback {% endcomment %}
-                {% assign first_block_image = section.blocks.first.settings.faq_image %}
-                <img id="faq-dynamic-image" width="100%" height="100%" 
-                     src="{{ first_block_image | default: section.settings.fallback_image | img_url:'master' }}" 
-                     alt="{{ first_block_image.alt }}">
+                {% comment %} Initial image: first metafield item, else first block, else fallback {% endcomment %}
+                {% if faq_meta_items != blank %}
+                    {% assign first_faq_image = faq_meta_items.first.faq_image | default: faq_meta_items.first.image %}
+                {% else %}
+                    {% assign first_faq_image = section.blocks.first.settings.faq_image %}
+                {% endif %}
+                <img id="faq-dynamic-image" width="100%" height="100%"
+                     src="{{ first_faq_image | default: section.settings.fallback_image | img_url:'master' }}"
+                     alt="{{ first_faq_image.alt }}">
             </div>
         </div>
 

@@ -1278,7 +1278,7 @@
                    {% assign shipped_by_key = 'air' %}
                  {% elsif shipped_by contains 'sea' or shipped_by contains 'see' or shipped_by contains 'mer' or shipped_by contains 'maritim' %}
                    {% assign shipped_by_key = 'sea' %}
-                 {% elsif shipped_by contains 'road' or shipped_by contains 'landweg' or shipped_by contains 'straße' or shipped_by contains 'strasse' or shipped_by contains 'route' or shipped_by contains 'terrestre' %}
+                 {% elsif shipped_by contains 'road' or shipped_by contains 'landweg' or shipped_by contains 'straße' or shipped_by contains 'strasse' or shipped_by contains 'rout' or shipped_by contains 'terrestre' %}
                    {% assign shipped_by_key = 'road' %}
                  {% endif %}
                  <div class="tech-list">
@@ -1614,7 +1614,7 @@ function normalizeShippingMethod(value) {
 
   if (has(['air', 'luft', 'aér', 'aer', 'avion'])) return 'air';
   if (has(['sea', 'see', 'mer', 'maritim'])) return 'sea';
-  if (has(['road', 'landweg', 'straße', 'strasse', 'route', 'terrestre'])) return 'road';
+  if (has(['road', 'landweg', 'straße', 'strasse', 'rout', 'terrestre'])) return 'road';
 
   return normalized;
 }

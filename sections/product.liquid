@@ -1272,11 +1272,13 @@
                 {% comment %} {{ product.metafields.custom.technical_details | metafield_tag }} {% endcomment %}
                  {% assign shipped_by = selected_variant.metafields.custom.shipped_by.value | default: selected_variant.metafields.custom.shipped_by | default: product.metafields.custom.shipped_by.value | default: product.metafields.custom.shipped_by | downcase | strip %}
                  {% assign shipped_by_key = shipped_by %}
-                 {% if shipped_by == 'luft' or shipped_by == 'air' %}
+                 {% comment %} Match by keyword (contains) so translated values work too:
+                    EN air/sea/road, DE luft(weg)/see(weg)/landweg/straße, FR aérien/avion/maritime/mer/route/terrestre. {% endcomment %}
+                 {% if shipped_by contains 'air' or shipped_by contains 'luft' or shipped_by contains 'aér' or shipped_by contains 'aer' or shipped_by contains 'avion' %}
                    {% assign shipped_by_key = 'air' %}
-                 {% elsif shipped_by == 'see' or shipped_by == 'sea' %}
+                 {% elsif shipped_by contains 'sea' or shipped_by contains 'see' or shipped_by contains 'mer' or shipped_by contains 'maritim' %}
                    {% assign shipped_by_key = 'sea' %}
-                 {% elsif shipped_by == 'straße' or shipped_by == 'strasse' or shipped_by == 'road' %}
+                 {% elsif shipped_by contains 'road' or shipped_by contains 'landweg' or shipped_by contains 'straße' or shipped_by contains 'strasse' or shipped_by contains 'route' or shipped_by contains 'terrestre' %}
                    {% assign shipped_by_key = 'road' %}
                  {% endif %}
                  <div class="tech-list">
@@ -1312,7 +1314,7 @@
                                 {% render 'road' %}
                               {% endif %}
                             </span>
-                            <span class="pas-shipping-text" data-shipping-text>by {{ shipped_by }}</span>
+                            <span class="pas-shipping-text" data-shipping-text>{{ shipped_by }}</span>
                           </div>
                         </div>
                       </div>
@@ -1607,10 +1609,12 @@ const SHIPPING_ICONS = {
 
 function normalizeShippingMethod(value) {
   const normalized = String(value || '').toLowerCase().trim();
+  // Match by keyword so translated values resolve to an icon too (EN/DE/FR).
+  const has = (arr) => arr.some((k) => normalized.includes(k));
 
-  if (normalized === 'air' || normalized === 'luft') return 'air';
-  if (normalized === 'sea' || normalized === 'see') return 'sea';
-  if (normalized === 'road' || normalized === 'strasse' || normalized === 'straße') return 'road';
+  if (has(['air', 'luft', 'aér', 'aer', 'avion'])) return 'air';
+  if (has(['sea', 'see', 'mer', 'maritim'])) return 'sea';
+  if (has(['road', 'landweg', 'straße', 'strasse', 'route', 'terrestre'])) return 'road';
 
   return normalized;
 }
@@ -1829,9 +1833,7 @@ class VariantSelector extends HTMLElement {
     }
 
     if (textEl) {
-      textEl.textContent = shippingLabel
-        ? `by ${shippingLabel}`
-        : '';
+      textEl.textContent = shippingLabel || '';
     }
   }
 

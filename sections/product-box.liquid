@@ -909,11 +909,13 @@
                 <div class="product-desc">
                   {% assign shipped_by = selected_variant_shipped_by %}
                   {% assign shipped_by_key = shipped_by %}
-                  {% if shipped_by == 'luft' or shipped_by == 'air' %}
+                  {% comment %} Match by keyword (contains) so translated values work too:
+                     EN air/sea/road, DE luft(weg)/see(weg)/landweg/straße, FR aérien/avion/maritime/mer/route/terrestre. {% endcomment %}
+                  {% if shipped_by contains 'air' or shipped_by contains 'luft' or shipped_by contains 'aér' or shipped_by contains 'aer' or shipped_by contains 'avion' %}
                     {% assign shipped_by_key = 'air' %}
-                  {% elsif shipped_by == 'see' or shipped_by == 'sea' %}
+                  {% elsif shipped_by contains 'sea' or shipped_by contains 'see' or shipped_by contains 'mer' or shipped_by contains 'maritim' %}
                     {% assign shipped_by_key = 'sea' %}
-                  {% elsif shipped_by == 'straße' or shipped_by == 'strasse' or shipped_by == 'road' %}
+                  {% elsif shipped_by contains 'road' or shipped_by contains 'landweg' or shipped_by contains 'straße' or shipped_by contains 'strasse' or shipped_by contains 'route' or shipped_by contains 'terrestre' %}
                     {% assign shipped_by_key = 'road' %}
                   {% endif %}
 
@@ -950,7 +952,7 @@
                                 {% render 'road' %}
                               {% endif %}
                             </span>
-                            <span class="pas-shipping-text" data-shipping-text>by {{ shipped_by }}</span>
+                            <span class="pas-shipping-text" data-shipping-text>{{ shipped_by }}</span>
                           </div>
                         </div>
                       </div>

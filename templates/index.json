@@ -58,60 +58,25 @@
         "button_link": "shopify://products/exotic-fruit-discovery-box"
       }
     },
-    "spacer0": {
-      "type": "spacer",
-      "settings": {
-        "spacer_height": 90
-      }
-    },
-    "bestseller": {
-      "type": "bestseller",
-      "settings": {
-        "collection": "best-this-week",
-        "heading": "What’s best this week",
-        "subheading": "These are the four freshly picked fruits we’re most excited about this week.",
-        "cta_url": "shopify://collections/fruit",
-        "cta_text": "All fruits in season"
-      }
-    },
-    "spacer": {
-      "type": "spacer",
-      "settings": {
-        "spacer_height": 90
-      }
-    },
-    "discovery-box": {
-      "type": "discovery-box",
-      "settings": {
-        "product": "exotic-fruit-discovery-box",
-        "bg-image": "shopify://shop_images/8.jpg",
-        "heading": "Embark on a Flavor Adventure with our Discovery Box",
-        "para": "New to Jurassic Fruit? The Discovery Box is your perfect start.",
-        "user_image": "shopify://shop_images/c0a0a587c74f5cfa420fa4ba1cf06894c0c01d00.jpg",
-        "review_star": 4.6,
-        "user_name": "Ghica I. on the Discovery Box of Jurassic Fruit",
-        "user_comment": "\"I just loved the whole box! The fruits were delicious and I found so many new fruits that were so tasty 😋\""
-      }
-    },
     "spacer7": {
       "type": "spacer",
       "settings": {
-        "spacer_height": 90
+        "spacer_height": 40
       }
     },
     "all-categories": {
       "type": "category-grid-sec",
       "blocks": {
-        "collection_block_6hFaDw": {
-          "type": "collection_block",
-          "settings": {
-            "collection": "fruit"
-          }
-        },
         "collection_block_JnrDEX": {
           "type": "collection_block",
           "settings": {
             "collection": "fruit-boxes"
+          }
+        },
+        "collection_block_6hFaDw": {
+          "type": "collection_block",
+          "settings": {
+            "collection": "fruit"
           }
         },
         "collection_block_YpVyhY": {
@@ -152,8 +117,8 @@
         }
       },
       "block_order": [
-        "collection_block_6hFaDw",
         "collection_block_JnrDEX",
+        "collection_block_6hFaDw",
         "collection_block_YpVyhY",
         "collection_block_xGihdd",
         "collection_block_AwVC9h",
@@ -165,10 +130,45 @@
         "heading": "Main categories"
       }
     },
-    "spacer8": {
+    "spacer0": {
       "type": "spacer",
       "settings": {
         "spacer_height": 90
+      }
+    },
+    "bestseller": {
+      "type": "bestseller",
+      "settings": {
+        "collection": "best-this-week",
+        "heading": "What’s best this week",
+        "subheading": "These are the four freshly picked fruits we’re most excited about this week.",
+        "cta_url": "shopify://collections/fruit",
+        "cta_text": "All fruits in season"
+      }
+    },
+    "spacer": {
+      "type": "spacer",
+      "settings": {
+        "spacer_height": 90
+      }
+    },
+    "discovery-box": {
+      "type": "discovery-box",
+      "settings": {
+        "product": "exotic-fruit-discovery-box",
+        "bg-image": "shopify://shop_images/8.jpg",
+        "heading": "Embark on a Flavor Adventure with our Discovery Box",
+        "para": "New to Jurassic Fruit? The Discovery Box is your perfect start.",
+        "user_image": "shopify://shop_images/c0a0a587c74f5cfa420fa4ba1cf06894c0c01d00.jpg",
+        "review_star": 4.6,
+        "user_name": "Ghica I. on the Discovery Box of Jurassic Fruit",
+        "user_comment": "\"I just loved the whole box! The fruits were delicious and I found so many new fruits that were so tasty 😋\""
+      }
+    },
+    "spacer8": {
+      "type": "spacer",
+      "settings": {
+        "spacer_height": 50
       }
     },
     "video-carousel": {
@@ -594,12 +594,12 @@
   },
   "order": [
     "banner",
+    "spacer7",
+    "all-categories",
     "spacer0",
     "bestseller",
     "spacer",
     "discovery-box",
-    "spacer7",
-    "all-categories",
     "spacer8",
     "video-carousel",
     "spacer6",

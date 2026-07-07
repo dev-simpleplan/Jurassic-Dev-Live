@@ -12,6 +12,38 @@
     "main": {
       "type": "collection",
       "blocks": {
+        "collection_iTf6ri": {
+          "type": "collection",
+          "settings": {
+            "col": "",
+            "parent_collections": [],
+            "hide_on_generic_collections": false,
+            "col_name": ""
+          }
+        },
+        "collection_rxVwVF": {
+          "type": "collection",
+          "settings": {
+            "col": "fruit-boxes",
+            "parent_collections": [
+              "fruit",
+              "all-products"
+            ],
+            "hide_on_generic_collections": false,
+            "col_name": "Boxes"
+          }
+        },
+        "collection_JKYHMB": {
+          "type": "collection",
+          "settings": {
+            "col": "mangoes",
+            "parent_collections": [
+              "fruit"
+            ],
+            "hide_on_generic_collections": true,
+            "col_name": ""
+          }
+        },
         "collection_zp8hR7": {
           "type": "collection",
           "settings": {
@@ -34,17 +66,6 @@
             "col_name": ""
           }
         },
-        "collection_JKYHMB": {
-          "type": "collection",
-          "settings": {
-            "col": "mangoes",
-            "parent_collections": [
-              "fruit"
-            ],
-            "hide_on_generic_collections": true,
-            "col_name": ""
-          }
-        },
         "collection_fMayaE": {
           "type": "collection",
           "settings": {
@@ -52,18 +73,6 @@
             "parent_collections": [],
             "hide_on_generic_collections": false,
             "col_name": "Fruits"
-          }
-        },
-        "collection_rxVwVF": {
-          "type": "collection",
-          "settings": {
-            "col": "fruit-boxes",
-            "parent_collections": [
-              "fruit",
-              "all-products"
-            ],
-            "hide_on_generic_collections": false,
-            "col_name": "Boxes"
           }
         },
         "collection_NUyX4d": {
@@ -131,11 +140,12 @@
         }
       },
       "block_order": [
+        "collection_iTf6ri",
+        "collection_rxVwVF",
+        "collection_JKYHMB",
         "collection_zp8hR7",
         "collection_Fnbewh",
-        "collection_JKYHMB",
         "collection_fMayaE",
-        "collection_rxVwVF",
         "collection_NUyX4d",
         "collection_XAzdgK",
         "collection_m7RmEV",

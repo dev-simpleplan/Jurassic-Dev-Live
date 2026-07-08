@@ -20,7 +20,7 @@
                 </div>
                 <div class="nl-form">
                     {% form 'customer' %}
-                    <input type="hidden" name="return_to" value="{{ pages['thank-you'].url }}">
+                    {% comment %} <input type="hidden" name="return_to" value="{{ pages['thank-you'].url }}"> {% endcomment %}
                     <div class="form-in">
                         <div class="email_input">
                         <input
@@ -37,16 +37,18 @@
                             value="{{ 'sections.newsletter.subscribe' | t }}">
                         </div>
                     </div>
-                    {% if form.posted_successfully? %}
-                        <script>
-                        window.location.href = {{ pages['thank-you'].url | json }};
-                        </script>
-                    {% elsif form.errors %}
-                        <div class="form-error">
-                        <p>There was an error submitting the form. Please check your email address and try again.</p>
-                        </div>
-                    {% endif %}
+                    
                     {% endform %}
+
+                    <script>
+                        document.addEventListener('DOMContentLoaded', function () {
+                        const params = new URLSearchParams(window.location.search);
+
+                        if (params.get('customer_posted') === 'true') {
+                            window.location.replace('{{ pages["thank-you"].url }}');
+                        }
+                        });
+                    </script>   
                 </div>
             </div>
         </div>

@@ -12,6 +12,18 @@ function canOpenOnHover(dropdown) {
   return !dropdown?.dataset.hoverLocked;
 }
 
+/* While the page is scrolling, the pointer can slide under a dropdown and fire
+   mouseenter, opening it unexpectedly and causing jank. Suppress hover-open for
+   a short idle window after the last scroll so opening only happens on a real
+   mouse move. */
+let isPageScrolling = false;
+let scrollIdleTimer = null;
+window.addEventListener('scroll', () => {
+  isPageScrolling = true;
+  if (scrollIdleTimer) clearTimeout(scrollIdleTimer);
+  scrollIdleTimer = setTimeout(() => { isPageScrolling = false; }, 150);
+}, { passive: true });
+
 function isCornerCartActive() {
   return Boolean(
     window.corner ||
@@ -46,6 +58,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 document.addEventListener('mouseenter', (e) => {
   if (isTouchLikeDevice()) return;
+  if (isPageScrolling) return; // ignore scroll-induced mouseenter
 
   const dropdownWrap = e.target.closest('.wrapper-dropdown');
   if (!dropdownWrap) return;
@@ -54,6 +67,19 @@ document.addEventListener('mouseenter', (e) => {
   closeAllDropdowns(dropdownWrap);
   dropdownWrap.classList.add('active');
 }, true);
+
+/* Open on genuine mouse movement too, so a dropdown the cursor is already
+   resting over (e.g. right after a scroll) still opens once the user moves. */
+document.addEventListener('mousemove', (e) => {
+  if (isTouchLikeDevice() || isPageScrolling) return;
+
+  const dropdownWrap = e.target.closest('.wrapper-dropdown');
+  if (!dropdownWrap || dropdownWrap.classList.contains('active')) return;
+  if (!canOpenOnHover(dropdownWrap)) return;
+
+  closeAllDropdowns(dropdownWrap);
+  dropdownWrap.classList.add('active');
+}, { passive: true });
 
 document.addEventListener('mouseleave', (e) => {
   if (isTouchLikeDevice()) return;

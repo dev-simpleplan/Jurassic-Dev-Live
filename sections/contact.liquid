@@ -102,10 +102,10 @@
                     <div class="cgw-right">
                         <div class="cgwr-form">
                             {% form 'contact', id: 'contactID' %}
-                            <input type="hidden" name="return_to" value="{{ routes.root_url }}pages/thank-you">
+                            <input type="hidden" name="return_to" value="{{ pages['thank-you'].url }}">
                             {% if form.posted_successfully? %}
                                 <script>
-                                    window.location = window.Shopify.routes.root + "pages/thank-you";
+                                    window.location = {{ pages['thank-you'].url | json }};
                                 </script>
                             {% else %}
                                 {{ form.errors | default_errors }}

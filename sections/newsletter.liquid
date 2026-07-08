@@ -20,7 +20,7 @@
                 </div>
                 <div class="nl-form">
                     {% form 'customer' %}
-                    <input type="hidden" name="return_to" value="{{ routes.root_url }}pages/thank-you">
+                    <input type="hidden" name="return_to" value="{{ pages['thank-you'].url }}">
                     <div class="form-in">
                         <div class="email_input">
                         <input
@@ -39,7 +39,7 @@
                     </div>
                     {% if form.posted_successfully? %}
                         <script>
-                        window.location.href = window.Shopify.routes.root + 'pages/thank-you';
+                        window.location.href = {{ pages['thank-you'].url | json }};
                         </script>
                     {% elsif form.errors %}
                         <div class="form-error">

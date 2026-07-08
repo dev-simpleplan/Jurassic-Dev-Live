@@ -41,14 +41,15 @@
                     {% endform %}
 
                     <script>
-                        document.addEventListener('DOMContentLoaded', function () {
-                        const params = new URLSearchParams(window.location.search);
+document.addEventListener('DOMContentLoaded', function () {
+    const params = new URLSearchParams(window.location.search);
 
-                        if (params.get('customer_posted') === 'true') {
-                            window.location.replace('{{ pages["thank-you"].url }}');
-                        }
-                        });
-                    </script>   
+    if (params.get('customer_posted') === 'true') {
+        console.log('Newsletter submitted');
+        alert('Newsletter submitted');
+    }
+});
+</script>
                 </div>
             </div>
         </div>

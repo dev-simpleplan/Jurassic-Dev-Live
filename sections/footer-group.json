@@ -17,13 +17,13 @@
         "menu_group_6Ryarp": {
           "type": "menu_group",
           "settings": {
-            "menu_handle": "footer"
+            "menu_handle": "footer-1"
           }
         },
         "menu_group_9xcnye": {
           "type": "menu_group",
           "settings": {
-            "menu_handle": ""
+            "menu_handle": "footer-learn-menu"
           }
         },
         "partner_logo_XzkVyW": {

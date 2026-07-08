@@ -8,7 +8,7 @@
 
     if product_video_metafield != blank
       for media_item in product_video_metafield.value
-        if media_item.media_type == 'video'
+        if media_item.media_type == 'video' or media_item.media_type == 'image'
           assign product_video_count = product_video_count | plus: 1
         endif
       endfor
@@ -89,6 +89,19 @@
                       </span>
                     </button>
                   </div>
+                </div>
+              </div>
+            </div>
+          {% elsif media_item.media_type == 'image' %}
+            <div class="item">
+              <div class="vci-item">
+                <div class="vcitem-video">
+                  <img
+                    width="100%"
+                    src="{{ media_item | image_url: width: 2000 }}"
+                    alt="{{ media_item.alt }}"
+                    class="img ab"
+                    loading="lazy">
                 </div>
               </div>
             </div>
@@ -380,14 +393,14 @@ document.addEventListener("DOMContentLoaded", () => {
         "id": "use_product_videos",
         "label": "Use product-specific videos",
         "default": false,
-        "info": "When enabled on product templates, this section uses a product metafield instead of section blocks and hides unless at least 3 videos are added."
+        "info": "When enabled on product templates, this section uses a product metafield instead of section blocks and hides unless at least 3 media items (images/videos) are added."
       },
       {
         "type": "text",
         "id": "product_videos_metafield",
         "label": "Product videos metafield key",
         "default": "product_videos",
-        "info": "Create a product metafield in the custom namespace with this key. Use a list of video files."
+        "info": "Create a product metafield in the custom namespace with this key. Use a list of files (images and/or videos)."
       }
     ],
     "blocks": [

@@ -58,13 +58,13 @@
     "card": "Geschenkgutschein",
     "expired": "Diese Geschenkkarte ist abgelaufen.",
     "expires_on": "Läuft ab am {{ expires_on }}",
-    "use_at_checkout": "Verwenden Sie diese Geschenkkarte an der Kasse."
+    "use_at_checkout": "Verwende diese Geschenkkarte an der Kasse."
   },
   "thank_you_page": {
     "heading": "Danke",
-    "subheading": "Ihr Formular wurde erfolgreich übermittelt.",
+    "subheading": "Dein Formular wurde erfolgreich übermittelt.",
     "body_intro": "Willkommen bei uns.",
-    "body_text": "Sie erfahren jetzt von seltenen Entdeckungen, frischen Neuheiten und allem, was sich wirklich zu probieren lohnt. Wir melden uns nur, wenn es wirklich etwas zu sagen gibt.",
+    "body_text": "Du erfährst jetzt von seltenen Entdeckungen, frischen Neuheiten und allem, was sich wirklich zu probieren lohnt. Wir melden uns nur, wenn es wirklich etwas zu sagen gibt.",
     "cta": "Zurück zur Startseite"
   },
   "general": {

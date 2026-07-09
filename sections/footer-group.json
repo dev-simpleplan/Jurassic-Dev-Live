@@ -35,8 +35,8 @@
         "trust_logos_FKDq8p": {
           "type": "trust-logos",
           "settings": {
-            "trust_text": "<p>Quality<br>Organic code: DE OKO-005</p>",
-            "trust-image": "shopify://shop_images/image_307.png"
+            "trust_text": "<p><strong>Quality</strong><br/><a href=\"https://cdn.shopify.com/s/files/1/0746/5330/2841/files/Organic_Certificate_until_31.03.2027_-_EN.pdf?v=1773678107\" target=\"_blank\" title=\"Organic certificate\">Organic certified: DE OKO-005</a></p>",
+            "trust-image": "shopify://shop_images/bio_logo.png"
           }
         },
         "trust_logos_3C6PBf": {

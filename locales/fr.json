@@ -99,7 +99,8 @@
       "sold_out": "Indisponible",
       "in_stock": "En stock",
       "out_of_stock": "Indisponible",
-      "inventory_status": "Plus que {{ count }} disponible"
+      "inventory_status": "Plus que {{ count }} disponible",
+      "almost_sold_out": "Bientôt épuisé"
     }
   },
   "benefits": {

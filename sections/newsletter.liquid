@@ -80,10 +80,13 @@
 
                     <script>
                     document.addEventListener('DOMContentLoaded', function () {
-                        const params = new URLSearchParams(window.location.search);
+                        var thankYouUrl = "{{ pages['thank-you'].url }}";
+                        var params = new URLSearchParams(window.location.search);
 
-                        if (params.get('customer_posted') === 'true') {
-                            window.location.href = "{{ pages['thank-you'].url }}";
+                        // Guard against an empty URL (e.g. page not available in this
+                        // market) which would reload the same page and loop forever.
+                        if (thankYouUrl && params.get('customer_posted') === 'true') {
+                            window.location.href = thankYouUrl;
                         }
                     });
                     </script>

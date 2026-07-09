@@ -103,7 +103,7 @@
                         <div class="cgwr-form">
                             {% form 'contact', id: 'contactID' %}
                             <input type="hidden" name="return_to" value="{{ pages['thank-you'].url }}">
-                            {% if form.posted_successfully? %}
+                            {% if form.posted_successfully? and pages['thank-you'].url != blank %}
                                 <script>
                                     window.location = {{ pages['thank-you'].url | json }};
                                 </script>

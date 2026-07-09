@@ -322,46 +322,37 @@
               </form>
             </div>
             <div class="fc_trust_text">
-              <p class="{% if current_variant.available and current_variant.inventory_quantity > 0 and current_variant.inventory_quantity < 100 %}low-stock{% endif %}">
-                {% if current_variant.available == false or current_variant.inventory_quantity <= 0 %}
-                  {{ 'products.product.out_of_stock' | t }}
-                {% elsif current_variant.inventory_quantity < 100 %}
-                  {{ 'products.product.inventory_status' | t: count: current_variant.inventory_quantity }}
-                {% else %}
-                  {{ 'products.product.in_stock' | t }}
-                {% endif %}
-              </p>
-              {% comment %} <span class="dot_seperator"></span>
-              <p>Ships in 24 hrs</p> {% endcomment %}
-              
-              {% comment %} <p>{{ product.metafields.custom.benefit | default: 'Product Benefit' }}</p> {% endcomment %}
-               {%- capture benefit_text -%}
-                {%- if product.tags contains 'Fresh fruit' -%}
-                  {{ 'benefits.freshly_picked' | t }}
-                {%- elsif product.tags contains 'New' -%}
-                  {{ 'benefits.rare_handpicked' | t }}
-                {%- elsif product.tags contains 'Dried Fruit' or product.tags contains 'Date' -%}
-                  {{ 'benefits.pure_raw' | t }}
-                {%- elsif product.tags contains 'Fine food' or product.tags contains 'Honey' -%}
-                  {{ 'benefits.artisanal' | t }}
-                {%- else -%}
-                  {{ product.metafields.custom.benefit }}
+              {% comment %}
+                Stock line: show "Almost sold out" only when any tracked variant
+                has 15 or fewer in stock; otherwise show nothing for stock.
+                Product-level (based on all variants), so it does not change with
+                the selected variant — the JS no longer overwrites it.
+              {% endcomment %}
+              {%- assign almost_sold_out = false -%}
+              {%- for v in product.variants -%}
+                {%- if v.inventory_management != blank and v.inventory_quantity <= 15 -%}
+                  {%- assign almost_sold_out = true -%}
+                  {%- break -%}
                 {%- endif -%}
-              {%- endcapture -%}
+              {%- endfor -%}
 
-              {%- assign benefit_text = benefit_text | strip -%}
-
-              {%- if benefit_text != blank -%}
-                <span class="dot_seperator"></span>
-                <p>{{ benefit_text }}</p>
+              {%- if almost_sold_out -%}
+                <p class="low-stock">{{ 'products.product.almost_sold_out' | t }}</p>
               {%- endif -%}
 
-              {% comment %} {%- assign benefit_text = benefit_text | strip -%}
-
-              {%- if benefit_text != blank -%}
-                <span class="dot_seperator"></span>
-                <p>{{ benefit_text }}</p>
-              {%- endif -%} {% endcomment %}
+              {% comment %} Product USPs from the product metafield — each in its own <p>. {% endcomment %}
+              {%- assign usp_items = product.metafields.custom.product_usp.value -%}
+              {%- if usp_items != blank -%}
+                {%- assign has_preceding = almost_sold_out -%}
+                {%- for item in usp_items -%}
+                  {%- assign usp_text = item.usp_text -%}
+                  {%- if usp_text != blank -%}
+                    {%- if has_preceding -%}<span class="dot_seperator"></span>{%- endif -%}
+                    <p>{{ usp_text }}</p>
+                    {%- assign has_preceding = true -%}
+                  {%- endif -%}
+                {%- endfor -%}
+              {%- endif -%}
             </div>
           </div>
         </div>

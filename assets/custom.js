@@ -171,13 +171,8 @@ document.addEventListener('click', (e) => {
       }
     }
 
-    const trustText = card.querySelector('.fc_trust_text p:first-child');
-    if (trustText) {
-      trustText.innerText = getInventoryMessage(inventoryQty, isVariantAvailable);
-      isVariantAvailable && inventoryQty > 0 && inventoryQty < 100
-        ? trustText.classList.add('low-stock')
-        : trustText.classList.remove('low-stock');
-    }
+    // Trust text ("Almost sold out" + USP) is product-level and rendered in
+    // Liquid; it must not be overwritten on variant change.
 
     const addBtn = card.querySelector('.add-to-cart-btn');
     const addFormInput = card.querySelector('.product-card-add-form input[name="id"]');

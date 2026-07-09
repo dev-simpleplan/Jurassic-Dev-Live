@@ -96,7 +96,8 @@
       "sold_out": "Unavailable",
       "in_stock": "In stock",
       "out_of_stock": "Unavailable",
-      "inventory_status": "Only {{ count }} left"
+      "inventory_status": "Only {{ count }} left",
+      "almost_sold_out": "Almost sold out"
     }
   },
   "benefits": {

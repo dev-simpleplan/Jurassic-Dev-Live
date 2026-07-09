@@ -132,11 +132,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (addToCartInput) addToCartInput.value = variantId;
 
-        if (trustText) {
-          const inventoryQty = parseInt(inventory, 10) || 0;
-          trustText.textContent = getInventoryMessage(inventoryQty);
-          trustText.classList.toggle("low-stock", inventoryQty > 0 && inventoryQty < 100);
-        }
+        // Trust text ("Almost sold out" + USP) is product-level Liquid; do not
+        // overwrite it on variant change.
 
         if (image && mainImg) mainImg.src = image;
 

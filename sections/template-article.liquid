@@ -100,7 +100,7 @@
                                                         value="Subscribe">
                                                     </div>
                                                 </div>
-                                                {% if form.posted_successfully? %}
+                                                {% if form.posted_successfully? and pages['thank-you'].url != blank %}
                                                 <script>
                                                     window.location.href = {{ pages['thank-you'].url | json }};
                                                 </script>

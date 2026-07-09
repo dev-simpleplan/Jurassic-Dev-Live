@@ -95,7 +95,8 @@
       "sold_out": "Nicht verfügbar",
       "inventory_status": "Nur noch {{ count }} verfügbar",
       "in_stock": "Auf Lager",
-      "out_of_stock": "Nicht verfügbar"
+      "out_of_stock": "Nicht verfügbar",
+      "almost_sold_out": "Fast ausverkauft"
     }
   },
   "shopify": {

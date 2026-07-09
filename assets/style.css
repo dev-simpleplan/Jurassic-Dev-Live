@@ -2544,6 +2544,11 @@ footer::before {
     color: #dbd7c8;
     line-height: 14px;
 }
+.trust-text a {
+    font-size: 12px;
+    color: #dbd7c8;
+    line-height: 14px;
+}
 .fti-bottom .ftib-right {
     display: flex;
     align-items: flex-start;

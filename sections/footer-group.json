@@ -50,8 +50,8 @@
         "trust_logos_qXwHtt": {
           "type": "trust-logos",
           "settings": {
-            "trust_text": "<p>(4.7) Trustpilot</p>",
-            "trust-image": "shopify://shop_images/Frame_427323090.png"
+            "trust_text": "<p>4.6 Google</p>",
+            "trust-image": "shopify://shop_images/Google_Favicon_2025_svg.webp"
           }
         }
       },

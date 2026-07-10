@@ -295,6 +295,13 @@
                             alt="{{ link.title | escape }}"
                             loading="lazy">
                         </div>
+                      {% elsif forloop.first and section.settings.mobile_start_here_image != blank %}
+                        <div class="lf-image">
+                          <img
+                            src="{{ section.settings.mobile_start_here_image | image_url: width: 150, height: 150, crop: 'center' }}"
+                            alt="{{ link.title | escape }}"
+                            loading="lazy">
+                        </div>
                       {% endif %}
 
                       <div class="lf-text">
@@ -467,6 +474,12 @@
         "type": "image_picker",
         "id": "select_logo",
         "label": "Change Logo"
+      },
+      {
+        "type": "image_picker",
+        "id": "mobile_start_here_image",
+        "label": "Mobile 'Start Here' image",
+        "info": "Shows next to the first item (Start Here) in the mobile Categories menu, matching the collection thumbnails."
       }
     ],
     "blocks": [

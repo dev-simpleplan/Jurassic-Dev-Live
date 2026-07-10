@@ -104,7 +104,8 @@
         "nav_menu_right_tATRCL"
       ],
       "settings": {
-        "select_logo": "shopify://shop_images/Jurassic_Fruit_2.svg"
+        "select_logo": "shopify://shop_images/Jurassic_Fruit_2.svg",
+        "mobile_start_here_image": "shopify://shop_images/Discovery-Box-Exotic-Fruit-Large-2546-02042026-JurassicFruit-JurassicFruit.jpg"
       }
     }
   },

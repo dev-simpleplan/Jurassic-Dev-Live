@@ -341,7 +341,7 @@
               {%- endif -%}
 
               {% comment %} Product USPs from the product metafield — each in its own <p>. {% endcomment %}
-              {%- assign usp_items = product.metafields.custom.product_usp.value -%}
+              {%- assign usp_items = product.metafields.custom.product_usp_for_cards.value -%}
               {%- if usp_items != blank -%}
                 {%- assign has_preceding = almost_sold_out -%}
                 {%- for item in usp_items -%}

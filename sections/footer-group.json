@@ -41,7 +41,6 @@
         },
         "trust_logos_3C6PBf": {
           "type": "trust-logos",
-          "disabled": true,
           "settings": {
             "trust_text": "<p>(4.7/5) excellent</p>",
             "trust-image": "shopify://shop_images/image_306.png"

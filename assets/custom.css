@@ -638,6 +638,20 @@
   color: red;
 }
 
+/* Mobile: at most one USP (none when "Almost sold out"); no separators.
+   Desktop keeps both USPs and the dot separators (default flex layout). */
+@media (max-width: 767px) {
+  .fc_trust_text .dot_seperator {
+    display: none;
+  }
+  .fc_trust_text .fc-usp-2 {
+    display: none;
+  }
+  .fc_trust_text--low .fc-usp-1 {
+    display: none;
+  }
+}
+
 /* 1. Default Style (10 or more) */
 .inventory-text {
   color: inherit;

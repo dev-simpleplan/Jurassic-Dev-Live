@@ -321,38 +321,68 @@
                 </div>
               </form>
             </div>
-            <div class="fc_trust_text">
-              {% comment %}
-                Stock line: show "Almost sold out" only when any tracked variant
-                has 15 or fewer in stock; otherwise show nothing for stock.
-                Product-level (based on all variants), so it does not change with
-                the selected variant — the JS no longer overwrites it.
-              {% endcomment %}
-              {%- assign almost_sold_out = false -%}
-              {%- for v in product.variants -%}
-                {%- if v.inventory_management != blank and v.inventory_quantity <= 15 -%}
-                  {%- assign almost_sold_out = true -%}
-                  {%- break -%}
+            {%- comment -%}
+              Trust line, based on the displayed variant's stock:
+                0 / unavailable -> "Unavailable", no USP (desktop + mobile)
+                1-15            -> "Almost sold out" + 2 USPs on desktop, none on mobile
+                > 15 / untracked -> 2 USPs on desktop, first USP on mobile
+              Desktop shows up to 2 USPs; mobile shows at most 1 (and none when
+              "Almost sold out"). Mobile visibility is handled in CSS; separators
+              are hidden on mobile. Product-level, so the JS no longer overwrites it.
+            {%- endcomment -%}
+            {%- assign cv_tracked = false -%}
+            {%- if current_variant.inventory_management != blank -%}
+              {%- assign cv_tracked = true -%}
+            {%- endif -%}
+
+            {%- assign is_unavailable = false -%}
+            {%- if current_variant.available == false -%}
+              {%- assign is_unavailable = true -%}
+            {%- elsif cv_tracked and current_variant.inventory_quantity <= 0 -%}
+              {%- assign is_unavailable = true -%}
+            {%- endif -%}
+
+            {%- assign almost_sold_out = false -%}
+            {%- if is_unavailable == false and cv_tracked and current_variant.inventory_quantity <= 15 -%}
+              {%- assign almost_sold_out = true -%}
+            {%- endif -%}
+
+            {%- assign stock_label = '' -%}
+            {%- if is_unavailable -%}
+              {%- assign stock_label = 'products.product.out_of_stock' | t -%}
+            {%- elsif almost_sold_out -%}
+              {%- assign stock_label = 'products.product.almost_sold_out' | t -%}
+            {%- endif -%}
+
+            {%- assign usp_items = product.metafields.custom.product_usp_for_cards.value -%}
+       
+            {%- if usp_items != blank -%}
+              {% assign usp1 = '' %}
+              {% assign usp2 = '' %}
+
+              {% for item in usp_items limit: 2 %}
+                {% if forloop.first %}
+                  {% assign usp1 = item.usp_text %}
+                {% else %}
+                  {% assign usp2 = item.usp_text %}
+                {% endif %}
+              {% endfor %}
+            {%- endif -%}
+
+            <div class="fc_trust_text{% if almost_sold_out %} fc_trust_text--low{% endif %}">
+              {%- if stock_label != blank -%}
+                <p class="low-stock">{{ stock_label }}</p>
+              {%- endif -%}
+              {%- unless is_unavailable -%}
+                {%- if usp1 != blank -%}
+                  {%- if stock_label != blank -%}<span class="dot_seperator"></span>{%- endif -%}
+                  <p class="fc-usp-1">{{ usp1 }}</p>
                 {%- endif -%}
-              {%- endfor -%}
-
-              {%- if almost_sold_out -%}
-                <p class="low-stock">{{ 'products.product.almost_sold_out' | t }}</p>
-              {%- endif -%}
-
-              {% comment %} Product USPs from the product metafield — each in its own <p>. {% endcomment %}
-              {%- assign usp_items = product.metafields.custom.product_usp_for_cards.value -%}
-              {%- if usp_items != blank -%}
-                {%- assign has_preceding = almost_sold_out -%}
-                {%- for item in usp_items -%}
-                  {%- assign usp_text = item.usp_text -%}
-                  {%- if usp_text != blank -%}
-                    {%- if has_preceding -%}<span class="dot_seperator"></span>{%- endif -%}
-                    <p>{{ usp_text }}</p>
-                    {%- assign has_preceding = true -%}
-                  {%- endif -%}
-                {%- endfor -%}
-              {%- endif -%}
+                {%- if usp2 != blank -%}
+                  {%- if stock_label != blank or usp1 != blank -%}<span class="dot_seperator"></span>{%- endif -%}
+                  <p class="fc-usp-2">{{ usp2 }}</p>
+                {%- endif -%}
+              {%- endunless -%}
             </div>
           </div>
         </div>

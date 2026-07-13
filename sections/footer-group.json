@@ -82,8 +82,8 @@
         "youtube_url": "https://www.youtube.com/c/jurassicfruit",
         "show_whatsapp": false,
         "whatsapp_url": "",
-        "show_telegram": false,
-        "telegram_url": ""
+        "show_telegram": true,
+        "telegram_url": "https://t.me/JurassicFruitOfficial"
       }
     }
   },

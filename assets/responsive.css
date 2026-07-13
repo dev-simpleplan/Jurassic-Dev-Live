@@ -1940,7 +1940,20 @@
   h2.oke-reviewCarousel-header-title {
     padding: 0 60px;
   }
+  .item-pieces {
+    font-size: 9px;
+  }
+  .wrapper-dropdown .pull-right {
+    font-size: 11px;
+  }
+  .item-unit-price {
+      font-size: 9px;
+  }
+  .wrapper-dropdown .selected-display {
+      font-size: 12px;
+  }
 }
+
 @media (max-width: 425px) {
   footer::before {
     top: 8px;

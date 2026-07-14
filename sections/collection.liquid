@@ -433,7 +433,12 @@
                         {%- break -%}
                       {%- endif -%}
                     {%- endfor -%}
-                    {% if product_quality_label != 'untreated' and product_is_organic == false %}
+                    {%- comment -%} Match untreated across languages (EN untreated / DE unbehandelt / FR non traité). {%- endcomment -%}
+                    {%- assign matches_untreated = false -%}
+                    {%- if product_quality_label contains 'untreated' or product_quality_label contains 'unbehandelt' or product_quality_label contains 'non-traite' or product_quality_label contains 'nontraite' -%}
+                      {%- assign matches_untreated = true -%}
+                    {%- endif -%}
+                    {% if matches_untreated == false and product_is_organic == false %}
                       {%- assign matches_custom_filters = false -%}
                     {% endif %}
                   {% endif %}
@@ -441,20 +446,22 @@
                   {% if region_filter_value != blank %}
                     {%- assign matches_region_filter = false -%}
                     {%- assign product_collection_handles = product.collections | map: 'handle' | join: ',' -%}
+                    {%- comment -%} Match region by keyword so translated collection handles work
+                        (EN america / FR amerique / DE amerika, etc.). {%- endcomment -%}
                     {% if region_filter_value == 'asia' %}
-                      {% if product_collection_handles contains 'fruit-asia' or product_collection_handles contains 'fruit-from-asia' or product_collection_handles contains 'fruits-from-asia' %}
+                      {% if product_collection_handles contains 'asia' or product_collection_handles contains 'asie' or product_collection_handles contains 'asien' %}
                         {%- assign matches_region_filter = true -%}
                       {% endif %}
                     {% elsif region_filter_value == 'europe' %}
-                      {% if product_collection_handles contains 'fruit-europe' or product_collection_handles contains 'fruit-from-europe' or product_collection_handles contains 'fruits-from-europe' %}
+                      {% if product_collection_handles contains 'europe' or product_collection_handles contains 'europa' %}
                         {%- assign matches_region_filter = true -%}
                       {% endif %}
                     {% elsif region_filter_value == 'america' %}
-                      {% if product_collection_handles contains 'fruit-america' or product_collection_handles contains 'fruit-from-america' or product_collection_handles contains 'fruits-from-america' %}
+                      {% if product_collection_handles contains 'america' or product_collection_handles contains 'amerique' or product_collection_handles contains 'amerika' %}
                         {%- assign matches_region_filter = true -%}
                       {% endif %}
                     {% elsif region_filter_value == 'africa' %}
-                      {% if product_collection_handles contains 'fruit-africa' or product_collection_handles contains 'fruit-from-africa' or product_collection_handles contains 'fruits-from-africa' %}
+                      {% if product_collection_handles contains 'africa' or product_collection_handles contains 'afrique' or product_collection_handles contains 'afrika' %}
                         {%- assign matches_region_filter = true -%}
                       {% endif %}
                     {% endif %}
@@ -482,7 +489,12 @@
                         {%- break -%}
                       {%- endif -%}
                     {%- endfor -%}
-                    {% if product_quality_label != 'untreated' and product_is_organic == false %}
+                    {%- comment -%} Match untreated across languages (EN untreated / DE unbehandelt / FR non traité). {%- endcomment -%}
+                    {%- assign matches_untreated = false -%}
+                    {%- if product_quality_label contains 'untreated' or product_quality_label contains 'unbehandelt' or product_quality_label contains 'non-traite' or product_quality_label contains 'nontraite' -%}
+                      {%- assign matches_untreated = true -%}
+                    {%- endif -%}
+                    {% if matches_untreated == false and product_is_organic == false %}
                       {%- assign matches_custom_filters = false -%}
                     {% endif %}
                   {% endif %}
@@ -490,20 +502,22 @@
                   {% if region_filter_value != blank %}
                     {%- assign matches_region_filter = false -%}
                     {%- assign product_collection_handles = product.collections | map: 'handle' | join: ',' -%}
+                    {%- comment -%} Match region by keyword so translated collection handles work
+                        (EN america / FR amerique / DE amerika, etc.). {%- endcomment -%}
                     {% if region_filter_value == 'asia' %}
-                      {% if product_collection_handles contains 'fruit-asia' or product_collection_handles contains 'fruit-from-asia' or product_collection_handles contains 'fruits-from-asia' %}
+                      {% if product_collection_handles contains 'asia' or product_collection_handles contains 'asie' or product_collection_handles contains 'asien' %}
                         {%- assign matches_region_filter = true -%}
                       {% endif %}
                     {% elsif region_filter_value == 'europe' %}
-                      {% if product_collection_handles contains 'fruit-europe' or product_collection_handles contains 'fruit-from-europe' or product_collection_handles contains 'fruits-from-europe' %}
+                      {% if product_collection_handles contains 'europe' or product_collection_handles contains 'europa' %}
                         {%- assign matches_region_filter = true -%}
                       {% endif %}
                     {% elsif region_filter_value == 'america' %}
-                      {% if product_collection_handles contains 'fruit-america' or product_collection_handles contains 'fruit-from-america' or product_collection_handles contains 'fruits-from-america' %}
+                      {% if product_collection_handles contains 'america' or product_collection_handles contains 'amerique' or product_collection_handles contains 'amerika' %}
                         {%- assign matches_region_filter = true -%}
                       {% endif %}
                     {% elsif region_filter_value == 'africa' %}
-                      {% if product_collection_handles contains 'fruit-africa' or product_collection_handles contains 'fruit-from-africa' or product_collection_handles contains 'fruits-from-africa' %}
+                      {% if product_collection_handles contains 'africa' or product_collection_handles contains 'afrique' or product_collection_handles contains 'afrika' %}
                         {%- assign matches_region_filter = true -%}
                       {% endif %}
                     {% endif %}

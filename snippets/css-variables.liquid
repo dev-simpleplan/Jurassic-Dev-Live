@@ -1,4 +1,14 @@
 {% style %}
+  {% # Self-hosted Scale variable font (replaces the Typekit kit) %}
+  @font-face {
+    font-family: "scale-variable";
+    src: url("{{ 'Scale-VF-Regular.woff2' | asset_url }}") format("woff2"),
+         url("{{ 'Scale-VF-Regular.woff' | asset_url }}") format("woff");
+    font-weight: 100 900;
+    font-style: normal;
+    font-display: swap;
+  }
+
   {% # Loads all font variantions with display: swap %}
   {{ settings.type_primary_font | font_face: font_display: 'swap' }}
   {{ settings.type_primary_font | font_modify: 'weight', 'bold' | font_face: font_display: 'swap' }}

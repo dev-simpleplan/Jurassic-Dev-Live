@@ -168,12 +168,11 @@
       rel="preconnect"
       href="https://fonts.gstatic.com"
       crossorigin />
+    <link rel="preload" as="font" type="font/woff2" href="{{ 'Scale-VF-Regular.woff2' | asset_url }}" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="https://use.typekit.net/dic6enr.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" rel="stylesheet" />
     {% comment %} <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" /> {% endcomment %}
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bxslider@4.2.17/dist/jquery.bxslider.min.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.2.3/animate.min.css" />
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.css"
@@ -205,11 +204,7 @@
       <meta name="description" content="{{ page_description | escape }}" />
     {% endif %}
 
-    <script
-      src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
-      integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
-      crossorigin="anonymous"
-      referrerpolicy="no-referrer"></script>
+    <script src="{{ 'jquery.min.js' | asset_url }}"></script>
 
     <script>
       window.shopCurrency = "{{ shop.currency }}";

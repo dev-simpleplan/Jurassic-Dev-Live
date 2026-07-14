@@ -14,19 +14,33 @@
         <a href="{{ product.url }}" class="card-link"></a>
         {% assign images = product.images %}
         {% if images.size > 0 %}
+            {%- assign card_img = images.first -%}
             <img
-              src="{{ images.first | img_url: 'master' }}"
+              src="{{ card_img | image_url: width: 600 }}"
+              srcset="{{ card_img | image_url: width: 300 }} 300w,
+                      {{ card_img | image_url: width: 400 }} 400w,
+                      {{ card_img | image_url: width: 600 }} 600w,
+                      {{ card_img | image_url: width: 800 }} 800w"
+              sizes="(max-width: 767px) 50vw, 25vw"
               alt="{{ product.title | escape }}"
-              width="{{ images.first.width }}"
-              height="{{ images.first.height }}"
+              width="{{ card_img.width }}"
+              height="{{ card_img.height }}"
+              loading="lazy"
               class="img_sizing primary-img">
 
             {% if images.size > 1 %}
+              {%- assign card_hover_img = images[1] -%}
               <img
-                src="{{ images[1] | img_url: 'master' }}"
+                src="{{ card_hover_img | image_url: width: 600 }}"
+                srcset="{{ card_hover_img | image_url: width: 300 }} 300w,
+                        {{ card_hover_img | image_url: width: 400 }} 400w,
+                        {{ card_hover_img | image_url: width: 600 }} 600w,
+                        {{ card_hover_img | image_url: width: 800 }} 800w"
+                sizes="(max-width: 767px) 50vw, 25vw"
                 alt="{{ product.title | escape }}"
-                width="{{ images[1].width }}"
-                height="{{ images[1].height }}"
+                width="{{ card_hover_img.width }}"
+                height="{{ card_hover_img.height }}"
+                loading="lazy"
                 class="img_sizing hover-img">
             {% endif %}
           {% else %}

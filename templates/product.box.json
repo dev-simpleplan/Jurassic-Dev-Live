@@ -35,12 +35,6 @@
             "page": "delivery-popup"
           }
         },
-        "staging_delivery_date_app_product_delivery_info_jGcmjQ": {
-          "type": "shopify://apps/staging-delivery-date-app/blocks/product-delivery-info/f5eebd54-3726-4096-a681-6d536d3a08d8",
-          "settings": {
-            "page": ""
-          }
-        },
         "store_usp": {
           "type": "store_usp",
           "settings": {
@@ -69,7 +63,6 @@
         "box_content",
         "variant_selector",
         "delivery_info_WFVGrD",
-        "staging_delivery_date_app_product_delivery_info_jGcmjQ",
         "store_usp",
         "product_info",
         "pair_with_UwJtYY"
@@ -547,7 +540,7 @@
       "type": "bestseller-carousel",
       "name": "BestsellerCarousel",
       "settings": {
-        "collection": "fruit",
+        "collection": "best-this-week",
         "heading": "This week’s bestsellers"
       }
     },
@@ -560,30 +553,6 @@
     },
     "1763732275cf946bf5": {
       "type": "apps",
-      "blocks": {
-        "instafeed_app_block_WdKCQa": {
-          "type": "shopify://apps/instafeed/blocks/app-block/c447db20-095d-4a10-9725-b5977662c9d5",
-          "disabled": true,
-          "settings": {
-            "title": "Social Media Presence",
-            "title_color": "",
-            "title_size_v2": 0,
-            "alignment": "center",
-            "instafeed_margin_top": 0,
-            "instafeed_margin_bottom": 0,
-            "instafeed_margin_sides": 0,
-            "show_instagram_link": false,
-            "link_alignment": "left",
-            "link_color": "#000000",
-            "background_color": "",
-            "feed_id": "",
-            "html_area": ""
-          }
-        }
-      },
-      "block_order": [
-        "instafeed_app_block_WdKCQa"
-      ],
       "settings": {}
     },
     "spacer_x7yJX8": {

@@ -1,5 +1,9 @@
+let _isTouchLikeCache = null;
 function isTouchLikeDevice() {
-  return window.matchMedia('(hover: none), (pointer: coarse)').matches;
+  if (_isTouchLikeCache === null) {
+    _isTouchLikeCache = window.matchMedia('(hover: none), (pointer: coarse)').matches;
+  }
+  return _isTouchLikeCache;
 }
 
 function closeAllDropdowns(except) {
@@ -67,19 +71,6 @@ document.addEventListener('mouseenter', (e) => {
   closeAllDropdowns(dropdownWrap);
   dropdownWrap.classList.add('active');
 }, true);
-
-/* Open on genuine mouse movement too, so a dropdown the cursor is already
-   resting over (e.g. right after a scroll) still opens once the user moves. */
-document.addEventListener('mousemove', (e) => {
-  if (isTouchLikeDevice() || isPageScrolling) return;
-
-  const dropdownWrap = e.target.closest('.wrapper-dropdown');
-  if (!dropdownWrap || dropdownWrap.classList.contains('active')) return;
-  if (!canOpenOnHover(dropdownWrap)) return;
-
-  closeAllDropdowns(dropdownWrap);
-  dropdownWrap.classList.add('active');
-}, { passive: true });
 
 document.addEventListener('mouseleave', (e) => {
   if (isTouchLikeDevice()) return;

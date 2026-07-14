@@ -1233,6 +1233,10 @@ li.nav-item.has-mega-menu:hover .nav_arrow_down {
     align-items: center;
     gap: 2px;
 }
+.score .star-svg {
+    display: block;
+    flex: 0 0 auto;
+}
 .rating-text {
     text-align: center;
 }

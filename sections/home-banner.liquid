@@ -2,9 +2,14 @@
   <div class="banner-bg">
     <picture>
       {% if section.settings.banner_bg_mobile != blank %}
-        <source media="(max-width: 767px)" srcset="{{ section.settings.banner_bg_mobile | img_url: 'master' }}">
+        <source media="(max-width: 767px)"
+                srcset="{{ section.settings.banner_bg_mobile | image_url: width: 750 }} 750w, {{ section.settings.banner_bg_mobile | image_url: width: 1100 }} 1100w">
       {% endif %}
-      <img src="{{ section.settings['banner-bg'] | img_url: 'master' }}" alt="Banner Image" class="img">
+      <img src="{{ section.settings['banner-bg'] | image_url: width: 2000 }}"
+           srcset="{{ section.settings['banner-bg'] | image_url: width: 1200 }} 1200w, {{ section.settings['banner-bg'] | image_url: width: 1800 }} 1800w, {{ section.settings['banner-bg'] | image_url: width: 2400 }} 2400w"
+           sizes="100vw"
+           alt="Banner Image" class="img"
+           fetchpriority="high" decoding="async">
     </picture>
   </div>
 

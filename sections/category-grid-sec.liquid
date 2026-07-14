@@ -37,7 +37,12 @@
                             {% if collection.image %}
                               <img
                                 class="icon"
-                                src="{{ collection.image | img_url: 'master' }}"
+                                src="{{ collection.image | image_url: width: 200 }}"
+                                srcset="{{ collection.image | image_url: width: 200 }} 200w, {{ collection.image | image_url: width: 300 }} 300w"
+                                sizes="150px"
+                                width="{{ collection.image.width }}"
+                                height="{{ collection.image.height }}"
+                                loading="lazy"
                                 alt="{{ collection.title | escape }}">
                             {% endif %}
                           </div>

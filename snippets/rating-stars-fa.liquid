@@ -1,24 +1,17 @@
 {%- assign rating = rating | default: 0 | plus: 0.0 -%}
 {%- if rating < 0 -%}{%- assign rating = 0 -%}{%- endif -%}
 {%- if rating > 5 -%}{%- assign rating = 5 -%}{%- endif -%}
+{%- assign percent = rating | times: 20 -%}{% # 5 stars = 100% => 1 star = 20% %}
 
-<!-- {%- assign percent = rating | times: 20 -%} {# 5 stars = 100% => 1 star = 20% #} -->
+{%- capture star_svg -%}<svg class="star-svg" viewBox="0 0 24 24" width="1em" height="1em" fill="currentColor" aria-hidden="true"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>{%- endcapture -%}
 
 <span class="score" aria-label="Rating {{ rating }}/5">
   <span class="score-wrap">
     <span class="stars-active" style="width:{{ percent }}%">
-      <i class="fa fa-star" aria-hidden="true"></i>
-      <i class="fa fa-star" aria-hidden="true"></i>
-      <i class="fa fa-star" aria-hidden="true"></i>
-      <i class="fa fa-star" aria-hidden="true"></i>
-      <i class="fa fa-star" aria-hidden="true"></i>
+      {{ star_svg }}{{ star_svg }}{{ star_svg }}{{ star_svg }}{{ star_svg }}
     </span>
     <span class="stars-inactive" aria-hidden="true">
-      <i class="fa fa-star"></i>
-      <i class="fa fa-star"></i>
-      <i class="fa fa-star"></i>
-      <i class="fa fa-star"></i>
-      <i class="fa fa-star"></i>
+      {{ star_svg }}{{ star_svg }}{{ star_svg }}{{ star_svg }}{{ star_svg }}
     </span>
   </span>
 </span>

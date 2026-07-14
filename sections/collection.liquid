@@ -329,59 +329,52 @@
     {%- endfor -%}
 
     {%- assign certificate_filter = collection.filters | where: "param_name", "filter.p.m.custom.certificate" | first -%}
-    {%- comment -%} 1. Bestseller {%- endcomment -%}
+
+    {%- comment -%} Detect organic products on the page (used to show the Organic & untreated pill). {%- endcomment -%}
+    {%- assign has_organic_value = false -%}
+    {%- if certificate_filter -%}
+      {%- for value in certificate_filter.values -%}
+        {%- assign organic_handle = value.label | handleize -%}
+        {%- if organic_handle == 'organic' or organic_handle == 'bio' or organic_handle == 'biologique' -%}
+          {%- assign has_organic_value = true -%}
+        {%- endif -%}
+      {%- endfor -%}
+    {%- endif -%}
+
+    {%- comment -%} 1. Bestseller (when the page has bestsellers) {%- endcomment -%}
     {%- if collection.all_tags contains 'Best Seller' or bestseller_active -%}
-      <button type="button" 
-              class="qf-pill {% if bestseller_active %}is-active{% endif %}" 
-              data-name="constraint" 
+      <button type="button"
+              class="qf-pill {% if bestseller_active %}is-active{% endif %}"
+              data-name="constraint"
               data-value="best-seller">
         {% if is_all_fruits_collection %}{{ 'quick_filters.bestsellers' | t }}{% else %}{{ 'quick_filters.bestseller' | t }}{% endif %}
       </button>
     {%- endif -%}
 
-    {%- if is_all_fruits_collection -%}
-      <button type="button" class="qf-pill {% if region_filter_value == 'asia' %}is-active{% endif %}" data-name="jf_region" data-value="asia">{{ 'quick_filters.asia' | t }}</button>
-      <button type="button" class="qf-pill {% if region_filter_value == 'europe' %}is-active{% endif %}" data-name="jf_region" data-value="europe">{{ 'quick_filters.europe' | t }}</button>
-      <button type="button" class="qf-pill {% if region_filter_value == 'america' %}is-active{% endif %}" data-name="jf_region" data-value="america">{{ 'quick_filters.america' | t }}</button>
-      <button type="button" class="qf-pill {% if region_filter_value == 'africa' %}is-active{% endif %}" data-name="jf_region" data-value="africa">{{ 'quick_filters.africa' | t }}</button>
-    {%- endif -%}
-
-    {%- comment -%} 2. Organic {%- endcomment -%}
-    {%- if certificate_filter -%}
-      {%- for value in certificate_filter.values -%}
-        {%- assign organic_handle = value.label | handleize -%}
-        {%- if organic_handle == 'organic' or organic_handle == 'bio' or organic_handle == 'biologique' -%}
-          <button type="button" 
-                  class="qf-pill {% if value.active %}is-active{% endif %}" 
-                  data-name="{{ value.param_name }}" 
-                  data-value="{{ value.value }}">
-            {{ 'quick_filters.organic' | t }}
-          </button>
-        {%- endif -%}
-      {%- endfor -%}
-    {%- endif -%}
-
-    {%- if is_all_fruits_collection -%}
+    {%- comment -%} 2. Organic & untreated (when organic products are present) {%- endcomment -%}
+    {%- if has_organic_value -%}
       <button type="button"
               class="qf-pill {% if untreated_only_active %}is-active{% endif %}"
               data-name="jf_quality_label"
               data-value="untreated">
-        {{ 'quick_filters.untreated' | t }}
+        {{ 'quick_filters.organic_untreated' | t }}
       </button>
     {%- endif -%}
 
-    {%- unless is_all_fruits_collection -%}
-      {%- comment -%} 3. Out of Stock (Fully sold out products only) {%- endcomment -%}
-      <button
-        type="button"
-        class="qf-pill {% if unavailable_only_active %}is-active{% endif %}"
-        data-name="jf_unavailable"
-        data-value="1">
-        {{ 'products.product.out_of_stock' | t }}
-      </button>
-    {%- endunless -%}
+    {%- comment -%} 3. Regions — only on the Fruits collection and the All products / all-fruits collections {%- endcomment -%}
+    {%- assign fruit_collection_handles = "fruit,fruits,fruits-en-saison,obst,fruechte,fruchte" | split: "," -%}
+    {%- assign show_regions = is_all_fruits_collection -%}
+    {%- if fruit_collection_handles contains collection.handle -%}
+      {%- assign show_regions = true -%}
+    {%- endif -%}
+    {%- if show_regions -%}
+      <button type="button" class="qf-pill {% if region_filter_value == 'asia' %}is-active{% endif %}" data-name="jf_region" data-value="asia">{{ 'quick_filters.asia' | t }}</button>
+      <button type="button" class="qf-pill {% if region_filter_value == 'america' %}is-active{% endif %}" data-name="jf_region" data-value="america">{{ 'quick_filters.america' | t }}</button>
+      <button type="button" class="qf-pill {% if region_filter_value == 'africa' %}is-active{% endif %}" data-name="jf_region" data-value="africa">{{ 'quick_filters.africa' | t }}</button>
+      <button type="button" class="qf-pill {% if region_filter_value == 'europe' %}is-active{% endif %}" data-name="jf_region" data-value="europe">{{ 'quick_filters.europe' | t }}</button>
+    {%- endif -%}
 
-    {%- comment -%} 4. Clear All Button {%- endcomment -%}
+    {%- comment -%} Clear All Button {%- endcomment -%}
     <button type="button" class="qf-pill clear-all-pill" style="display: none;">
       {{ 'quick_filters.clear_all' | t }} ✕
     </button>
@@ -431,8 +424,18 @@
                   {%- assign product_quality_label = product.metafields.custom.quality_label.value | default: product.metafields.custom.quality_label | handleize -%}
                   {%- assign matches_custom_filters = true -%}
 
-                  {% if untreated_only_active and product_quality_label != 'untreated' %}
-                    {%- assign matches_custom_filters = false -%}
+                  {% if untreated_only_active %}
+                    {%- comment -%} "Organic & untreated" pill: keep products that are untreated OR organic-certified. {%- endcomment -%}
+                    {%- assign product_is_organic = false -%}
+                    {%- for cert in product.metafields.custom.certificate.value -%}
+                      {%- if cert.system.handle == 'organic' -%}
+                        {%- assign product_is_organic = true -%}
+                        {%- break -%}
+                      {%- endif -%}
+                    {%- endfor -%}
+                    {% if product_quality_label != 'untreated' and product_is_organic == false %}
+                      {%- assign matches_custom_filters = false -%}
+                    {% endif %}
                   {% endif %}
 
                   {% if region_filter_value != blank %}
@@ -470,8 +473,18 @@
                   {%- assign product_quality_label = product.metafields.custom.quality_label.value | default: product.metafields.custom.quality_label | handleize -%}
                   {%- assign matches_custom_filters = true -%}
 
-                  {% if untreated_only_active and product_quality_label != 'untreated' %}
-                    {%- assign matches_custom_filters = false -%}
+                  {% if untreated_only_active %}
+                    {%- comment -%} "Organic & untreated" pill: keep products that are untreated OR organic-certified. {%- endcomment -%}
+                    {%- assign product_is_organic = false -%}
+                    {%- for cert in product.metafields.custom.certificate.value -%}
+                      {%- if cert.system.handle == 'organic' -%}
+                        {%- assign product_is_organic = true -%}
+                        {%- break -%}
+                      {%- endif -%}
+                    {%- endfor -%}
+                    {% if product_quality_label != 'untreated' and product_is_organic == false %}
+                      {%- assign matches_custom_filters = false -%}
+                    {% endif %}
                   {% endif %}
 
                   {% if region_filter_value != blank %}

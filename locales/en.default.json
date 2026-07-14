@@ -50,6 +50,7 @@
     "america": "America",
     "africa": "Africa",
     "untreated": "Untreated",
+    "organic_untreated": "Organic & untreated",
     "clear_all": "Clear All",
     "products_count": "{{ count }} products",
     "products_count_filtered": "{{ count }} products out of {{ total }}"

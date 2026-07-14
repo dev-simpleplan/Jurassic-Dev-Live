@@ -64,6 +64,7 @@
     "america": "Amérique",
     "africa": "Afrique",
     "untreated": "Non traité",
+    "organic_untreated": "Bio & non traité",
     "clear_all": "Tout effacer",
     "products_count": "{{ count }} produits",
     "products_count_filtered": "{{ count }} produits sur {{ total }}"

@@ -57,7 +57,7 @@
         "nav_menu_right_BVgXx8": {
           "type": "nav_menu_right",
           "settings": {
-            "nav_items_right": "",
+            "nav_items_right": "new-direct-link",
             "product_list_heading": "New",
             "product_list": []
           }

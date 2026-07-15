@@ -1,6 +1,6 @@
 <section class="tic-section">
     <div class="tic-bg">
-        <img src="{{ section.settings.bg-image |img_url: 'master' }}" alt="">
+        <img src="{{ section.settings.bg-image |image_url: width: 1400 }}" alt="">
     </div>
     <div class="tic-content">
         <div class="container">
@@ -14,7 +14,7 @@
                         {% for block in section.blocks %}
                             <div class="tic-item">
                                 <div class="tici-image">
-                                    <img src="{{ block.settings.icon |img_url: 'master' }}" alt="block.settings.icon.alt">
+                                    <img src="{{ block.settings.icon |image_url: width: 1400 }}" alt="block.settings.icon.alt">
                                 </div>
                                 <div class="tici-text">{{ block.settings.text }}</div>
                             </div>

@@ -12,7 +12,7 @@
         <div class="container">
             <div class="lttop-in">
                 <div class="lttop-image">
-                    <img src="{{ section.settings.slide1_image | img_url:'master' }}" alt="">
+                    <img src="{{ section.settings.slide1_image | image_url: width: 1400 }}" alt="">
                 </div>
                 <div class="lttop-content">
                     <h2>{{ section.settings.slide1_heading }}</h2>
@@ -21,9 +21,9 @@
             </div>
         </div>
     </div>
-    <div class="lt-bottom" style="background-image: url({{ section.settings.slide2_background | img_url:'master' }});">
+    <div class="lt-bottom" style="background-image: url({{ section.settings.slide2_background | image_url: width: 1400 }});">
         {% comment %} <div class="ltbackground-image">
-            <img src="{{ section.settings.slide2_background | img_url:'master' }}" alt="">
+            <img src="{{ section.settings.slide2_background | image_url: width: 1400 }}" alt="">
         </div> {% endcomment %}
         <div class="container">
             <div class="ltbottom-in">
@@ -33,10 +33,10 @@
                     </div>
                     <div class="ltbot-right">
                         <div class="ltbotr-image">
-                            <img src="{{ section.settings.slide2_image | img_url:'master' }}" alt="">
+                            <img src="{{ section.settings.slide2_image | image_url: width: 1400 }}" alt="">
                         </div>
                         <div class="ltbotr-image hidden">
-                            <img src="{{ section.settings.slide1_image | img_url:'master' }}" alt="">
+                            <img src="{{ section.settings.slide1_image | image_url: width: 1400 }}" alt="">
                         </div>
                     </div>
                 </div>

@@ -1,10 +1,26 @@
 {% case media.media_type %}
   {% when 'image' %}
-    <img
-      src="{{ media | img_url: "master"}}"
-      alt="{{ media.preview_image.alt }}"
-      class="image-custom"
-      lazyload>
+    {% if is_thumb %}
+      <img
+        src="{{ media | image_url: width: 160 }}"
+        srcset="{{ media | image_url: width: 120 }} 120w, {{ media | image_url: width: 200 }} 200w"
+        sizes="80px"
+        alt="{{ media.preview_image.alt }}"
+        class="image-custom"
+        width="{{ media.preview_image.width }}"
+        height="{{ media.preview_image.height }}"
+        loading="lazy">
+    {% else %}
+      <img
+        src="{{ media | image_url: width: 1000 }}"
+        srcset="{{ media | image_url: width: 600 }} 600w, {{ media | image_url: width: 900 }} 900w, {{ media | image_url: width: 1200 }} 1200w, {{ media | image_url: width: 1600 }} 1600w"
+        sizes="(max-width: 767px) 100vw, 50vw"
+        alt="{{ media.preview_image.alt }}"
+        class="image-custom"
+        width="{{ media.preview_image.width }}"
+        height="{{ media.preview_image.height }}"
+        {% if is_first %}loading="eager" fetchpriority="high"{% else %}loading="lazy"{% endif %}>
+    {% endif %}
     {% when 'external_video' %}
       {{ media | external_video_tag: class: "image-custom" }}
     {% when 'video' %}

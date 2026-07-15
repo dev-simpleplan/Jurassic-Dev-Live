@@ -3,7 +3,7 @@
         <div class="container">
             <div class="footer-top-in">
                 <div class="fti-logo">
-                    <img src="{{ section.settings['footer-logo'] | img_url: 'master' }}" alt="Banner Image">
+                    <img src="{{ section.settings['footer-logo'] | image_url: width: 1400 }}" alt="Banner Image">
                 </div>
                 <div class="fti-center">
                     <div class="fti-nav-wrap">
@@ -103,7 +103,7 @@
                               
                         </div>
                         <div class="fti-cr-mark">
-                            <img src="{{ section.settings['jf-mark'] | img_url: 'master' }}" alt="Logo Mark Image">
+                            <img src="{{ section.settings['jf-mark'] | image_url: width: 1400 }}" alt="Logo Mark Image">
                         </div>
                     </div>
                 </div>
@@ -115,7 +115,7 @@
                                 {% for block in trust %} 
                                 <li>
                                     <div class="trust-image">
-                                        <img src="{{ block.settings.trust-image | img_url: 'master' }}" alt="" class="trust image">
+                                        <img src="{{ block.settings.trust-image | image_url: width: 1400 }}" alt="" class="trust image">
                                     </div> 
                                     <div class="trust-text">
                                       {{ block.settings.trust_text }}
@@ -134,7 +134,7 @@
                                   {% for block in partner %}
                                     <li>
                                       <img
-                                        src="{{ block.settings.t-icon | img_url: 'master' }}"
+                                        src="{{ block.settings.t-icon | image_url: width: 1400 }}"
                                         alt=""
                                         class="icon">
                                     </li>

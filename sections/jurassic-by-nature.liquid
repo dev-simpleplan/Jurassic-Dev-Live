@@ -4,7 +4,7 @@
 
 <section class="jurassic-nature">
     <div class="bg-image">
-        <img width="100%" height="100%" src="{{ section.settings.bg_image | img_url:'master' }}" alt="{{ section.settings.bg_image.alt }}">
+        <img width="100%" height="100%" src="{{ section.settings.bg_image | image_url: width: 1400 }}" alt="{{ section.settings.bg_image.alt }}">
     </div>
     <div class="jn-in">
         <div class="container-fluid">
@@ -15,10 +15,10 @@
                 </div>
                 <div class="jn-icon">
                     <div class="outer">
-                        <img width="100%" height="100%" src="{{ section.settings.icon-outer | img_url:'master' }}" alt="{{ section.settings.icon.alt }}">
+                        <img width="100%" height="100%" src="{{ section.settings.icon-outer | image_url: width: 1400 }}" alt="{{ section.settings.icon.alt }}">
                     </div>
                     <div class="inner">
-                        <img width="100%" height="100%" src="{{ section.settings.icon-inner | img_url:'master' }}" alt="{{ section.settings.icon.alt }}">
+                        <img width="100%" height="100%" src="{{ section.settings.icon-inner | image_url: width: 1400 }}" alt="{{ section.settings.icon.alt }}">
                     </div>
                 </div>
             </div>
@@ -36,7 +36,7 @@
                                     </div>
                                 </div>
                                 <div class="jbniitem-image">
-                                    <img src="{{ item.timeline_fruit_image | img_url:'master' }}" alt="{{ item.timeline_fruit_image.alt }}">
+                                    <img src="{{ item.timeline_fruit_image | image_url: width: 1400 }}" alt="{{ item.timeline_fruit_image.alt }}">
                                 </div>
                             </div>
                         </div>

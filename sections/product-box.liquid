@@ -147,7 +147,7 @@
                     <div class="item" data-media-id="{{ media.id }}">
                       <div class="prod-main">
                         <a href="{{ media | img_url: 'master' }}" data-fancybox="gallery-box" class="zoom-wrapper">
-                          {% render 'product-media', media: media %}
+                          {% render 'product-media', media: media, is_first: forloop.first %}
                         </a>
                       </div>
                     </div>
@@ -182,7 +182,7 @@
                 {% for media in product.media %}
                   <div class="item" data-media-id="{{ media.id }}">
                     <div class="prod-thumb">
-                      {% render 'product-media', media: media %}
+                      {% render 'product-media', media: media, is_thumb: true %}
                     </div>
                   </div>
                 {% endfor %}

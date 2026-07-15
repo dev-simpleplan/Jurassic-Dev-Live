@@ -1,1 +1,40 @@
-{"sections":{"main":{"type":"cart","settings":{}},"bestseller_ibqLhV":{"type":"bestseller","name":"Bestseller","settings":{"collection":"all-fruits","heading":"save on your shipping cost!","subheading":"Each season brings a new treasure. Dive into our curated selection of rare, seasonal fruits—available only while nature allows.","cta_url":"","cta_text":""}},"spacer_JE3wC4":{"type":"spacer","name":"Spacer","settings":{"spacer_height":100}}},"order":["main","bestseller_ibqLhV","spacer_JE3wC4"]}
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "cart",
+      "settings": {}
+    },
+    "bestseller_ibqLhV": {
+      "type": "bestseller",
+      "name": "Bestseller",
+      "settings": {
+        "collection": "best-this-week",
+        "heading": "save on your shipping cost!",
+        "subheading": "Each season brings a new treasure. Dive into our curated selection of rare, seasonal fruits—available only while nature allows.",
+        "cta_url": "shopify://collections/fruit",
+        "cta_text": ""
+      }
+    },
+    "spacer_JE3wC4": {
+      "type": "spacer",
+      "name": "Spacer",
+      "settings": {
+        "spacer_height": 100
+      }
+    }
+  },
+  "order": [
+    "main",
+    "bestseller_ibqLhV",
+    "spacer_JE3wC4"
+  ]
+}

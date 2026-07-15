@@ -16,8 +16,8 @@
             </div>
           </div>
           <div class="carthead-right">
-            <a href="{{ collections['all-fruits'].url }}" class="custom-btn line rounded">
-              Continue Shopping
+            <a href="{{ section.settings.continue_url | default: collections['all-fruits'].url }}" class="custom-btn line rounded">
+              {{ section.settings.continue_text | default: 'Continue Shopping' }}
             </a>
           </div>
         </div>
@@ -841,6 +841,23 @@
 {% schema %}
 {
   "name": "t:general.cart",
-  "settings": []
+  "settings": [
+    {
+      "type": "header",
+      "content": "Continue Shopping Button"
+    },
+    {
+      "type": "url",
+      "id": "continue_url",
+      "label": "Button link",
+      "info": "Where the Continue Shopping button goes. Defaults to the all-fruits collection if left empty."
+    },
+    {
+      "type": "text",
+      "id": "continue_text",
+      "label": "Button text",
+      "default": "Continue Shopping"
+    }
+  ]
 }
 {% endschema %}

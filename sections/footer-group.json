@@ -39,8 +39,16 @@
             "trust-image": "shopify://shop_images/bio_logo.png"
           }
         },
+        "trust_logos_Fnt6U3": {
+          "type": "trust-logos",
+          "settings": {
+            "trust_text": "<p><strong>4.6 stars</strong></p><p> +18000 Okendo Verified Reviews</p>",
+            "trust-image": "shopify://shop_images/oke.png"
+          }
+        },
         "trust_logos_3C6PBf": {
           "type": "trust-logos",
+          "disabled": true,
           "settings": {
             "trust_text": "<p>(4.7/5) excellent</p>",
             "trust-image": "shopify://shop_images/image_306.png"
@@ -49,7 +57,7 @@
         "trust_logos_qXwHtt": {
           "type": "trust-logos",
           "settings": {
-            "trust_text": "<p>4.6 Google</p>",
+            "trust_text": "<p><strong>4.6</strong> Google</p>",
             "trust-image": "shopify://shop_images/Google_Favicon_2025_svg.webp"
           }
         }
@@ -59,6 +67,7 @@
         "menu_group_9xcnye",
         "partner_logo_XzkVyW",
         "trust_logos_FKDq8p",
+        "trust_logos_Fnt6U3",
         "trust_logos_3C6PBf",
         "trust_logos_qXwHtt"
       ],

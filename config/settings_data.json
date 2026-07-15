@@ -1,1 +1,106 @@
-{"current":{"favicon_light":"shopify:\/\/shop_images\/favicon-light.png","favicon_dark":"shopify:\/\/shop_images\/favicon-dark.png","cart_shipping_threshold":99,"cart_gift_threshold":119,"free_gift_product":"100-gift-card","cart_free_gift_product":"100-gift-card","sections":{"side-cart":{"type":"side-cart","settings":{}},"newsletter":{"type":"newsletter","settings":{"left-image":"shopify:\/\/shop_images\/e674c04ea0d7f3a319ab0027c0e08b9ce30c559b.jpg","right-image":"shopify:\/\/shop_images\/64efb817b0eda88b82156381eddafbc724f00fdf.jpg","heading":"Join the expedition","text":"Your inbox deserves better flavors. Stories, news, and promotions from the wild side."}},"top-bar":{"type":"top-bar","blocks":{"market_threshold_EU7xyg":{"type":"market_threshold","settings":{"market_code":"fr","amount":120}},"market_threshold_BBWJHb":{"type":"market_threshold","settings":{"market_code":"in","amount":13085}},"market_threshold_L4ncwW":{"type":"market_threshold","settings":{"market_code":"de","amount":99}}},"block_order":["market_threshold_EU7xyg","market_threshold_BBWJHb","market_threshold_L4ncwW"],"settings":{"rating_image":"shopify:\/\/shop_images\/image_306.png","rating_text":"(4.7\/5) “excellent”","tbtext_prefix":"Free shipping above","tbtext_amount":120}}},"content_for_index":[],"blocks":{"1232542678405107163":{"type":"shopify:\/\/apps\/instafeed\/blocks\/head-block\/c447db20-095d-4a10-9725-b5977662c9d5","disabled":false,"settings":{}},"733389323033596483":{"type":"shopify:\/\/apps\/okendo\/blocks\/theme-settings\/bb689e69-ea70-4661-8fb7-ad24a2e23c29","disabled":false,"settings":{"show_preview_data":true}},"8218531531362863771":{"type":"shopify:\/\/apps\/kite-discount-free-gift\/blocks\/app-embed\/2c7302c4-455d-4078-a829-48563ba26089","disabled":true,"settings":{}},"2131494470682214141":{"type":"shopify:\/\/apps\/corner-cart-drawer-free-gift\/blocks\/corner-widget\/73667a27-0d48-44b7-91f9-aef741c803ed","disabled":false,"settings":{"elementToReplaceInCartPage":".cart-page-data","hide_theme_cart":false,"enable_defer_loading":false,"enable_corner_test_campaigns":true}},"9241046253743163954":{"type":"shopify:\/\/apps\/sticky-add-to-cart-bar\/blocks\/app-embed\/e98261d9-7a53-483b-8aaa-054afd5be639","disabled":true,"settings":{}},"4887604186841085581":{"type":"shopify:\/\/apps\/yanet-back-in-stock\/blocks\/bis\/4a272ca4-2ae2-4e8b-9da8-8dc6353ba485","disabled":true,"settings":{"product_list":[],"tags":"","show":false,"inline":true,"backorder":true,"index":true,"collection":true,"variant":true,"top":100,"text":"NOTIFY ME WHEN AVAILABLE","color":"#333333","background":"#ffc761","confirm":false,"title":"NOTIFY ME WHEN AVAILABLE","info":"We will notify you as soon as this product is available again.","show_name":true,"name_placeholder":"Name","email_placeholder":"Email address","email":"Enter a valid email","push":true,"push_label":"Send me a push notification","push_permission":"Permission rejected! Please enable push notifications and try again.","privacy":"We respect your privacy and don't share your email with anybody.","success":"Successfully subscribed","custom":false,"font":"assistant_n4","css":""}},"2102808784413787648":{"type":"shopify:\/\/apps\/kbite-back-in-stock-notify-me\/blocks\/main-app-embed\/147a6f7f-6771-4f9b-8dc6-c14e6b24f32c","disabled":true,"settings":{}},"1513253815146976218":{"type":"shopify:\/\/apps\/omnisend-email-marketing-sms\/blocks\/app-embed\/44704aa2-794f-4c5d-8c8e-039c841158e9","disabled":false,"settings":{}},"12793297677437526120":{"type":"shopify:\/\/apps\/t-lab-ai-language-translate\/blocks\/custom_translations\/b5b83690-efd4-434d-8c6a-a5cef4019faf","disabled":false,"settings":{}},"18128612654622612671":{"type":"shopify:\/\/apps\/selecty\/blocks\/app-embed\/a005a4a7-4aa2-4155-9c2b-0ab41acbf99c","disabled":false,"settings":{}},"8765772171712610185":{"type":"shopify:\/\/apps\/t-lab-ai-language-translate\/blocks\/language_switcher\/b5b83690-efd4-434d-8c6a-a5cef4019faf","disabled":true,"settings":{"enable_language_switcher":true,"enable_country_region_switcher":true,"use_currency_for_region":false,"switcher_position":"header","show_flags":true,"switcher_appearance":"language-code","invert_switcher_icon_colors":false,"dropdown_appearance":"language-name","use_modal_dialog":true,"language_country_mapping":"","countries_filter":"","custom_css":"","header_switcher_reference_element":".tb-lang-wrap","header_switcher_relative_position":"after","mobile_menu_switcher_reference_element":"","mobile_switcher_relative_position":"before","header_switcher_border_width":0,"switcher_viewport_position":"top-right","custom_position_spacing":"55,20,20,20","custom_switcher_font_size":"12px","custom_switcher_border_width":1,"custom_switcher_text_color":"#ffffff","custom_switcher_background_color":"#ffffff","custom_switcher_border_color":"#000000"}},"16160652613208317715":{"type":"shopify:\/\/apps\/boo-eu-withdrawal-button\/blocks\/theme\/019c83fd-5304-7bcb-bc27-c2e42bcee2aa","disabled":false,"settings":{}}}}}
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "current": {
+    "favicon_light": "shopify://shop_images/favicon-light.png",
+    "favicon_dark": "shopify://shop_images/favicon-dark.png",
+    "cart_shipping_threshold": 99,
+    "cart_gift_threshold": 119,
+    "free_gift_product": "100-gift-card",
+    "cart_free_gift_product": "100-gift-card",
+    "sections": {
+      "side-cart": {
+        "type": "side-cart",
+        "settings": {}
+      },
+      "newsletter": {
+        "type": "newsletter",
+        "settings": {
+          "left-image": "shopify://shop_images/e674c04ea0d7f3a319ab0027c0e08b9ce30c559b.jpg",
+          "right-image": "shopify://shop_images/64efb817b0eda88b82156381eddafbc724f00fdf.jpg",
+          "heading": "Join the expedition",
+          "text": "Your inbox deserves better flavors. Stories, news, and promotions from the wild side."
+        }
+      },
+      "top-bar": {
+        "type": "top-bar",
+        "blocks": {
+          "market_threshold_EU7xyg": {
+            "type": "market_threshold",
+            "settings": {
+              "market_code": "fr",
+              "amount": 120
+            }
+          },
+          "market_threshold_BBWJHb": {
+            "type": "market_threshold",
+            "settings": {
+              "market_code": "in",
+              "amount": 13085
+            }
+          },
+          "market_threshold_L4ncwW": {
+            "type": "market_threshold",
+            "settings": {
+              "market_code": "de",
+              "amount": 99
+            }
+          }
+        },
+        "block_order": [
+          "market_threshold_EU7xyg",
+          "market_threshold_BBWJHb",
+          "market_threshold_L4ncwW"
+        ],
+        "settings": {
+          "rating_image": "shopify://shop_images/oke.png",
+          "rating_text": "4.6 stars | +18000 Okendo Verified Reviews",
+          "tbtext_prefix": "Free shipping above",
+          "tbtext_amount": 120
+        }
+      }
+    },
+    "content_for_index": [],
+    "blocks": {
+      "733389323033596483": {
+        "type": "shopify://apps/okendo/blocks/theme-settings/bb689e69-ea70-4661-8fb7-ad24a2e23c29",
+        "disabled": false,
+        "settings": {
+          "show_preview_data": true
+        }
+      },
+      "2131494470682214141": {
+        "type": "shopify://apps/corner-cart-drawer-free-gift/blocks/corner-widget/73667a27-0d48-44b7-91f9-aef741c803ed",
+        "disabled": false,
+        "settings": {
+          "elementToReplaceInCartPage": ".cart-page-data",
+          "hide_theme_cart": false,
+          "enable_defer_loading": false,
+          "enable_corner_test_campaigns": true
+        }
+      },
+      "1513253815146976218": {
+        "type": "shopify://apps/omnisend-email-marketing-sms/blocks/app-embed/44704aa2-794f-4c5d-8c8e-039c841158e9",
+        "disabled": false,
+        "settings": {}
+      },
+      "18128612654622612671": {
+        "type": "shopify://apps/selecty/blocks/app-embed/a005a4a7-4aa2-4155-9c2b-0ab41acbf99c",
+        "disabled": false,
+        "settings": {}
+      },
+      "16160652613208317715": {
+        "type": "shopify://apps/boo-eu-withdrawal-button/blocks/theme/019c83fd-5304-7bcb-bc27-c2e42bcee2aa",
+        "disabled": false,
+        "settings": {}
+      }
+    }
+  }
+}

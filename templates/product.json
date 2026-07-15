@@ -554,7 +554,7 @@
         "okendo_reviews_widget_4WUGBX"
       ],
       "custom_css": [
-        ".okeReviews[data-oke-container].oke-w,div.okeReviews.oke-w {max-width: 1200px; margin: 0 auto; color: var(--oke-text-primaryColor); padding: var(--oke-widget-spaceAbove) 0 var(--oke-widget-spaceBelow);}"
+        ".okeReviews[data-oke-container].oke-w,div.okeReviews.oke-w {max-width: 1330px; margin: 0 auto; color: var(--oke-text-primaryColor); padding: var(--oke-widget-spaceAbove) 0 var(--oke-widget-spaceBelow);}"
       ],
       "settings": {}
     },

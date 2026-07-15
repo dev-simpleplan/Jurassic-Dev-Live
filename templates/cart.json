@@ -11,7 +11,10 @@
   "sections": {
     "main": {
       "type": "cart",
-      "settings": {}
+      "settings": {
+        "continue_url": "shopify://collections/all-products",
+        "continue_text": "Continue Shopping"
+      }
     },
     "bestseller_ibqLhV": {
       "type": "bestseller",

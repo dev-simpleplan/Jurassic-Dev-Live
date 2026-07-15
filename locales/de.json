@@ -52,7 +52,8 @@
     "organic_untreated": "Bio & unbehandelt",
     "clear_all": "Alle löschen",
     "products_count": "{{ count }} Produkte",
-    "products_count_filtered": "{{ count }} Produkte von {{ total }}"
+    "products_count_filtered": "{{ count }} Produkte von {{ total }}",
+    "load_more": "Mehr laden"
   },
   "gift_card": {
     "add_to_apple_wallet": "Zu Apple Wallet hinzufügen",

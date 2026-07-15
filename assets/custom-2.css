@@ -772,6 +772,16 @@ span.cart-compare-price {
   grid-column: 1 / -1;
   margin-top: 20px;
 }
+.collection-wrapper .load-more-wrap {
+  display: flex;
+  justify-content: center;
+  grid-column: 1 / -1;
+  margin-top: 30px;
+}
+.load-more-wrap .load-more-btn.is-loading {
+  opacity: 0.6;
+  pointer-events: none;
+}
 .collection-wrapper .no-products-found {
   display: flex;
   width: 100%;

@@ -53,7 +53,8 @@
     "organic_untreated": "Organic & untreated",
     "clear_all": "Clear All",
     "products_count": "{{ count }} products",
-    "products_count_filtered": "{{ count }} products out of {{ total }}"
+    "products_count_filtered": "{{ count }} products out of {{ total }}",
+    "load_more": "Load more"
   },
   "collections": {
     "title": "Collections"

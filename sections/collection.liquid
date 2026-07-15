@@ -551,7 +551,16 @@
                     {% render 'product-card-primary', product: product, collection: collection %}
                   {% endunless %}
                 {% endfor %}
-                {% render 'pagination' | pagination: paginate %}
+                {% if paginate.next %}
+                  <div class="load-more-wrap">
+                    <button
+                      type="button"
+                      class="load-more-btn custom-btn black"
+                      data-next-url="{{ paginate.next.url }}">
+                      {{ 'quick_filters.load_more' | t }}
+                    </button>
+                  </div>
+                {% endif %}
               {% endif %}
             {% else %}
               <div class="no-products-found">
@@ -677,7 +686,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 window.history.pushState({}, "", url);
                 bindPaginationLinks();
-                
+                bindLoadMore();
+
                 // Re-bind click events to new pills injected via AJAX
                 bindQuickPills();
                 toggleClearAllVisibility();
@@ -828,6 +838,53 @@ document.addEventListener("DOMContentLoaded", () => {
       });
   }
 
+    function bindLoadMore() {
+        const btn = productGrid.querySelector('.load-more-btn');
+        if (!btn) return;
+
+        btn.onclick = () => {
+            const url = btn.getAttribute('data-next-url');
+            if (!url) return;
+
+            btn.disabled = true;
+            btn.classList.add('is-loading');
+
+            fetch(url)
+                .then(res => res.text())
+                .then(data => {
+                    const parser = new DOMParser();
+                    const newDoc = parser.parseFromString(data, "text/html");
+                    const newGrid = newDoc.querySelector("#ProductGrid");
+                    if (!newGrid) return;
+
+                    const newCards = newGrid.querySelectorAll('.product-card-primary');
+                    const wrap = btn.closest('.load-more-wrap');
+                    newCards.forEach(card => wrap.parentNode.insertBefore(card, wrap));
+
+                    const newBtn = newGrid.querySelector('.load-more-btn');
+                    if (newBtn) {
+                        btn.setAttribute('data-next-url', newBtn.getAttribute('data-next-url'));
+                        btn.disabled = false;
+                        btn.classList.remove('is-loading');
+                    } else {
+                        wrap.remove();
+                    }
+
+                    window.history.pushState({}, "", url);
+
+                    if (typeof lenis !== 'undefined') lenis.resize();
+                    if (typeof window.bindProductCardAddForms === 'function') {
+                        window.bindProductCardAddForms(productGrid);
+                    }
+                })
+                .catch(err => {
+                    btn.disabled = false;
+                    btn.classList.remove('is-loading');
+                    console.error("Load more error:", err);
+                });
+        };
+    }
+
     // --- 2. SIDEBAR TOGGLE & OUTSIDE CLICK ---
     filter_button.onclick = (e) => {
         e.stopPropagation();
@@ -900,6 +957,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     bindQuickPills();
     bindPaginationLinks();
+    bindLoadMore();
     toggleClearAllVisibility();
     updateQuickFilterCount();
 });
@@ -1034,6 +1092,15 @@ document.addEventListener('DOMContentLoaded', function() {
         "type": "text",
         "id": "head",
         "label": "Category Pages Heading"
+      },
+      {
+        "type": "range",
+        "id": "number_of_product",
+        "min": 8,
+        "max": 100,
+        "step": 4,
+        "default": 40,
+        "label": "Products per page"
       }
     ],
     "blocks": [

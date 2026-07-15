@@ -309,11 +309,37 @@
         <script>
           document.addEventListener("DOMContentLoaded", (event) => {
             // 1. Initialize Lenis
-            window.lenis = new Lenis({
-              duration: 1.2,
-              easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-              prevent: (node) => node.closest('[data-lenis-prevent]') !== null
-            });
+            // ▼▼▼ TOGGLE: set to true to re-enable Lenis smooth scroll ▼▼▼
+            const ENABLE_LENIS = false;
+            // ▲▲▲ TOGGLE ▲▲▲
+
+            if (ENABLE_LENIS) {
+              window.lenis = new Lenis({
+                duration: 1.2,
+                easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+                prevent: (node) => node.closest('[data-lenis-prevent]') !== null
+              });
+            } else {
+              // Lenis disabled — native scroll. Lightweight shim so existing code
+              // (header on-scroll, side cart start/stop, scrollTo, resize) keeps working.
+              const _scrollCbs = [];
+              window.lenis = {
+                on(evt, cb) { if (evt === 'scroll') _scrollCbs.push(cb); },
+                raf() {}, resize() {}, start() {}, stop() {}, destroy() {},
+                scrollTo(target, opts) {
+                  const behavior = opts && opts.immediate ? 'auto' : 'smooth';
+                  if (typeof target === 'number') {
+                    window.scrollTo({ top: target, behavior });
+                  } else if (target && target.getBoundingClientRect) {
+                    window.scrollTo({ top: window.scrollY + target.getBoundingClientRect().top, behavior });
+                  }
+                }
+              };
+              window.addEventListener('scroll', () => {
+                const scroll = window.scrollY;
+                _scrollCbs.forEach((cb) => cb({ scroll }));
+              }, { passive: true });
+            }
 
             const lenisPreventSelectors = [
               '[role="dialog"]',
@@ -370,34 +396,36 @@
               });
             }
 
-            addLenisPreventToAppDropdowns();
+            if (ENABLE_LENIS) {
+              addLenisPreventToAppDropdowns();
 
-            const lenisPreventObserver = new MutationObserver((mutations) => {
-              mutations.forEach((mutation) => {
-                if (mutation.type === 'attributes') {
-                  addLenisPreventToAppDropdowns(mutation.target);
-                }
-
-                mutation.addedNodes.forEach((node) => {
-                  if (node.nodeType === Node.ELEMENT_NODE) {
-                    addLenisPreventToAppDropdowns(node);
+              const lenisPreventObserver = new MutationObserver((mutations) => {
+                mutations.forEach((mutation) => {
+                  if (mutation.type === 'attributes') {
+                    addLenisPreventToAppDropdowns(mutation.target);
                   }
+
+                  mutation.addedNodes.forEach((node) => {
+                    if (node.nodeType === Node.ELEMENT_NODE) {
+                      addLenisPreventToAppDropdowns(node);
+                    }
+                  });
                 });
               });
-            });
 
-            lenisPreventObserver.observe(document.body, {
-              childList: true,
-              subtree: true,
-              attributes: true,
-              attributeFilter: ['class', 'style', 'aria-expanded']
-            });
+              lenisPreventObserver.observe(document.body, {
+                childList: true,
+                subtree: true,
+                attributes: true,
+                attributeFilter: ['class', 'style', 'aria-expanded']
+              });
 
-            function raf(time) {
-              window.lenis.raf(time);
+              function raf(time) {
+                window.lenis.raf(time);
+                requestAnimationFrame(raf);
+              }
               requestAnimationFrame(raf);
             }
-            requestAnimationFrame(raf);
 
             // 2. Setup Header Logic
             const header = document.querySelector('header');

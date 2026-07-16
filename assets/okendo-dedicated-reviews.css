@@ -16,7 +16,8 @@
     display: flex;
     -ms-flex-wrap: wrap;
     flex-wrap: wrap;
-    margin: -3px -9px
+    margin: -3px -9px;
+    gap: 12px;
 }
 
 .orc-allReviewsCollections .orc-collectionControls .orc-collectionControls-item-label {
@@ -36,8 +37,8 @@
 }
 
 .orc-allReviewsCollections .orc-collectionControls-item-input--checked+.orc-collectionControls-item-label,.orc-allReviewsCollections .orc-collectionControls-item-input:checked+.orc-collectionControls-item-label {
-    border: 1px solid #535565;
-    box-shadow: 0 0 0 1px #535565
+    background-color: transparent;
+    color: #1a1a1a;
 }
 
 .orc-allReviewsCollections .orc-collectionControls-item {
@@ -122,19 +123,7 @@ div.okeReviews[data-oke-container].oke-w .oke-w-header-content-block:nth-child(2
     }
 }
 
-@media only screen and (min-width: 1200px) {
-    .orc-allReviewsCollections .orc-collectionControls-item {
-        -ms-flex:1 1 25%;
-        flex: 1 1 25%
-    }
-}
-
 @media all and (min-width: 1200px) {
-    .orc-allReviewsCollections .orc-collectionControls-item {
-        -ms-flex: 1 1 25%;
-        flex: 1 1 15%;
-    }
-
     .orc-allReviewsCollections .orc-collectionControls-item-label-heading {
         font-size: 16px;
     }

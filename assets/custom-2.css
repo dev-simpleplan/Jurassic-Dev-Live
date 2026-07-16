@@ -2447,8 +2447,17 @@ li.variant-value.is-sold-out {
   grid-template-columns: 1fr 1fr;
   gap: 50px;
 }
-.nutri-image p {
+.nutri-image p,
+.nutri-image li {
   font-size: 15px;
+  font-weight: 400;
+  line-height: 150%;
+}
+.nutri-image ul {
+  list-style: inherit;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
 }
 .nutri-image img {
   width: 100%;

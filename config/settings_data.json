@@ -61,7 +61,7 @@
         ],
         "settings": {
           "rating_image": "shopify://shop_images/oke.png",
-          "rating_text": "4.6 stars +18000 Reviews",
+          "rating_text": "4.6 (+18000 Reviews)",
           "tbtext_prefix": "Free shipping above",
           "tbtext_amount": 120
         }

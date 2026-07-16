@@ -81,6 +81,10 @@
     margin: 0
 }
 
+span.orc-collectionControls-item-label-heading {
+    align-self: center;
+}
+
 div.okeReviews[data-oke-container].oke-w {
     max-width: min(86%, 1200px);
 }

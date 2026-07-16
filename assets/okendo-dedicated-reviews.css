@@ -36,8 +36,10 @@
     text-align: center
 }
 
-.orc-allReviewsCollections .orc-collectionControls-item-input--checked+.orc-collectionControls-item-label,.orc-allReviewsCollections .orc-collectionControls-item-input:checked+.orc-collectionControls-item-label {
-    background-color: #fcf9f5;
+.orc-allReviewsCollections .orc-collectionControls-item-input--checked+.orc-collectionControls-item-label,
+.orc-allReviewsCollections .orc-collectionControls-item-input:checked+.orc-collectionControls-item-label,
+.orc-allReviewsCollections .orc-collectionControls-item.orc-collectionControls-item-input--checked {
+    background-color: transparent;
     color: #1a1a1a;
 }
 

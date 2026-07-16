@@ -1,9 +1,118 @@
 <div class="container container-reviews">
-    <h2 class="heading center">{{ page.title }}</h2>   
-    {% render 'okendo-reviews-widget', product: product %}
+    <h2 class="heading center">{{ page.title }}</h2>
+    <div class="orc-allReviewsCollections">
+        <div id="orc-collection-control" style="display: none">
+            <div id="orc-collection-controls-label" class="orc-collectionControlsLabel">Select a product range</div>
+            <div class="orc-collectionControls" role="radiogroup" aria-labelledby="orc-collection-controls-label">
+                <div class="orc-collectionControls-item">
+                    <input
+                        id="orc-reviews-control-0"
+                        class="orc-collectionControls-item-input orc-collectionControls-item-input--checked js-orc-collectionRadio"
+                        type="radio"
+                        checked
+                        value="<YOUR GROUP ID OR PRODUCT ID GOES HERE>"
+                        name="orc-reviews-collection-control"
+                    />
+                    <label for="orc-reviews-control-0" class="orc-collectionControls-item-label">
+                        <span class="orc-collectionControls-item-label-heading"> <!-- YOUR GROUP NAME OR PRODUCT NAME GOES HERE .e.g Rings --> </span>
+                                                        <!-- OPTIONAL ADD AN IMAGE FOR THE GROUP/PRODUCT - IF NOT NEEDED, DELETE THE SPAN TAG BELOW -->
+                        <span
+                            class="orc-collectionControls-item-label-background"
+                            style="background-image: url('{{ 'everything-women.jpg' | asset_img_url: '150x' }}')"
+                        ></span>
+                    </label>
+                </div>
+                <div class="orc-collectionControls-item">
+                    <input
+                        id="orc-reviews-control-1"
+                        class="orc-collectionControls-item-input js-orc-collectionRadio"
+                        type="radio"
+                        value="<YOUR GROUP ID OR PRODUCT ID GOES HERE>"
+                        name="orc-reviews-collection-control"
+                    />
+                    <label for="orc-reviews-control-1" class="orc-collectionControls-item-label">
+                        <span class="orc-collectionControls-item-label-heading"> <!-- YOUR GROUP NAME OR PRODUCT NAME GOES HERE .e.g Rings --> </span>
+                                                    <!-- OPTIONAL ADD AN IMAGE FOR THE GROUP/PRODUCT - IF NOT NEEDED, DELETE THE SPAN TAG BELOW -->
+                        <span
+                            class="orc-collectionControls-item-label-background"
+                            style="background-image: url('{{ 'necklaces-women.jpg' | asset_img_url: '150x' }}')"
+                        ></span>
+                    </label>
+                </div>
+                <div class="orc-collectionControls-item">
+                    <input
+                        id="orc-reviews-control-2"
+                        class="orc-collectionControls-item-input js-orc-collectionRadio"
+                        type="radio"
+                        value="a69d54ca-b7e7-46b4-969b-2a172dd0c055"
+                        name="orc-reviews-collection-control"
+                    />
+                    <label for="orc-reviews-control-2" class="orc-collectionControls-item-label">
+                        <span class="orc-collectionControls-item-label-heading"> <!-- YOUR GROUP NAME OR PRODUCT NAME GOES HERE .e.g Rings -->  </span>  
+                                                    <!-- OPTIONAL ADD AN IMAGE FOR THE GROUP/PRODUCT - IF NOT NEEDED, DELETE THE SPAN TAG BELOW -->
+                                                <span
+                            class="orc-collectionControls-item-label-background"
+                            style="background-image: url('{{ 'rings-women.jpg' | asset_img_url: '150x' }}')"
+                        ></span>
+                    </label>
+                </div>
+                <div class="orc-collectionControls-item">
+                    <input
+                        id="orc-reviews-control-3"
+                        class="orc-collectionControls-item-input js-orc-collectionRadio"
+                        type="radio"
+                        value="<YOUR GROUP ID OR PRODUCT ID GOES HERE>"
+                        name="orc-reviews-collection-control"
+                    />
+                    <label for="orc-reviews-control-3" class="orc-collectionControls-item-label">
+                        <span class="orc-collectionControls-item-label-heading"> <!-- YOUR GROUP NAME OR PRODUCT NAME GOES HERE .e.g Rings --> </span>
+                                                <!-- OPTIONAL ADD AN IMAGE FOR THE GROUP/PRODUCT - IF NOT NEEDED, DELETE THE SPAN TAG BELOW -->
+                        <span
+                            class="orc-collectionControls-item-label-background"
+                            style="background-image: url('{{ 'bracelets-women.jpg' | asset_img_url: '150x' }}')"
+                        ></span>
+                    </label>
+                </div>
+                <div class="orc-collectionControls-item">
+                    <input
+                        id="orc-reviews-control-4"
+                        class="orc-collectionControls-item-input js-orc-collectionRadio"
+                        type="radio"
+                        value="<YOUR GROUP ID OR PRODUCT ID GOES HERE>"
+                        name="orc-reviews-collection-control"
+                    />
+                    <label for="orc-reviews-control-4" class="orc-collectionControls-item-label">
+                        <span class="orc-collectionControls-item-label-heading"> <!-- YOUR GROUP NAME OR PRODUCT NAME GOES HERE .e.g Rings -->  </span>
+                                                <!-- OPTIONAL ADD AN IMAGE FOR THE GROUP/PRODUCT - IF NOT NEEDED, DELETE THE SPAN TAG BELOW -->
+                        <span
+                            class="orc-collectionControls-item-label-background"
+                            style="background-image: url('{{ 'earrings-women.jpg' | asset_img_url: '150x' }}')"
+                        ></span>
+                    </label>
+                </div>
+                <div class="orc-collectionControls-item">
+                    <input
+                        id="orc-reviews-control-5"
+                        class="orc-collectionControls-item-input js-orc-collectionRadio"
+                        type="radio"
+                        value="<YOUR GROUP ID OR PRODUCT ID GOES HERE>"
+                        name="orc-reviews-collection-control"
+                    />
+                    <label for="orc-reviews-control-5" class="orc-collectionControls-item-label">
+                                                <!-- OPTIONAL ADD AN IMAGE FOR THE GROUP/PRODUCT - IF NOT NEEDED, DELETE THE SPAN TAG BELOW -->                         <span class="orc-collectionControls-item-label-heading"> <!-- YOUR GROUP NAME OR PRODUCT NAME GOES HERE .e.g Rings --> </span>
+
+                        <span
+                            class="orc-collectionControls-item-label-background"
+                            style="background-image: url('{{ 'anklets-women.jpg' | asset_img_url: '150x' }}')"
+                        ></span>
+                    </label>
+                </div>
+            </div>
+        </div>
+        <!-- SET THE data-oke-reivews-group-id to the GUID you wish to default the widget to when the page loads (usually the first radio value in the list above -->
+        <div id="orc-widget-snippet" class="drp-okendo-reviews" data-oke-widget data-oke-reviews-group-id="<YOUR DEFAULT GROUP ID GOES HERE>"></div>
+    </div>
 </div>
-
-
 
 {% style %}
     .container-reviews {

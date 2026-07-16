@@ -42,7 +42,7 @@
         "trust_logos_Fnt6U3": {
           "type": "trust-logos",
           "settings": {
-            "trust_text": "<p><strong>4.6 stars</strong></p><p> +18,000 Okendo Verified Reviews</p>",
+            "trust_text": "<p><strong>4.6 stars</strong></p><p> +40,000 Okendo Verified Reviews</p>",
             "trust-image": "shopify://shop_images/oke.png"
           }
         },
@@ -91,7 +91,8 @@
         "show_whatsapp": false,
         "whatsapp_url": "",
         "show_telegram": true,
-        "telegram_url": "https://t.me/JurassicFruitOfficial"
+        "telegram_url": "https://t.me/JurassicFruitOfficial",
+        "footer_para": "All prices include VAT and exclude shipping costs if not stated otherwise. Health authorities recommends washing your fruits under water before consumption."
       }
     }
   },

@@ -93,8 +93,8 @@ div.okeReviews[data-oke-container].oke-w .oke-w-header-content-block:nth-child(2
     }
 
     .orc-allReviewsCollections .orc-collectionControls-item {
-        -ms-flex: 1 1 50%;
-        flex: 1 1 50%;
+        -ms-flex: 1 1 18%;;
+        flex: 1 1 18%;;
         padding: 9px
     }
 

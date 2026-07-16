@@ -117,7 +117,7 @@
             "columnDistribution": "space-between",
             "verticalAlignment": "top",
             "blocks": [{
-                "columnWidth": "one-half",
+                "columnWidth": "one-third",
                 "modules": [{
                     "name": "rating-average",
                     "layout": "one-line"
@@ -129,7 +129,15 @@
                 }],
                 "textAlignment": "left"
             }, {
-                "columnWidth": "one-half",
+                "columnWidth": "one-third",
+                "modules": [{
+                    "name": "attributes",
+                    "layout": "stacked",
+                    "stretchMode": "stretch"
+                }],
+                "textAlignment": "left"
+            }, {
+                "columnWidth": "one-third",
                 "modules": [{
                     "name": "media-grid",
                     "imageGap": {
@@ -139,6 +147,14 @@
                     "scaleToFill": true,
                     "rows": 2,
                     "columns": 5
+                }],
+                "textAlignment": "left"
+            }, {
+                "columnWidth": "full",
+                "modules": [{
+                    "name": "reviews-summary",
+                    "heading": "Reviews Summary",
+                    "maxTextLines": 5
                 }],
                 "textAlignment": "left"
             }]

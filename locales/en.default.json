@@ -109,6 +109,9 @@
     "artisanal": "Small-Batch · Artisanal"
   },
   "sections": {
+    "collection_reviews": {
+      "heading": "What explorers are saying"
+    },
     "newsletter": {
       "email_placeholder": "Enter Email Address",
       "subscribe": "Subscribe"

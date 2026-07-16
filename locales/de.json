@@ -115,6 +115,9 @@
     "artisanal": "Kleinserie · Handgefertigt"
   },
   "sections": {
+    "collection_reviews": {
+      "heading": "Das sagen unsere Entdecker"
+    },
     "newsletter": {
       "email_placeholder": "E-Mail-Adresse eingeben",
       "subscribe": "Abonnieren"

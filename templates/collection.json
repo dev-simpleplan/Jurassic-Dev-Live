@@ -165,37 +165,8 @@
         "spacer_height": 50
       }
     },
-    "headingsec_ATiVep": {
-      "type": "headingsec",
-      "name": "headingsec",
-      "settings": {
-        "heading": "What explorers are saying",
-        "para": ""
-      }
-    },
-    "spacer_E3UqMA": {
-      "type": "spacer",
-      "name": "Spacer",
-      "settings": {
-        "spacer_height": 50
-      }
-    },
     "17658703763bf5fc11": {
-      "type": "apps",
-      "blocks": {
-        "okendo_reviews_carousel_T9RnMR": {
-          "type": "shopify://apps/okendo/blocks/reviews-carousel/bb689e69-ea70-4661-8fb7-ad24a2e23c29",
-          "settings": {
-            "show_heading": false,
-            "heading": "Reviews",
-            "badge_link": "",
-            "product": ""
-          }
-        }
-      },
-      "block_order": [
-        "okendo_reviews_carousel_T9RnMR"
-      ],
+      "type": "collection-group-reviews",
       "settings": {}
     },
     "spacer_tafrLK": {
@@ -266,8 +237,6 @@
   "order": [
     "main",
     "spacer_Kqf4M3",
-    "headingsec_ATiVep",
-    "spacer_E3UqMA",
     "17658703763bf5fc11",
     "spacer_tafrLK",
     "faq_pages_FmiYAa"

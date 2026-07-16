@@ -1,0 +1,56 @@
+{%- comment -%}
+  Renders an Okendo reviews carousel scoped to the current collection's Okendo Group,
+  so each collection page shows only the reviews for its own products.
+
+  Maps collection.id -> Okendo Group ID (GUID). Collections not in the map fall back
+  to an unscoped (all-reviews) carousel.
+
+  Accepts:
+    header_text - optional. Text for the carousel's own heading (data-oke-header-text).
+                  Styled via .oke-reviewCarousel-header-title to match theme headings.
+
+  To add a new collection: get its Group ID from Okendo admin
+  (Reviews > Groups > [group] -> GUID at the end of the URL) and add a `when` branch.
+{%- endcomment -%}
+{%- assign group_id = '' -%}
+{%- case collection.id -%}
+  {%- when 310722756665 -%}{%- assign group_id = '7c0144f5-ee5f-4493-9e65-bffe5b64be3b' -%}
+  {%- when 310722691129 -%}{%- assign group_id = '919c0af0-a5f7-4e6b-b01d-e1ea290bf76b' -%}
+  {%- when 310722854969 -%}{%- assign group_id = '68595ce5-0137-43b5-8317-32181e7088bb' -%}
+  {%- when 310722723897 -%}{%- assign group_id = 'a8eccc99-872e-4a63-a982-9158833dce16' -%}
+  {%- when 310722789433 -%}{%- assign group_id = '530c54ef-209f-4620-a0cb-826bb020d5de' -%}
+  {%- when 310722822201 -%}{%- assign group_id = 'd18d4692-0410-45aa-8557-351559b02c5f' -%}
+  {%- when 310722920505 -%}{%- assign group_id = '17e56f03-6b68-46e6-ad17-de0b236a353e' -%}
+  {%- when 310989455417 -%}{%- assign group_id = '5fef1c4b-1ab7-4bf6-afc8-46ab6a5a429d' -%}
+  {%- when 462098399289 -%}{%- assign group_id = 'a50d2786-4916-4eff-b98d-50d2367f0542' -%}
+  {%- when 310722330681 -%}{%- assign group_id = '303ed3aa-418f-4b17-874d-d5bafed97f00' -%}
+  {%- when 310722396217 -%}{%- assign group_id = '6e638a8a-fc7a-4403-afb0-ac4a90736f5b' -%}
+  {%- when 312600789049 -%}{%- assign group_id = '72ec081e-9973-47a2-b087-40c24b5b2a68' -%}
+  {%- when 462531919929 -%}{%- assign group_id = 'eda0823c-85fa-4ddf-90f6-f79c82bf178f' -%}
+  {%- when 310755229753 -%}{%- assign group_id = '10120fae-11b7-4e06-880d-93162481e7f9' -%}
+  {%- when 310722297913 -%}{%- assign group_id = 'd144288b-6df8-4623-8e16-5f0678472c48' -%}
+  {%- when 310752444473 -%}{%- assign group_id = '29104f55-f09b-43c7-8e54-095c0e514125' -%}
+  {%- when 310751002681 -%}{%- assign group_id = '44ee4681-d0a7-4337-9452-08fde3966ef2' -%}
+  {%- when 310752575545 -%}{%- assign group_id = '39ff7c89-2bed-412e-9cc9-37247e2d4764' -%}
+  {%- when 310722625593 -%}{%- assign group_id = 'cf512727-6953-42b0-8f67-4ebb09da438b' -%}
+  {%- when 310448947257 -%}{%- assign group_id = 'c7cda6a4-6cf0-436e-ad54-b54d257e58d4' -%}
+  {%- when 310722887737 -%}{%- assign group_id = 'cb3bfc4e-d055-4da1-9075-cecf4b18a1a7' -%}
+  {%- when 310722527289 -%}{%- assign group_id = '3f4713b8-be65-4f82-b881-a97e2b052968' -%}
+  {%- when 310722428985 -%}{%- assign group_id = 'ad9c51a6-607d-483e-8cc9-75672a3d4c60' -%}
+  {%- when 310722363449 -%}{%- assign group_id = 'c5010614-afad-44cf-b853-d07d1e5c9da7' -%}
+  {%- when 310722494521 -%}{%- assign group_id = 'e0e6f176-068c-4f16-8cd1-74a925520729' -%}
+  {%- when 310722592825 -%}{%- assign group_id = '24439c05-d2e3-4de1-a9f2-768388617d5d' -%}
+  {%- when 312127914041 -%}{%- assign group_id = '98aa380d-c18a-4bc8-88ee-8f08aa635865' -%}
+  {%- when 310722461753 -%}{%- assign group_id = 'c9047801-062a-4b79-9504-0dcd188aa849' -%}
+  {%- when 311006724153 -%}{%- assign group_id = 'c5572a40-8afb-437d-9d26-7a0a4d088366' -%}
+  {%- when 310722658361 -%}{%- assign group_id = '64437371-4ce7-47e8-8351-8dda6da26dbc' -%}
+  {%- when 310722560057 -%}{%- assign group_id = '7e142552-18f2-4cf0-bcc5-a7e8c82af2ba' -%}
+  {%- when 463216771129 -%}{%- assign group_id = '05c1c12f-bf3d-4306-a338-e5bdcc852359' -%}
+  {%- when 310754082873 -%}{%- assign group_id = 'cff5967e-984e-48ba-b212-bd874254da1a' -%}
+  {%- when 311433101369 -%}{%- assign group_id = 'bce51bb1-9bbe-41d7-a42c-a652d636a307' -%}
+{%- endcase -%}
+<div
+  data-oke-carousel
+  {% if group_id != '' %}data-oke-reviews-group-id="{{ group_id }}"{% endif %}
+  {% if header_text != blank %}data-oke-header-text="{{ header_text | escape }}"{% endif %}
+></div>

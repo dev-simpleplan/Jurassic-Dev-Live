@@ -112,6 +112,9 @@
     "artisanal": "En petite quantité · Artisanal"
   },
   "sections": {
+    "collection_reviews": {
+      "heading": "Ce que disent nos explorateurs"
+    },
     "newsletter": {
       "email_placeholder": "Entrez votre adresse e-mail",
       "subscribe": "S’abonner"

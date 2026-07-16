@@ -103,6 +103,7 @@ div.okeReviews[data-oke-container].oke-w .oke-is-medium .oke-w-header-content-bl
 @media only screen and (min-width: 800px) {
     .orc-allReviewsCollections .orc-collectionControls {
         margin: 32px 40px;
+        padding: 0;
     }
 
     .orc-allReviewsCollections .orc-collectionControls-item {

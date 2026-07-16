@@ -1,4 +1,4 @@
-<div class="container container-reviews">
+<div class="container container-reviews" style="margin-top: 120px;">
     <h2 class="heading center">{{ page.title }}</h2>
     <div class="orc-allReviewsCollections">
         <div id="orc-collection-control" style="display: none">
@@ -113,19 +113,3 @@
         <div id="orc-widget-snippet" class="drp-okendo-reviews" data-oke-widget data-oke-reviews-group-id="<YOUR DEFAULT GROUP ID GOES HERE>"></div>
     </div>
 </div>
-
-{% style %}
-    .container-reviews {
-        margin-top: 120px;
-    }
-
-    div.okeReviews[data-oke-container].oke-w {
-        max-width: min(86%, 1200px);
-    }
-
-    div.okeReviews[data-oke-container].oke-w
-    .oke-w-header-content-block:nth-child(2) {
-        display: none;
-        background-color: green;
-    }
-{% endstyle %}

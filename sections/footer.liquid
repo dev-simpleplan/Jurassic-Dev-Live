@@ -188,7 +188,9 @@
                     </p>
                     <p class="reserved"><span> | </span>All rights reserved.</p>
                 </div>
-                
+                <div class="footer-lastpara">
+                  <p>{{ section.settings.footer_para }}</p>
+                </div>
                 {% comment %} <div class="footer-made-with">
                     <p>Made with {% render 'red-heart' %} by <a href="https://www.simpleplanmedia.com/" target="_blank">SimplePlan</a></p>
                 </div> {% endcomment %}
@@ -253,7 +255,13 @@
     { "type": "url", "id": "whatsapp_url", "label": "WhatsApp URL (e.g., https://wa.me/91XXXXXXXXXX)" },
 
     { "type": "checkbox", "id": "show_telegram", "label": "Show Telegram", "default": false },
-    { "type": "url", "id": "telegram_url", "label": "Telegram URL" }
+    { "type": "url", "id": "telegram_url", "label": "Telegram URL" },
+    {
+        "type": "text",
+        "id": "footer_para",
+        "label": "Legal Paragraph",
+        "default": "All prices include VAT and exclude shipping costs if not stated otherwise. Health authorities recommends washing your fruits under water before consumption."
+    }
   ],
   "blocks": [
     {

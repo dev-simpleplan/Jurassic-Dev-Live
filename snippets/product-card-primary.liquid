@@ -186,11 +186,11 @@
 
   <div class="star_rating">
     {% if review_count > 0 %}
-      <div class="star-rating-fallback">
+      <a href="{{ product.url }}" class="star-rating-fallback star-rating-link" aria-label="{{ product.title | escape }} — {{ review_rating_display }} stars, {{ review_count }} reviews">
         <span class="star-rating-fallback__star">★</span>
         <span class="star-rating-fallback__rating">{{ review_rating_display }}</span>
         <span class="star-rating-fallback__count">({{ review_count }})</span>
-      </div>
+      </a>
     {% endif %}
   </div>
 

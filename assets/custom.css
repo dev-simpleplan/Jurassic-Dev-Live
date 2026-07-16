@@ -196,6 +196,14 @@
   font-size: 11px;
   line-height: 15px;
 }
+a.star-rating-link {
+  width: fit-content;
+  text-decoration: none;
+  cursor: pointer;
+}
+a.star-rating-link:hover {
+  color: #747474;
+}
 .star-rating-fallback__star {
   color: #ffc226;
   font-size: 12px;

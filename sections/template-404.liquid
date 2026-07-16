@@ -1,22 +1,99 @@
+{%- liquid
+  assign bg_image = section.settings.bg_image
+  assign logo_image = section.settings.logo_image
+  assign button_url = section.settings.button_url | default: shop.url
+-%}
 <section class="error-template">
     <div class="et-bg">
-        <img src="https://cdn.shopify.com/s/files/1/0752/8015/4881/files/Vector_-_2025-12-08T192241.263.svg?v=1765201976" alt="">
+        {%- if bg_image != blank -%}
+            <img src="{{ bg_image | image_url: width: 1200 }}" alt="" width="{{ bg_image.width }}" height="{{ bg_image.height }}" loading="lazy">
+        {%- else -%}
+            <img src="https://cdn.shopify.com/s/files/1/0752/8015/4881/files/Vector_-_2025-12-08T192241.263.svg?v=1765201976" alt="" loading="lazy">
+        {%- endif -%}
     </div>
   <div class="container">
     <div class="et-data">
         <div class="etd-heading">
-            <h1>404</h1>
-            <p>No result found</p>
+            <h1>{{ section.settings.heading }}</h1>
+            <p>{{ section.settings.subheading }}</p>
         </div>
-        <div class="etd-desc">
-            <p>Lorem ipsum dolor sit amet consectetur. Nulla morbi blandit quis scelerisque elementum enim a pulvinar elit. Ante arcu feugiat sit turpis commodo faucibus non rhoncus potenti. Nunc posuere tempus sagittis nisl pulvinar aliquam sit commodo. Egestas vestibulum laoreet odio duis nisi.</p>
-        </div>
-        <div class="etd-button">
-            <a href="{{ shop.url }}" class="line-btn dark">go back to homepage</a>
-        </div>
-        <div class="etd-logo">
-            <img src="https://cdn.shopify.com/s/files/1/0752/8015/4881/files/Group_66.svg?v=1765202267" alt="">
-        </div>
+        {%- if section.settings.description != blank -%}
+            <div class="etd-desc">
+                {{ section.settings.description }}
+            </div>
+        {%- endif -%}
+        {%- if section.settings.button_label != blank -%}
+            <div class="etd-button">
+                <a href="{{ button_url }}" class="line-btn dark">{{ section.settings.button_label }}</a>
+            </div>
+        {%- endif -%}
+        {%- if logo_image != blank -%}
+            <div class="etd-logo">
+                <img src="{{ logo_image | image_url: width: 400 }}" alt="{{ shop.name | escape }}" width="{{ logo_image.width }}" height="{{ logo_image.height }}" loading="lazy">
+            </div>
+        {%- else -%}
+            <div class="etd-logo">
+                <img src="https://cdn.shopify.com/s/files/1/0752/8015/4881/files/Group_66.svg?v=1765202267" alt="{{ shop.name | escape }}" loading="lazy">
+            </div>
+        {%- endif -%}
     </div>
   </div>
 </section>
+
+{% schema %}
+{
+  "name": "404 Page",
+  "tag": "section",
+  "class": "template-404-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "404"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "No result found"
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "Description",
+      "default": "<p>The page you are looking for could not be found. It may have been moved or no longer exists.</p>"
+    },
+    {
+      "type": "header",
+      "content": "Button"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label",
+      "default": "go back to homepage"
+    },
+    {
+      "type": "url",
+      "id": "button_url",
+      "label": "Button link",
+      "info": "Defaults to the homepage if left blank."
+    },
+    {
+      "type": "header",
+      "content": "Images"
+    },
+    {
+      "type": "image_picker",
+      "id": "bg_image",
+      "label": "Background image"
+    },
+    {
+      "type": "image_picker",
+      "id": "logo_image",
+      "label": "Logo image"
+    }
+  ]
+}
+{% endschema %}

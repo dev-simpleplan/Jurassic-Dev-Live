@@ -107,3 +107,77 @@
         <div id="orc-widget-snippet" class="drp-okendo-reviews" data-oke-widget></div>
     </div>
 </div>
+
+<script type="text/javascript">
+  (() => {
+  const SETTINGS = {
+    "subscriberId": "ad277cb9-c298-42e3-ad35-9267969af9c2",
+        "reviewsWidget": {
+            "reviews": {
+                "list": {
+                    "layout": {
+                        "collapseReviewerDetails": true,
+                        "columnAmount": 4,
+                        "name": "masonry",
+                        "showAttributeBars": false,
+                        "borderStyle": "full",
+                        "showProductVariantName": false,
+                        "showProductDetails": "only-when-grouped",
+                        "cardLayout": {
+                            "reviewDetailsPosition": "above",
+                            "showProductName": false,
+                            "showFullHeightImages": false,
+                            "showReply": false,
+                            "name": "featured",
+                            "showAttributeBars": false,
+                        }
+                    },
+                    "initialPageSize": 12,
+                    "replyTruncation": {
+                        "bodyMaxLines": 4,
+                        "enabled": true
+                    },
+                    "media": {
+                        "layout": "featured",
+                        "size": {
+                            "value": 250,
+                            "unit": "px"
+                        }
+                    },
+                    "truncation": {
+                        "bodyMaxLines": 4,
+                        "truncateAll": false,
+                        "enabled": true
+                    },
+                    "loadMorePageSize": 4
+                },
+                "controls": {
+                    "defaultSort": "has_media desc",
+                    "sortOptionOrder": ["has_media desc", "date desc", "rating desc", "helpful desc", "date asc", "rating asc", "unhelpful desc"]
+                }
+            }
+        },
+  };
+
+  function initializeWidget() {
+	const widget = document.querySelector("[data-oke-widget]");
+
+	if (!widget || !window.okeWidgetApi) {
+		return false;
+	}
+
+	window.okeWidgetApi.setWidgetSettings(SETTINGS);
+	window.okeWidgetApi.init();
+
+	return true;
+	}
+
+  const interval = setInterval(() => {
+    if (initializeWidget()) {
+      clearInterval(interval);
+    }
+  }, 100);
+
+  setTimeout(() => clearInterval(interval), 10000);
+})();
+</script>

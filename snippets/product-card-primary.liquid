@@ -43,7 +43,7 @@
 <div class="product-card-primary" data-product-available="{{ product.available }}">
   <div class="fruits_card">
       <div class="fc_top">
-        <a href="{{ product.url | within: collection }}" class="card-link"></a>
+        <a href="{{ product.url }}" class="card-link"></a>
         {% assign images = product.images %}
 
         <div class="fc_image {% if images.size > 1 %}has-hover-img{% endif %}">
@@ -202,7 +202,7 @@
   </div>
           </div>
           <p class="fc_product_title">
-            <a href="{{ product.url | within: collection }}">{{ product_display_title | truncate: 65 }}</a>
+            <a href="{{ product.url }}">{{ product_display_title | truncate: 65 }}</a>
           </p>
         </div>
 

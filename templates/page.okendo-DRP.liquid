@@ -112,51 +112,54 @@
   (() => {
   const SETTINGS = {
     "subscriberId": "ad277cb9-c298-42e3-ad35-9267969af9c2",
-        "reviewsWidget": {
-            "reviews": {
-                "list": {
-                    "layout": {
-                        "collapseReviewerDetails": true,
-                        "columnAmount": 4,
-                        "name": "masonry",
-                        "showAttributeBars": false,
-                        "borderStyle": "full",
-                        "showProductVariantName": false,
-                        "showProductDetails": "only-when-grouped",
-                        "cardLayout": {
-                            "reviewDetailsPosition": "above",
-                            "showProductName": false,
-                            "showFullHeightImages": false,
-                            "showReply": false,
-                            "name": "featured",
-                            "showAttributeBars": false,
-                        }
+    "reviewsWidget": {
+        "header": {
+            "columnDistribution": "space-around",
+            "verticalAlignment": "top",
+            "blocks": [{
+                "columnWidth": "one-third",
+                "modules": [{
+                    "name": "rating-average",
+                    "layout": "one-line"
+                }, {
+                    "name": "rating-breakdown",
+                    "backgroundColor": "#f5f5f5",
+                    "shadingColor": "#ce1a1aff",
+                    "stretchMode": "contain"
+                }],
+                "textAlignment": "left"
+            }, {
+                "columnWidth": "one-third",
+                "modules": [{
+                    "name": "attributes",
+                    "layout": "stacked",
+                    "stretchMode": "stretch"
+                }],
+                "textAlignment": "left"
+            }, {
+                "columnWidth": "one-third",
+                "modules": [{
+                    "name": "media-grid",
+                    "imageGap": {
+                        "value": 4,
+                        "unit": "px"
                     },
-                    "initialPageSize": 12,
-                    "replyTruncation": {
-                        "bodyMaxLines": 4,
-                        "enabled": true
-                    },
-                    "media": {
-                        "layout": "featured",
-                        "size": {
-                            "value": 250,
-                            "unit": "px"
-                        }
-                    },
-                    "truncation": {
-                        "bodyMaxLines": 4,
-                        "truncateAll": false,
-                        "enabled": true
-                    },
-                    "loadMorePageSize": 4
-                },
-                "controls": {
-                    "defaultSort": "has_media desc",
-                    "sortOptionOrder": ["has_media desc", "date desc", "rating desc", "helpful desc", "date asc", "rating asc", "unhelpful desc"]
-                }
-            }
+                    "scaleToFill": true,
+                    "rows": 2,
+                    "columns": 3
+                }],
+                "textAlignment": "left"
+            }, {
+                "columnWidth": "full",
+                "modules": [{
+                    "name": "reviews-summary",
+                    "heading": "Reviews Summary",
+                    "maxTextLines": 5
+                }],
+                "textAlignment": "left"
+            }]
         },
+    },      
   };
 
   function initializeWidget() {

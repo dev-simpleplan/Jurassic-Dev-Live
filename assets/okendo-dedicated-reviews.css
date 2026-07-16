@@ -16,7 +16,8 @@
     display: flex;
     -ms-flex-wrap: wrap;
     flex-wrap: wrap;
-    margin: 24px 0 0 0;
+    margin: 20px 0 0 0;
+    padding: 0 20px;
     gap: 12px;
 }
 
@@ -47,7 +48,7 @@
     box-sizing: border-box;
     -ms-flex: 1 1 100%;
     flex: 1 1 100%;
-    padding: 0 20px;
+    padding: 3px 9px
 }
 
 .orc-allReviewsCollections .orc-collectionControls-item-label-heading {

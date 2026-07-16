@@ -1,4 +1,4 @@
-<div class="container-fluid">
+<div class="container">
     <h2 class="heading center">{{ page.title }}</h2>   
     {% render 'okendo-reviews-widget', product: product %}
 </div>
@@ -6,6 +6,10 @@
 
 
 {% style %}
+    .container {
+        margin-top: 200px;
+    }
+
     div.okeReviews[data-oke-container].oke-w {
         max-width: min(81%, 1200px);
     }

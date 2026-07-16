@@ -79,6 +79,12 @@
             "collection": "fruit"
           }
         },
+        "collection_block_XzTX36": {
+          "type": "collection_block",
+          "settings": {
+            "collection": "coconuts"
+          }
+        },
         "collection_block_YpVyhY": {
           "type": "collection_block",
           "settings": {
@@ -119,6 +125,7 @@
       "block_order": [
         "collection_block_JnrDEX",
         "collection_block_6hFaDw",
+        "collection_block_XzTX36",
         "collection_block_YpVyhY",
         "collection_block_xGihdd",
         "collection_block_AwVC9h",

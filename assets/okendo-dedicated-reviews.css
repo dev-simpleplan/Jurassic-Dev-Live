@@ -32,7 +32,6 @@
     -ms-flex-pack: justify;
     justify-content: space-between;
     margin-top: 0;
-    padding: 8px 16px;
     text-align: center
 }
 
@@ -83,8 +82,7 @@ div.okeReviews[data-oke-container].oke-w {
     max-width: min(86%, 1200px);
 }
 
-div.okeReviews[data-oke-container].oke-w
-.oke-w-header-content-block:nth-child(2) {
+div.okeReviews[data-oke-container].oke-w .oke-w-header-content-block:nth-child(2) {
     display: none;
 }
 
@@ -105,7 +103,6 @@ div.okeReviews[data-oke-container].oke-w
         -ms-flex-direction: column;
         flex-direction: column;
         height: auto;
-        padding: 16px
     }
 
     .orc-allReviewsCollections .orc-collectionControls-item-label-heading {

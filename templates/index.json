@@ -111,6 +111,7 @@
         },
         "collection_block_c3LLEz": {
           "type": "collection_block",
+          "disabled": true,
           "settings": {
             "collection": "new"
           }

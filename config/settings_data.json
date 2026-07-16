@@ -69,13 +69,6 @@
     },
     "content_for_index": [],
     "blocks": {
-      "733389323033596483": {
-        "type": "shopify://apps/okendo/blocks/theme-settings/bb689e69-ea70-4661-8fb7-ad24a2e23c29",
-        "disabled": false,
-        "settings": {
-          "show_preview_data": true
-        }
-      },
       "2131494470682214141": {
         "type": "shopify://apps/corner-cart-drawer-free-gift/blocks/corner-widget/73667a27-0d48-44b7-91f9-aef741c803ed",
         "disabled": false,
@@ -100,6 +93,13 @@
         "type": "shopify://apps/boo-eu-withdrawal-button/blocks/theme/019c83fd-5304-7bcb-bc27-c2e42bcee2aa",
         "disabled": false,
         "settings": {}
+      },
+      "733389323033596483": {
+        "type": "shopify://apps/okendo/blocks/theme-settings/bb689e69-ea70-4661-8fb7-ad24a2e23c29",
+        "disabled": false,
+        "settings": {
+          "show_preview_data": false
+        }
       }
     }
   }

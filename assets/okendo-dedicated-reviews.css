@@ -93,7 +93,8 @@ div.okeReviews[data-oke-container].oke-w .oke-w-header-content-block:nth-child(2
     display: none;
 }
 
-div.okeReviews[data-oke-container].oke-w .oke-w-header-content-block--oneThird:nth-child(3) {
+div.okeReviews[data-oke-container].oke-w .oke-is-large .oke-w-header-content-block--oneThird:nth-child(3),
+div.okeReviews[data-oke-container].oke-w .oke-is-medium .oke-w-header-content-block--oneThird:nth-child(3) {
     width: calc(48% - 48px);
 }
 

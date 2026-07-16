@@ -1,5 +1,9 @@
-<h1>Customer Reviews</h1>
-{% render 'okendo-reviews-widget', product: product %}
+<div class="container-fluid">
+    <h2 class="heading center">{{ page.title }}</h2>   
+    {% render 'okendo-reviews-widget', product: product %}
+</div>
+
+
 
 {% style %}
     div.okeReviews[data-oke-container].oke-w {

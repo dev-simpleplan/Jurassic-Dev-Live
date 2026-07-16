@@ -108,8 +108,8 @@ div.okeReviews[data-oke-container].oke-w .oke-w-header-content-block:nth-child(2
     .orc-allReviewsCollections .orc-collectionControls-item-label-heading {
         -ms-flex-preferred-size: auto;
         flex-basis: auto;
-        margin-bottom: 16px;
         text-align: center
+        padding: 16px;
     }
 
     .orc-allReviewsCollections .orc-collectionControls-item-label-background {

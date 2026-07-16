@@ -2457,7 +2457,9 @@ li.variant-value.is-sold-out {
   list-style: inherit;
   display: flex;
   flex-direction: column;
-  gap: 3px;
+  gap: 1px;
+  padding-left: 20px;
+  margin-top: 8px;
 }
 .nutri-image img {
   width: 100%;

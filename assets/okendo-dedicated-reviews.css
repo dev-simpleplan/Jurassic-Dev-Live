@@ -38,7 +38,7 @@
 
 .orc-allReviewsCollections .orc-collectionControls-item-input--checked+.orc-collectionControls-item-label,
 .orc-allReviewsCollections .orc-collectionControls-item-input:checked+.orc-collectionControls-item-label,
-.orc-allReviewsCollections .orc-collectionControls-item.orc-collectionControls-item-input--checked {
+.orc-collectionControls-item:has(.orc-collectionControls-item-input--checked) {
     background-color: transparent;
     color: #1a1a1a;
 }

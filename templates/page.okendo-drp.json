@@ -1,0 +1,44 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "spacer_cHUeXh": {
+      "type": "spacer",
+      "name": "Spacer",
+      "settings": {
+        "spacer_height": 90
+      }
+    },
+    "1784145094e9d6ac2b": {
+      "type": "apps",
+      "blocks": {
+        "okendo_reviews_widget_hanMVq": {
+          "type": "shopify://apps/okendo/blocks/reviews-widget/bb689e69-ea70-4661-8fb7-ad24a2e23c29",
+          "settings": {
+            "product": "",
+            "widget_type": "reviews_widget"
+          }
+        }
+      },
+      "block_order": [
+        "okendo_reviews_widget_hanMVq"
+      ],
+      "custom_css": [
+        "div.okeReviews[data-oke-container].oke-w {max-width: min(81%, 1200px);}",
+        "div.okeReviews[data-oke-container].oke-w .oke-w-header-content-block:nth-child(2) {display: none; background-color: green;}"
+      ],
+      "settings": {}
+    }
+  },
+  "order": [
+    "spacer_cHUeXh",
+    "1784145094e9d6ac2b"
+  ]
+}

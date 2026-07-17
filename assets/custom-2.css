@@ -2742,6 +2742,15 @@ p.product-description-metafield {
 .prod-main-image.slick-initialized img {
   opacity: 1;
 }
+/* Hide the thumbnail rail until Slick initializes, so it doesn't flash in its
+   raw (right-pinned) position before snapping into the nav layout. Mirrors the
+   main image guard above. */
+.prod-thumb-image {
+  opacity: 0;
+}
+.prod-thumb-image.slick-initialized {
+  opacity: 1;
+}
 .boxIn {
   display: flex;
   flex-direction: column;

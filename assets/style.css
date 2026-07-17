@@ -932,14 +932,18 @@ li.nav-item.has-mega-menu:hover .nav_arrow_down {
 #predictive-search {
   position: absolute;
   top: 100%;
-  left: auto;
+  left: 0;
   right: 0;
   margin: 0 auto;
-  max-width: 840px;
-  background: var(--body-bg);
-  border: 1px solid #ddd;
+  max-width: 1400px;
   z-index: 100;
   width: 100%;
+}
+.predsearch-in {
+    max-width: 840px;
+    margin-left: auto;
+    background: var(--body-bg);
+    border: 1px solid #ddd;
 }
 
 .ps-grid {

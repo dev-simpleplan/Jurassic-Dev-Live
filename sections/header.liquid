@@ -412,25 +412,27 @@
                     value="product">
 
                   <div id="predictive-search" class="predictive-search" hidden>
-                    <div class="ps-grid">
-                      <div class="ps-suggestions">
-                        <p class="ps-title">Suggestions</p>
-                        <ul class="ps-list ps-suggestions-list" data-lenis-prevent></ul>
+                    <div class="predsearch-in">
+                      <div class="ps-grid">
+                        <div class="ps-suggestions">
+                          <p class="ps-title">Suggestions</p>
+                          <ul class="ps-list ps-suggestions-list" data-lenis-prevent></ul>
+                        </div>
+
+                        <div class="ps-products">
+                          <p class="ps-title">Products</p>
+                          <ul class="ps-list ps-products-list" data-lenis-prevent></ul>
+                        </div>
                       </div>
 
-                      <div class="ps-products">
-                        <p class="ps-title">Products</p>
-                        <ul class="ps-list ps-products-list" data-lenis-prevent></ul>
+                      <div class="ps-empty-state" hidden>
+                        <p>No results found</p>
                       </div>
-                    </div>
 
-                    <div class="ps-empty-state" hidden>
-                      <p>No results found</p>
+                      <a href="#" class="ps-view-all">
+                        Search for "<span></span>" →
+                      </a>
                     </div>
-
-                    <a href="#" class="ps-view-all">
-                      Search for "<span></span>" →
-                    </a>
                   </div>
 
                 </form>

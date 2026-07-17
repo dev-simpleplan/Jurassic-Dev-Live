@@ -211,7 +211,7 @@
       window.currencySymbol = "{{ cart.currency.symbol | default: shop.currency_symbol }}";
     </script>
     
-    {% if template == 'page.okendo-DRP' %}
+    {% if template == 'page.okendo-drp' %}
       {{ 'okendo-dedicated-reviews.js' | asset_url | script_tag }}
       {{ 'okendo-dedicated-reviews.css' | asset_url | stylesheet_tag: preload: true }}
     {% endif %}

@@ -49,6 +49,7 @@
     flex: 1 1 100%;
     padding: 9px 10px;
     align-items: center;
+    align-content: center;
 }
 
 .orc-allReviewsCollections .orc-collectionControls-item-label-heading {

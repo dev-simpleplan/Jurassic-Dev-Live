@@ -90,6 +90,7 @@ span.orc-collectionControls-item-label-heading {
 div.okeReviews[data-oke-container].oke-w,
 #orc-collection-control {
     max-width: min(86%, 1200px);
+    margin: auto;
     margin-bottom: 36px;
 }
 

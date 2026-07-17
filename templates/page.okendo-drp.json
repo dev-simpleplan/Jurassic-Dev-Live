@@ -15,9 +15,15 @@
       "settings": {
         "spacer_height": 90
       }
+    },
+    "okendo_dedicated_reviews_page_7RUtNa": {
+      "type": "okendo-dedicated-reviews-page",
+      "name": "Okendo Reviews Page",
+      "settings": {}
     }
   },
   "order": [
-    "spacer_cHUeXh"
+    "spacer_cHUeXh",
+    "okendo_dedicated_reviews_page_7RUtNa"
   ]
 }

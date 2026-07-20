@@ -14,7 +14,6 @@
       "blocks": {
         "collection_diNBVy": {
           "type": "collection",
-          "disabled": true,
           "settings": {
             "col": "fruit-cases",
             "parent_collections": [

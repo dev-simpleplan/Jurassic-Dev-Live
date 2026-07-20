@@ -100,6 +100,7 @@
   {{ content_for_header }}
 
     {% if template.name == 'index' %}
+      <link rel="preload" as="image" href="{{ 'jurassic-loader-gif.gif' | asset_url }}" fetchpriority="high">
       <script>
         (function() {
           try {
@@ -120,7 +121,7 @@
           background: #000;
           opacity: 0;
           visibility: hidden;
-          transition: opacity 0.45s ease, visibility 0.45s ease;
+          transition: opacity 0.25s ease, visibility 0.25s ease;
           pointer-events: none;
         }
 
@@ -265,8 +266,12 @@
       <div class="homepage-loader" id="homepage-loader" aria-hidden="true">
         <div class="homepage-loader__media">
           <img
-            src="{{ 'home-loader.gif' | asset_url }}"
+            src="{{ 'jurassic-loader-gif.gif' | asset_url }}"
             alt="Loading"
+            width="500"
+            height="500"
+            fetchpriority="high"
+            decoding="sync"
             loading="eager">
         </div>
       </div>
@@ -537,10 +542,23 @@
     <script>
       {% if template.name == 'index' %}
         (function() {
+          // Dismiss as soon as the DOM is ready rather than on window 'load'.
+          // 'load' waits for every image and third-party app script (Okendo,
+          // Instafeed, Omnisend...), which made the loader linger for seconds.
+          const LOADER_MIN_MS = 400;   // keep it visible briefly so it doesn't flash
+          const LOADER_MAX_MS = 2000;  // hard safety cap
+          const startedAt = Date.now();
           let loaderDismissed = false;
 
           const hideLoader = () => {
             if (loaderDismissed) return;
+
+            const elapsed = Date.now() - startedAt;
+            if (elapsed < LOADER_MIN_MS) {
+              window.setTimeout(hideLoader, LOADER_MIN_MS - elapsed);
+              return;
+            }
+
             loaderDismissed = true;
 
             document.documentElement.classList.remove('show-home-loader');
@@ -555,14 +573,18 @@
               if (loader) {
                 loader.remove();
               }
-            }, 500);
+            }, 300);
           };
 
           const shouldShowLoader = document.documentElement.classList.contains('show-home-loader');
 
           if (shouldShowLoader) {
-            window.addEventListener('load', hideLoader, { once: true });
-            window.setTimeout(hideLoader, 5000);
+            if (document.readyState === 'loading') {
+              document.addEventListener('DOMContentLoaded', hideLoader, { once: true });
+            } else {
+              hideLoader();
+            }
+            window.setTimeout(hideLoader, LOADER_MAX_MS);
           }
         })();
       {% endif %}

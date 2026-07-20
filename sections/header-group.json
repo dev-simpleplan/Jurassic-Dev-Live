@@ -66,7 +66,7 @@
           "type": "nav_menu_right",
           "disabled": true,
           "settings": {
-            "nav_items_right": "",
+            "nav_items_right": "sale",
             "product_list_heading": "Sale",
             "product_list": [
               "mangosteen",

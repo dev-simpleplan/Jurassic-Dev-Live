@@ -1,0 +1,21 @@
+{% for group in robots.default_groups %}
+  {{- group.user_agent }}
+
+  {% for rule in group.rules -%}
+    {{ rule }}
+  {% endfor -%}
+
+  {%- comment -%}
+    Block Okendo review-pagination URLs. These are generated client-side by the
+    Okendo reviews widget and resolve to 404s, which were being discovered and
+    reported in Google Search Console.
+  {%- endcomment -%}
+  {%- if group.user_agent.value == '*' %}
+    {{ 'Disallow: /*?okeReviewsNextUrl=' }}
+    {{ 'Disallow: /*&okeReviewsNextUrl=' }}
+  {% endif -%}
+
+  {%- if group.sitemap != blank %}
+    {{ group.sitemap }}
+  {% endif %}
+{% endfor %}

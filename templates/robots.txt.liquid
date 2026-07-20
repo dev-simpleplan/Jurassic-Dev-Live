@@ -1,21 +1,25 @@
-{% for group in robots.default_groups %}
-  {{- group.user_agent }}
+{%- comment -%}
+  Custom robots.txt.
 
-  {% for rule in group.rules -%}
-    {{ rule }}
-  {% endfor -%}
+  Reproduces Shopify's default rules via `robots.default_groups` (so nothing is lost
+  and future Shopify changes are picked up automatically), then appends rules blocking
+  Okendo review-pagination URLs. Those `?okeReviewsNextUrl=` URLs are generated
+  client-side by the Okendo reviews widget, resolve to 404s, and were being discovered
+  and reported in Google Search Console.
 
-  {%- comment -%}
-    Block Okendo review-pagination URLs. These are generated client-side by the
-    Okendo reviews widget and resolve to 404s, which were being discovered and
-    reported in Google Search Console.
-  {%- endcomment -%}
-  {%- if group.user_agent.value == '*' %}
-    {{ 'Disallow: /*?okeReviewsNextUrl=' }}
-    {{ 'Disallow: /*&okeReviewsNextUrl=' }}
-  {% endif -%}
+  Delete this file to revert to Shopify's auto-generated robots.txt.
+{%- endcomment -%}
+{%- for group in robots.default_groups -%}
+{{ group.user_agent }}
+{%- for rule in group.rules %}
+{{ rule }}
+{%- endfor %}
+{%- if group.user_agent.value == '*' %}
+Disallow: /*?okeReviewsNextUrl=
+Disallow: /*&okeReviewsNextUrl=
+{%- endif %}
+{%- if group.sitemap != blank %}
+{{ group.sitemap }}
+{%- endif %}
 
-  {%- if group.sitemap != blank %}
-    {{ group.sitemap }}
-  {% endif %}
-{% endfor %}
+{% endfor -%}

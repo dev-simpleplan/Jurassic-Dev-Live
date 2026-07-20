@@ -15,8 +15,10 @@
         "collection_iTf6ri": {
           "type": "collection",
           "settings": {
-            "col": "",
-            "parent_collections": [],
+            "col": "bundles-dried-products",
+            "parent_collections": [
+              "fruit-boxes"
+            ],
             "hide_on_generic_collections": false,
             "col_name": ""
           }
@@ -155,7 +157,8 @@
         "collection_JiN3yp"
       ],
       "settings": {
-        "head": "Exotic fruits in season"
+        "head": "Exotic fruits in season",
+        "number_of_product": 40
       }
     },
     "spacer_Kqf4M3": {
@@ -167,7 +170,11 @@
     },
     "17658703763bf5fc11": {
       "type": "collection-group-reviews",
-      "settings": {}
+      "settings": {
+        "heading": "",
+        "padding_top": 0,
+        "padding_bottom": 0
+      }
     },
     "spacer_tafrLK": {
       "type": "spacer",

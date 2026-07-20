@@ -16,7 +16,7 @@
           "type": "collection",
           "disabled": true,
           "settings": {
-            "col": "family-sizes",
+            "col": "fruit-cases",
             "parent_collections": [
               "fruit-boxes"
             ],

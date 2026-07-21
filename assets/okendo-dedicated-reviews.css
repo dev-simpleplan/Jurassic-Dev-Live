@@ -105,6 +105,10 @@ div.okeReviews[data-oke-container].oke-w .oke-is-medium .oke-w-header-content-bl
     margin-top: 30px;
 }
 
+.container-reviews .heading {
+    align-items: center;
+}
+
 @media only screen and (min-width: 800px) {
     .container-reviews {
         margin-top: 0;

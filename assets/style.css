@@ -5884,3 +5884,6 @@ h2.oke-reviewCarousel-header-title {
 .js-oke-widgetSize.oke-is-large .oke-w-ratingAverageModule-rating .oke-stars {
     width: 100px;
 }
+#corner-sticky-atc-outer-container {
+    z-index: 9999999999!important;
+}

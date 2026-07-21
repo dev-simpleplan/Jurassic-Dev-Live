@@ -1227,7 +1227,10 @@ body.backdrop::before {
   margin-bottom: 8px;
 }
 .withdrawal-page .withdrawal-form-intro {
-  margin-bottom: 20px;
+  margin-bottom: 30px;
+}
+.withdrawal-page .withdrawal-form-intro p {
+  font-size: 16px;
 }
 .withdrawal-page .form-group--checkbox .withdrawal-confirm {
   display: flex;
@@ -1241,4 +1244,10 @@ body.backdrop::before {
   min-width: 18px;
   height: 18px;
   margin-top: 2px;
+}
+.withdrawal-notice {
+  margin-top: 20px;
+}
+.withdrawal-notice p {
+  font-size: 16px;
 }

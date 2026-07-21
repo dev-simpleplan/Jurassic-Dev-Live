@@ -5903,10 +5903,7 @@ h2.oke-reviewCarousel-header-title {
     max-width: 1200px!important;
 
 }
-.okeReviews.oke-w {
-    padding-left: 40px !important;
-    padding-right: 40px !important;
-}
+
 @media (max-width: 767px) {
     .okeReviews.oke-w {
         padding-left: 20px !important;

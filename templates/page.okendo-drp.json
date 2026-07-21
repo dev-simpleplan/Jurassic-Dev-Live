@@ -25,7 +25,23 @@
       "settings": {
         "intro_text": "",
         "button_label": "",
-        "button_link": ""
+        "button_link": "shopify://products/acerola-cherry",
+        "group_1_label": "All Reviews",
+        "group_1_id": "",
+        "group_2_label": "Coconuts",
+        "group_2_id": "",
+        "group_3_label": "Mangoes",
+        "group_3_id": "",
+        "group_4_label": "Dates",
+        "group_4_id": "",
+        "group_5_label": "Dates",
+        "group_5_id": "",
+        "group_6_label": "Honey",
+        "group_6_id": "",
+        "group_7_label": "Exotic Fruits in season",
+        "group_7_id": "",
+        "group_8_label": "Discovery Boxes",
+        "group_8_id": ""
       }
     },
     "bestseller_carousel_wHNT3n": {

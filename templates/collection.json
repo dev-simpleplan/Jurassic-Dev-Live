@@ -12,28 +12,6 @@
     "main": {
       "type": "collection",
       "blocks": {
-        "collection_diNBVy": {
-          "type": "collection",
-          "settings": {
-            "col": "fruit-cases",
-            "parent_collections": [
-              "fruit-boxes"
-            ],
-            "hide_on_generic_collections": false,
-            "col_name": ""
-          }
-        },
-        "collection_iTf6ri": {
-          "type": "collection",
-          "settings": {
-            "col": "bundles-dried-products",
-            "parent_collections": [
-              "fruit-boxes"
-            ],
-            "hide_on_generic_collections": false,
-            "col_name": ""
-          }
-        },
         "collection_rxVwVF": {
           "type": "collection",
           "settings": {
@@ -133,6 +111,28 @@
             "col_name": ""
           }
         },
+        "collection_diNBVy": {
+          "type": "collection",
+          "settings": {
+            "col": "fruit-cases",
+            "parent_collections": [
+              "fruit-boxes"
+            ],
+            "hide_on_generic_collections": false,
+            "col_name": ""
+          }
+        },
+        "collection_iTf6ri": {
+          "type": "collection",
+          "settings": {
+            "col": "bundles-dried-products",
+            "parent_collections": [
+              "fruit-boxes"
+            ],
+            "hide_on_generic_collections": false,
+            "col_name": ""
+          }
+        },
         "collection_C7k3BY": {
           "type": "collection",
           "settings": {
@@ -153,8 +153,6 @@
         }
       },
       "block_order": [
-        "collection_diNBVy",
-        "collection_iTf6ri",
         "collection_rxVwVF",
         "collection_JKYHMB",
         "collection_zp8hR7",
@@ -165,6 +163,8 @@
         "collection_m7RmEV",
         "collection_Hixxmw",
         "collection_nnUfpe",
+        "collection_diNBVy",
+        "collection_iTf6ri",
         "collection_C7k3BY",
         "collection_JiN3yp"
       ],

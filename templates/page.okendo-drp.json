@@ -23,8 +23,8 @@
       ],
       "name": "Okendo Reviews Page",
       "settings": {
-        "intro_text": "<p>Test</p>",
-        "button_label": "CTA",
+        "intro_text": "",
+        "button_label": "",
         "button_link": ""
       }
     },

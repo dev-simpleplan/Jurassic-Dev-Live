@@ -13,17 +13,26 @@
       "type": "spacer",
       "name": "Spacer",
       "settings": {
-        "spacer_height": 30
+        "spacer_height": 120
       }
     },
     "okendo_dedicated_reviews_page_7RUtNa": {
       "type": "okendo-dedicated-reviews-page",
       "name": "Okendo Reviews Page",
       "settings": {}
+    },
+    "bestseller_carousel_wHNT3n": {
+      "type": "bestseller-carousel",
+      "name": "BestsellerCarousel",
+      "settings": {
+        "collection": "",
+        "heading": "Our Bestsellers"
+      }
     }
   },
   "order": [
     "spacer_cHUeXh",
-    "okendo_dedicated_reviews_page_7RUtNa"
+    "okendo_dedicated_reviews_page_7RUtNa",
+    "bestseller_carousel_wHNT3n"
   ]
 }

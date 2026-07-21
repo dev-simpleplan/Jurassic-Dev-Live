@@ -3,18 +3,19 @@
 
 <div class="container container-reviews">
     <h2 class="heading center">{{ page.title }}</h2>
-    <div class="reviews-intro page-width">
-        {% if section.settings.text != blank %}
-            <div class="reviews-intro__text">
-                {{ section.settings.text }}
-            </div>
-        {% endif %}
-        {% if section.settings.button_label != blank and section.settings.button_link != blank %}
-            <a href="{{ section.settings.button_link }}" class="button reviews-intro__button">
-                {{ section.settings.button_label }}
-            </a>
-        {% endif %}
-    </div>
+        <div class="reviews-intro">
+            {% if section.settings.intro_text != blank %}
+                <div class="reviews-intro__text">
+                    {{ section.settings.intro_text }}
+                </div>
+            {% endif %}
+
+            {% if section.settings.button_label != blank and section.settings.button_link != blank %}
+                <a href="{{ section.settings.button_link }}" class="button reviews-intro__button">
+                    {{ section.settings.button_label }}
+                </a>
+            {% endif %}
+        </div>
     <div class="orc-allReviewsCollections">
         <div id="orc-collection-control" style="display: none">
             <div id="orc-collection-controls-label" class="orc-collectionControlsLabel">Select a product range</div>

@@ -1,0 +1,216 @@
+<section class="contact-page withdrawal-page">
+    {% if section.settings['banner-bg'] != blank %}
+    <div class="banner-bg">
+        <img src="{{ section.settings['banner-bg'] | img_url: 'master' }}" alt="Banner Image" class="img">
+    </div>
+    {% endif %}
+    <div class="contactpage-in">
+        <div class="container">
+            <div class="cpi-in">
+                <div class="cpi-grid-wrap">
+                    <div class="cgw-left">
+                        <div class="cgwl-top">
+                            <div class="cgwlt-top">
+                                <h1 data-aos="fade-up" data-aos-duration="1000">{{ section.settings.head }}</h1>
+                                {% if section.settings.notice != blank %}
+                                <div class="withdrawal-notice" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="50">
+                                    {{ section.settings.notice }}
+                                </div>
+                                {% endif %}
+                            </div>
+                            <div class="cgwlt-bottom">
+
+                                {% if section.settings.email != blank %}
+                                <div class="cgwlt-item">
+                                    <div class="cgwlt-item-label">email</div>
+                                    <div class="cgwlt-item-data">
+                                        <a class="line" href="mailto:{{ section.settings.email }}">{{ section.settings.email }}</a>
+                                    </div>
+                                </div>
+                                {% endif %}
+
+                                {% if section.settings.phone != blank or section.settings.phone_data != blank %}
+                                <div class="cgwlt-item">
+                                    <div class="cgwlt-item-label">Phone</div>
+                                    <div class="cgwlt-item-data">
+                                        {% if section.settings.phone != blank %}
+                                            <a href="tel:{{ section.settings.phone }}">{{ section.settings.phone }}</a>
+                                        {% endif %}
+                                        {% if section.settings.phone_data != blank %}
+                                            <p>{{ section.settings.phone_data }}</p>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                {% endif %}
+
+                                {% if section.settings.address != blank %}
+                                <div class="cgwlt-item">
+                                    <div class="cgwlt-item-label">Address</div>
+                                    <div class="cgwlt-item-data">
+                                        <p>{{ section.settings.address }}</p>
+                                    </div>
+                                </div>
+                                {% endif %}
+
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="cgw-right">
+                        <div class="cgwr-form">
+                            {% if section.settings.form_heading != blank %}
+                                <h2 class="withdrawal-form-heading">{{ section.settings.form_heading }}</h2>
+                            {% endif %}
+                            {% if section.settings.form_intro != blank %}
+                                <div class="withdrawal-form-intro">{{ section.settings.form_intro }}</div>
+                            {% endif %}
+                            {% form 'contact', id: 'withdrawalID' %}
+                            <input type="hidden" name="return_to" value="{{ pages['thank-you'].url }}">
+                            {% if form.posted_successfully? and pages['thank-you'].url != blank %}
+                                <script>
+                                    window.location = {{ pages['thank-you'].url | json }};
+                                </script>
+                            {% else %}
+                                {{ form.errors | default_errors }}
+                            {% endif %}
+                            <div class="form-group">
+                                <label for="wf-name">{{ section.settings.label_name }}</label>
+                                <input id="wf-name" type="text" required name="contact[name]" placeholder="{{ section.settings.label_name }}">
+                            </div>
+                            <div class="form-group">
+                                <label for="wf-email">{{ section.settings.label_email }}</label>
+                                <input id="wf-email" type="email" required name="contact[email]" placeholder="{{ section.settings.label_email }}">
+                            </div>
+                            <div class="form-group">
+                                <label for="wf-order">{{ section.settings.label_order }}</label>
+                                <input id="wf-order" type="text" required name="contact[Order number]" placeholder="{{ section.settings.label_order }}">
+                            </div>
+                            <div class="form-group">
+                                <label for="wf-products">{{ section.settings.label_products }}</label>
+                                <textarea id="wf-products" name="contact[body]" rows="4" placeholder="{{ section.settings.label_products }}"></textarea>
+                            </div>
+                            <div class="form-group form-group--checkbox">
+                                <label class="withdrawal-confirm">
+                                    <input type="checkbox" required name="contact[Confirmation]" value="{{ section.settings.confirm_label | escape }}">
+                                    <span>{{ section.settings.confirm_label }}</span>
+                                </label>
+                            </div>
+                            <div class="contact-form-btn">
+                                <input type="submit" value="{{ section.settings.submit_label }}" class="custom-btn black">
+                            </div>
+                            {% endform %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</section>
+
+{% schema %}
+  {
+    "name": "Withdrawal Form Template",
+    "settings": [
+        {
+            "type": "image_picker",
+            "id": "banner-bg",
+            "label": "Banner Image"
+        },
+        {
+            "type": "text",
+            "id": "head",
+            "label": "Heading",
+            "default": "Request Withdrawal"
+        },
+        {
+            "type": "richtext",
+            "id": "notice",
+            "label": "Notice / intro text",
+            "default": "<p>Please note: Fresh food is excluded from the right of withdrawal. Durable food products can only be returned if unopened and in their original condition.</p><p>If there is a quality issue with your order or you received a spoiled or damaged item, please contact us by email at: support@jurassicfruit.com. To help us resolve your case as quickly as possible, please attach a photo of all affected products and a short description of the problem.</p>"
+        },
+        {
+            "type": "header",
+            "content": "Form"
+        },
+        {
+            "type": "text",
+            "id": "form_heading",
+            "label": "Form heading",
+            "default": "Withdrawal form"
+        },
+        {
+            "type": "richtext",
+            "id": "form_intro",
+            "label": "Form intro text",
+            "default": "<p>I hereby withdraw from the contract concluded by me for the purchase of the following goods/services:</p>"
+        },
+        {
+            "type": "text",
+            "id": "label_name",
+            "label": "Field label: Full name",
+            "default": "Full name *"
+        },
+        {
+            "type": "text",
+            "id": "label_email",
+            "label": "Field label: Email",
+            "default": "Email address *"
+        },
+        {
+            "type": "text",
+            "id": "label_order",
+            "label": "Field label: Order number",
+            "default": "Order number *"
+        },
+        {
+            "type": "text",
+            "id": "label_products",
+            "label": "Field label: Product(s) to withdraw",
+            "default": "Product(s) to withdraw"
+        },
+        {
+            "type": "text",
+            "id": "confirm_label",
+            "label": "Confirmation checkbox text",
+            "default": "I confirm that I want to exercise my right of withdrawal within the 14-day withdrawal period."
+        },
+        {
+            "type": "text",
+            "id": "submit_label",
+            "label": "Submit button text",
+            "default": "Send withdrawal request"
+        },
+        {
+            "type": "header",
+            "content": "Contact details (optional)"
+        },
+        {
+            "type": "text",
+            "id": "email",
+            "label": "Email"
+        },
+        {
+            "type": "text",
+            "id": "phone",
+            "label": "Phone (tel)"
+        },
+        {
+            "type": "text",
+            "id": "phone_data",
+            "label": "Phone additional info (displayed under number)"
+        },
+        {
+            "type": "text",
+            "id": "address",
+            "label": "Address"
+        }
+    ],
+    "presets": [
+        {
+        "name": "Withdrawal Form Template",
+        "category": "Page"
+        }
+    ]
+  }
+{% endschema %}

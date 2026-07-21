@@ -5219,6 +5219,7 @@ li.easy-footnote-single {
 }
 .cgwr-form form .form-group input, 
 .cgwr-form form .form-group select,
+.cgwr-form form .form-group textarea,
 .cgwr-form form .form-group input::placeholder {
     border: none;
     border-bottom: 1px solid #CBC6B3;

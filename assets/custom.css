@@ -1218,3 +1218,27 @@ body.backdrop::before {
 .filter-sidebar.active {
   right: 0;
 }
+
+/* Withdrawal form page (duplicated from contact) */
+.withdrawal-page .withdrawal-notice p {
+  margin-bottom: 12px;
+}
+.withdrawal-page .withdrawal-form-heading {
+  margin-bottom: 8px;
+}
+.withdrawal-page .withdrawal-form-intro {
+  margin-bottom: 20px;
+}
+.withdrawal-page .form-group--checkbox .withdrawal-confirm {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  cursor: pointer;
+  text-transform: none;
+}
+.withdrawal-page .form-group--checkbox .withdrawal-confirm input[type="checkbox"] {
+  width: 18px;
+  min-width: 18px;
+  height: 18px;
+  margin-top: 2px;
+}

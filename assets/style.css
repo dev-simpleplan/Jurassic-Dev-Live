@@ -5901,3 +5901,20 @@ h2.oke-reviewCarousel-header-title {
         padding-right: 20px !important;
     }
 }
+.shopify-challenge__container {
+    margin: 170px auto 100px auto;
+}
+.shopify-challenge__button {
+    padding: 17px 33px;
+    display: block;
+    font-weight: 600;
+    font-size: 14px;
+    /* letter-spacing: 2px; */
+    line-height: 100%;
+    /* text-transform: capitalize; */
+    transition: 0.3s ease all;
+    cursor: pointer;
+    background-color: #1a1a1a;
+    color: #fcf9f5;
+    border: 1px solid #1a1a1a;
+}

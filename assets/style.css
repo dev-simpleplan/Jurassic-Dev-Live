@@ -531,7 +531,7 @@ header {
     top: 35px;
     left: 0;
     width: 100%;
-    z-index: 99999;
+    z-index: 999999999;
     transition: .4s ease all;
 }
 header.header-bg {

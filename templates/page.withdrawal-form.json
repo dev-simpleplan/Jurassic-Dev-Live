@@ -1,9 +1,36 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "main": {
       "type": "withdrawal-form",
-      "settings": {}
+      "settings": {
+        "banner-bg": "shopify://shop_images/66e9e4d3ba7ae3073620862b14be69db63c97069.png",
+        "head": "Request Withdrawal",
+        "notice": "<p>Please note: Fresh food is excluded from the right of withdrawal. Durable food products can only be returned if unopened and in their original condition.</p><p>If there is a quality issue with your order or you received a spoiled or damaged item, please contact us by email at: support@jurassicfruit.com. To help us resolve your case as quickly as possible, please attach a photo of all affected products and a short description of the problem.</p>",
+        "form_heading": "Withdrawal form",
+        "form_intro": "<p>I hereby withdraw from the contract concluded by me for the purchase of the following goods/services:</p>",
+        "label_name": "Full name *",
+        "label_email": "Email address *",
+        "label_order": "Order number *",
+        "label_products": "Product(s) to withdraw",
+        "confirm_label": "I confirm that I want to exercise my right of withdrawal within the 14-day withdrawal period.",
+        "submit_label": "Send withdrawal request",
+        "email": "",
+        "phone": "",
+        "phone_data": "",
+        "address": ""
+      }
     }
   },
-  "order": ["main"]
+  "order": [
+    "main"
+  ]
 }

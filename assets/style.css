@@ -5896,7 +5896,7 @@ h2.oke-reviewCarousel-header-title {
     width: 100px;
 }
 #corner-sticky-atc-outer-container {
-    z-index: 999999999!important;
+    z-index: 999999!important;
 }
 .okeReviews[data-oke-container].oke-w, div.okeReviews.oke-w {
     max-width: 1200px!important;

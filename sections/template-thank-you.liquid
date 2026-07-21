@@ -21,6 +21,20 @@
   endcase
 %}
 
+<script>
+  // Forms redirect here carrying their own anchor (e.g. #contact_form), which the
+  // browser inherits from the form action and uses to scroll down to the footer
+  // form. Strip it early (this runs before the footer is parsed) and stay at top.
+  (function () {
+    if (!window.location.hash) return;
+    history.replaceState(null, '', window.location.pathname + window.location.search);
+    var toTop = function () { window.scrollTo(0, 0); };
+    toTop();
+    document.addEventListener('DOMContentLoaded', toTop);
+    window.addEventListener('load', toTop);
+  })();
+</script>
+
 <section class="error-template">
   <div class="et-bg">
         <img src="https://cdn.shopify.com/s/files/1/0752/8015/4881/files/Vector_-_2025-12-08T192241.263.svg?v=1765201976" alt="">

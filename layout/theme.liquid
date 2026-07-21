@@ -2,6 +2,14 @@
 <html lang="{{ request.locale.iso_code }}">
 
 	<head>
+
+  <script async src="https://www.googletagmanager.com/gtm.js?id=GTM-TH3LQDC"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+  </script>
+
   {% include 'app-plaza' %}
   {%- render 'ecom_header' -%}
 
@@ -213,13 +221,6 @@
     </script>
 
   </head>
-
-  <script async src="https://www.googletagmanager.com/gtm.js?id=GTM-TH3LQDC"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-  </script>
 
   <script>
 (function() {

@@ -1824,6 +1824,10 @@ span.cart-compare-price {
   color: #1a1a1a;
   display: inline-flex;
 }
+.store-usp .su-item p > i {
+  text-align: left;
+  margin-bottom: 20px;
+}
 .store-usp .su-item a {
   text-decoration: underline;
   text-underline-offset: 2px;

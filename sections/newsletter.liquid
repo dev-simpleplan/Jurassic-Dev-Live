@@ -27,6 +27,9 @@
                 <div class="nl-form">
                     {% form 'customer' %}
 
+                        <!-- Redirect to the thankyou page after a successful signup -->
+                        <input type="hidden" name="return_to" value="{{ pages['thankyou'].url }}">
+
                         <!-- Newsletter Tag -->
                         <input type="hidden" name="contact[tags]" value="newsletter">
 
@@ -48,6 +51,14 @@
                         </div>
 
                         {% if form.posted_successfully? %}
+                            {% comment %} return_to redirects server-side; this JS is a
+                               fallback, and the message shows if thankyou is unavailable
+                               in this market (blank URL). {% endcomment %}
+                            {% if pages['thankyou'].url != blank %}
+                                <script>
+                                    window.location.href = {{ pages['thankyou'].url | json }};
+                                </script>
+                            {% endif %}
                             <div class="newsletter-success">
                                 <p>{{ 'sections.newsletter.success' | t }}</p>
                             </div>
@@ -60,39 +71,6 @@
                         {% endif %}
 
                     {% endform %}
-
-                    {% comment %}
-                    ===========================================================
-                    NEWSLETTER REDIRECT
-                    ===========================================================
-
-                    AFTER THE THEME IS PUBLISHED:
-
-                    1. Create a page with handle:
-                       thankyou
-
-                    2. Assign the template:
-                       page.thankyou
-
-                    3. Uncomment the script below.
-
-                    ===========================================================
-
-                    <script>
-                    document.addEventListener('DOMContentLoaded', function () {
-                        var thankYouUrl = "{{ pages['thankyou'].url }}";
-                        var params = new URLSearchParams(window.location.search);
-
-                        // Guard against an empty URL (e.g. page not available in this
-                        // market) which would reload the same page and loop forever.
-                        if (thankYouUrl && params.get('customer_posted') === 'true') {
-                            window.location.href = thankYouUrl;
-                        }
-                    });
-                    </script>
-
-                    ===========================================================
-                    {% endcomment %}
 
                 </div>
             </div>

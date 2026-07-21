@@ -117,7 +117,8 @@
     },
     "newsletter": {
       "email_placeholder": "Entrez votre adresse e-mail",
-      "subscribe": "S’abonner"
+      "subscribe": "S’abonner",
+      "success": "Merci pour votre inscription ! Vérifiez votre boîte mail pour confirmer."
     },
     "frequently_bought": {
       "heading_html": "Fréquemment achetés"

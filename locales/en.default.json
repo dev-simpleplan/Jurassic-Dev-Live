@@ -114,7 +114,8 @@
     },
     "newsletter": {
       "email_placeholder": "Enter Email Address",
-      "subscribe": "Subscribe"
+      "subscribe": "Subscribe",
+      "success": "Thanks for subscribing! Check your inbox to confirm."
     },
     "frequently_bought": {
       "heading_html": "Frequently bought together"

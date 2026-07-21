@@ -120,7 +120,8 @@
     },
     "newsletter": {
       "email_placeholder": "E-Mail-Adresse eingeben",
-      "subscribe": "Abonnieren"
+      "subscribe": "Abonnieren",
+      "success": "Danke für deine Anmeldung! Bitte bestätige sie in deinem Postfach."
     },
     "frequently_bought": {
       "heading_html": "Wird oft zusammen gekauft"

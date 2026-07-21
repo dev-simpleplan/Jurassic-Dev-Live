@@ -42,7 +42,7 @@
         "trust_logos_Fnt6U3": {
           "type": "trust-logos",
           "settings": {
-            "trust_text": "<p><strong>4.6 stars</strong></p><p> +40,000 Okendo Verified Reviews</p>",
+            "trust_text": "<p><a href=\"/pages/customer-reviews\" title=\"Over 180,000 happy fruit explorers\"><strong>4.6 stars</strong></a></p><p><a href=\"/pages/customer-reviews\" title=\"Over 180,000 happy fruit explorers\"> +40,000 Okendo Verified Reviews</a></p>",
             "trust-image": "shopify://shop_images/oke.png"
           }
         },

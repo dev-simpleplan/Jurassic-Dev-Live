@@ -13,11 +13,14 @@
       "type": "spacer",
       "name": "Spacer",
       "settings": {
-        "spacer_height": 120
+        "spacer_height": 150
       }
     },
     "okendo_dedicated_reviews_page_7RUtNa": {
       "type": "okendo-dedicated-reviews-page",
+      "custom_css": [
+        ".okeReviews.oke-w {padding-left: 0 !important; padding-right: 0 !important;}"
+      ],
       "name": "Okendo Reviews Page",
       "settings": {}
     },

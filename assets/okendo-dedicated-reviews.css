@@ -89,7 +89,7 @@ span.orc-collectionControls-item-label-heading {
 
 .orc-allReviewsCollections {
     max-width: min(86%, 1200px);
-    margin: 36px auto;
+    margin: 42px auto;
 }
 
 div.okeReviews[data-oke-container].oke-w .oke-w-header-content-block:nth-child(2) {

@@ -22,7 +22,11 @@
         ".okeReviews.oke-w {padding-left: 0 !important; padding-right: 0 !important;}"
       ],
       "name": "Okendo Reviews Page",
-      "settings": {}
+      "settings": {
+        "intro_text": "<p>Test</p>",
+        "button_label": "CTA",
+        "button_link": ""
+      }
     },
     "bestseller_carousel_wHNT3n": {
       "type": "bestseller-carousel",

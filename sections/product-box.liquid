@@ -286,7 +286,9 @@
                       </div>
 
                       <span class="price-txt">
-                        {{ 'sections.product.price_includes_vat' | t }} <a href="javascript:void()">{{ 'sections.product.shipping_costs' | t }}</a>
+                        {{ 'sections.product.price_includes_vat' | t }} <a href="#" class="shipping-cost-trigger">{{ 'sections.product.shipping_costs' | t }}</a>
+                        {%- comment -%} Hidden opener the delivery-date app hooks to open the modal (mirrors the product template). {%- endcomment -%}
+                        <span class="product_delivery_modal_opener" style="display:none" data-popup-delivery-cost-title="Wie viel kostet die Lieferung und wie lange dauert sie?" data-popup-delivery-country="Liefern nach" data-popup-calculated-delivery-date="Bestelle heute für die Lieferung ab"></span>
                       </span>
                     </div>
 
@@ -1125,6 +1127,23 @@
       </div>
     </div>
   </div>
+
+  <script>
+    // Mirrors the product template: the "shipping costs" link opens the same
+    // delivery modal by triggering the app-wired opener.
+    document.addEventListener("DOMContentLoaded", function () {
+      const originalOpener = document.querySelector('.product_delivery_modal_opener');
+
+      document.querySelectorAll('.shipping-cost-trigger').forEach(link => {
+        link.addEventListener('click', function (e) {
+          e.preventDefault();
+          if (originalOpener) {
+            originalOpener.click();
+          }
+        });
+      });
+    });
+  </script>
 
   <script>
   /* ======================================================

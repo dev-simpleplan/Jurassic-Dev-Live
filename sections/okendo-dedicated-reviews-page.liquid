@@ -5,13 +5,13 @@
     <h2 class="heading center">{{ page.title }}</h2>
         <div class="reviews-intro center">
             {% if section.settings.intro_text != blank %}
-                <p class="reviews-intro__text">
+                <p class="reviews-intro__text center">
                     {{ section.settings.intro_text }}
                 </p>
             {% endif %}
 
             {% if section.settings.button_label != blank and section.settings.button_link != blank %}
-                <a href="{{ section.settings.button_link }}" class="custom-btn black reviews-intro__button">
+                <a href="{{ section.settings.button_link }}" class="custom-btn black reviews-intro__button center">
                     {{ section.settings.button_label }}
                 </a>
             {% endif %}

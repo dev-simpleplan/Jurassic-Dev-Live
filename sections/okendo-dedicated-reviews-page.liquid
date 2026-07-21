@@ -26,11 +26,11 @@
                         class="orc-collectionControls-item-input orc-collectionControls-item-input--checked js-orc-collectionRadio"
                         type="radio"
                         checked
-                        value=""
+                        value="{{ section.settings.group_1_id }}"
                         name="orc-reviews-collection-control"
                     />
                     <label for="orc-reviews-control-3" class="orc-collectionControls-item-label">
-                        <span class="orc-collectionControls-item-label-heading"> All Reviews </span>
+                        <span class="orc-collectionControls-item-label-heading"> {{ section.settings.group_1_label }} </span>
                     </label>
                 </div>
                 <div class="orc-collectionControls-item custom-btn black">
@@ -38,11 +38,11 @@
                         id="orc-reviews-control-2"
                         class="orc-collectionControls-item-input js-orc-collectionRadio"
                         type="radio"
-                        value="6e638a8a-fc7a-4403-afb0-ac4a90736f5b"
+                        value="{{ section.settings.group_2_label }}"
                         name="orc-reviews-collection-control"
                     />
                     <label for="orc-reviews-control-2" class="orc-collectionControls-item-label">
-                        <span class="orc-collectionControls-item-label-heading"> Coconuts </span>  
+                        <span class="orc-collectionControls-item-label-heading"> {{ section.settings.group_2_label }} </span>  
                     </label>
                 </div>
                 <div class="orc-collectionControls-item custom-btn black">

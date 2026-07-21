@@ -580,7 +580,7 @@
       "type": "bestseller-carousel",
       "name": "BestsellerCarousel",
       "settings": {
-        "collection": "best-this-week",
+        "collection": "our-favorites-this-week",
         "heading": "This week’s bestsellers"
       }
     },

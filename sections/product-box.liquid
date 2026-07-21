@@ -741,6 +741,15 @@
                       </div>
 
                     </div>
+                    <p style='margin:0;' class="delivery-to">
+                      <span class="product_delivery_modal_deliver_to">{{ 'sections.product.deliver_to' | t }}</span>
+                      {{ localization.country }} {{ 'sections.product.delivery_by' | t }} :
+                      <span class="calculated-delivery-date"></span>
+                        <span class="product_delivery_modal_opener" data-popup-delivery-cost-title="Wie viel kostet die Lieferung und wie lange dauert sie?" data-popup-delivery-country="Liefern nach" data-popup-calculated-delivery-date="Bestelle heute für die Lieferung ab">
+                          <small>{{ 'sections.product.details' | t }}</small>
+                        </span>
+                      {% comment %} <span id="delivery-data-new">9,90 €</span> {% endcomment %}
+                    </p>
                     {% comment %} <div class="payment-options">
                       <p>Guaranteed safe checkout with payment options</p>
                       <div class="po-icon-wrap">

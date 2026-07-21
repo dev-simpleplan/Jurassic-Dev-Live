@@ -25,8 +25,8 @@
       "type": "bestseller-carousel",
       "name": "BestsellerCarousel",
       "settings": {
-        "collection": "",
-        "heading": "Our Bestsellers"
+        "collection": "best-this-week",
+        "heading": "Our bestsellers"
       }
     }
   },

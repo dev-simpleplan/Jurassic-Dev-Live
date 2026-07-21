@@ -322,12 +322,18 @@ a:hover {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    position: relative;
 }
 .top-bar-in .tb-rating {
     display: flex;
     align-items: center;
     justify-content: flex-start;
     gap: 10px;
+}
+.top-bar-in .tb-text {
+    position: absolute;
+    left: 0;
+    right: 0;
 }
 .tbr-icon {
     width: 22px;

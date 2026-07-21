@@ -1172,6 +1172,9 @@
   .bdp-in {
     gap: 20px;
   }
+  .top-bar-in .tb-text {
+    position: relative;
+  }
 }
 
 @media (max-width: 767px) {

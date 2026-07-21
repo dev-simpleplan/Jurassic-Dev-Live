@@ -35,6 +35,12 @@
             "page": "delivery-popup"
           }
         },
+        "delivery_date_app_product_delivery_info_G7mqYG": {
+          "type": "shopify://apps/delivery-date-app/blocks/product-delivery-info/01996116-7c1b-724b-af9b-9e5b36aa18ce",
+          "settings": {
+            "page": ""
+          }
+        },
         "store_usp": {
           "type": "store_usp",
           "settings": {
@@ -63,6 +69,7 @@
         "box_content",
         "variant_selector",
         "delivery_info_WFVGrD",
+        "delivery_date_app_product_delivery_info_G7mqYG",
         "store_usp",
         "product_info",
         "pair_with_UwJtYY"

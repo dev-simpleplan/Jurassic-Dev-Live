@@ -83,7 +83,7 @@
                                             </div>
                                             <div class="nl-form">
                                                 {% form 'customer' %}
-                                                <input type="hidden" name="return_to" value="{{ pages['thank-you'].url }}">
+                                                <input type="hidden" name="return_to" value="{{ pages['thankyou'].url }}">
                                                 <div class="form-in">
                                                     <div class="email_input">
                                                     <input
@@ -100,9 +100,9 @@
                                                         value="Subscribe">
                                                     </div>
                                                 </div>
-                                                {% if form.posted_successfully? and pages['thank-you'].url != blank %}
+                                                {% if form.posted_successfully? and pages['thankyou'].url != blank %}
                                                 <script>
-                                                    window.location.href = {{ pages['thank-you'].url | json }};
+                                                    window.location.href = {{ pages['thankyou'].url | json }};
                                                 </script>
                                                 {% elsif form.errors %}
                                                     <div class="form-error">

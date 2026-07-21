@@ -65,10 +65,10 @@
                                 <div class="withdrawal-form-intro">{{ section.settings.form_intro }}</div>
                             {% endif %}
                             {% form 'contact', id: 'withdrawalID' %}
-                            <input type="hidden" name="return_to" value="{{ pages['thank-you'].url }}">
-                            {% if form.posted_successfully? and pages['thank-you'].url != blank %}
+                            <input type="hidden" name="return_to" value="{{ pages['thankyou'].url }}">
+                            {% if form.posted_successfully? and pages['thankyou'].url != blank %}
                                 <script>
-                                    window.location = {{ pages['thank-you'].url | json }};
+                                    window.location = {{ pages['thankyou'].url | json }};
                                 </script>
                             {% else %}
                                 {{ form.errors | default_errors }}

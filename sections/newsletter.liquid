@@ -69,10 +69,10 @@
                     AFTER THE THEME IS PUBLISHED:
 
                     1. Create a page with handle:
-                       thank-you
+                       thankyou
 
                     2. Assign the template:
-                       page.thank-you
+                       page.thankyou
 
                     3. Uncomment the script below.
 
@@ -80,7 +80,7 @@
 
                     <script>
                     document.addEventListener('DOMContentLoaded', function () {
-                        var thankYouUrl = "{{ pages['thank-you'].url }}";
+                        var thankYouUrl = "{{ pages['thankyou'].url }}";
                         var params = new URLSearchParams(window.location.search);
 
                         // Guard against an empty URL (e.g. page not available in this

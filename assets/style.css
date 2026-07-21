@@ -334,6 +334,7 @@ a:hover {
     position: absolute;
     left: 0;
     right: 0;
+    z-index: -1;
 }
 .tbr-icon {
     width: 22px;

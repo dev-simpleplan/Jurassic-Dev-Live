@@ -246,7 +246,7 @@
       "type": "bestseller",
       "name": "Bestseller",
       "settings": {
-        "collection": "dried-fruit",
+        "collection": "bestsellers-dried-fruits",
         "heading": "Our most loved dried fruits",
         "subheading": "Just as wild and flavorful as our fresh fruits, made for snacking.",
         "cta_url": "shopify://collections/dried-fruit",

@@ -57,6 +57,7 @@
           },
           "market_threshold_L4ncwW": {
             "type": "market_threshold",
+            "name": "Market Threshold DE",
             "settings": {
               "market_code": "de",
               "amount": 99

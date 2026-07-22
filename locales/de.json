@@ -91,7 +91,7 @@
   "products": {
     "product": {
       "from": "Aus",
-      "add_to_cart": "in den Warenkorb legen",
+      "add_to_cart": "In den Warenkorb",
       "select_product": "Wählen",
       "added_to_cart": "Hinzugefügt",
       "sold_out": "Nicht verfügbar",
@@ -161,7 +161,7 @@
       "net_quantity": "Nettomenge",
       "storage_conditions": "Lagerbedingungen",
       "quality_label": "Qualität",
-      "certificate":"Zertifizierung",
+      "certificate": "Zertifizierung",
       "texture": "Textur",
       "sweetness": "Süße",
       "sourness": "Säure",

@@ -183,6 +183,24 @@
 
 
 document.addEventListener("DOMContentLoaded", () => {
+  // Global sound preference. Owl Carousel's loop mode CLONES the video slides, so
+  // the same video exists as multiple <video> elements (original + clones) each with
+  // its own muted state. To keep them from disagreeing, sound is a single global
+  // state applied to EVERY video element and EVERY audio button at once.
+  let userWantsSound = false;
+
+  function applyGlobalSound() {
+    document.querySelectorAll('.vcitem-video video').forEach(function (v) {
+      v.muted = !userWantsSound;
+    });
+    document.querySelectorAll('.vcitem-video .video-audio-control').forEach(function (control) {
+      control.classList.toggle('is-muted', !userWantsSound);
+      control.classList.toggle('is-unmuted', userWantsSound);
+      control.setAttribute('aria-pressed', userWantsSound ? 'true' : 'false');
+      control.setAttribute('aria-label', userWantsSound ? 'Mute video' : 'Unmute video');
+    });
+  }
+
   if (window.jQuery && window.jQuery.fn && window.jQuery.fn.owlCarousel) {
     window.jQuery('.video-carousel').each(function () {
       const $section = window.jQuery(this);
@@ -209,6 +227,9 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         if (targetVideo) {
+          // Keep every clone/original in sync with the global sound state, so the
+          // newly centered video (often a clone in loop mode) plays with the right sound.
+          applyGlobalSound();
           targetVideo.play().catch(() => {});
         }
       }
@@ -299,17 +320,12 @@ document.addEventListener("DOMContentLoaded", () => {
     // Click to play/pause
     btn.addEventListener("click", () => {
       if (video.paused || video.ended) {
-        // optional: pause others
+        // Only one video plays at a time — pause the others (leave their sound state alone).
         document.querySelectorAll(".vcitem-video video").forEach((v) => {
           if (v !== video && !v.paused) v.pause();
-          if (v !== video) v.muted = true;
         });
-        document.querySelectorAll(".vcitem-video .video-audio-control").forEach((control) => {
-          control.classList.add("is-muted");
-          control.classList.remove("is-unmuted");
-          control.setAttribute("aria-pressed", "false");
-          control.setAttribute("aria-label", "Unmute video");
-        });
+        // Reflect the global sound preference on all videos/buttons.
+        applyGlobalSound();
         video.play().catch(() => {});
       } else {
         video.pause();
@@ -318,14 +334,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (audioBtn) {
       audioBtn.addEventListener("click", () => {
-        const shouldUnmute = video.muted;
-        video.muted = !shouldUnmute ? true : false;
+        // Toggle the global sound preference and apply it to every video + button,
+        // so clones and originals (loop mode) always stay in sync.
+        userWantsSound = !userWantsSound;
+        applyGlobalSound();
 
-        if (shouldUnmute && (video.paused || video.ended)) {
+        // If sound was just turned on and this video isn't playing, start it.
+        if (userWantsSound && (video.paused || video.ended)) {
           video.play().catch(() => {});
         }
 
-        syncAudioState();
         showBtn();
       });
     }

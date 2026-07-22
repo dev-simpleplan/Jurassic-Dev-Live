@@ -2113,6 +2113,10 @@ li.variant-value.is-sold-out {
   margin-top: 16px!important;
   font-size: 14px;
 }
+.variant .delivery-unavailable {
+  margin-top: 16px!important;
+  font-size: 14px;
+}
 .variant .delivery-to span.calculated-delivery-date {
   font-weight: 600;
 }

@@ -737,7 +737,7 @@
                       </div>
 
                     </div>
-                    <p style='margin:0;' class="delivery-to">
+                    <p style='margin:0;{% unless selected_variant.available %}display:none;{% endunless %}' class="delivery-to">
                       <span class="product_delivery_modal_deliver_to">{{ 'sections.product.deliver_to' | t }}</span>
                       {{ localization.country }} {{ 'sections.product.delivery_by' | t }} :
                       <span class="calculated-delivery-date"></span>
@@ -746,6 +746,8 @@
                         </span>
                       {% comment %} <span id="delivery-data-new">9,90 €</span> {% endcomment %}
                     </p>
+                    {%- comment -%} Shown instead of the delivery date when the variant is unavailable. {%- endcomment -%}
+                    <p style='margin:0;{% if selected_variant.available %}display:none;{% endif %}' class="delivery-unavailable">{{ 'sections.product.unavailable_soon' | t }}</p>
                     
                     {% comment %} <div class="payment-options">
                       <p>Guaranteed safe checkout with payment options</p>
@@ -1650,6 +1652,7 @@ class VariantSelector extends HTMLElement {
     this.updatePriceInstant();
     this.updateMedia();
     this.updateShippingInfo();
+    this.updateDeliveryLine();
     this.updateAddToCartButton();
 
     document.addEventListener('quantity:change', () => {
@@ -1676,6 +1679,7 @@ class VariantSelector extends HTMLElement {
     this.updatePriceInstant();
     this.updateMedia();
     this.updateShippingInfo();
+    this.updateDeliveryLine();
     this.updateAddToCartButton();
   }
 
@@ -1812,6 +1816,16 @@ class VariantSelector extends HTMLElement {
         if (unitPriceWrap) unitPriceWrap.style.display = 'none';
       }
     }
+  }
+
+  updateDeliveryLine() {
+    if (!this.currentVariant) return;
+    const available = this.currentVariant.available;
+    const deliveryLine = document.querySelector('.delivery-to');
+    const unavailableMsg = document.querySelector('.delivery-unavailable');
+    // Hide the delivery date and show "Will come soon again." when unavailable.
+    if (deliveryLine) deliveryLine.style.display = available ? '' : 'none';
+    if (unavailableMsg) unavailableMsg.style.display = available ? 'none' : '';
   }
 
   updateShippingInfo() {

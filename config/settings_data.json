@@ -32,19 +32,11 @@
       "top-bar": {
         "type": "top-bar",
         "blocks": {
-          "market_threshold_cAPVNU": {
+          "market_threshold_gcwet4": {
             "type": "market_threshold",
-            "name": "Market Threshold DK",
+            "name": "Market Threshold LU",
             "settings": {
-              "market_code": "dk",
-              "amount": 120
-            }
-          },
-          "market_threshold_mFJiNJ": {
-            "type": "market_threshold",
-            "name": "Market Threshold BE",
-            "settings": {
-              "market_code": "be",
+              "market_code": "lu",
               "amount": 120
             }
           },
@@ -56,12 +48,28 @@
               "amount": 120
             }
           },
+          "market_threshold_mFJiNJ": {
+            "type": "market_threshold",
+            "name": "Market Threshold BE",
+            "settings": {
+              "market_code": "be",
+              "amount": 120
+            }
+          },
           "market_threshold_L4ncwW": {
             "type": "market_threshold",
             "name": "Market Threshold DE",
             "settings": {
               "market_code": "de",
               "amount": 99
+            }
+          },
+          "market_threshold_cAPVNU": {
+            "type": "market_threshold",
+            "name": "Market Threshold DK",
+            "settings": {
+              "market_code": "dk",
+              "amount": 120
             }
           },
           "market_threshold_EU7xyg": {
@@ -82,10 +90,11 @@
           }
         },
         "block_order": [
-          "market_threshold_cAPVNU",
-          "market_threshold_mFJiNJ",
+          "market_threshold_gcwet4",
           "market_threshold_J8RxcL",
+          "market_threshold_mFJiNJ",
           "market_threshold_L4ncwW",
+          "market_threshold_cAPVNU",
           "market_threshold_EU7xyg",
           "market_threshold_BBWJHb"
         ],

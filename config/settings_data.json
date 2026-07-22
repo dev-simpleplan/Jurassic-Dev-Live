@@ -32,10 +32,11 @@
       "top-bar": {
         "type": "top-bar",
         "blocks": {
-          "market_threshold_EU7xyg": {
+          "market_threshold_J8RxcL": {
             "type": "market_threshold",
+            "name": "Market Threshold AT",
             "settings": {
-              "market_code": "fr",
+              "market_code": "at",
               "amount": 120
             }
           },
@@ -44,6 +45,14 @@
             "settings": {
               "market_code": "in",
               "amount": 13085
+            }
+          },
+          "market_threshold_EU7xyg": {
+            "type": "market_threshold",
+            "name": "Market Threshold FR",
+            "settings": {
+              "market_code": "fr",
+              "amount": 120
             }
           },
           "market_threshold_L4ncwW": {
@@ -55,8 +64,9 @@
           }
         },
         "block_order": [
-          "market_threshold_EU7xyg",
+          "market_threshold_J8RxcL",
           "market_threshold_BBWJHb",
+          "market_threshold_EU7xyg",
           "market_threshold_L4ncwW"
         ],
         "settings": {
@@ -81,11 +91,6 @@
       },
       "1513253815146976218": {
         "type": "shopify://apps/omnisend-email-marketing-sms/blocks/app-embed/44704aa2-794f-4c5d-8c8e-039c841158e9",
-        "disabled": false,
-        "settings": {}
-      },
-      "18128612654622612671": {
-        "type": "shopify://apps/selecty/blocks/app-embed/a005a4a7-4aa2-4155-9c2b-0ab41acbf99c",
         "disabled": false,
         "settings": {}
       },

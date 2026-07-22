@@ -569,13 +569,13 @@
                         <variant-selector data-url="{{ product.url }}" data-section="{{ section.id }}">
                           <div class="sv-perKg">
                             <p>{{ 'sections.product.select_variant' | t }}</p>
-                            <div class="perKg">
+                            {% comment %} <div class="perKg">
                               {% comment %} Kept for layout parity; button state below becomes the source of truth. {% endcomment %}
                               {% assign selected_variant_pieces = selected_variant.metafields.custom.pieces.value | default: selected_variant.metafields.custom.pieces %}
                               {% if selected_variant_pieces != blank %}
                                 ( {{ selected_variant_pieces }} )
                               {% endif %}
-                            </div>
+                            </div> {% endcomment %}
                           </div>
                           {% for option in product.options_with_values %}
                             {% assign option_index = forloop.index0 %}

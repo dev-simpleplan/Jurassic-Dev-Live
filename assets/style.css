@@ -788,7 +788,7 @@ li.nav-item.has-mega-menu:hover .nav_arrow_down {
     font-weight: 400;
     font-size: 18px;
     color: #1A1A1A;
-    text-transform: capitalize;
+    /* text-transform: capitalize; */
 }
 .mmsr-bottom {
     display: grid;

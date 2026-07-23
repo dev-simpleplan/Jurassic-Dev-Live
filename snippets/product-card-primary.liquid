@@ -212,9 +212,10 @@
               <div class="fc_variant_wrap">
                 <div class="wrapper-dropdown" id="dropdown-{{ product.id }}">
                   <span class="selected-display">
-                    <b>{{ default_variant.title }} </b>
-                    {% comment %} {% if default_variant.metafields.custom.pieces %}({{ default_variant.metafields.custom.pieces }}){% endif %}
-                    — {{ default_variant.price | money }} {% endcomment %}
+                    <b>{{ default_variant.title }}</b>
+                    {% if default_variant.metafields.custom.pieces %}
+                      <span class="selected-display-pieces">( {{ default_variant.metafields.custom.pieces }} )</span>
+                    {% endif %}
                   </span>
                   
                   <ul class="dropdown" data-lenis-prevent>
@@ -228,6 +229,7 @@
                         class="dropdown-item{% if variant.id == default_variant.id %} is-selected{% endif %}"
                         data-id="{{ variant.id }}"
                         data-selected-title="{{ variant.title | escape }}"
+                        data-pieces="{{ variant.metafields.custom.pieces | escape }}"
                         data-price="{{ variant.price | money_without_currency }} {{ cart.currency.symbol }}"
                         data-compare="{% if variant.compare_at_price > variant.price %}{{ variant.compare_at_price | money_without_currency }} {{ cart.currency.symbol }}{% endif %}"
                         data-unit="{% if variant.unit_price_measurement %}{{ variant.unit_price | money_without_currency }} {{ cart.currency.symbol }} / {{ variant.unit_price_measurement.reference_unit }}{% endif %}"

@@ -1109,7 +1109,7 @@ section.faq-page .faq-head h1 {
   .fc_variant_outer {
     overflow: visible;
     position: relative;
-    height: 37px;
+    height: 48px; /* room for the pieces line (e.g. "5-7 varieties ~2kg") under the variant name */
   }
 
   .fc_variant_wrap {

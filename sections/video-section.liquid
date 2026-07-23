@@ -1,3 +1,9 @@
+{%- style -%}
+  /* YouTube/Vimeo embeds are 16:9 — override the self-hosted video's 2:1 crop box. */
+  .vidimage-in.yt-mode {
+    padding-top: 56.25%;
+  }
+{%- endstyle -%}
 <section class="vid-img pos-rel">
     <div class="container">
         <div class="vid-img-wrap">
@@ -6,15 +12,46 @@
                     <h2>{{ section.settings.heading }}</h2>
                     <p class="small">{{ section.settings.para }}</p>
                 </div>
-                <div class="vidimage-in">
-                    {% if section.settings.video_link != blank %}
-                        {%- assign poster_url = nil -%}
-  
-                        {%- if section.settings.video_poster != blank -%}
-                            {%- assign poster_url = section.settings.video_poster | img_url: 'master' -%}
-                        {%- endif -%}
+                <div class="vidimage-in{% if section.settings.youtube != blank %} yt-mode{% endif %}">
+                    {%- assign poster_url = nil -%}
+                    {%- if section.settings.video_poster != blank -%}
+                        {%- assign poster_url = section.settings.video_poster | img_url: 'master' -%}
+                    {%- endif -%}
 
-                        {{ section.settings.video_link | video_tag: 
+                    {% if section.settings.youtube != blank %}
+                        {%- comment -%} YouTube/Vimeo: poster (direct child so the container CSS sizes it)
+                            + play button; the iframe only loads when clicked, to keep the page fast.
+                            If the video turns out to be blocked from embedding, JS below falls back to
+                            the uploaded video (if any) or a "Watch on YouTube/Vimeo" link — instead of
+                            showing YouTube's "Video unavailable" error inside the page. {%- endcomment -%}
+                        {% if poster_url %}
+                            <img src="{{ poster_url }}" alt="{{ section.settings.heading | escape }}" class="img ab yt-poster">
+                        {% endif %}
+                        {% if section.settings.video_link != blank %}
+                            <div class="yt-fallback-video" style="display:none;">
+                                {{ section.settings.video_link | video_tag:
+                                    class: 'img ab',
+                                    autoplay: false,
+                                    loop: true,
+                                    muted: false,
+                                    controls: true,
+                                    playsinline: true,
+                                    poster: poster_url
+                                }}
+                            </div>
+                        {% endif %}
+                        <button type="button"
+                            class="video-control"
+                            aria-label="Play video"
+                            data-yt-type="{{ section.settings.youtube.type }}"
+                            data-yt-id="{{ section.settings.youtube.id }}"
+                            data-watch-url="{% if section.settings.youtube.type == 'youtube' %}https://www.youtube.com/watch?v={{ section.settings.youtube.id }}{% elsif section.settings.youtube.type == 'vimeo' %}https://vimeo.com/{{ section.settings.youtube.id }}{% endif %}">
+                            <span class="video-control-play">
+                                <span class="video-control-symbol" aria-hidden="true"><img src="https://cdn.shopify.com/s/files/1/0752/8015/4881/files/Polygon_1.svg?v=1759301174" alt=""></span>
+                            </span>
+                        </button>
+                    {% elsif section.settings.video_link != blank %}
+                        {{ section.settings.video_link | video_tag:
                             class: 'img ab',
                             autoplay: false,
                             loop: true,
@@ -28,8 +65,7 @@
                                 <span class="video-control-symbol" aria-hidden="true"><img src="https://cdn.shopify.com/s/files/1/0752/8015/4881/files/Polygon_1.svg?v=1759301174" alt=""></span>
                             </span>
                         </button>
-                    {% endif %}
-                    {% if section.settings.video_img != blank and section.settings.video_link == blank %}
+                    {% elsif section.settings.video_img != blank %}
                         <img src="{{ section.settings.video_img |  img_url: 'master' }}" alt="{{ section.settings.video_img.title }}" class="img ab">
                     {% endif %}
                 </div>
@@ -39,12 +75,124 @@
 </section>
 
 <script>
+// Lazily loads the YouTube IFrame API (only once, however many video sections exist)
+// so we can detect "embedding disabled" (onError) and fall back gracefully instead
+// of showing YouTube's in-page "Video unavailable" screen.
+window.__ytApiPromise = window.__ytApiPromise || new Promise((resolve) => {
+  if (window.YT && window.YT.Player) {
+    resolve(window.YT);
+    return;
+  }
+  const existingCallback = window.onYouTubeIframeAPIReady;
+  window.onYouTubeIframeAPIReady = function () {
+    if (typeof existingCallback === "function") existingCallback();
+    resolve(window.YT);
+  };
+  if (!document.getElementById("youtube-iframe-api")) {
+    const tag = document.createElement("script");
+    tag.id = "youtube-iframe-api";
+    tag.src = "https://www.youtube.com/iframe_api";
+    document.head.appendChild(tag);
+  }
+});
+
 document.addEventListener("DOMContentLoaded", () => {
   const wraps = document.querySelectorAll(".vidimage-in");
 
-  wraps.forEach((wrap) => {
-    const video = wrap.querySelector("video");
+  wraps.forEach((wrap, index) => {
     const btn = wrap.querySelector("button.video-control");
+    const video = wrap.querySelector("video");
+    const ytId = btn ? btn.dataset.ytId : null;
+
+    // --- YouTube / Vimeo facade: load the embed on click, with a graceful fallback
+    //     if the video turns out to be blocked from embedding. ---
+    if (btn && ytId) {
+      const ytType = btn.dataset.ytType;
+      const watchUrl = btn.dataset.watchUrl;
+      const poster = wrap.querySelector(".yt-poster");
+      const fallbackVideoWrap = wrap.querySelector(".yt-fallback-video");
+      const fallbackVideo = fallbackVideoWrap ? fallbackVideoWrap.querySelector("video") : null;
+      let attempted = false;
+
+      const hidePosterAndButton = () => {
+        wrap.classList.add("is-playing");
+        btn.classList.add("is-hidden");
+        btn.setAttribute("aria-hidden", "true");
+        if (poster) poster.style.display = "none";
+      };
+
+      const showPosterAndButton = () => {
+        wrap.classList.remove("is-playing");
+        btn.classList.remove("is-hidden");
+        btn.setAttribute("aria-hidden", "false");
+        if (poster) poster.style.display = "";
+      };
+
+      // Called when the embed can't play (blocked/removed/private). Falls back to the
+      // uploaded video if there is one, otherwise turns the button into a "Watch on
+      // YouTube/Vimeo" link that opens the video on its own site.
+      const fallback = () => {
+        const playerEl = wrap.querySelector(".yt-player-target");
+        if (playerEl) playerEl.remove();
+
+        if (fallbackVideoWrap && fallbackVideo) {
+          fallbackVideoWrap.style.display = "";
+          fallbackVideoWrap.style.cssText += ";position:absolute;inset:0;width:100%;height:100%;";
+          hidePosterAndButton();
+          fallbackVideo.play().catch(() => {});
+          fallbackVideo.addEventListener("pause", showPosterAndButton);
+          fallbackVideo.addEventListener("ended", showPosterAndButton);
+          return;
+        }
+
+        // No uploaded fallback video: restore the poster/button and make the button
+        // open the video on YouTube/Vimeo directly instead of embedding it.
+        showPosterAndButton();
+        if (watchUrl) {
+          btn.setAttribute("aria-label", "Watch on " + (ytType === "vimeo" ? "Vimeo" : "YouTube"));
+          btn.onclick = () => window.open(watchUrl, "_blank", "noopener");
+        }
+      };
+
+      btn.addEventListener("click", function onFirstClick() {
+        if (attempted) return;
+        attempted = true;
+        hidePosterAndButton();
+
+        if (ytType === "youtube") {
+          const targetId = "yt-player-" + index + "-" + Date.now();
+          const target = document.createElement("div");
+          target.id = targetId;
+          target.className = "yt-player-target";
+          target.style.cssText = "position:absolute;inset:0;width:100%;height:100%;z-index:2;";
+          wrap.appendChild(target);
+
+          window.__ytApiPromise.then((YT) => {
+            new YT.Player(targetId, {
+              videoId: ytId,
+              playerVars: { autoplay: 1, rel: 0, playsinline: 1 },
+              events: {
+                onReady: (e) => e.target.playVideo(),
+                onError: fallback
+              }
+            });
+          }).catch(fallback);
+        } else if (ytType === "vimeo") {
+          const iframe = document.createElement("iframe");
+          iframe.src = "https://player.vimeo.com/video/" + ytId + "?autoplay=1";
+          iframe.setAttribute("title", {{ section.settings.heading | json }});
+          iframe.setAttribute("allow", "autoplay; encrypted-media; picture-in-picture; fullscreen");
+          iframe.setAttribute("allowfullscreen", "");
+          iframe.className = "yt-player-target";
+          iframe.style.cssText = "position:absolute;inset:0;width:100%;height:100%;border:0;z-index:2;";
+          iframe.addEventListener("error", fallback);
+          wrap.appendChild(iframe);
+        }
+      });
+      return; // facade handled; skip the self-hosted <video> logic below
+    }
+
+    // --- Self-hosted <video> ---
     if (!video || !btn) return;
 
     const hideButton = () => {
@@ -92,6 +240,13 @@ document.addEventListener("DOMContentLoaded", () => {
             "label": "Paragraph"
         },
         {
+            "type": "video_url",
+            "id": "youtube",
+            "label": "YouTube / Vimeo URL",
+            "accept": ["youtube", "vimeo"],
+            "info": "Paste a YouTube or Vimeo link. When set, this is used instead of an uploaded video. The poster image below shows until the viewer clicks play."
+        },
+        {
             "type": "image_picker",
             "id": "video_img",
             "label": "Upload Image"
@@ -104,7 +259,7 @@ document.addEventListener("DOMContentLoaded", () => {
         {
             "type": "video",
             "id": "video_link",
-            "label": "Upload Video"
+            "label": "Upload Video (fallback if no YouTube/Vimeo URL)"
         }
     ]
 }

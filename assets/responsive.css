@@ -1886,6 +1886,9 @@
   .wrapper-dropdown .selected-display {
     font-size: 13px;
   }
+  .selected-display-pieces {
+    font-size: 10px;
+  }
   .wrapper-dropdown .dropdown li {
     padding: 8px 10px;
   }

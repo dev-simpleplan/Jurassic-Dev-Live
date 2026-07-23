@@ -93,7 +93,8 @@ document.addEventListener('click', (e) => {
     const hiddenInput = parent.querySelector('.custom-variant-id');
 
     const selectedTitle = (item.dataset.selectedTitle || item.querySelector('.item-title')?.childNodes[0]?.textContent || item.querySelector('.item-title')?.textContent || '').trim();
-    display.innerHTML = `<b>${selectedTitle}</b>`;
+    const selectedPieces = (item.dataset.pieces || '').trim();
+    display.innerHTML = `<b>${selectedTitle}</b>` + (selectedPieces ? ` <span class="selected-display-pieces">( ${selectedPieces} )</span>` : '');
 
     const { id, price, compare, unit, inventory, available } = item.dataset;
     const inventoryQty = parseInt(inventory, 10) || 0;

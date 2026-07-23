@@ -67,6 +67,9 @@
           assign is_generic_collection = false
           assign is_all_fruits_collection = false
           assign unavailable_only_active = false
+          assign almost_sold_out_only_active = false
+          assign available_only_active = false
+          assign availability_filter_value = ''
           assign untreated_only_active = false
           assign region_filter_value = ''
           assign has_active_collection_filters = false
@@ -81,8 +84,20 @@
             assign is_all_fruits_collection = true
           endif
 
-          if current_page_url contains 'jf_unavailable=1'
+          # Availability dropdown (in the Filter popup): Available Now / Almost Sold Out /
+          # Coming Soon. jf_unavailable=1 is kept for backward compatibility with old links and is
+          # treated the same as jf_availability=coming_soon.
+          if current_page_url contains 'jf_availability=coming_soon' or current_page_url contains 'jf_unavailable=1'
+            assign availability_filter_value = 'coming_soon'
             assign unavailable_only_active = true
+            assign has_active_collection_filters = true
+          elsif current_page_url contains 'jf_availability=almost_sold_out'
+            assign availability_filter_value = 'almost_sold_out'
+            assign almost_sold_out_only_active = true
+            assign has_active_collection_filters = true
+          elsif current_page_url contains 'jf_availability=available'
+            assign availability_filter_value = 'available'
+            assign available_only_active = true
             assign has_active_collection_filters = true
           endif
 
@@ -290,6 +305,34 @@
                         </div>
                       </div>
                     {%- endif -%}
+                    <div class="form-filter-wrap list">
+                      <div class="ff-head">
+                        <p>{{ 'quick_filters.availability' | t }}</p>
+                        <div class="filter-down-arrow">{% render "icon-arrow_down" %}</div>
+                      </div>
+                      <div class="ff-in">
+                        <ul>
+                          <li>
+                            <label for="Filter-availability-available">
+                              <input type="radio" name="jf_availability" value="available" id="Filter-availability-available" {% if availability_filter_value == 'available' %}checked{% endif %}>
+                              {{ 'quick_filters.available_now' | t }}
+                            </label>
+                          </li>
+                          <li>
+                            <label for="Filter-availability-almost">
+                              <input type="radio" name="jf_availability" value="almost_sold_out" id="Filter-availability-almost" {% if availability_filter_value == 'almost_sold_out' %}checked{% endif %}>
+                              {{ 'quick_filters.almost_sold_out' | t }}
+                            </label>
+                          </li>
+                          <li>
+                            <label for="Filter-availability-coming-soon">
+                              <input type="radio" name="jf_availability" value="coming_soon" id="Filter-availability-coming-soon" {% if availability_filter_value == 'coming_soon' %}checked{% endif %}>
+                              {{ 'quick_filters.coming_soon' | t }}
+                            </label>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
                     <div class="clear-filter">
                       <a href="{{ collection.url }}" class="reset-btn">Reset</a>
                       <button type="submit" class="apply-filter-btn custom-btn black">Apply Filters</button>
@@ -397,7 +440,7 @@
             <div class="loader-spinner"></div>
           </div>
           {%- assign products_per_page = section.settings.number_of_product -%}
-          {%- if unavailable_only_active or untreated_only_active or region_filter_value != blank -%}
+          {%- if unavailable_only_active or untreated_only_active or region_filter_value != blank or almost_sold_out_only_active or available_only_active -%}
             {%- assign products_per_page = 250 -%}
           {%- endif -%}
           {% paginate collection.products by products_per_page %}
@@ -418,7 +461,7 @@
                     <button type="button" class="reset-link custom-btn black" onclick="window.location.href=window.location.pathname">Clear all filters</button>
                   </div>
                 {% endunless %}
-              {% elsif untreated_only_active or region_filter_value != blank %}
+              {% elsif untreated_only_active or region_filter_value != blank or almost_sold_out_only_active or available_only_active %}
                 {%- assign has_custom_filtered_products = false -%}
                 {% for product in collection.products %}
                   {%- assign product_quality_label = product.metafields.custom.quality_label.value | default: product.metafields.custom.quality_label | handleize -%}
@@ -471,6 +514,58 @@
                     {% endunless %}
                   {% endif %}
 
+                  {%- comment -%} Availability dropdown: "Available Now" / "Almost Sold Out" match on the
+                      product's reference variant (same preferred/first-available variant logic used for
+                      the card's stock badge), so results match what the card itself shows. {%- endcomment -%}
+                  {% if almost_sold_out_only_active or available_only_active %}
+                    {%- assign matches_availability = false -%}
+                    {%- assign ref_variant = nil -%}
+                    {%- for variant in product.variants -%}
+                      {%- if variant.metafields.custom.is_prior == true and variant.available -%}
+                        {%- assign ref_variant = variant -%}
+                        {%- break -%}
+                      {%- endif -%}
+                    {%- endfor -%}
+                    {%- if ref_variant == nil -%}
+                      {%- for variant in product.variants -%}
+                        {%- if variant.available -%}
+                          {%- assign ref_variant = variant -%}
+                          {%- break -%}
+                        {%- endif -%}
+                      {%- endfor -%}
+                    {%- endif -%}
+                    {%- if ref_variant == nil -%}
+                      {%- assign ref_variant = product.variants.first -%}
+                    {%- endif -%}
+
+                    {%- assign ref_tracked = false -%}
+                    {%- if ref_variant.inventory_management != blank -%}
+                      {%- assign ref_tracked = true -%}
+                    {%- endif -%}
+
+                    {%- assign ref_unavailable = false -%}
+                    {%- if ref_variant.available == false -%}
+                      {%- assign ref_unavailable = true -%}
+                    {%- elsif ref_tracked and ref_variant.inventory_quantity <= 0 -%}
+                      {%- assign ref_unavailable = true -%}
+                    {%- endif -%}
+
+                    {%- assign ref_almost_sold_out = false -%}
+                    {%- if ref_unavailable == false and ref_tracked and ref_variant.inventory_quantity <= 15 -%}
+                      {%- assign ref_almost_sold_out = true -%}
+                    {%- endif -%}
+
+                    {% if almost_sold_out_only_active and ref_unavailable == false and ref_almost_sold_out %}
+                      {%- assign matches_availability = true -%}
+                    {% elsif available_only_active and ref_unavailable == false and ref_almost_sold_out == false %}
+                      {%- assign matches_availability = true -%}
+                    {% endif %}
+
+                    {% unless matches_availability %}
+                      {%- assign matches_custom_filters = false -%}
+                    {% endunless %}
+                  {% endif %}
+
                   {% if matches_custom_filters and product.available %}
                     {%- assign has_custom_filtered_products = true -%}
                     {% render 'product-card-primary', product: product, collection: collection %}
@@ -479,6 +574,12 @@
                 {% for product in collection.products %}
                   {%- assign product_quality_label = product.metafields.custom.quality_label.value | default: product.metafields.custom.quality_label | handleize -%}
                   {%- assign matches_custom_filters = true -%}
+
+                  {% if almost_sold_out_only_active or available_only_active %}
+                    {%- comment -%} Both options are subsets of in-stock products, so they never match
+                        here in the fully-unavailable loop. {%- endcomment -%}
+                    {%- assign matches_custom_filters = false -%}
+                  {% endif %}
 
                   {% if untreated_only_active %}
                     {%- comment -%} "Organic & untreated" pill: keep products that are untreated OR organic-certified. {%- endcomment -%}
@@ -541,15 +642,12 @@
                   </div>
                 {% endunless %}
               {% else %}
+                {%- comment -%} Default view: in-stock products only. Out-of-stock items are
+                    hidden here and viewable via the "Out of stock" quick filter (jf_unavailable=1). {%- endcomment -%}
                 {% for product in collection.products %}
                   {% if product.available %}
                     {% render 'product-card-primary', product: product, collection: collection %}
                   {% endif %}
-                {% endfor %}
-                {% for product in collection.products %}
-                  {% unless product.available %}
-                    {% render 'product-card-primary', product: product, collection: collection %}
-                  {% endunless %}
                 {% endfor %}
                 {% if paginate.next %}
                   <div class="load-more-wrap">
@@ -722,6 +820,7 @@ document.addEventListener("DOMContentLoaded", () => {
         // 3. Check the URL for filter parameters (as a fallback)
         const hasUrlFilters = window.location.search.includes('filter.')
             || window.location.search.includes('jf_unavailable=1')
+            || window.location.search.includes('jf_availability=')
             || window.location.search.includes('jf_quality_label=untreated')
             || window.location.search.includes('jf_region=');
 
@@ -736,20 +835,20 @@ document.addEventListener("DOMContentLoaded", () => {
         const countEl = document.querySelector('.qf-count');
         if (!countEl) return;
 
-        const urlParams = new URLSearchParams(window.location.search);
-        const unavailableActive = urlParams.get('jf_unavailable') === '1';
-        const untreatedActive = urlParams.get('jf_quality_label') === 'untreated';
-        const regionActive = urlParams.get('jf_region');
-
-        if (!unavailableActive && !untreatedActive && !regionActive) return;
-
-        const totalCount = countEl.dataset.totalCount || '0';
+        const totalCount = parseInt(countEl.dataset.totalCount || '0', 10);
         const filteredTemplate = countEl.dataset.filteredTemplate || '__COUNT__ products out of __TOTAL__';
-        const visibleFilteredCount = document.querySelectorAll('#ProductGrid .product-card-primary').length;
+        const totalTemplate = countEl.dataset.totalTemplate || '__COUNT__ products';
+        const visibleCount = document.querySelectorAll('#ProductGrid .product-card-primary').length;
 
-        countEl.textContent = filteredTemplate
-            .replace('__COUNT__', visibleFilteredCount)
-            .replace('__TOTAL__', totalCount);
+        // Show "X out of Y" whenever fewer products are shown than the collection total
+        // (out-of-stock hidden by default, an active quick filter, or more pages to load).
+        if (visibleCount < totalCount) {
+            countEl.textContent = filteredTemplate
+                .replace('__COUNT__', visibleCount)
+                .replace('__TOTAL__', totalCount);
+        } else {
+            countEl.textContent = totalTemplate.replace('__COUNT__', totalCount);
+        }
     }
 
     function bindQuickPills() {
@@ -871,6 +970,8 @@ document.addEventListener("DOMContentLoaded", () => {
                     }
 
                     window.history.pushState({}, "", url);
+
+                    updateQuickFilterCount();
 
                     if (typeof lenis !== 'undefined') lenis.resize();
                     if (typeof window.bindProductCardAddForms === 'function') {

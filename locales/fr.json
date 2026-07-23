@@ -72,7 +72,12 @@
     "clear_all": "Tout effacer",
     "products_count": "{{ count }} produits",
     "products_count_filtered": "{{ count }} produits sur {{ total }}",
-    "load_more": "Charger plus"
+    "load_more": "Charger plus",
+    "no_products_found": "Aucun produit trouvé",
+    "no_products_unavailable": "Aucun produit totalement indisponible n'a été trouvé dans cette collection.",
+    "no_products_quick_filters": "Aucun produit n'a été trouvé pour les filtres rapides sélectionnés.",
+    "no_products_default": "Ajustez vos filtres ou supprimez-les pour découvrir plus de fruits délicieux.",
+    "clear_all_filters": "Effacer tous les filtres"
   },
   "gift_card": {
     "add_to_apple_wallet": "Ajouter à Cartes",

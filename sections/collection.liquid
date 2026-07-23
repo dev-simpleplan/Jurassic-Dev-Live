@@ -456,9 +456,9 @@
 
                 {% unless has_unavailable_products %}
                   <div class="no-products-found">
-                    <h3>No products found</h3>
-                    <p>No fully unavailable products were found in this collection.</p>
-                    <button type="button" class="reset-link custom-btn black" onclick="window.location.href=window.location.pathname">Clear all filters</button>
+                    <h3>{{ 'quick_filters.no_products_found' | t }}</h3>
+                    <p>{{ 'quick_filters.no_products_unavailable' | t }}</p>
+                    <button type="button" class="reset-link custom-btn black" onclick="window.location.href=window.location.pathname">{{ 'quick_filters.clear_all_filters' | t }}</button>
                   </div>
                 {% endunless %}
               {% elsif untreated_only_active or region_filter_value != blank or almost_sold_out_only_active or available_only_active %}
@@ -636,9 +636,9 @@
 
                 {% unless has_custom_filtered_products %}
                   <div class="no-products-found">
-                    <h3>No products found</h3>
-                    <p>No products were found for the selected quick filters.</p>
-                    <button type="button" class="reset-link custom-btn black" onclick="window.location.href=window.location.pathname">Clear all filters</button>
+                    <h3>{{ 'quick_filters.no_products_found' | t }}</h3>
+                    <p>{{ 'quick_filters.no_products_quick_filters' | t }}</p>
+                    <button type="button" class="reset-link custom-btn black" onclick="window.location.href=window.location.pathname">{{ 'quick_filters.clear_all_filters' | t }}</button>
                   </div>
                 {% endunless %}
               {% else %}
@@ -662,9 +662,9 @@
               {% endif %}
             {% else %}
               <div class="no-products-found">
-                <h3>No products found</h3>
-                <p>Try adjusting your filters or clearing them to see more delicious fruits.</p>
-                <button type="button" class="reset-link custom-btn black" onclick="window.location.href=window.location.pathname">Clear all filters</button>
+                <h3>{{ 'quick_filters.no_products_found' | t }}</h3>
+                <p>{{ 'quick_filters.no_products_default' | t }}</p>
+                <button type="button" class="reset-link custom-btn black" onclick="window.location.href=window.location.pathname">{{ 'quick_filters.clear_all_filters' | t }}</button>
               </div>
             {% endif %}
           {% endpaginate %}

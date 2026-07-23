@@ -57,7 +57,12 @@
     "clear_all": "Alle löschen",
     "products_count": "{{ count }} Produkte",
     "products_count_filtered": "{{ count }} Produkte von {{ total }}",
-    "load_more": "Mehr laden"
+    "load_more": "Mehr laden",
+    "no_products_found": "Keine Produkte gefunden",
+    "no_products_unavailable": "In dieser Kollektion wurden keine vollständig nicht verfügbaren Produkte gefunden.",
+    "no_products_quick_filters": "Für die ausgewählten Schnellfilter wurden keine Produkte gefunden.",
+    "no_products_default": "Passe deine Filter an oder entferne sie, um mehr köstliche Früchte zu sehen.",
+    "clear_all_filters": "Alle Filter löschen"
   },
   "gift_card": {
     "add_to_apple_wallet": "Zu Apple Wallet hinzufügen",

@@ -59,7 +59,12 @@
     "clear_all": "Clear All",
     "products_count": "{{ count }} products",
     "products_count_filtered": "{{ count }} products out of {{ total }}",
-    "load_more": "Load more"
+    "load_more": "Load more",
+    "no_products_found": "No products found",
+    "no_products_unavailable": "No fully unavailable products were found in this collection.",
+    "no_products_quick_filters": "No products were found for the selected quick filters.",
+    "no_products_default": "Try adjusting your filters or clearing them to see more delicious fruits.",
+    "clear_all_filters": "Clear all filters"
   },
   "collections": {
     "title": "Collections"

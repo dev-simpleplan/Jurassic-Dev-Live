@@ -2589,7 +2589,7 @@ li.variant-value.is-sold-out {
   display: flex;
   align-items: center;
   gap: 4px;
-  text-transform: lowercase;
+  /* text-transform: lowercase; */
 }
 .pas-shipping svg {
   width: 20px;

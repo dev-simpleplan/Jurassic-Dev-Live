@@ -5912,6 +5912,7 @@ h2.oke-reviewCarousel-header-title {
 }
 .okeReviews[data-oke-container].oke-w, div.okeReviews.oke-w {
     max-width: 1200px!important;
+    padding: 0 20px!important;
 
 }
 

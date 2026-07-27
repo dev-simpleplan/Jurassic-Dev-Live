@@ -23,7 +23,7 @@
       ],
       "name": "Okendo Reviews Page",
       "settings": {
-        "intro_text": "<p>From first bites to new favorite fruits, our customers have plenty of stories to share. Explore their honest reviews and discover where your next fruit adventure might begin.</p><p>Every review comes from a verified customer. We believe honest feedback matters, so you'll find both praise and constructive criticism here.</p>",
+        "intro_text": "<p>From first bites to new favorite fruits, our customers have plenty of stories to share. Explore their reviews and discover where your next fruit adventure might begin.</p><p>Every review comes from a verified customer. We believe honest feedback matters, so you'll find both praise and constructive criticism here.</p>",
         "button_label": "Shop all",
         "button_link": "shopify://collections/all-products",
         "group_1_label": "All Reviews",

@@ -66,14 +66,14 @@
                         {% if pair[0] == localization.language.iso_code %}
                         <img
                             src="https://flagcdn.com/w20/{{ pair[1] }}.png"
-                            alt="{{ localization.language.endonym_name }}"
+                            alt="{{ localization.language.endonym_name | capitalize }}"
                             width="20"
                             height="14"
                         >
                         {% endif %}
                     {% endfor %}
                     <span class="label">
-                        {{ localization.language.endonym_name }}
+                        {{ localization.language.endonym_name | capitalize }}
                     </span>
                     </button>
 
@@ -86,13 +86,13 @@
                             {% if pair[0] == language.iso_code %}
                                 <img
                                 src="https://flagcdn.com/w20/{{ pair[1] }}.png"
-                                alt="{{ language.endonym_name }}"
+                                alt="{{ language.endonym_name | capitalize }}"
                                 width="20"
                                 height="14"
                                 >
                             {% endif %}
                             {% endfor %}
-                            <span>{{ language.endonym_name }}</span>
+                            <span>{{ language.endonym_name | capitalize }}</span>
                         </a>
                         </li>
                     {% endfor %}
@@ -171,7 +171,7 @@
                 <span class="lang-code">
                     {{ language.iso_code | upcase }}
                 </span>
-                <span>{{ language.endonym_name }}</span>
+                <span>{{ language.endonym_name | capitalize }}</span>
                 </a>
             </li>
             {% endfor %}

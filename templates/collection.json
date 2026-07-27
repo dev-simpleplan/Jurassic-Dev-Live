@@ -212,21 +212,23 @@
           "settings": {
             "question": "How much does delivery cost and how long does it take?",
             "answer": "<p>Find all shipping options here: <a href=\"https://www.jurassicfruit.com/en/policies/shipping-policy\" title=\"https://www.jurassicfruit.com/en/policies/shipping-policy\">Shipping policy</a> The indicated delivery times start from the shipping date (not the order date, due to our weekly schedule).The delivery delays are not guaranteed except for Express.</p>",
-            "faq_image": "shopify://shop_images/Discovery_20Date_20Gift_hash_escaped_06.jpg"
+            "faq_image": "shopify://shop_images/Box-4-Exquisite-Small-Fruits-Mangosteen-Granadilla-Rambutan-Passionfruit-red-0891-30042025-JurassicFruit-JurassicFruit.jpg"
           }
         },
         "faq_ACCaTB": {
           "type": "faq",
           "settings": {
             "question": "When will it be delivered?",
-            "answer": "<p>It depends on when you pass your order.</p><p>Order <strong>until Thursday 20:00</strong> so that your fruits will be shipped the next Monday, Tuesday or Wednesday (delivery one to two days after). If you order after Thursday 19:00 (and before Thursday 20:00 the next week) your fruits will be shipped the second next Monday, Tuesday or Wednesday.</p><p>This weekly schedule allows us to have minimum waste (we ask our producers to gather the exact quantities our customers need) and to have the freshest fruits possible (our producers pick the fruits at the very last minute).<br/><br/>Please note that the shipping delay indicated by your chosen carrier affects only the delivery time, not the shipping day itself. We do not store fruits; they are harvested once a week. Therefore, even if you select express shipping, the shipment will not leave earlier than the date indicated at checkout.</p>"
+            "answer": "<p>It depends on when you pass your order.</p><p>Order <strong>until Thursday 20:00</strong> so that your fruits will be shipped the next Monday, Tuesday or Wednesday (delivery one to two days after). If you order after Thursday 19:00 (and before Thursday 20:00 the next week) your fruits will be shipped the second next Monday, Tuesday or Wednesday.</p><p>This weekly schedule allows us to have minimum waste (we ask our producers to gather the exact quantities our customers need) and to have the freshest fruits possible (our producers pick the fruits at the very last minute).<br/><br/>Please note that the shipping delay indicated by your chosen carrier affects only the delivery time, not the shipping day itself. We do not store fruits; they are harvested once a week. Therefore, even if you select express shipping, the shipment will not leave earlier than the date indicated at checkout.</p>",
+            "faq_image": "shopify://shop_images/Organic-Farm-Com-Si-TMF-Rambutan-Mangosteen-Longkong-Durian-Thailand-May2023-3555-JurassicFruit.jpg"
           }
         },
         "faq_kEbLiV": {
           "type": "faq",
           "settings": {
             "question": "Must I be at home to receive the delivery?",
-            "answer": "<p>It is the best, but it is not mandatory! If you are not at home, you have different options:</p><p>You can deliver to another address, such as your office, a small local store, a neighbour's home, a relative's home, etc.</p><p>You can set that when you are not at home, you want the parcel to be delivered to another address or to be left at your doorstep. To set your personal options, you just have to sign in at <strong>UPS My Choice</strong>.</p>"
+            "answer": "<p>It is the best, but it is not mandatory! If you are not at home, you have different options:</p><p>You can deliver to another address, such as your office, a small local store, a neighbour's home, a relative's home, etc.</p><p>You can set that when you are not at home, you want the parcel to be delivered to another address or to be left at your doorstep. To set your personal options, you just have to sign in at <strong>UPS My Choice</strong>.</p>",
+            "faq_image": "shopify://shop_images/Sonja-Mango-Palmer-DomRep-01785_JurassicFruit_fa1b334f-734f-42e7-a395-ec0681e5f993.jpg"
           }
         },
         "faq_LV6Jjz": {
@@ -234,7 +236,7 @@
           "settings": {
             "question": "Can I come and pick up my order?",
             "answer": "<p>Yes, you can pick up your order in Essen and save on shipping costs.</p><p>As we do not have a physical store, orders must still be <strong>placed online</strong> so you can choose your payment method and so we can pre-order the fresh fruits. We order everything fresh each week and do not sell from stock.<br/>For the best availability, we recommend placing your order by Thursday at 8:00 PM.</p><p>Pickup is possible once you receive the <strong>shipping confirmation email</strong> (this is sent automatically and <strong>looks the same as for regular shipping orders</strong>). After that, you can collect your package:<br/>Monday to Sunday (except Thursday), ideally as soon as possible, between 8:00 AM and 12:00 PM.</p>",
-            "faq_image": "shopify://shop_images/Mango-Gedong-Indonesia-beach-4.jpg"
+            "faq_image": "shopify://shop_images/warehouse-team-Essen-packing_b.jpg"
           }
         }
       },

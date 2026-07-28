@@ -5622,7 +5622,7 @@ li.easy-footnote-single {
 
 .wrapper-dropdown .dropdown {
     position: absolute;
-    bottom: calc(100% - 1px);
+    bottom: calc(100% - 0px);
     left: -1px;
     right: 0;
     width: calc(100% + 2px);
@@ -5682,7 +5682,7 @@ li.easy-footnote-single {
     }
 
     .wrapper-dropdown:hover .dropdown {
-        max-height: 170px;
+        max-height: 180px;
         visibility: inherit;
         overflow-y: auto;
     }
@@ -5700,20 +5700,48 @@ li.easy-footnote-single {
     align-items: center;
     width: fit-content;
     padding: 4px 8px;
-    border: 1px solid #99bd0f66;
+    border: 1px solid #7cb342aa;
     border-radius: 999px;
-    background: #f6fbdf;
-    color: #516500;
+    background: #eaf6db;
+    color: #3f6b12;
     font-size: 10px;
     font-weight: 600;
     letter-spacing: 0.04em;
     line-height: 1;
     text-transform: uppercase;
     position: absolute;
-    top: -10px;
+    top: -6px; /* nudged down off the divider line, was -10px */
     left: 0;
     right: 0;
     margin: 0 auto;
+    z-index: 1;
+}
+
+/* Match the dropdown container's rounded top corners so a highlighted/bordered
+   first row doesn't get clipped square against the rounded card, leaving a gap. */
+.wrapper-dropdown .dropdown li:first-child {
+    border-radius: 8px 8px 0 0;
+}
+
+/* Bestseller row: light green highlight (item.metafields.custom.bestseller variants) */
+.wrapper-dropdown .dropdown li:has(.vv-bestseller) {
+    background: #f2f9e8;
+}
+
+/* Selected variant: border highlight instead of a flat fill, so it still reads
+   clearly even on a bestseller row's green background. */
+.wrapper-dropdown .dropdown li.is-selected {
+    background: transparent;
+    font-weight: 600;
+    box-shadow: inset 0 0 0 1.5px #ffbb42;
+}
+.wrapper-dropdown .dropdown li.is-selected:has(.vv-bestseller) {
+    background: #f2f9e8;
+}
+
+/* Hover always wins (grey), regardless of bestseller/selected state above. */
+.wrapper-dropdown .dropdown li:hover {
+    background: #f0f0f0;
 }
 .item-details .item-title {
     font-size: 13px;

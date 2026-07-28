@@ -5950,7 +5950,8 @@ h2.oke-reviewCarousel-header-title {
     height: 70%;
     object-fit: cover;
 }
-.durian svg #image3 {
+.durian svg #image3,
+.durian svg #image2 {
     width: 90%;
     height: auto;
 }

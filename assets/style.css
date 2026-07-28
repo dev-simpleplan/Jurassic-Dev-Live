@@ -5738,7 +5738,7 @@ li.easy-footnote-single {
 .wrapper-dropdown .dropdown li.is-selected {
     background: transparent;
     font-weight: 600;
-    /* box-shadow: inset 0 0 0 1px #ffbb42; */
+    box-shadow: inset 0 0 0 1px #ffbb42;
     border: 1px solid #ffbb42;
     /* border-left: none;
     border-right: none;

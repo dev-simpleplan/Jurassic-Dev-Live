@@ -5943,3 +5943,14 @@ h2.oke-reviewCarousel-header-title {
 .crisp-client .cc-165wh[data-full-view=true] .cc-lk42u .cc-w7v18 {
     z-index: 999999999 !important;
 }
+
+/* Durian Image */
+.durian svg #image1 {
+    width: 80%;
+    height: 70%;
+    object-fit: cover;
+}
+.durian svg #image3 {
+    width: 90%;
+    height: auto;
+}

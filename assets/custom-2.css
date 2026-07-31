@@ -1968,7 +1968,7 @@ flex-wrap: wrap;
 li.variant-value .vvv-value {
   font-size: 13px;
   line-height: 100%;
-  text-transform: uppercase;
+  /* text-transform: uppercase; */
   color: #151515;
   text-align: center;
 }

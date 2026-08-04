@@ -210,12 +210,12 @@
         <div class="tc-filter-wrap">
           <div class="filter-wrap filter">
             <div class="filter-buttton">
-              Filter {% render 'filter-icon' %}
+              {{ 'quick_filters.filter' | t }} {% render 'filter-icon' %}
             </div>
             <div class="filter-sidebar">
               <div class="filtersidebar-in" data-lenis-prevent>
                 <div class="filter-cross-div">
-                  <p><span>Filter</span> {% render 'filter-icon' %}</p>
+                  <p><span>{{ 'quick_filters.filter' | t }}</span> {% render 'filter-icon' %}</p>
                   <div class="filter-close-mob">{% render 'cross' %}</div>
                 </div>
                 <div class="filter-sidebar-form">
@@ -230,7 +230,7 @@
 
                     <div class="form-filter-wrap list">
                       <div class="ff-head">
-                        <p>Sort By</p>
+                        <p>{{ 'quick_filters.sort_by' | t }}</p>
                         <div class="filter-down-arrow">{% render "icon-arrow_down" %}</div>
                       </div>
                       <div class="ff-in">
@@ -334,8 +334,8 @@
                       </div>
                     </div>
                     <div class="clear-filter">
-                      <a href="{{ collection.url }}" class="reset-btn">Reset</a>
-                      <button type="submit" class="apply-filter-btn custom-btn black">Apply Filters</button>
+                      <a href="{{ collection.url }}" class="reset-btn">{{ 'quick_filters.reset' | t }}</a>
+                      <button type="submit" class="apply-filter-btn custom-btn black">{{ 'quick_filters.apply_filters' | t }}</button>
                     </div>
                   </form>
                 </div>

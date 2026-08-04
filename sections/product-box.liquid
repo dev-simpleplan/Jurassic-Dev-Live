@@ -141,13 +141,49 @@
                     </div>
                   {% endif %}
               </div>
+              {%- comment -%}
+                Localized infographics: same per-language file-list metafields used on the
+                regular product template (custom.infographics_de / _fr / _en). Falls back to
+                English if the visitor's language set is empty/unset. Appended after the real
+                product media in both the main slider and thumbnails.
+              {%- endcomment -%}
+              {%- liquid
+                case request.locale.iso_code
+                  when 'de'
+                    assign infographics = product.metafields.custom.infographics_de.value
+                  when 'fr'
+                    assign infographics = product.metafields.custom.infographics_fr.value
+                  else
+                    assign infographics = product.metafields.custom.infographics_en.value
+                endcase
+                if infographics == blank or infographics.size == 0
+                  assign infographics = product.metafields.custom.infographics_en.value
+                endif
+              -%}
               <div class="prod-main-image">
-                {% if product.media.size > 0 %}
+                {% if product.media.size > 0 or infographics.size > 0 %}
                   {% for media in product.media %}
                     <div class="item" data-media-id="{{ media.id }}">
                       <div class="prod-main">
                         <a href="{{ media | img_url: 'master' }}" data-fancybox="gallery-box" class="zoom-wrapper">
                           {% render 'product-media', media: media, is_first: forloop.first %}
+                        </a>
+                      </div>
+                    </div>
+                  {% endfor %}
+                  {% for image in infographics %}
+                    <div class="item" data-media-id="infographic-{{ forloop.index }}">
+                      <div class="prod-main">
+                        <a href="{{ image | image_url: width: 1600 }}" data-fancybox="gallery-box" class="zoom-wrapper">
+                          <img
+                            src="{{ image | image_url: width: 1000 }}"
+                            srcset="{{ image | image_url: width: 600 }} 600w, {{ image | image_url: width: 900 }} 900w, {{ image | image_url: width: 1200 }} 1200w, {{ image | image_url: width: 1600 }} 1600w"
+                            sizes="(max-width: 767px) 100vw, 50vw"
+                            alt="{{ image.alt | default: product.title | escape }}"
+                            class="image-custom"
+                            width="{{ image.width }}"
+                            height="{{ image.height }}"
+                            loading="lazy">
                         </a>
                       </div>
                     </div>
@@ -165,8 +201,9 @@
                   </div>
                 {% endif %}
               </div>
+              {%- assign gallery_total = product.media.size | plus: infographics.size -%}
               <div class="product-gallery-counter" aria-live="polite">
-                <span data-gallery-current>1</span>/<span data-gallery-total>{% if product.media.size > 0 %}{{ product.media.size }}{% else %}1{% endif %}</span>
+                <span data-gallery-current>1</span>/<span data-gallery-total>{% if gallery_total > 0 %}{{ gallery_total }}{% else %}1{% endif %}</span>
               </div>
               <div class="btn-wrap">
                 <button class="custom-prev">
@@ -178,11 +215,26 @@
               </div>
             </div>
             <div class="prod-thumb-image">
-              {% if product.media.size > 0 %}
+              {% if product.media.size > 0 or infographics.size > 0 %}
                 {% for media in product.media %}
                   <div class="item" data-media-id="{{ media.id }}">
                     <div class="prod-thumb">
                       {% render 'product-media', media: media, is_thumb: true %}
+                    </div>
+                  </div>
+                {% endfor %}
+                {% for image in infographics %}
+                  <div class="item" data-media-id="infographic-{{ forloop.index }}">
+                    <div class="prod-thumb">
+                      <img
+                        src="{{ image | image_url: width: 160 }}"
+                        srcset="{{ image | image_url: width: 120 }} 120w, {{ image | image_url: width: 200 }} 200w"
+                        sizes="80px"
+                        alt="{{ image.alt | default: product.title | escape }}"
+                        class="image-custom"
+                        width="{{ image.width }}"
+                        height="{{ image.height }}"
+                        loading="lazy">
                     </div>
                   </div>
                 {% endfor %}

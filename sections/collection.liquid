@@ -137,6 +137,19 @@
               assign has_active_collection_filters = true
             endif
           endfor
+
+          # Default view "Load More" is a virtual/offset pagination over the AVAILABLE
+          # (in-stock) products only — not Shopify's raw paginate.next, which counts
+          # out-of-stock products too and previously caused the button to appear (or do
+          # nothing when clicked) even when few/no more visible products existed.
+          # jf_offset tracks how many available products have already been shown.
+          assign visible_offset = 0
+          assign offset_parts = current_page_url | split: 'jf_offset='
+          if offset_parts.size > 1
+            assign offset_str = offset_parts[1] | split: '&' | first
+            assign visible_offset = offset_str | plus: 0
+          endif
+          assign visible_per_page = section.settings.number_of_product | default: 40
         -%}
 
         {%- if section.blocks.size > 0 -%}
@@ -422,6 +435,18 @@
       {{ 'quick_filters.clear_all' | t }} ✕
     </button>
   </div>
+  {%- comment -%}
+    Recompute total_products_count as the AVAILABLE (in-stock) count when no filter is
+    active, so the header count and the Load More logic agree on the same number instead
+    of the raw total (which includes out-of-stock products and previously made the count
+    and the "X products" text misleading). Capped at 250 raw products (Shopify's paginate
+    ceiling) — comfortably covers every collection in this store.
+  {%- endcomment -%}
+  {%- unless has_active_collection_filters -%}
+    {% paginate collection.products by 250 %}
+      {%- assign total_products_count = collection.products | where: "available" | size -%}
+    {% endpaginate %}
+  {%- endunless -%}
   <div
     class="qf-count"
     data-total-count="{{ total_products_count }}"
@@ -439,11 +464,17 @@
           <div class="cart-loader">
             <div class="loader-spinner"></div>
           </div>
-          {%- assign products_per_page = section.settings.number_of_product -%}
-          {%- if unavailable_only_active or untreated_only_active or region_filter_value != blank or almost_sold_out_only_active or available_only_active -%}
-            {%- assign products_per_page = 250 -%}
-          {%- endif -%}
-          {% paginate collection.products by products_per_page %}
+          {%- comment -%}
+            Always fetch the max raw page size (250, Shopify's ceiling for `paginate ... by`).
+            Out-of-stock products are filtered out AFTER this fetch, so the raw page size and
+            the "how many to actually show" size must be decoupled — the default view below
+            uses `where: "available"` + `slice` (governed by the admin "Products per page"
+            setting and the jf_offset param) to paginate over the AVAILABLE set only, instead
+            of Shopify's raw paginate.next, which counts out-of-stock products too and
+            previously made "Load More" appear (or do nothing) even with very few/no more
+            visible products left.
+          {%- endcomment -%}
+          {% paginate collection.products by 250 %}
             {% if collection.products_count > 0 %}
               {% if unavailable_only_active %}
                 {%- assign has_unavailable_products = false -%}
@@ -571,68 +602,11 @@
                     {% render 'product-card-primary', product: product, collection: collection %}
                   {% endif %}
                 {% endfor %}
-                {% for product in collection.products %}
-                  {%- assign product_quality_label = product.metafields.custom.quality_label.value | default: product.metafields.custom.quality_label | handleize -%}
-                  {%- assign matches_custom_filters = true -%}
-
-                  {% if almost_sold_out_only_active or available_only_active %}
-                    {%- comment -%} Both options are subsets of in-stock products, so they never match
-                        here in the fully-unavailable loop. {%- endcomment -%}
-                    {%- assign matches_custom_filters = false -%}
-                  {% endif %}
-
-                  {% if untreated_only_active %}
-                    {%- comment -%} "Organic & untreated" pill: keep products that are untreated OR organic-certified. {%- endcomment -%}
-                    {%- assign product_is_organic = false -%}
-                    {%- for cert in product.metafields.custom.certificate.value -%}
-                      {%- if cert.system.handle == 'organic' -%}
-                        {%- assign product_is_organic = true -%}
-                        {%- break -%}
-                      {%- endif -%}
-                    {%- endfor -%}
-                    {%- comment -%} Match untreated across languages (EN untreated / DE unbehandelt / FR non traité). {%- endcomment -%}
-                    {%- assign matches_untreated = false -%}
-                    {%- if product_quality_label contains 'untreated' or product_quality_label contains 'unbehandelt' or product_quality_label contains 'non-traite' or product_quality_label contains 'nontraite' -%}
-                      {%- assign matches_untreated = true -%}
-                    {%- endif -%}
-                    {% if matches_untreated == false and product_is_organic == false %}
-                      {%- assign matches_custom_filters = false -%}
-                    {% endif %}
-                  {% endif %}
-
-                  {% if region_filter_value != blank %}
-                    {%- assign matches_region_filter = false -%}
-                    {%- assign product_collection_handles = product.collections | map: 'handle' | join: ',' -%}
-                    {%- comment -%} Match region by keyword so translated collection handles work
-                        (EN america / FR amerique / DE amerika, etc.). {%- endcomment -%}
-                    {% if region_filter_value == 'asia' %}
-                      {% if product_collection_handles contains 'asia' or product_collection_handles contains 'asie' or product_collection_handles contains 'asien' %}
-                        {%- assign matches_region_filter = true -%}
-                      {% endif %}
-                    {% elsif region_filter_value == 'europe' %}
-                      {% if product_collection_handles contains 'europe' or product_collection_handles contains 'europa' %}
-                        {%- assign matches_region_filter = true -%}
-                      {% endif %}
-                    {% elsif region_filter_value == 'america' %}
-                      {% if product_collection_handles contains 'america' or product_collection_handles contains 'amerique' or product_collection_handles contains 'amerika' %}
-                        {%- assign matches_region_filter = true -%}
-                      {% endif %}
-                    {% elsif region_filter_value == 'africa' %}
-                      {% if product_collection_handles contains 'africa' or product_collection_handles contains 'afrique' or product_collection_handles contains 'afrika' %}
-                        {%- assign matches_region_filter = true -%}
-                      {% endif %}
-                    {% endif %}
-
-                    {% unless matches_region_filter %}
-                      {%- assign matches_custom_filters = false -%}
-                    {% endunless %}
-                  {% endif %}
-
-                  {% if matches_custom_filters and product.available != true %}
-                    {%- assign has_custom_filtered_products = true -%}
-                    {% render 'product-card-primary', product: product, collection: collection %}
-                  {% endif %}
-                {% endfor %}
+                {%- comment -%}
+                  Out-of-stock products are intentionally NOT rendered here. They're hidden
+                  in the default view too, and are viewable via the Availability filter's
+                  "Coming Soon" option (handled in the unavailable_only_active branch above).
+                {%- endcomment -%}
 
                 {% unless has_custom_filtered_products %}
                   <div class="no-products-found">
@@ -642,19 +616,25 @@
                   </div>
                 {% endunless %}
               {% else %}
-                {%- comment -%} Default view: in-stock products only. Out-of-stock items are
-                    hidden here and viewable via the "Out of stock" quick filter (jf_unavailable=1). {%- endcomment -%}
-                {% for product in collection.products %}
-                  {% if product.available %}
-                    {% render 'product-card-primary', product: product, collection: collection %}
-                  {% endif %}
+                {%- comment -%}
+                  Default view: in-stock products only, paginated over the AVAILABLE set
+                  (not Shopify's raw paginate.next — see comment above the paginate tag).
+                  jf_offset tracks how many available products have been shown so far;
+                  Load More only renders when there are genuinely more beyond that.
+                {%- endcomment -%}
+                {%- assign available_products = collection.products | where: "available" -%}
+                {%- assign available_count = available_products.size -%}
+                {%- assign visible_batch = available_products | slice: visible_offset, visible_per_page -%}
+                {% for product in visible_batch %}
+                  {% render 'product-card-primary', product: product, collection: collection %}
                 {% endfor %}
-                {% if paginate.next %}
+                {%- assign next_offset = visible_offset | plus: visible_per_page -%}
+                {% if next_offset < available_count %}
                   <div class="load-more-wrap">
                     <button
                       type="button"
                       class="load-more-btn custom-btn black"
-                      data-next-url="{{ paginate.next.url }}">
+                      data-next-url="{{ collection.url }}?jf_offset={{ next_offset }}">
                       {{ 'quick_filters.load_more' | t }}
                     </button>
                   </div>
@@ -726,6 +706,9 @@ document.addEventListener("DOMContentLoaded", () => {
                 searchParams.delete(key);
             }
         });
+
+        // Any filter/sort change restarts the visible-product pagination from the top.
+        searchParams.delete('jf_offset');
 
         const constraints = searchParams.getAll('constraint').filter(Boolean);
         searchParams.delete('constraint');
@@ -941,6 +924,10 @@ document.addEventListener("DOMContentLoaded", () => {
         const btn = productGrid.querySelector('.load-more-btn');
         if (!btn) return;
 
+        // The next URL carries jf_offset (a count of AVAILABLE products already shown),
+        // so the fetched page returns exactly the next batch of visible products. The
+        // server only renders the button when more genuinely remain, so if the fetched
+        // page has no button, this was the last batch and the button is removed.
         btn.onclick = () => {
             const url = btn.getAttribute('data-next-url');
             if (!url) return;
@@ -968,8 +955,6 @@ document.addEventListener("DOMContentLoaded", () => {
                     } else {
                         wrap.remove();
                     }
-
-                    window.history.pushState({}, "", url);
 
                     updateQuickFilterCount();
 

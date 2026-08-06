@@ -95,6 +95,14 @@
               "market_code": "nl",
               "amount": 120
             }
+          },
+          "market_threshold_zmQXmF": {
+            "type": "market_threshold",
+            "name": "Market Threshold NL",
+            "settings": {
+              "market_code": "bg",
+              "amount": 120
+            }
           }
         },
         "block_order": [
@@ -105,7 +113,8 @@
           "market_threshold_EU7xyg",
           "market_threshold_BBWJHb",
           "market_threshold_gcwet4",
-          "market_threshold_84gHi6"
+          "market_threshold_84gHi6",
+          "market_threshold_zmQXmF"
         ],
         "settings": {
           "rating_image": "shopify://shop_images/durian-logo-jurassic.svg",

@@ -12,17 +12,6 @@
     "main": {
       "type": "collection",
       "blocks": {
-        "collection_9xCG7h": {
-          "type": "collection",
-          "settings": {
-            "col": "dragon-fruit",
-            "parent_collections": [
-              "fruit"
-            ],
-            "hide_on_generic_collections": false,
-            "col_name": ""
-          }
-        },
         "collection_rxVwVF": {
           "type": "collection",
           "settings": {
@@ -65,6 +54,17 @@
               "fruit"
             ],
             "hide_on_generic_collections": true,
+            "col_name": ""
+          }
+        },
+        "collection_9xCG7h": {
+          "type": "collection",
+          "settings": {
+            "col": "dragon-fruit",
+            "parent_collections": [
+              "fruit"
+            ],
+            "hide_on_generic_collections": false,
             "col_name": ""
           }
         },
@@ -165,11 +165,11 @@
         }
       },
       "block_order": [
-        "collection_9xCG7h",
         "collection_rxVwVF",
         "collection_JKYHMB",
         "collection_zp8hR7",
         "collection_Fnbewh",
+        "collection_9xCG7h",
         "collection_fMayaE",
         "collection_NUyX4d",
         "collection_XAzdgK",

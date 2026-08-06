@@ -98,7 +98,7 @@
           },
           "market_threshold_zmQXmF": {
             "type": "market_threshold",
-            "name": "Market Threshold NL",
+            "name": "Market Threshold Bulgaria",
             "settings": {
               "market_code": "bg",
               "amount": 120

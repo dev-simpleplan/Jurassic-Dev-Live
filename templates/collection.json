@@ -17,7 +17,7 @@
           "settings": {
             "col": "dates",
             "parent_collections": [
-              "all-dried-products"
+              "dried-products"
             ],
             "hide_on_generic_collections": true,
             "col_name": ""
@@ -28,7 +28,7 @@
           "settings": {
             "col": "dried-fruit",
             "parent_collections": [
-              "all-dried-products"
+              "dried-products"
             ],
             "hide_on_generic_collections": true,
             "col_name": ""
@@ -39,7 +39,7 @@
           "settings": {
             "col": "nuts",
             "parent_collections": [
-              "all-dried-products"
+              "dried-products"
             ],
             "hide_on_generic_collections": true,
             "col_name": ""
@@ -50,7 +50,7 @@
           "settings": {
             "col": "honey",
             "parent_collections": [
-              "all-dried-products"
+              "dried-products"
             ],
             "hide_on_generic_collections": true,
             "col_name": ""
@@ -61,7 +61,7 @@
           "settings": {
             "col": "bundles-dried-products",
             "parent_collections": [
-              "all-dried-products"
+              "dried-products"
             ],
             "hide_on_generic_collections": true,
             "col_name": ""
@@ -72,7 +72,7 @@
           "settings": {
             "col": "olives",
             "parent_collections": [
-              "all-dried-products"
+              "dried-products"
             ],
             "hide_on_generic_collections": true,
             "col_name": ""
@@ -83,7 +83,7 @@
           "settings": {
             "col": "fine-food",
             "parent_collections": [
-              "all-dried-products"
+              "dried-products"
             ],
             "hide_on_generic_collections": true,
             "col_name": ""
@@ -94,7 +94,7 @@
           "settings": {
             "col": "seaweeds",
             "parent_collections": [
-              "all-dried-products"
+              "dried-products"
             ],
             "hide_on_generic_collections": true,
             "col_name": ""

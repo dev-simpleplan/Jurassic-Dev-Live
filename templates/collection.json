@@ -12,6 +12,17 @@
     "main": {
       "type": "collection",
       "blocks": {
+        "collection_LxK4xj": {
+          "type": "collection",
+          "settings": {
+            "col": "honey",
+            "parent_collections": [
+              "all-dried-products"
+            ],
+            "hide_on_generic_collections": false,
+            "col_name": ""
+          }
+        },
         "collection_G43pLX": {
           "type": "collection",
           "settings": {
@@ -189,6 +200,7 @@
         }
       },
       "block_order": [
+        "collection_LxK4xj",
         "collection_G43pLX",
         "collection_zjQwym",
         "collection_mtRxR4",

@@ -1233,7 +1233,7 @@
             {%- assign high_raw = season_meta.high_season_month.value | default: '' | split: ',' -%}
             {%- assign low_raw = season_meta.low_season_month.value | default: '' | split: ',' -%}
 
-            {%- assign high_indexes = '' -%}
+            {%- assign high_indexes = ',' -%}
             {% for h in high_raw %}
               {% assign h_clean = h | strip %}
 
@@ -1247,7 +1247,7 @@
 
             {% endfor %}
 
-            {%- assign low_indexes = '' -%}
+            {%- assign low_indexes = ',' -%}
             {% for l in low_raw %}
               {% assign l_clean = l | strip %}
 
@@ -1276,7 +1276,7 @@
                     {%- assign display_month = months_en[index0] -%}
                 {%- endcase -%}
 
-                {%- assign index_key = index | append: ',' -%}
+                {%- assign index_key = ',' | append: index | append: ',' -%}
 
             {%- assign is_high = false -%}
             {%- if high_indexes contains index_key -%}

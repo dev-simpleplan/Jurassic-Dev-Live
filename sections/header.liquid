@@ -44,7 +44,28 @@
                 {%- if selected_menu and selected_menu.links and selected_menu.links.size > 0 -%}
                   {%- assign nav_links = selected_menu.links -%}
                   {%- assign selected_menu_title_downcase = selected_menu.title | downcase | strip -%}
-                  {%- assign selected_menu_url = selected_menu.url | default: 'javascript:void()' -%}
+
+                  {%- comment -%}
+                    Top-level nav destination. A Shopify menu/linklist object has NO .url of its
+                    own, so this used to always fall through to javascript:void() — making every
+                    top-level item a dead click while hover opened the mega menu. Resolve it as:
+                      1. the block's explicit "Top level link" setting (merchant-controlled), else
+                      2. a collection whose handle matches the selected menu's handle, else
+                      3. javascript:void() (unchanged no-op fallback).
+                  {%- endcomment -%}
+                  {%- assign selected_menu_url = '' -%}
+                  {%- if block.settings.nav_top_link != blank -%}
+                    {%- assign selected_menu_url = block.settings.nav_top_link -%}
+                  {%- else -%}
+                    {%- assign nav_menu_handle = block.settings.nav_items_right | handle -%}
+                    {%- assign nav_menu_collection = collections[nav_menu_handle] -%}
+                    {%- if nav_menu_collection != blank and nav_menu_collection.handle != blank -%}
+                      {%- assign selected_menu_url = nav_menu_collection.url -%}
+                    {%- endif -%}
+                  {%- endif -%}
+                  {%- if selected_menu_url == blank -%}
+                    {%- assign selected_menu_url = 'javascript:void()' -%}
+                  {%- endif -%}
 
                   {%- if selected_menu_title_downcase == 'wieder kaufen' or selected_menu_title_downcase == 'buy again' -%}
                     {%- assign selected_menu_url = routes.account_url -%}
@@ -493,6 +514,12 @@
             "type": "link_list",
             "id": "nav_items_right",
             "label": "Nav Items"
+          },
+          {
+            "type": "url",
+            "id": "nav_top_link",
+            "label": "Top level link",
+            "info": "Where clicking the top-level menu name goes (hover still opens the mega menu). Leave empty to auto-use a collection matching the menu's handle."
           },
           {
             "type": "text",

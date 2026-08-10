@@ -56,17 +56,6 @@
             "col_name": ""
           }
         },
-        "collection_t4qUEG": {
-          "type": "collection",
-          "settings": {
-            "col": "bundles-dried-products",
-            "parent_collections": [
-              "dried-products"
-            ],
-            "hide_on_generic_collections": true,
-            "col_name": ""
-          }
-        },
         "collection_LdnHDc": {
           "type": "collection",
           "settings": {
@@ -93,6 +82,17 @@
           "type": "collection",
           "settings": {
             "col": "seaweeds",
+            "parent_collections": [
+              "dried-products"
+            ],
+            "hide_on_generic_collections": true,
+            "col_name": ""
+          }
+        },
+        "collection_t4qUEG": {
+          "type": "collection",
+          "settings": {
+            "col": "bundles-dried-products",
             "parent_collections": [
               "dried-products"
             ],
@@ -248,10 +248,10 @@
         "collection_zjQwym",
         "collection_G43pLX",
         "collection_LxK4xj",
-        "collection_t4qUEG",
         "collection_LdnHDc",
         "collection_fd9LiJ",
         "collection_Y3QRM3",
+        "collection_t4qUEG",
         "collection_rxVwVF",
         "collection_JKYHMB",
         "collection_zp8hR7",

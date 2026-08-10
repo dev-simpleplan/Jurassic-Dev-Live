@@ -12,6 +12,28 @@
     "main": {
       "type": "collection",
       "blocks": {
+        "collection_t4qUEG": {
+          "type": "collection",
+          "settings": {
+            "col": "bundles-dried-products",
+            "parent_collections": [
+              "all-dried-products"
+            ],
+            "hide_on_generic_collections": false,
+            "col_name": ""
+          }
+        },
+        "collection_LdnHDc": {
+          "type": "collection",
+          "settings": {
+            "col": "olives",
+            "parent_collections": [
+              "all-dried-products"
+            ],
+            "hide_on_generic_collections": false,
+            "col_name": ""
+          }
+        },
         "collection_fd9LiJ": {
           "type": "collection",
           "settings": {
@@ -222,6 +244,8 @@
         }
       },
       "block_order": [
+        "collection_t4qUEG",
+        "collection_LdnHDc",
         "collection_fd9LiJ",
         "collection_Y3QRM3",
         "collection_LxK4xj",

@@ -18,6 +18,7 @@
           "type": "nav_menu_right",
           "settings": {
             "nav_items_right": "start-here",
+            "nav_top_link": "",
             "product_list_heading": "Start here",
             "product_list": []
           }
@@ -26,6 +27,7 @@
           "type": "nav_menu_right",
           "settings": {
             "nav_items_right": "boxes-direct-link",
+            "nav_top_link": "",
             "product_list_heading": "Boxes",
             "product_list": []
           }
@@ -34,6 +36,7 @@
           "type": "nav_menu_right",
           "settings": {
             "nav_items_right": "fruit",
+            "nav_top_link": "",
             "product_list_heading": "Most Popular",
             "product_list": [
               "young-fresh-coconut-pagode",
@@ -46,6 +49,7 @@
           "type": "nav_menu_right",
           "settings": {
             "nav_items_right": "dried",
+            "nav_top_link": "shopify://collections/dried-fruit",
             "product_list_heading": "Most Popular",
             "product_list": [
               "date-barhi-gold-fresh-and-juicy",
@@ -58,6 +62,7 @@
           "type": "nav_menu_right",
           "settings": {
             "nav_items_right": "new-direct-link",
+            "nav_top_link": "",
             "product_list_heading": "New",
             "product_list": []
           }
@@ -66,6 +71,7 @@
           "type": "nav_menu_right",
           "settings": {
             "nav_items_right": "sale",
+            "nav_top_link": "",
             "product_list_heading": "Sale",
             "product_list": [
               "mangosteen",
@@ -78,6 +84,7 @@
           "disabled": true,
           "settings": {
             "nav_items_right": "",
+            "nav_top_link": "",
             "product_list_heading": "",
             "product_list": []
           }
@@ -87,6 +94,7 @@
           "disabled": true,
           "settings": {
             "nav_items_right": "",
+            "nav_top_link": "",
             "product_list_heading": "",
             "product_list": []
           }

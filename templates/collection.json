@@ -152,7 +152,7 @@
             "parent_collections": [
               "fruit"
             ],
-            "hide_on_generic_collections": false,
+            "hide_on_generic_collections": true,
             "col_name": ""
           }
         },

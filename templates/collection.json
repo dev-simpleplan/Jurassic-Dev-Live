@@ -12,6 +12,17 @@
     "main": {
       "type": "collection",
       "blocks": {
+        "collection_G43pLX": {
+          "type": "collection",
+          "settings": {
+            "col": "nuts",
+            "parent_collections": [
+              "all-dried-products"
+            ],
+            "hide_on_generic_collections": false,
+            "col_name": ""
+          }
+        },
         "collection_zjQwym": {
           "type": "collection",
           "settings": {
@@ -178,6 +189,7 @@
         }
       },
       "block_order": [
+        "collection_G43pLX",
         "collection_zjQwym",
         "collection_mtRxR4",
         "collection_rxVwVF",

@@ -36,7 +36,7 @@
           "type": "nav_menu_right",
           "settings": {
             "nav_items_right": "fruit",
-            "nav_top_link": "",
+            "nav_top_link": "shopify://collections/fruit",
             "product_list_heading": "Most Popular",
             "product_list": [
               "young-fresh-coconut-pagode",

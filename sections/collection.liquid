@@ -475,12 +475,17 @@
             visible products left.
           {%- endcomment -%}
           {% paginate collection.products by 250 %}
+            {%- assign schema_product_handles = '' -%}
+            {%- assign schema_product_count = 0 -%}
+            {%- assign schema_position_offset = paginate.current_offset -%}
             {% if collection.products_count > 0 %}
               {% if unavailable_only_active %}
                 {%- assign has_unavailable_products = false -%}
                 {% for product in collection.products %}
                   {% unless product.available %}
                     {%- assign has_unavailable_products = true -%}
+                    {%- assign schema_product_handles = schema_product_handles | append: '|' | append: product.handle | append: '|' -%}
+                    {%- assign schema_product_count = schema_product_count | plus: 1 -%}
                     {% render 'product-card-primary', product: product, collection: collection %}
                   {% endunless %}
                 {% endfor %}
@@ -599,6 +604,8 @@
 
                   {% if matches_custom_filters and product.available %}
                     {%- assign has_custom_filtered_products = true -%}
+                    {%- assign schema_product_handles = schema_product_handles | append: '|' | append: product.handle | append: '|' -%}
+                    {%- assign schema_product_count = schema_product_count | plus: 1 -%}
                     {% render 'product-card-primary', product: product, collection: collection %}
                   {% endif %}
                 {% endfor %}
@@ -625,7 +632,10 @@
                 {%- assign available_products = collection.products | where: "available" -%}
                 {%- assign available_count = available_products.size -%}
                 {%- assign visible_batch = available_products | slice: visible_offset, visible_per_page -%}
+                {%- assign schema_position_offset = visible_offset -%}
                 {% for product in visible_batch %}
+                  {%- assign schema_product_handles = schema_product_handles | append: '|' | append: product.handle | append: '|' -%}
+                  {%- assign schema_product_count = schema_product_count | plus: 1 -%}
                   {% render 'product-card-primary', product: product, collection: collection %}
                 {% endfor %}
                 {%- assign next_offset = visible_offset | plus: visible_per_page -%}
@@ -647,6 +657,13 @@
                 <button type="button" class="reset-link custom-btn black" onclick="window.location.href=window.location.pathname">{{ 'quick_filters.clear_all_filters' | t }}</button>
               </div>
             {% endif %}
+            {% render 'collection-itemlist-schema',
+              current_page_url: current_page_url,
+              paginate: paginate,
+              schema_product_count: schema_product_count,
+              schema_product_handles: schema_product_handles,
+              schema_position_offset: schema_position_offset
+            %}
           {% endpaginate %}
         </div>
       </div>

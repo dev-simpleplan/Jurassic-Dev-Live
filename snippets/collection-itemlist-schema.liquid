@@ -1,0 +1,82 @@
+{%- if request.page_type == 'collection' and schema_product_count > 0 and schema_product_handles != blank -%}
+  {%- assign schema_shop_url = request.origin | default: shop.url | default: shop.secure_url | replace: 'http://', 'https://' -%}
+  {%- if schema_shop_url contains '/en' -%}
+    {%- assign schema_shop_url = schema_shop_url | split: '/en' | first -%}
+  {%- endif -%}
+  {%- if schema_shop_url contains '/de' -%}
+    {%- assign schema_shop_url = schema_shop_url | split: '/de' | first -%}
+  {%- endif -%}
+  {%- if schema_shop_url contains '/fr' -%}
+    {%- assign schema_shop_url = schema_shop_url | split: '/fr' | first -%}
+  {%- endif -%}
+  {%- assign schema_page_url = schema_shop_url | append: collection.url -%}
+  {%- assign schema_current_page_url = current_page_url | replace: '\/', '/' | replace: '\u0026', '&' -%}
+  {%- if schema_current_page_url contains '?' -%}
+    {%- assign schema_query_string = schema_current_page_url | split: '?' | last -%}
+    {%- assign schema_page_url = schema_page_url | append: '?' | append: schema_query_string -%}
+  {%- elsif paginate.current_page > 1 -%}
+    {%- assign schema_page_url = schema_page_url | append: '?page=' | append: paginate.current_page -%}
+  {%- endif -%}
+
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "CollectionPage",
+      "name": {{ collection.title | json }},
+      "url": {{ schema_page_url | json }},
+      "mainEntity": {
+        "@type": "ItemList",
+        "name": {{ collection.title | json }},
+        "numberOfItems": {{ schema_product_count }},
+        "itemListElement": [
+          {%- assign schema_item_index = 0 -%}
+          {%- for product in collection.products -%}
+            {%- assign schema_handle_match = '|' | append: product.handle | append: '|' -%}
+            {%- if schema_product_handles contains schema_handle_match -%}
+              {%- assign schema_item_index = schema_item_index | plus: 1 -%}
+              {%- assign selected_variant = product.selected_or_first_available_variant -%}
+              {%- assign review_rating_object = product.metafields.reviews.rating.value -%}
+              {%- assign review_rating_value = review_rating_object.rating | default: product.metafields.reviews.rating | default: product.metafields.okendo.RatingAndReviewAverageValue.value | default: product.metafields.okendo.RatingAndReviewAverageValue | default: 0 | plus: 0 -%}
+              {%- assign review_count = product.metafields.reviews.rating_count.value | default: product.metafields.reviews.rating_count | default: product.metafields.okendo.RatingAndReviewCount.value | default: product.metafields.okendo.RatingAndReviewCount | default: 0 | plus: 0 -%}
+              {
+                "@type": "ListItem",
+                "position": {{ schema_position_offset | default: paginate.current_offset | plus: schema_item_index }},
+                "name": {{ product.title | json }},
+                "url": {{ schema_shop_url | append: product.url | json }},
+                "item": {
+                  "@type": "Product",
+                  "name": {{ product.title | json }},
+                  "url": {{ schema_shop_url | append: product.url | json }}
+                  {%- if product.featured_image -%}
+                    ,"image": {{ product.featured_image | image_url: width: 1200 | prepend: 'https:' | json }}
+                  {%- endif -%}
+                  {%- if selected_variant -%}
+                    ,"offers": {
+                      "@type": "Offer",
+                      "price": {{ selected_variant.price | divided_by: 100.0 | json }},
+                      "priceCurrency": {{ cart.currency.iso_code | default: shop.currency | json }},
+                      "availability": "https://schema.org/{% if product.available %}InStock{% else %}OutOfStock{% endif %}"
+                    }
+                  {%- endif -%}
+                  {%- if review_rating_value > 0 and review_count > 0 -%}
+                    ,"aggregateRating": {
+                      "@type": "AggregateRating",
+                      "ratingValue": {{ review_rating_value | json }},
+                      "reviewCount": {{ review_count | json }}
+                    }
+                  {%- endif -%}
+                }
+              }{%- if schema_item_index < schema_product_count -%},{%- endif -%}
+            {%- endif -%}
+          {%- endfor -%}
+        ]
+      }
+    }
+  </script>
+{%- endif -%}
+
+{%- if request.page_type == 'collection' and collection.metafields.custom.json_ld_reviews.value != blank -%}
+  <script type="application/ld+json">
+    {{ collection.metafields.custom.json_ld_reviews.value }}
+  </script>
+{%- endif -%}

@@ -1,1 +1,33 @@
-{"sections":{"template":{"type":"template-thank-you","settings":{"head":"Thank you","subhead":"your form is successfully submitted.","text":"<p><strong>Welcome in. <\/strong>You’ll now hear about rare finds, fresh arrivals, and what’s truly worth trying. We’ll only reach out when it matters.<\/p>","cta-txt":"Go back to homepage","cta-url":""}},"spacer":{"type":"spacer","settings":{"spacer_height":140}}},"order":["template","spacer"]}
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "template": {
+      "type": "template-thank-you",
+      "settings": {
+        "head": "Thank you",
+        "subhead": "your form is successfully submitted.",
+        "text": "<p><strong>Welcome in. </strong>You’ll now hear about rare finds, fresh arrivals, and what’s truly worth trying. We’ll only reach out when it matters.</p>",
+        "cta-txt": "Go back to homepage",
+        "cta-url": ""
+      }
+    },
+    "spacer": {
+      "type": "spacer",
+      "settings": {
+        "spacer_height": 140
+      }
+    }
+  },
+  "order": [
+    "template",
+    "spacer"
+  ]
+}

@@ -68,6 +68,14 @@
             "category_number": 1
           }
         },
+        "faq_item_nBNdyL": {
+          "type": "faq_item",
+          "settings": {
+            "question": "Does every destination qualify for a freshness guarantee?",
+            "answer": "<p>For some destinations, delivery times regularly exceed 2 days and can vary depending on the carrier and local conditions: <a href=\"https://www.jurassicfruit.com/en/policies/shipping-policy\" title=\"https://www.jurassicfruit.com/en/policies/shipping-policy\">Shipping Options</a><br/>Because of this, we cannot reliably predict the final transit time and shipping conditions.<br/>Especially during warmer weather, longer shipping times may affect the freshness of the products. Therefore, we are unfortunately unable to offer a freshness guarantee for these destinations.<br/>If you choose to place an order to one of these destinations, please be aware that the shipment is sent at your own risk with regard to transit time and product freshness.<br/>If you have any questions about shipping times or freshness for your destination, please feel free to contact us. We're always happy to help.</p>",
+            "category_number": 1
+          }
+        },
         "faq_item_FpgG3R": {
           "type": "faq_item",
           "settings": {
@@ -206,6 +214,7 @@
         "faq_item_dwyJXq",
         "faq_item_9dY96R",
         "faq_item_L6kMhr",
+        "faq_item_nBNdyL",
         "faq_item_FpgG3R",
         "faq_item_RUm6Y8",
         "faq_item_jfipgi",

@@ -7,15 +7,34 @@
                 </div>
                 <div class="tbr-text">{{ section.settings.rating_text }}</div>
             </div>
-            <div class="tb-text">
+            {%- comment -%}
+              When a special-occasion message is enabled, the shipping text and the
+              special message auto-rotate as a ticker (see bindTopBarTicker below) instead
+              of both being crammed into the bar at once. With it off, only the shipping
+              line renders and no ticker JS/CSS engages — same as before this feature.
+            {%- endcomment -%}
+            {%- assign show_ticker = false -%}
+            {%- if section.settings.special_message_enabled and section.settings.special_message_text != blank -%}
+              {%- assign show_ticker = true -%}
+            {%- endif -%}
+            <div class="tb-text{% if show_ticker %} tb-text--ticker{% endif %}">
+              <div class="tb-ticker" data-tb-ticker data-tb-ticker-interval="{{ section.settings.ticker_interval | default: 4 | times: 1000 }}">
                 <p
+                  class="tb-ticker-item is-active"
                   data-top-bar-shipping
                   data-prefix="{{ section.settings.tbtext_prefix | default: 'Free shipping on orders above' | escape }}"
-                  data-default-amount="{{ section.settings.tbtext_amount | default: 450 }}"
+                  data-default-amount="{{ section.settings.tbtext_amount | default: 120 }}"
+                  data-default-type="{{ section.settings.tbtext_default_type | default: 'discount' }}"
+                  data-discount-prefix="{{ section.settings.tbtext_discount_prefix | default: 'shipping discount over' | escape }}"
+                  data-default-discount-amount="{{ section.settings.tbtext_discount_amount | default: 5.9 }}"
                   data-default-currency="{{ localization.country.currency.iso_code | default: cart.currency.iso_code | default: shop.currency }}"
                 >
                   {{ section.settings.tbtext_prefix | default: 'Free shipping on orders above' }}
                 </p>
+                {%- if show_ticker -%}
+                  <p class="tb-ticker-item">{{ section.settings.special_message_text }}</p>
+                {%- endif -%}
+              </div>
             </div>
             {% comment %} <div class="tb-lang-wrap">
                 {% if localization.available_countries.size > 1 %}
@@ -452,10 +471,22 @@ document.addEventListener('DOMContentLoaded', function () {
   const topBarShipping = document.querySelector('[data-top-bar-shipping]');
   if (!topBarShipping) return;
 
+  {%- comment -%}
+    Two message types per market, editable from the theme editor (Market Threshold blocks)
+    without touching code — see the Shipping Policy: most EU countries only get a shipping
+    *discount* over the threshold, not free shipping outright. "type": "free" renders
+    "{prefix} {amount}"; "type": "discount" renders "{discount_amount} {discount_prefix}
+    {amount}" (e.g. "€5.90 shipping discount over €120"). Markets without a block fall back
+    to data-default-type / data-default-amount / data-default-discount-amount below.
+  {%- endcomment -%}
   const marketThresholds = {
     {% for block in section.blocks %}
       {% if block.type == 'market_threshold' and block.settings.market_code != blank and block.settings.amount != blank %}
-        "{{ block.settings.market_code | downcase | strip }}": {{ block.settings.amount | json }},
+        "{{ block.settings.market_code | downcase | strip }}": {
+          type: {{ block.settings.message_type | default: 'free' | json }},
+          amount: {{ block.settings.amount | json }},
+          discountAmount: {{ block.settings.discount_amount | json }}
+        },
       {% endif %}
     {% endfor %}
   };
@@ -481,7 +512,7 @@ document.addEventListener('DOMContentLoaded', function () {
     return marketKey;
   }
 
-  function formatThreshold(amount) {
+  function formatThreshold(amount, minimumFractionDigits) {
     const currencyCode =
       window.activeCurrency ||
       topBarShipping.dataset.defaultCurrency ||
@@ -495,17 +526,27 @@ document.addEventListener('DOMContentLoaded', function () {
     return new Intl.NumberFormat(document.documentElement.lang || undefined, {
       style: 'currency',
       currency: currencyCode,
-      minimumFractionDigits: 0,
+      minimumFractionDigits: minimumFractionDigits ?? 0,
       maximumFractionDigits: 2
     }).format(numericAmount);
   }
 
   function updateTopBarShipping() {
-    const prefix = topBarShipping.dataset.prefix || 'Free shipping on orders above';
     const marketKey = resolveMarketKey();
-    const amount = marketThresholds[marketKey] ?? topBarShipping.dataset.defaultAmount;
+    const market = marketThresholds[marketKey];
 
-    topBarShipping.textContent = `${prefix} ${formatThreshold(amount)}`;
+    const type = market?.type || topBarShipping.dataset.defaultType || 'free';
+    const amount = market?.amount ?? topBarShipping.dataset.defaultAmount;
+
+    if (type === 'discount') {
+      const discountPrefix = topBarShipping.dataset.discountPrefix || 'shipping discount over';
+      const discountAmount = market?.discountAmount ?? topBarShipping.dataset.defaultDiscountAmount;
+      // Discount amounts (e.g. 5.90) always show 2 decimals; round thresholds don't need them.
+      topBarShipping.textContent = `${formatThreshold(discountAmount, 2)} ${discountPrefix} ${formatThreshold(amount)}`;
+    } else {
+      const prefix = topBarShipping.dataset.prefix || 'Free shipping on orders above';
+      topBarShipping.textContent = `${prefix} ${formatThreshold(amount)}`;
+    }
   }
 
   updateTopBarShipping();
@@ -519,6 +560,22 @@ document.addEventListener('DOMContentLoaded', function () {
       window.clearInterval(retryTimer);
     }
   }, 700);
+
+  // Special-occasion ticker: only present in the DOM when a special message is enabled
+  // in the section settings and non-empty (see the show_ticker check in the markup above),
+  // so this is a no-op the rest of the time.
+  const ticker = document.querySelector('[data-tb-ticker]');
+  const tickerItems = ticker ? ticker.querySelectorAll('.tb-ticker-item') : [];
+  if (ticker && tickerItems.length > 1) {
+    let activeIndex = 0;
+    const intervalMs = parseInt(ticker.dataset.tbTickerInterval, 10) || 4000;
+
+    window.setInterval(() => {
+      tickerItems[activeIndex].classList.remove('is-active');
+      activeIndex = (activeIndex + 1) % tickerItems.length;
+      tickerItems[activeIndex].classList.add('is-active');
+    }, intervalMs);
+  }
 });
 </script>
 
@@ -548,14 +605,66 @@ document.addEventListener('DOMContentLoaded', function () {
         {
             "type": "text",
             "id": "tbtext_prefix",
-            "label": "Announcement Prefix",
+            "label": "Free Shipping Prefix",
             "default": "Free shipping on orders above"
         },
         {
             "type": "number",
             "id": "tbtext_amount",
-            "label": "Free Shipping Threshold",
-            "default": 450
+            "label": "Default Threshold Amount",
+            "info": "Used for any country without its own Market Threshold block below.",
+            "default": 120
+        },
+        {
+            "type": "select",
+            "id": "tbtext_default_type",
+            "label": "Default Message Type",
+            "info": "Message shown for countries without their own Market Threshold block — per the Shipping Policy, most countries get a discount rather than free shipping.",
+            "options": [
+                { "value": "free", "label": "Free shipping" },
+                { "value": "discount", "label": "Shipping discount" }
+            ],
+            "default": "discount"
+        },
+        {
+            "type": "text",
+            "id": "tbtext_discount_prefix",
+            "label": "Shipping Discount Text",
+            "info": "e.g. \"€5.90 [this text] €120\" → \"shipping discount over\"",
+            "default": "shipping discount over"
+        },
+        {
+            "type": "number",
+            "id": "tbtext_discount_amount",
+            "label": "Default Discount Amount",
+            "info": "Used for any country without its own Market Threshold block below.",
+            "default": 5.9
+        },
+        {
+            "type": "header",
+            "content": "Special Occasion Message"
+        },
+        {
+            "type": "checkbox",
+            "id": "special_message_enabled",
+            "label": "Enable special occasion message",
+            "info": "When on, this message and the shipping message auto-rotate as a ticker. When off, only the shipping message shows (no ticker).",
+            "default": false
+        },
+        {
+            "type": "text",
+            "id": "special_message_text",
+            "label": "Special Occasion Message",
+            "info": "e.g. \"🎄 Christmas orders ship until Dec 20\""
+        },
+        {
+            "type": "range",
+            "id": "ticker_interval",
+            "label": "Ticker Rotation Speed (seconds)",
+            "min": 2,
+            "max": 10,
+            "step": 1,
+            "default": 4
         }
 
     ],
@@ -571,9 +680,25 @@ document.addEventListener('DOMContentLoaded', function () {
                     "info": "Use country codes like DE, IN, US, FR, GB"
                 },
                 {
+                    "type": "select",
+                    "id": "message_type",
+                    "label": "Message Type",
+                    "options": [
+                        { "value": "free", "label": "Free shipping" },
+                        { "value": "discount", "label": "Shipping discount" }
+                    ],
+                    "default": "free"
+                },
+                {
                     "type": "number",
                     "id": "amount",
                     "label": "Threshold Amount"
+                },
+                {
+                    "type": "number",
+                    "id": "discount_amount",
+                    "label": "Discount Amount",
+                    "info": "Only used when Message Type is \"Shipping discount\", e.g. 5.90"
                 }
             ]
         }

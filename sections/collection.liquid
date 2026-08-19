@@ -71,7 +71,6 @@
           assign available_only_active = false
           assign availability_filter_value = ''
           assign untreated_only_active = false
-          assign region_filter_value = ''
           assign has_active_collection_filters = false
           assign total_products_count = collection.all_products_count | default: collection.products_count
           assign filtered_products_count = collection.products_count
@@ -106,19 +105,8 @@
             assign has_active_collection_filters = true
           endif
 
-          if current_page_url contains 'jf_region=asia'
-            assign region_filter_value = 'asia'
-            assign has_active_collection_filters = true
-          elsif current_page_url contains 'jf_region=europe'
-            assign region_filter_value = 'europe'
-            assign has_active_collection_filters = true
-          elsif current_page_url contains 'jf_region=america'
-            assign region_filter_value = 'america'
-            assign has_active_collection_filters = true
-          elsif current_page_url contains 'jf_region=africa'
-            assign region_filter_value = 'africa'
-            assign has_active_collection_filters = true
-          endif
+          # Regions are no longer a query-param filter — the pills link straight to the
+          # region collections instead (see the quick-filter markup below for why).
 
           if current_tags != blank
             assign has_active_collection_filters = true
@@ -138,18 +126,6 @@
             endif
           endfor
 
-          # Default view "Load More" is a virtual/offset pagination over the AVAILABLE
-          # (in-stock) products only — not Shopify's raw paginate.next, which counts
-          # out-of-stock products too and previously caused the button to appear (or do
-          # nothing when clicked) even when few/no more visible products existed.
-          # jf_offset tracks how many available products have already been shown.
-          assign visible_offset = 0
-          assign offset_parts = current_page_url | split: 'jf_offset='
-          if offset_parts.size > 1
-            assign offset_str = offset_parts[1] | split: '&' | first
-            assign visible_offset = offset_str | plus: 0
-          endif
-          assign visible_per_page = section.settings.number_of_product | default: 40
         -%}
 
         {%- if section.blocks.size > 0 -%}
@@ -286,11 +262,34 @@
                               </ul>
                             {%- when 'list' -%}
                               <ul>
+                                {%- comment -%}
+                                  Country of Origin is backed by a metaobject-reference metafield
+                                  (product.metafields.custom.country_of_origin), so Shopify's own
+                                  filter_value.count includes out-of-stock products — a country can
+                                  show "(3)" with only 2 actually available, or "(1)" with the one
+                                  match out of stock, making the checkbox look wrong and "Apply
+                                  Filters" land on a no-products-found result. Recompute the count
+                                  as available-only for this filter specifically so the number shown
+                                  matches what selecting it will actually return.
+                                {%- endcomment -%}
+                                {%- assign is_country_filter = false -%}
+                                {%- if filter.param_name contains 'country_of_origin' -%}
+                                  {%- assign is_country_filter = true -%}
+                                {%- endif -%}
                                 {%- for filter_value in filter.values -%}
+                                  {%- assign display_count = filter_value.count -%}
+                                  {%- if is_country_filter -%}
+                                    {%- assign display_count = 0 -%}
+                                    {%- for product in collection.products -%}
+                                      {%- if product.available and product.metafields.custom.country_of_origin.value.country_name == filter_value.label -%}
+                                        {%- assign display_count = display_count | plus: 1 -%}
+                                      {%- endif -%}
+                                    {%- endfor -%}
+                                  {%- endif -%}
                                   <li>
                                     <label for="Filter-{{ filter.param_name }}-{{ forloop.index }}">
-                                      <input type="checkbox" name="{{ filter_value.param_name }}" value="{{ filter_value.value }}" id="Filter-{{ filter.param_name }}-{{ forloop.index }}" {% if filter_value.active %}checked{% endif %} {% if filter_value.count == 0 and filter_value.active == false %}disabled{% endif %}>
-                                      {{ filter_value.label }} ({{ filter_value.count }})
+                                      <input type="checkbox" name="{{ filter_value.param_name }}" value="{{ filter_value.value }}" id="Filter-{{ filter.param_name }}-{{ forloop.index }}" {% if filter_value.active %}checked{% endif %} {% if display_count == 0 and filter_value.active == false %}disabled{% endif %}>
+                                      {{ filter_value.label }} ({{ display_count }})
                                     </label>
                                   </li>
                                 {%- endfor -%}
@@ -417,17 +416,35 @@
       </button>
     {%- endif -%}
 
-    {%- comment -%} 3. Regions — only on the Fruits collection and the All products / all-fruits collections {%- endcomment -%}
+    {%- comment -%}
+      3. Regions — client-side quick-filter pills, shown on the Fruits collection and the
+      All products / all-fruits collections.
+
+      The old version read `jf_region=` back out of the URL in Liquid (via
+      `current_page_url`, sourced from `content_for_header`'s cached `pageurl`) to decide
+      which products to render server-side. That cache goes stale independently of the
+      actual request, so the server could keep filtering by whatever region got cached
+      first — the "every region shows the same products" bug.
+
+      Fix: region membership is baked onto every card as a static `data-regions` attribute
+      in product-card-primary.liquid, computed purely from the product's own collection
+      list (never from the request URL, so it can never be stale). Clicking a pill just
+      shows/hides cards by that attribute in JS (bindRegionFilter below), reading the
+      *actual* browser URL (`window.location.search`, always accurate — unlike Liquid's
+      cached view of it) to restore state on load. This also means region now combines
+      with the other quick filters again, since it's just another client-side show/hide
+      pass over the same rendered set.
+    {%- endcomment -%}
     {%- assign fruit_collection_handles = "fruit,fruits,fruits-en-saison,obst,fruechte,fruchte" | split: "," -%}
     {%- assign show_regions = is_all_fruits_collection -%}
     {%- if fruit_collection_handles contains collection.handle -%}
       {%- assign show_regions = true -%}
     {%- endif -%}
     {%- if show_regions -%}
-      <button type="button" class="qf-pill {% if region_filter_value == 'asia' %}is-active{% endif %}" data-name="jf_region" data-value="asia">{{ 'quick_filters.asia' | t }}</button>
-      <button type="button" class="qf-pill {% if region_filter_value == 'america' %}is-active{% endif %}" data-name="jf_region" data-value="america">{{ 'quick_filters.america' | t }}</button>
-      <button type="button" class="qf-pill {% if region_filter_value == 'africa' %}is-active{% endif %}" data-name="jf_region" data-value="africa">{{ 'quick_filters.africa' | t }}</button>
-      <button type="button" class="qf-pill {% if region_filter_value == 'europe' %}is-active{% endif %}" data-name="jf_region" data-value="europe">{{ 'quick_filters.europe' | t }}</button>
+      <button type="button" class="qf-pill" data-name="jf_region" data-value="asia">{{ 'quick_filters.asia' | t }}</button>
+      <button type="button" class="qf-pill" data-name="jf_region" data-value="america">{{ 'quick_filters.america' | t }}</button>
+      <button type="button" class="qf-pill" data-name="jf_region" data-value="africa">{{ 'quick_filters.africa' | t }}</button>
+      <button type="button" class="qf-pill" data-name="jf_region" data-value="europe">{{ 'quick_filters.europe' | t }}</button>
     {%- endif -%}
 
     {%- comment -%} Clear All Button {%- endcomment -%}
@@ -467,12 +484,11 @@
           {%- comment -%}
             Always fetch the max raw page size (250, Shopify's ceiling for `paginate ... by`).
             Out-of-stock products are filtered out AFTER this fetch, so the raw page size and
-            the "how many to actually show" size must be decoupled — the default view below
-            uses `where: "available"` + `slice` (governed by the admin "Products per page"
-            setting and the jf_offset param) to paginate over the AVAILABLE set only, instead
-            of Shopify's raw paginate.next, which counts out-of-stock products too and
-            previously made "Load More" appear (or do nothing) even with very few/no more
-            visible products left.
+            the "how many to show" size must be decoupled — the default view below renders the
+            full `where: "available"` set and reveals it in batches client-side (see the
+            .is-hidden-batch handling), instead of Shopify's raw paginate.next, which counts
+            out-of-stock products too and previously made "Load More" appear (or do nothing)
+            even with very few/no more visible products left.
           {%- endcomment -%}
           {% paginate collection.products by 250 %}
             {%- assign schema_product_handles = '' -%}
@@ -497,7 +513,7 @@
                     <button type="button" class="reset-link custom-btn black" onclick="window.location.href=window.location.pathname">{{ 'quick_filters.clear_all_filters' | t }}</button>
                   </div>
                 {% endunless %}
-              {% elsif untreated_only_active or region_filter_value != blank or almost_sold_out_only_active or available_only_active %}
+              {% elsif untreated_only_active or almost_sold_out_only_active or available_only_active %}
                 {%- assign has_custom_filtered_products = false -%}
                 {% for product in collection.products %}
                   {%- assign product_quality_label = product.metafields.custom.quality_label.value | default: product.metafields.custom.quality_label | handleize -%}
@@ -520,34 +536,6 @@
                     {% if matches_untreated == false and product_is_organic == false %}
                       {%- assign matches_custom_filters = false -%}
                     {% endif %}
-                  {% endif %}
-
-                  {% if region_filter_value != blank %}
-                    {%- assign matches_region_filter = false -%}
-                    {%- assign product_collection_handles = product.collections | map: 'handle' | join: ',' -%}
-                    {%- comment -%} Match region by keyword so translated collection handles work
-                        (EN america / FR amerique / DE amerika, etc.). {%- endcomment -%}
-                    {% if region_filter_value == 'asia' %}
-                      {% if product_collection_handles contains 'asia' or product_collection_handles contains 'asie' or product_collection_handles contains 'asien' %}
-                        {%- assign matches_region_filter = true -%}
-                      {% endif %}
-                    {% elsif region_filter_value == 'europe' %}
-                      {% if product_collection_handles contains 'europe' or product_collection_handles contains 'europa' %}
-                        {%- assign matches_region_filter = true -%}
-                      {% endif %}
-                    {% elsif region_filter_value == 'america' %}
-                      {% if product_collection_handles contains 'america' or product_collection_handles contains 'amerique' or product_collection_handles contains 'amerika' %}
-                        {%- assign matches_region_filter = true -%}
-                      {% endif %}
-                    {% elsif region_filter_value == 'africa' %}
-                      {% if product_collection_handles contains 'africa' or product_collection_handles contains 'afrique' or product_collection_handles contains 'afrika' %}
-                        {%- assign matches_region_filter = true -%}
-                      {% endif %}
-                    {% endif %}
-
-                    {% unless matches_region_filter %}
-                      {%- assign matches_custom_filters = false -%}
-                    {% endunless %}
                   {% endif %}
 
                   {%- comment -%} Availability dropdown: "Available Now" / "Almost Sold Out" match on the
@@ -624,30 +612,52 @@
                 {% endunless %}
               {% else %}
                 {%- comment -%}
-                  Default view: in-stock products only, paginated over the AVAILABLE set
-                  (not Shopify's raw paginate.next — see comment above the paginate tag).
-                  jf_offset tracks how many available products have been shown so far;
-                  Load More only renders when there are genuinely more beyond that.
+                  Default view: in-stock products only.
+
+                  ALL available products are rendered here (up to the 250 raw fetch), and
+                  JS reveals them in batches — rather than paginating server-side. Shopify
+                  caches `content_for_header`, so its `pageurl` (the only way to read query
+                  params in Liquid) goes stale and cannot be trusted for an offset param.
+                  Revealing client-side removes that dependency entirely: no round-trip,
+                  no cache risk, and Load More can never show when nothing is left.
                 {%- endcomment -%}
                 {%- assign available_products = collection.products | where: "available" -%}
                 {%- assign available_count = available_products.size -%}
-                {%- assign visible_batch = available_products | slice: visible_offset, visible_per_page -%}
-                {%- assign schema_position_offset = visible_offset -%}
-                {% for product in visible_batch %}
-                  {%- assign schema_product_handles = schema_product_handles | append: '|' | append: product.handle | append: '|' -%}
-                  {%- assign schema_product_count = schema_product_count | plus: 1 -%}
-                  {% render 'product-card-primary', product: product, collection: collection %}
-                {% endfor %}
-                {%- assign next_offset = visible_offset | plus: visible_per_page -%}
-                {% if next_offset < available_count %}
-                  <div class="load-more-wrap">
-                    <button
-                      type="button"
-                      class="load-more-btn custom-btn black"
-                      data-next-url="{{ collection.url }}?jf_offset={{ next_offset }}">
-                      {{ 'quick_filters.load_more' | t }}
-                    </button>
+                {%- assign visible_per_page = section.settings.number_of_product | default: 40 -%}
+                {%- comment -%}
+                  A native Shopify filter (list/boolean/price_range) can match products
+                  that are all out of stock — the sidebar's count badge is Shopify's own
+                  and doesn't know about our "hide unavailable" default, so it can say
+                  "Peru (1)" for a product this view then renders zero of. Show the same
+                  no-products-found messaging used by the other branches instead of a
+                  blank grid.
+                {%- endcomment -%}
+                {% if available_count == 0 %}
+                  <div class="no-products-found">
+                    <h3>{{ 'quick_filters.no_products_found' | t }}</h3>
+                    <p>{{ 'quick_filters.no_products_quick_filters' | t }}</p>
+                    <button type="button" class="reset-link custom-btn black" onclick="window.location.href=window.location.pathname">{{ 'quick_filters.clear_all_filters' | t }}</button>
                   </div>
+                {% else %}
+                  {% for product in available_products %}
+                    {%- assign card_extra_class = '' -%}
+                    {%- if forloop.index0 >= visible_per_page -%}
+                      {%- assign card_extra_class = 'is-hidden-batch' -%}
+                    {%- endif -%}
+                    {%- assign schema_product_handles = schema_product_handles | append: '|' | append: product.handle | append: '|' -%}
+                    {%- assign schema_product_count = schema_product_count | plus: 1 -%}
+                    {% render 'product-card-primary', product: product, collection: collection, extra_class: card_extra_class %}
+                  {% endfor %}
+                  {% if available_count > visible_per_page %}
+                    <div class="load-more-wrap">
+                      <button
+                        type="button"
+                        class="load-more-btn custom-btn black"
+                        data-batch-size="{{ visible_per_page }}">
+                        {{ 'quick_filters.load_more' | t }}
+                      </button>
+                    </div>
+                  {% endif %}
                 {% endif %}
               {% endif %}
             {% else %}
@@ -665,6 +675,18 @@
               schema_position_offset: schema_position_offset
             %}
           {% endpaginate %}
+          {%- comment -%}
+            Fallback for when the server-rendered grid has products but the client-side
+            region filter (see bindRegionFilter) hides every one of them — the server has
+            no way to know the region filter is active, so it can't render its own
+            no-products-found message for this case. Hidden by default; toggled by
+            updateQuickFilterCount() in JS when the visible count hits zero.
+          {%- endcomment -%}
+          <div class="no-products-found no-products-found--client" style="display: none;">
+            <h3>{{ 'quick_filters.no_products_found' | t }}</h3>
+            <p>{{ 'quick_filters.no_products_quick_filters' | t }}</p>
+            <button type="button" class="reset-link custom-btn black" onclick="window.location.href=window.location.pathname">{{ 'quick_filters.clear_all_filters' | t }}</button>
+          </div>
         </div>
       </div>
     </div>
@@ -709,6 +731,8 @@ document.addEventListener("DOMContentLoaded", () => {
         const searchParams = new URLSearchParams(formData);
         const currentUrlParams = new URLSearchParams(window.location.search);
 
+        // jf_region is preserved here only so the pushed URL stays shareable/correct on
+        // reload — the server ignores it entirely; filtering happens client-side below.
         ['jf_unavailable', 'jf_quality_label', 'jf_region'].forEach((key) => {
             const currentValue = currentUrlParams.get(key);
             if (currentValue) {
@@ -783,11 +807,13 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
 
                 window.history.pushState({}, "", url);
+                applyPriceSort();
                 bindPaginationLinks();
                 bindLoadMore();
 
                 // Re-bind click events to new pills injected via AJAX
                 bindQuickPills();
+                bindRegionFilter();
                 toggleClearAllVisibility();
                 updateQuickFilterCount();
 
@@ -814,7 +840,8 @@ document.addEventListener("DOMContentLoaded", () => {
         const hasActiveInputs = Array.from(filterForm.querySelectorAll('input:checked'))
             .some(input => input.name !== 'sort_by');
 
-        // 2. Check for pills that have the 'is-active' class
+        // 2. Check for pills that have the 'is-active' class (region pills included —
+        // they're real quick filters again now that they're handled client-side).
         const hasActivePills = document.querySelectorAll('.qf-pill.is-active').length > 0;
 
         // 3. Check the URL for filter parameters (as a fallback)
@@ -822,7 +849,8 @@ document.addEventListener("DOMContentLoaded", () => {
             || window.location.search.includes('jf_unavailable=1')
             || window.location.search.includes('jf_availability=')
             || window.location.search.includes('jf_quality_label=untreated')
-            || window.location.search.includes('jf_region=');
+            || window.location.search.includes('jf_region=')
+            ;
 
         if (hasActiveInputs || hasActivePills || hasUrlFilters) {
             clearAllBtn.style.display = 'inline-block';
@@ -832,13 +860,26 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function updateQuickFilterCount() {
+        // Cards past the current Load More batch carry .is-hidden-batch, and cards hidden
+        // by the client-side region filter carry .is-hidden-region — exclude both so the
+        // count reflects what's actually on screen.
+        const totalCards = document.querySelectorAll('#ProductGrid .product-card-primary').length;
+        const visibleCount = document.querySelectorAll('#ProductGrid .product-card-primary:not(.is-hidden-batch):not(.is-hidden-region)').length;
+
+        // The server already shows its own no-products-found message when it rendered zero
+        // cards. This covers the other case: the server rendered cards, but the client-side
+        // region filter hides every one of them — something the server can't know about.
+        const clientFallback = document.querySelector('.no-products-found--client');
+        if (clientFallback) {
+            clientFallback.style.display = (totalCards > 0 && visibleCount === 0) ? 'block' : 'none';
+        }
+
         const countEl = document.querySelector('.qf-count');
         if (!countEl) return;
 
         const totalCount = parseInt(countEl.dataset.totalCount || '0', 10);
         const filteredTemplate = countEl.dataset.filteredTemplate || '__COUNT__ products out of __TOTAL__';
         const totalTemplate = countEl.dataset.totalTemplate || '__COUNT__ products';
-        const visibleCount = document.querySelectorAll('#ProductGrid .product-card-primary').length;
 
         // Show "X out of Y" whenever fewer products are shown than the collection total
         // (out-of-stock hidden by default, an active quick filter, or more pages to load).
@@ -852,7 +893,10 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function bindQuickPills() {
-        const pills = document.querySelectorAll('.qf-pill:not(.clear-all-pill)');
+        // Region pills are handled entirely client-side by bindRegionFilter — they don't
+        // map to a form input and must never go through the AJAX fetch path below (that
+        // would send jf_region to the server, which no longer reads it at all).
+        const pills = document.querySelectorAll('.qf-pill:not(.clear-all-pill):not([data-name="jf_region"])');
         const form = document.querySelector(".tc-filter-wrap form");
 
         function syncPillStates() {
@@ -920,6 +964,89 @@ document.addEventListener("DOMContentLoaded", () => {
         syncPillStates();
     }
 
+    // --- Price sort fix: re-order cards by the price actually shown on them ---
+    //
+    // Shopify's sort_by=price-ascending/descending sorts collection.products by each
+    // product's *minimum* variant price. The card doesn't always show that variant though
+    // — it shows a "reference" variant (see default_variant in product-card-primary.liquid),
+    // which can be a different, pricier one. Visually the grid then looks unsorted even
+    // though the server sorted it correctly by a price that isn't on screen. Fix: when a
+    // price sort is active, re-sort the already-rendered cards by their own data-price
+    // (the exact number shown on the card) instead of trusting DOM order from the server.
+    function applyPriceSort() {
+        const sortBy = new URLSearchParams(window.location.search).get('sort_by');
+        if (sortBy !== 'price-ascending' && sortBy !== 'price-descending') return;
+
+        const cards = Array.from(productGrid.querySelectorAll('.product-card-primary'));
+        if (!cards.length) return;
+
+        cards.sort((a, b) => {
+            const priceA = parseFloat(a.dataset.price) || 0;
+            const priceB = parseFloat(b.dataset.price) || 0;
+            return sortBy === 'price-ascending' ? priceA - priceB : priceB - priceA;
+        });
+
+        // insertBefore a fixed anchor (rather than appendChild, which would drag
+        // load-more-wrap / the no-products fallback out of place) so only the cards move.
+        const anchor = productGrid.querySelector('.load-more-wrap') || productGrid.querySelector('.no-products-found--client');
+        cards.forEach(card => productGrid.insertBefore(card, anchor));
+    }
+
+    // --- Region quick filter: entirely client-side, no server round trip ---
+    //
+    // Each card already carries a static `data-regions` attribute (set in
+    // product-card-primary.liquid from the product's own collection membership — never
+    // from the request URL). Clicking a region pill just shows/hides cards already in the
+    // DOM by that attribute; the active region is mirrored into the URL's `jf_region` param
+    // via history.replaceState purely for shareable links / back-forward, and restored on
+    // load by reading window.location.search directly (the real browser URL, always
+    // accurate — unlike Liquid's cached view of it via content_for_header).
+    function applyRegionFilter() {
+        const activeRegion = new URLSearchParams(window.location.search).get('jf_region');
+        productGrid.querySelectorAll('.product-card-primary').forEach(card => {
+            if (!activeRegion) {
+                card.classList.remove('is-hidden-region');
+                return;
+            }
+            const regions = (card.dataset.regions || '').split(' ');
+            card.classList.toggle('is-hidden-region', !regions.includes(activeRegion));
+        });
+    }
+
+    function bindRegionFilter() {
+        const regionPills = document.querySelectorAll('.qf-pill[data-name="jf_region"]');
+        if (!regionPills.length) return;
+
+        const activeRegion = new URLSearchParams(window.location.search).get('jf_region');
+        regionPills.forEach(pill => {
+            pill.classList.toggle('is-active', pill.getAttribute('data-value') === activeRegion);
+
+            pill.onclick = () => {
+                const value = pill.getAttribute('data-value');
+                const isActive = pill.classList.contains('is-active');
+                const params = new URLSearchParams(window.location.search);
+
+                if (isActive) {
+                    params.delete('jf_region');
+                } else {
+                    params.set('jf_region', value);
+                }
+
+                const queryString = params.toString();
+                const newUrl = `${window.location.pathname}${queryString ? `?${queryString}` : ''}`;
+                window.history.replaceState({}, '', newUrl);
+
+                regionPills.forEach(p => p.classList.toggle('is-active', p === pill && !isActive));
+
+                applyRegionFilter();
+                updateQuickFilterCount();
+                toggleClearAllVisibility();
+            };
+        });
+
+        applyRegionFilter();
+    }
+
     function bindPaginationLinks() {
       document.querySelectorAll(".pagination a").forEach(link => {
           link.onclick = (e) => {
@@ -941,50 +1068,32 @@ document.addEventListener("DOMContentLoaded", () => {
         const btn = productGrid.querySelector('.load-more-btn');
         if (!btn) return;
 
-        // The next URL carries jf_offset (a count of AVAILABLE products already shown),
-        // so the fetched page returns exactly the next batch of visible products. The
-        // server only renders the button when more genuinely remain, so if the fetched
-        // page has no button, this was the last batch and the button is removed.
+        // All in-stock products are already in the DOM; those past the first batch carry
+        // .is-hidden-batch. Clicking reveals the next batch — no fetch, so there's no
+        // dependency on reading query params server-side (unreliable: Shopify caches
+        // content_for_header). The button removes itself once nothing is left hidden.
         btn.onclick = () => {
-            const url = btn.getAttribute('data-next-url');
-            if (!url) return;
+            const batchSize = parseInt(btn.dataset.batchSize, 10) || 40;
+            const hidden = productGrid.querySelectorAll('.product-card-primary.is-hidden-batch');
+            if (!hidden.length) {
+                btn.closest('.load-more-wrap')?.remove();
+                return;
+            }
 
-            btn.disabled = true;
-            btn.classList.add('is-loading');
+            for (let i = 0; i < batchSize && i < hidden.length; i++) {
+                hidden[i].classList.remove('is-hidden-batch');
+            }
 
-            fetch(url)
-                .then(res => res.text())
-                .then(data => {
-                    const parser = new DOMParser();
-                    const newDoc = parser.parseFromString(data, "text/html");
-                    const newGrid = newDoc.querySelector("#ProductGrid");
-                    if (!newGrid) return;
+            if (!productGrid.querySelector('.product-card-primary.is-hidden-batch')) {
+                btn.closest('.load-more-wrap')?.remove();
+            }
 
-                    const newCards = newGrid.querySelectorAll('.product-card-primary');
-                    const wrap = btn.closest('.load-more-wrap');
-                    newCards.forEach(card => wrap.parentNode.insertBefore(card, wrap));
+            updateQuickFilterCount();
 
-                    const newBtn = newGrid.querySelector('.load-more-btn');
-                    if (newBtn) {
-                        btn.setAttribute('data-next-url', newBtn.getAttribute('data-next-url'));
-                        btn.disabled = false;
-                        btn.classList.remove('is-loading');
-                    } else {
-                        wrap.remove();
-                    }
-
-                    updateQuickFilterCount();
-
-                    if (typeof lenis !== 'undefined') lenis.resize();
-                    if (typeof window.bindProductCardAddForms === 'function') {
-                        window.bindProductCardAddForms(productGrid);
-                    }
-                })
-                .catch(err => {
-                    btn.disabled = false;
-                    btn.classList.remove('is-loading');
-                    console.error("Load more error:", err);
-                });
+            if (typeof lenis !== 'undefined') lenis.resize();
+            if (typeof window.bindProductCardAddForms === 'function') {
+                window.bindProductCardAddForms(productGrid);
+            }
         };
     }
 
@@ -1058,7 +1167,9 @@ document.addEventListener("DOMContentLoaded", () => {
         closeSidebar();
     };
 
+    applyPriceSort();
     bindQuickPills();
+    bindRegionFilter();
     bindPaginationLinks();
     bindLoadMore();
     toggleClearAllVisibility();

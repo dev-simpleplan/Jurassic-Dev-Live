@@ -869,9 +869,13 @@ document.addEventListener("DOMContentLoaded", () => {
         // The server already shows its own no-products-found message when it rendered zero
         // cards. This covers the other case: the server rendered cards, but the client-side
         // region filter hides every one of them — something the server can't know about.
+        // Don't show it, though, if Load More could still reveal a later-batch match for the
+        // active region (that combination — "no products" message + a working Load More
+        // button — looked contradictory and confused users into thinking both were broken).
         const clientFallback = document.querySelector('.no-products-found--client');
         if (clientFallback) {
-            clientFallback.style.display = (totalCards > 0 && visibleCount === 0) ? 'block' : 'none';
+            const hasMoreForRegion = document.querySelector('#ProductGrid .product-card-primary.is-hidden-batch:not(.is-hidden-region)');
+            clientFallback.style.display = (totalCards > 0 && visibleCount === 0 && !hasMoreForRegion) ? 'block' : 'none';
         }
 
         const countEl = document.querySelector('.qf-count');
@@ -1003,14 +1007,41 @@ document.addEventListener("DOMContentLoaded", () => {
     // accurate — unlike Liquid's cached view of it via content_for_header).
     function applyRegionFilter() {
         const activeRegion = new URLSearchParams(window.location.search).get('jf_region');
+        const matchingCards = [];
+
         productGrid.querySelectorAll('.product-card-primary').forEach(card => {
             if (!activeRegion) {
                 card.classList.remove('is-hidden-region');
                 return;
             }
             const regions = (card.dataset.regions || '').split(' ');
-            card.classList.toggle('is-hidden-region', !regions.includes(activeRegion));
+            const matches = regions.includes(activeRegion);
+            card.classList.toggle('is-hidden-region', !matches);
+            if (matches) matchingCards.push(card);
         });
+
+        if (activeRegion) {
+            // .is-hidden-batch was assigned server-side by position in the UNFILTERED
+            // product order, with no idea a region filter exists — a region's few matches
+            // can easily land past the first batch, forcing a pointless Load More click
+            // before showing anything even though the matches are already in the DOM. Reveal
+            // this region's own first batch of matches immediately instead, independent of
+            // where they fell in the unfiltered order.
+            const batchSize = parseInt(productGrid.querySelector('.load-more-btn')?.dataset.batchSize, 10) || 40;
+            matchingCards.forEach((card, index) => {
+                if (index < batchSize) card.classList.remove('is-hidden-batch');
+            });
+        }
+
+        // The server renders Load More based on the total available count, with no idea
+        // the region filter exists — it can show the button even when every remaining
+        // hidden-batch card belongs to a different region than the one currently active.
+        // Hide it here once nothing left in the "next batch" pool actually matches.
+        const loadMoreWrap = productGrid.querySelector('.load-more-wrap');
+        if (loadMoreWrap) {
+            const hasMoreForRegion = productGrid.querySelector('.product-card-primary.is-hidden-batch:not(.is-hidden-region)');
+            loadMoreWrap.style.display = hasMoreForRegion ? '' : 'none';
+        }
     }
 
     function bindRegionFilter() {
@@ -1074,7 +1105,10 @@ document.addEventListener("DOMContentLoaded", () => {
         // content_for_header). The button removes itself once nothing is left hidden.
         btn.onclick = () => {
             const batchSize = parseInt(btn.dataset.batchSize, 10) || 40;
-            const hidden = productGrid.querySelectorAll('.product-card-primary.is-hidden-batch');
+            // Only count/reveal cards that also match the active region filter (if any) —
+            // otherwise a click can burn through the next batch unhiding cards that stay
+            // invisible anyway (still region-hidden), making the button look broken.
+            const hidden = productGrid.querySelectorAll('.product-card-primary.is-hidden-batch:not(.is-hidden-region)');
             if (!hidden.length) {
                 btn.closest('.load-more-wrap')?.remove();
                 return;
@@ -1084,7 +1118,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 hidden[i].classList.remove('is-hidden-batch');
             }
 
-            if (!productGrid.querySelector('.product-card-primary.is-hidden-batch')) {
+            if (!productGrid.querySelector('.product-card-primary.is-hidden-batch:not(.is-hidden-region)')) {
                 btn.closest('.load-more-wrap')?.remove();
             }
 

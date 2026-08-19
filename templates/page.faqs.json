@@ -96,7 +96,7 @@
           "type": "faq_item",
           "settings": {
             "question": "Can fresh fruit be returned?",
-            "answer": "<p>Fresh fruit is excluded from the right of withdrawal because it is perishable. Returns – especially after the package has been opened – are therefore generally not possible.</p><p>Please note that no refunds are issued for returns that have not been agreed with us in advance.</p><p>If you do have a reason for complaint after opening your box and checking the fruit, feel free to reach out and send us a photos of the issue right upon receipt. We review every case individually and aim to find a fair solution.</p><p>Our goal is always to sort things out quickly and easily, so just get in touch.</p>",
+            "answer": "<p>Fresh fruit is excluded from the right of withdrawal because it is perishable. Returns – especially after the package has been opened – are therefore generally not possible.<br/>The same applies to packages that have been refused or rejected upon delivery.</p><p><span style=\"text-decoration:underline\">Please note that no refunds are issued for returns that have not been agreed with us in advance.</span></p><p>If you do have a reason for complaint after opening your box and checking the fruit, feel free to reach out and send us a photos of the issue right upon receipt. We review every case individually and aim to find a fair solution.</p><p>Our goal is always to sort things out quickly and easily, so just get in touch!</p>",
             "category_number": 2
           }
         },

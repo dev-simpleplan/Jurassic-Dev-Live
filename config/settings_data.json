@@ -38,6 +38,7 @@
             "name": "Market Threshold AT",
             "settings": {
               "market_code": "at",
+              "message_type": "free",
               "amount": 120
             }
           },
@@ -46,6 +47,7 @@
             "name": "Market Threshold BE",
             "settings": {
               "market_code": "be",
+              "message_type": "free",
               "amount": 120
             }
           },
@@ -54,6 +56,7 @@
             "name": "Market Threshold DE",
             "settings": {
               "market_code": "de",
+              "message_type": "free",
               "amount": 99
             }
           },
@@ -62,6 +65,7 @@
             "name": "Market Threshold DK",
             "settings": {
               "market_code": "dk",
+              "message_type": "free",
               "amount": 120
             }
           },
@@ -70,6 +74,7 @@
             "name": "Market Threshold FR",
             "settings": {
               "market_code": "fr",
+              "message_type": "free",
               "amount": 120
             }
           },
@@ -78,6 +83,7 @@
             "name": "Market Threshold IN",
             "settings": {
               "market_code": "in",
+              "message_type": "free",
               "amount": 13085
             }
           },
@@ -86,6 +92,7 @@
             "name": "Market Threshold LU",
             "settings": {
               "market_code": "lu",
+              "message_type": "free",
               "amount": 120
             }
           },
@@ -94,6 +101,16 @@
             "name": "Market Threshold NL",
             "settings": {
               "market_code": "nl",
+              "message_type": "free",
+              "amount": 120
+            }
+          },
+          "market_threshold_ch01": {
+            "type": "market_threshold",
+            "name": "Market Threshold CH",
+            "settings": {
+              "market_code": "ch",
+              "message_type": "free",
               "amount": 120
             }
           },
@@ -102,7 +119,169 @@
             "name": "Market Threshold Bulgaria",
             "settings": {
               "market_code": "bg",
-              "amount": 120
+              "message_type": "discount",
+              "amount": 120,
+              "discount_amount": 5.9
+            }
+          },
+          "market_threshold_hr01": {
+            "type": "market_threshold",
+            "name": "Market Threshold HR",
+            "settings": {
+              "market_code": "hr",
+              "message_type": "discount",
+              "amount": 120,
+              "discount_amount": 5.9
+            }
+          },
+          "market_threshold_cz01": {
+            "type": "market_threshold",
+            "name": "Market Threshold CZ",
+            "settings": {
+              "market_code": "cz",
+              "message_type": "discount",
+              "amount": 120,
+              "discount_amount": 5.9
+            }
+          },
+          "market_threshold_ee01": {
+            "type": "market_threshold",
+            "name": "Market Threshold EE",
+            "settings": {
+              "market_code": "ee",
+              "message_type": "discount",
+              "amount": 120,
+              "discount_amount": 5.9
+            }
+          },
+          "market_threshold_fi01": {
+            "type": "market_threshold",
+            "name": "Market Threshold FI",
+            "settings": {
+              "market_code": "fi",
+              "message_type": "discount",
+              "amount": 120,
+              "discount_amount": 5.9
+            }
+          },
+          "market_threshold_gr01": {
+            "type": "market_threshold",
+            "name": "Market Threshold GR",
+            "settings": {
+              "market_code": "gr",
+              "message_type": "discount",
+              "amount": 120,
+              "discount_amount": 5.9
+            }
+          },
+          "market_threshold_hu01": {
+            "type": "market_threshold",
+            "name": "Market Threshold HU",
+            "settings": {
+              "market_code": "hu",
+              "message_type": "discount",
+              "amount": 120,
+              "discount_amount": 5.9
+            }
+          },
+          "market_threshold_ie01": {
+            "type": "market_threshold",
+            "name": "Market Threshold IE",
+            "settings": {
+              "market_code": "ie",
+              "message_type": "discount",
+              "amount": 120,
+              "discount_amount": 5.9
+            }
+          },
+          "market_threshold_it01": {
+            "type": "market_threshold",
+            "name": "Market Threshold IT",
+            "settings": {
+              "market_code": "it",
+              "message_type": "discount",
+              "amount": 120,
+              "discount_amount": 5.9
+            }
+          },
+          "market_threshold_lv01": {
+            "type": "market_threshold",
+            "name": "Market Threshold LV",
+            "settings": {
+              "market_code": "lv",
+              "message_type": "discount",
+              "amount": 120,
+              "discount_amount": 5.9
+            }
+          },
+          "market_threshold_lt01": {
+            "type": "market_threshold",
+            "name": "Market Threshold LT",
+            "settings": {
+              "market_code": "lt",
+              "message_type": "discount",
+              "amount": 120,
+              "discount_amount": 5.9
+            }
+          },
+          "market_threshold_pl01": {
+            "type": "market_threshold",
+            "name": "Market Threshold PL",
+            "settings": {
+              "market_code": "pl",
+              "message_type": "discount",
+              "amount": 120,
+              "discount_amount": 5.9
+            }
+          },
+          "market_threshold_ro01": {
+            "type": "market_threshold",
+            "name": "Market Threshold RO",
+            "settings": {
+              "market_code": "ro",
+              "message_type": "discount",
+              "amount": 120,
+              "discount_amount": 5.9
+            }
+          },
+          "market_threshold_sk01": {
+            "type": "market_threshold",
+            "name": "Market Threshold SK",
+            "settings": {
+              "market_code": "sk",
+              "message_type": "discount",
+              "amount": 120,
+              "discount_amount": 5.9
+            }
+          },
+          "market_threshold_si01": {
+            "type": "market_threshold",
+            "name": "Market Threshold SI",
+            "settings": {
+              "market_code": "si",
+              "message_type": "discount",
+              "amount": 120,
+              "discount_amount": 5.9
+            }
+          },
+          "market_threshold_es01": {
+            "type": "market_threshold",
+            "name": "Market Threshold ES",
+            "settings": {
+              "market_code": "es",
+              "message_type": "discount",
+              "amount": 120,
+              "discount_amount": 5.9
+            }
+          },
+          "market_threshold_se01": {
+            "type": "market_threshold",
+            "name": "Market Threshold SE",
+            "settings": {
+              "market_code": "se",
+              "message_type": "discount",
+              "amount": 120,
+              "discount_amount": 5.9
             }
           }
         },
@@ -115,13 +294,33 @@
           "market_threshold_BBWJHb",
           "market_threshold_gcwet4",
           "market_threshold_84gHi6",
-          "market_threshold_zmQXmF"
+          "market_threshold_ch01",
+          "market_threshold_zmQXmF",
+          "market_threshold_hr01",
+          "market_threshold_cz01",
+          "market_threshold_ee01",
+          "market_threshold_fi01",
+          "market_threshold_gr01",
+          "market_threshold_hu01",
+          "market_threshold_ie01",
+          "market_threshold_it01",
+          "market_threshold_lv01",
+          "market_threshold_lt01",
+          "market_threshold_pl01",
+          "market_threshold_ro01",
+          "market_threshold_sk01",
+          "market_threshold_si01",
+          "market_threshold_es01",
+          "market_threshold_se01"
         ],
         "settings": {
           "rating_image": "shopify://shop_images/durian-logo-jurassic.svg",
           "rating_text": "4.6 (+40,000 Reviews)",
           "tbtext_prefix": "Free shipping over",
-          "tbtext_amount": 120
+          "tbtext_amount": 120,
+          "tbtext_default_type": "discount",
+          "tbtext_discount_prefix": "shipping discount over",
+          "tbtext_discount_amount": 5.9
         }
       }
     },

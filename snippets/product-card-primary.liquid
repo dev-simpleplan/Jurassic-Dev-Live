@@ -40,7 +40,37 @@
   {% endif %}
 {% endfor %}
 
-<div class="product-card-primary" data-product-available="{{ product.available }}">
+{%- comment -%}
+  Region tagging for the client-side region quick-filter (see bindRegionFilter in
+  sections/collection.liquid). Computed from the product's own collection membership,
+  which is static per-product data — unlike reading the request URL in Liquid, this
+  never depends on Shopify's cached content_for_header, so it can't go stale.
+{%- endcomment -%}
+{%- assign product_collection_handles = product.collections | map: 'handle' | join: ',' -%}
+{%- assign product_regions = '' -%}
+{%- if product_collection_handles contains 'asia' or product_collection_handles contains 'asie' or product_collection_handles contains 'asien' -%}
+  {%- assign product_regions = product_regions | append: 'asia ' -%}
+{%- endif -%}
+{%- if product_collection_handles contains 'europe' or product_collection_handles contains 'europa' -%}
+  {%- assign product_regions = product_regions | append: 'europe ' -%}
+{%- endif -%}
+{%- if product_collection_handles contains 'america' or product_collection_handles contains 'amerique' or product_collection_handles contains 'amerika' -%}
+  {%- assign product_regions = product_regions | append: 'america ' -%}
+{%- endif -%}
+{%- if product_collection_handles contains 'africa' or product_collection_handles contains 'afrique' or product_collection_handles contains 'afrika' -%}
+  {%- assign product_regions = product_regions | append: 'africa ' -%}
+{%- endif -%}
+{%- assign product_regions = product_regions | strip -%}
+
+{%- comment -%}
+  data-price is the price actually shown on this card (default_variant's), in decimal
+  shop-currency units. Shopify's sort_by=price-ascending/descending sorts by the
+  product's *minimum* variant price server-side, which can differ from the "reference"
+  variant shown here — making the visible order look wrong even though it's correct by
+  that other price. bindPriceSort in sections/collection.liquid re-sorts the rendered
+  cards by this attribute instead, so the order matches what's on screen.
+{%- endcomment -%}
+<div class="product-card-primary{% if extra_class != blank %} {{ extra_class }}{% endif %}" data-product-available="{{ product.available }}" data-regions="{{ product_regions }}" data-price="{{ default_variant.price | divided_by: 100.0 }}">
   <div class="fruits_card">
       <div class="fc_top">
         <a href="{{ product.url }}" class="card-link"></a>

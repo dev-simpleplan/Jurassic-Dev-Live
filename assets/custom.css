@@ -1251,3 +1251,43 @@ body.backdrop::before {
 .withdrawal-notice p {
   font-size: 16px;
 }
+
+/* Collection "Load More": all in-stock products are rendered server-side and revealed
+   in batches by JS (see bindLoadMore in sections/collection.liquid). Query params can't
+   be read reliably in Liquid because Shopify caches content_for_header, so batching is
+   done client-side instead of via an offset param. */
+.product-card-primary.is-hidden-batch {
+  display: none;
+}
+
+/* Region quick filter: client-side show/hide via data-regions (see bindRegionFilter in
+   sections/collection.liquid). Same reasoning as .is-hidden-batch above — region
+   membership can't be read reliably from the request URL in Liquid. */
+.product-card-primary.is-hidden-region {
+  display: none;
+}
+
+/* Top bar special-occasion ticker: crossfades between the shipping message and the
+   special message (see the ticker script in sections/top-bar.liquid). Only rendered when
+   a special message is enabled in the section settings — .tb-text without --ticker just
+   shows the single shipping line with no positioning/animation involved. */
+.tb-text--ticker .tb-ticker {
+  position: relative;
+  display: inline-block;
+  min-height: 1.4em;
+  width: 100%;
+}
+.tb-text--ticker .tb-ticker-item {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.5s ease;
+  white-space: nowrap;
+}
+.tb-text--ticker .tb-ticker-item.is-active {
+  position: relative;
+  opacity: 1;
+  pointer-events: auto;
+}

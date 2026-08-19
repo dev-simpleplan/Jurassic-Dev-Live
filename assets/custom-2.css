@@ -1332,7 +1332,7 @@ span.cart-compare-price {
 .qf-wrapper .qf-pill:hover, .qf-wrapper .qf-pill.is-active {
     background-color: #1a1a1a;
     color: #fcf9f5;
-    border: 1px solid #1a1a1a; 
+    border: 1px solid #1a1a1a;
 }
 .qf-wrapper .qf-pill.is-disabled {
   opacity: 0.5;

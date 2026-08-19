@@ -125,6 +125,10 @@
     "artisanal": "En petite quantité · Artisanal"
   },
   "sections": {
+    "top_bar": {
+      "free_shipping_prefix": "Livraison gratuite dès",
+      "shipping_discount_suffix": "de réduction sur les frais de livraison dès"
+    },
     "collection_reviews": {
       "heading": "Ce que disent nos explorateurs"
     },

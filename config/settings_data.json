@@ -316,10 +316,8 @@
         "settings": {
           "rating_image": "shopify://shop_images/durian-logo-jurassic.svg",
           "rating_text": "4.6 (+40,000 Reviews)",
-          "tbtext_prefix": "Free shipping over",
           "tbtext_amount": 120,
           "tbtext_default_type": "discount",
-          "tbtext_discount_prefix": "shipping discount over",
           "tbtext_discount_amount": 5.9
         }
       }

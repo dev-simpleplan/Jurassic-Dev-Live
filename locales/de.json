@@ -128,6 +128,10 @@
     "artisanal": "Kleinserie · Handgefertigt"
   },
   "sections": {
+    "top_bar": {
+      "free_shipping_prefix": "Kostenloser Versand ab",
+      "shipping_discount_suffix": "Versandrabatt ab"
+    },
     "collection_reviews": {
       "heading": "Das sagen unsere Entdecker"
     },

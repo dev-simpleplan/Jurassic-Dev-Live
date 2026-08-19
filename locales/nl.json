@@ -1,0 +1,8 @@
+{
+  "sections": {
+    "top_bar": {
+      "free_shipping_prefix": "Gratis verzending vanaf",
+      "shipping_discount_suffix": "verzendkorting vanaf"
+    }
+  }
+}

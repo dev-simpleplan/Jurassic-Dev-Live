@@ -123,6 +123,10 @@
     "artisanal": "Small-Batch · Artisanal"
   },
   "sections": {
+    "top_bar": {
+      "free_shipping_prefix": "Free shipping on orders above",
+      "shipping_discount_suffix": "shipping discount over"
+    },
     "collection_reviews": {
       "heading": "What explorers are saying"
     },

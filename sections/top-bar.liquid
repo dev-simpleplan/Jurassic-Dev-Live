@@ -17,19 +17,36 @@
             {%- if section.settings.special_message_enabled and section.settings.special_message_text != blank -%}
               {%- assign show_ticker = true -%}
             {%- endif -%}
+            {%- comment -%}
+              Multilingual: tbtext_prefix / tbtext_discount_prefix are free-text section
+              settings, which Shopify does NOT auto-translate per store language — a single
+              value entered once shows on every locale (this was the bug: German visitors
+              saw English text). Only use the merchant's text when they've actually typed an
+              override; otherwise fall back to the locale files (locales/en.default.json,
+              fr.json, de.json, nl.json), which `| t` resolves in the page's own language
+              automatically.
+            {%- endcomment -%}
+            {%- assign shipping_prefix = section.settings.tbtext_prefix -%}
+            {%- if shipping_prefix == blank -%}
+              {%- assign shipping_prefix = 'sections.top_bar.free_shipping_prefix' | t -%}
+            {%- endif -%}
+            {%- assign discount_prefix = section.settings.tbtext_discount_prefix -%}
+            {%- if discount_prefix == blank -%}
+              {%- assign discount_prefix = 'sections.top_bar.shipping_discount_suffix' | t -%}
+            {%- endif -%}
             <div class="tb-text{% if show_ticker %} tb-text--ticker{% endif %}">
               <div class="tb-ticker" data-tb-ticker data-tb-ticker-interval="{{ section.settings.ticker_interval | default: 4 | times: 1000 }}">
                 <p
                   class="tb-ticker-item is-active"
                   data-top-bar-shipping
-                  data-prefix="{{ section.settings.tbtext_prefix | default: 'Free shipping on orders above' | escape }}"
+                  data-prefix="{{ shipping_prefix | escape }}"
                   data-default-amount="{{ section.settings.tbtext_amount | default: 120 }}"
                   data-default-type="{{ section.settings.tbtext_default_type | default: 'discount' }}"
-                  data-discount-prefix="{{ section.settings.tbtext_discount_prefix | default: 'shipping discount over' | escape }}"
+                  data-discount-prefix="{{ discount_prefix | escape }}"
                   data-default-discount-amount="{{ section.settings.tbtext_discount_amount | default: 5.9 }}"
                   data-default-currency="{{ localization.country.currency.iso_code | default: cart.currency.iso_code | default: shop.currency }}"
                 >
-                  {{ section.settings.tbtext_prefix | default: 'Free shipping on orders above' }}
+                  {{ shipping_prefix }}
                 </p>
                 {%- if show_ticker -%}
                   <p class="tb-ticker-item">{{ section.settings.special_message_text }}</p>
@@ -605,8 +622,8 @@ document.addEventListener('DOMContentLoaded', function () {
         {
             "type": "text",
             "id": "tbtext_prefix",
-            "label": "Free Shipping Prefix",
-            "default": "Free shipping on orders above"
+            "label": "Free Shipping Prefix (override)",
+            "info": "Leave blank to use the translated text from locales/*.json (recommended — it auto-adapts per store language). Only set this if you want the exact same text on every language."
         },
         {
             "type": "number",
@@ -629,9 +646,8 @@ document.addEventListener('DOMContentLoaded', function () {
         {
             "type": "text",
             "id": "tbtext_discount_prefix",
-            "label": "Shipping Discount Text",
-            "info": "e.g. \"€5.90 [this text] €120\" → \"shipping discount over\"",
-            "default": "shipping discount over"
+            "label": "Shipping Discount Text (override)",
+            "info": "e.g. \"€5.90 [this text] €120\". Leave blank to use the translated text from locales/*.json (recommended)."
         },
         {
             "type": "number",

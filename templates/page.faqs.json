@@ -192,7 +192,7 @@
           "type": "faq_item",
           "settings": {
             "question": "How can I pay my order?",
-            "answer": "<p>We offer you several payment options:</p><ul><li>Credit card (Mastercard, Visa, American Express, etc.)</li><li>Paypal</li><li>Sofort Überweisung</li><li>SEPA direct debit (upon request)</li><li>Transfer in advance (in this case, remember to let us know by email to accelerate the consideration of your transfer upon receipt):<br/>Sparkasse Essen<br/>IBAN DE76360501050008388928<br/>BIC SPESDE3EXXX</li></ul>",
+            "answer": "<p>We offer you several payment options:</p><ul><li>Credit card (Mastercard, Visa, American Express, etc.)</li><li>Paypal</li><li>Klarna</li><li>Add store credit via bank transfer (for more details contact us at support@jurassicfruit.com)</li></ul>",
             "category_number": 4
           }
         },

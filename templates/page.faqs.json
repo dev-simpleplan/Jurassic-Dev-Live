@@ -104,7 +104,7 @@
           "type": "faq_item",
           "settings": {
             "question": "Will I receive exactly the fruits and quantities I ordered?",
-            "answer": "<p>For the fruits sold by kg it is uncommon that we can ship you the exact same quantity (by the gram) that you have ordered. We do everything we can to serve you closer to what you ordered. Note that Nature changes and evolves every day and despite the great experience of our producers the forecasts do not always correspond with the harvests. The rain, the wind, a blow of hot, etc., all these factors that make that from time to time a fruit will not be finally available or that it will be in smaller quantity than envisaged.</p>",
+            "answer": "<p>Nature changes and evolves every day and despite the great experience of our producers the forecasts do not always correspond with the harvests. The rain, the wind, a blow of hot, etc., all these factors that make that from time to time a fruit will not be finally available or that it will be in smaller quantity than envisaged.<br/><br/>In the latter case, we will either be unable to deliver the fruit concerned, or we will deliver it to you and charge you for a smaller quantity.</p>",
             "category_number": 2
           }
         },

@@ -200,6 +200,7 @@
           },
           "market_threshold_DDcLxm": {
             "type": "market_threshold",
+            "name": "Market Threshold LU",
             "settings": {
               "market_code": "lu",
               "message_type": "free",

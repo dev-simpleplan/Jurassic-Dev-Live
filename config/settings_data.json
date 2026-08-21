@@ -33,6 +33,14 @@
       "top-bar": {
         "type": "top-bar",
         "blocks": {
+          "market_threshold_nRxYzk": {
+            "type": "market_threshold",
+            "settings": {
+              "market_code": "lu",
+              "message_type": "free",
+              "amount": 120
+            }
+          },
           "market_threshold_J8RxcL": {
             "type": "market_threshold",
             "name": "Market Threshold AT",
@@ -198,15 +206,6 @@
               "discount_amount": 5.9
             }
           },
-          "market_threshold_DDcLxm": {
-            "type": "market_threshold",
-            "name": "Market Threshold",
-            "settings": {
-              "market_code": "lu",
-              "message_type": "free",
-              "amount": 120
-            }
-          },
           "market_threshold_lv01": {
             "type": "market_threshold",
             "name": "Market Threshold LV",
@@ -278,6 +277,7 @@
           }
         },
         "block_order": [
+          "market_threshold_nRxYzk",
           "market_threshold_J8RxcL",
           "market_threshold_mFJiNJ",
           "market_threshold_zmQXmF",
@@ -295,7 +295,6 @@
           "market_threshold_it01",
           "market_threshold_ie01",
           "market_threshold_lt01",
-          "market_threshold_DDcLxm",
           "market_threshold_lv01",
           "market_threshold_84gHi6",
           "market_threshold_pl01",

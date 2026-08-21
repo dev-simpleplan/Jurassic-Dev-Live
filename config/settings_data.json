@@ -94,7 +94,7 @@
             "type": "market_threshold",
             "name": "Market Threshold DK",
             "settings": {
-              "market_code": "dk",
+              "market_code": "denemark",
               "message_type": "free",
               "amount": 120
             }

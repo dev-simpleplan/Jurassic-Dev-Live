@@ -202,7 +202,7 @@
             "type": "market_threshold",
             "name": "Market Threshold LU",
             "settings": {
-              "market_code": "lu",
+              "market_code": "LU",
               "message_type": "free",
               "amount": 120
             }

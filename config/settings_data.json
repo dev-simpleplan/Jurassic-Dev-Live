@@ -198,6 +198,14 @@
               "discount_amount": 5.9
             }
           },
+          "market_threshold_DDcLxm": {
+            "type": "market_threshold",
+            "settings": {
+              "market_code": "lu",
+              "message_type": "free",
+              "amount": 120
+            }
+          },
           "market_threshold_lv01": {
             "type": "market_threshold",
             "name": "Market Threshold LV",
@@ -286,6 +294,7 @@
           "market_threshold_it01",
           "market_threshold_ie01",
           "market_threshold_lt01",
+          "market_threshold_DDcLxm",
           "market_threshold_lv01",
           "market_threshold_84gHi6",
           "market_threshold_pl01",

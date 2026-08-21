@@ -51,16 +51,6 @@
               "amount": 120
             }
           },
-          "market_threshold_zmQXmF": {
-            "type": "market_threshold",
-            "name": "Market Threshold BG",
-            "settings": {
-              "market_code": "bg",
-              "message_type": "discount",
-              "amount": 120,
-              "discount_amount": 5.9
-            }
-          },
           "market_threshold_ch01": {
             "type": "market_threshold",
             "name": "Market Threshold CH",
@@ -280,7 +270,6 @@
         "block_order": [
           "market_threshold_J8RxcL",
           "market_threshold_mFJiNJ",
-          "market_threshold_zmQXmF",
           "market_threshold_ch01",
           "market_threshold_cz01",
           "market_threshold_L4ncwW",

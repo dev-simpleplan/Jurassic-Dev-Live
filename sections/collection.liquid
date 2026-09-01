@@ -453,23 +453,41 @@
     </button>
   </div>
   {%- comment -%}
-    Recompute total_products_count as the AVAILABLE (in-stock) count when no filter is
-    active, so the header count and the Load More logic agree on the same number instead
-    of the raw total (which includes out-of-stock products and previously made the count
-    and the "X products" text misleading). Capped at 250 raw products (Shopify's paginate
-    ceiling) — comfortably covers every collection in this store.
+    Recompute total_products_count as the AVAILABLE (in-stock) count, so the header count
+    and the Load More logic agree on the same number instead of the raw total (which
+    includes out-of-stock products and previously made the count and the "X products" text
+    misleading).
+
+    This used to only run when no quick filter was active, which made the "X out of Y"
+    denominator inconsistent: unfiltered it showed the true in-stock total (e.g. 19), but
+    with a quick filter like Untreated active it fell back to the untouched raw total (e.g.
+    86, since our jf_* quick filters aren't real Shopify `filter.` params and don't affect
+    collection.products_count) — "17 out of 86" instead of the far more useful "17 out of
+    19". Recomputing unconditionally fixes that; the client-side JS (updateQuickFilterCount)
+    is what actually decides "X out of Y" vs "X products" from data-total-count at runtime.
+
+    `{% paginate collection.products by 250 %}` only ever returns page 1 — for a collection
+    with MORE than 250 raw products (in stock + out of stock combined), that's a partial
+    slice, and *which* 250 land on page 1 depends on the active sort_by. That made this
+    count silently change every time the sort changed (same collection, wildly different
+    "X out of Y" numbers). Only trust the recomputed available-only count when the raw
+    total actually fits in one page — otherwise fall back to Shopify's own
+    collection.products_count, which is stable across sorts (it just includes out-of-stock
+    items, a smaller inaccuracy than a number that changes on every sort).
   {%- endcomment -%}
-  {%- unless has_active_collection_filters -%}
+  {%- if collection.products_count <= 250 -%}
     {% paginate collection.products by 250 %}
       {%- assign total_products_count = collection.products | where: "available" | size -%}
     {% endpaginate %}
-  {%- endunless -%}
+  {%- endif -%}
   <div
     class="qf-count"
     data-total-count="{{ total_products_count }}"
     data-total-template="{{ 'quick_filters.products_count' | t: count: '__COUNT__' }}"
     data-filtered-template="{{ 'quick_filters.products_count_filtered' | t: count: '__COUNT__', total: '__TOTAL__' }}">
-    {% if has_active_collection_filters and unavailable_only_active == false and filtered_products_count < total_products_count %}
+    {% if filtered_products_count == 0 %}
+      {{ 'quick_filters.products_count' | t: count: 0 }}
+    {% elsif has_active_collection_filters and unavailable_only_active == false and filtered_products_count < total_products_count %}
       {{ 'quick_filters.products_count_filtered' | t: count: filtered_products_count, total: total_products_count }}
     {% else %}
       {{ 'quick_filters.products_count' | t: count: total_products_count }}
@@ -887,7 +905,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // Show "X out of Y" whenever fewer products are shown than the collection total
         // (out-of-stock hidden by default, an active quick filter, or more pages to load).
-        if (visibleCount < totalCount) {
+        // At zero, "0 out of Y" reads as if Y products were still an option — just show
+        // "0 products" instead, matching the no-products-found message right below it.
+        if (visibleCount === 0) {
+            countEl.textContent = totalTemplate.replace('__COUNT__', 0);
+        } else if (visibleCount < totalCount) {
             countEl.textContent = filteredTemplate
                 .replace('__COUNT__', visibleCount)
                 .replace('__TOTAL__', totalCount);

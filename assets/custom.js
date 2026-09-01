@@ -64,6 +64,11 @@ document.addEventListener('mouseenter', (e) => {
   if (isTouchLikeDevice()) return;
   if (isPageScrolling) return; // ignore scroll-induced mouseenter
 
+  // mouseenter/mouseleave on document (capture phase) can fire with e.target being the
+  // document itself rather than an Element — e.g. when the cursor leaves the viewport —
+  // and Document has no .closest().
+  if (!(e.target instanceof Element)) return;
+
   const dropdownWrap = e.target.closest('.wrapper-dropdown');
   if (!dropdownWrap) return;
   if (!canOpenOnHover(dropdownWrap)) return;
@@ -74,6 +79,7 @@ document.addEventListener('mouseenter', (e) => {
 
 document.addEventListener('mouseleave', (e) => {
   if (isTouchLikeDevice()) return;
+  if (!(e.target instanceof Element)) return;
 
   const dropdownWrap = e.target.closest('.wrapper-dropdown');
   if (!dropdownWrap) return;

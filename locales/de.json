@@ -117,7 +117,8 @@
   "shopify": {
     "checkout": {
       "payment": {
-        "multiple_primary_payment_not_allowed": "Ungültige Zahlungsmethoden"
+        "multiple_primary_payment_not_allowed": "Ungültige Zahlungsmethoden",
+        "gift_card_code_label": "Gesamtrabatt"
       }
     }
   },

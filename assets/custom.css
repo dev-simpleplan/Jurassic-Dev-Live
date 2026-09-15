@@ -1315,3 +1315,16 @@ body.backdrop::before {
 .image-text-static .dt-in {
   opacity: 1;
 }
+#image1-static {
+  width: 80%;
+    height: 70%;
+    object-fit: cover;
+}
+#image2-static {
+  width: 90%;
+    height: auto;
+}
+#image3-static {
+width: 90%;
+    height: auto;
+}

@@ -1291,3 +1291,27 @@ body.backdrop::before {
   opacity: 1;
   pointer-events: auto;
 }
+
+/* Static copy of the "Durian Shape" scroll section (sections/image-text-static.liquid).
+   Deliberately does NOT reuse the .image-text-scroll class: that class is what the GSAP
+   ScrollTrigger code in theme.liquid looks for (document.querySelector(".image-text-scroll")),
+   so keeping this section off that class means GSAP never touches it — no pin, no scrub,
+   no risk of grabbing the wrong instance if both sections end up on the same page.
+
+   The container rule below mirrors .image-text-scroll's own layout (style.css) so it looks
+   the same. The only real difference from the original is the opacity override: .durian
+   image and .dt-in both default to opacity:0 in style.css (the pre-reveal state the GSAP
+   timeline animates FROM) — since nothing ever animates this section, that override is
+   what makes every image and text block simply visible from the start. */
+.image-text-static {
+  background-color: #1a1a1a;
+  padding: 40px 0;
+  height: 100vh;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.image-text-static .durian image,
+.image-text-static .dt-in {
+  opacity: 1;
+}

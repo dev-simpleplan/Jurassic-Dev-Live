@@ -1175,6 +1175,10 @@
   .top-bar-in .tb-text {
     position: relative;
   }
+  .image-text-static {
+    background-color: #dbd7c8;
+        height: auto;
+  }
 }
 
 @media (max-width: 767px) {

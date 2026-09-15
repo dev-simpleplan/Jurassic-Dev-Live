@@ -271,6 +271,7 @@
     },
     "durianShape": {
       "type": "image-text-scroll",
+      "disabled": true,
       "settings": {
         "heading": "Why Jurassic Fruit?",
         "para": "Some of the world’s best fruits have stayed unknown for too long. Jurassic Fruit was built to bring them back, guided by three simple principles:",

@@ -81,7 +81,8 @@
     "no_products_unavailable": "Aucun produit totalement indisponible n'a été trouvé dans cette collection.",
     "no_products_quick_filters": "Aucun produit n'a été trouvé pour les filtres rapides sélectionnés.",
     "no_products_default": "Ajustez vos filtres ou supprimez-les pour découvrir plus de fruits délicieux.",
-    "clear_all_filters": "Effacer tous les filtres"
+    "clear_all_filters": "Effacer tous les filtres",
+    "out_of_stock": "Non disponible"
   },
   "gift_card": {
     "add_to_apple_wallet": "Ajouter à Cartes",

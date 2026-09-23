@@ -118,7 +118,7 @@
         </div>
 
         {% assign product_tags = product.tags | downcase %}
-        {% if product.tags.size > 0 or product.metafields.custom.certificate or product.metafields.custom.quality_label != blank %}
+        {% if product.tags.size > 0 or product.metafields.custom.certificate or product.metafields.custom.quality_label != blank or product.metafields.custom.quality_label_v2.value != blank %}
           <div class="fc_category_tags">
             {% if product.metafields.custom.certificate %}
               {% assign certificate = product.metafields.custom.certificate.value %}
@@ -132,8 +132,16 @@
               {% endfor %}
             {% endif %}
 
-            {% if product.metafields.custom.quality_label != blank %}
-              <span>{{ product.metafields.custom.quality_label.value | default: product.metafields.custom.quality_label }}</span>
+            {% if product.metafields.custom.quality_label_v2.value != blank %}
+              <div style="display: flex; flex-direction: column; align-items: flex-start; gap: 5px;">
+                {% for ingredient in product.metafields.custom.quality_label_v2.value %}
+                  <span>{{ ingredient.value }}</span>
+                {% endfor %}
+              </div>
+            {% elsif product.metafields.custom.quality_label != blank %}
+              <span>
+                {{ product.metafields.custom.quality_label.value | default: product.metafields.custom.quality_label }}
+              </span>
             {% endif %}
 
             {% comment %}

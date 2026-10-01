@@ -152,7 +152,7 @@
           "type": "faq_item",
           "settings": {
             "question": "Are your products raw and vegan?",
-            "answer": "<p>All our products are vegan, and<br/>almost all of them are raw. We include a specific mention whenever a<br/>product is not raw (as is the case with Baru nuts and Brazil nuts,<br/>for example).</p><p>Why raw? It has been&nbsp;<strong>proven that the healthiest cooking is simply non-cooking!</strong>&nbsp;The one that preserves the best nutrients and does not generate carcinogenic compounds such as acrylamides. For your health we encourage you to incorporate as much raw and live food into your diet as possible.</p>",
+            "answer": "<p>All our products are vegan, and<br/>almost all of them are raw. We include a specific mention whenever a<br/>product is not raw (as is the case with Baru nuts and Brazil nuts,<br/>for example).</p><p><strong>Why raw?</strong> It has been&nbsp;proven that the healthiest cooking is simply non-cooking!&nbsp;The one that preserves the best nutrients and does not generate carcinogenic compounds such as acrylamides. For your health we encourage you to incorporate as much raw and live food into your diet as possible.</p>",
             "category_number": 3
           }
         },

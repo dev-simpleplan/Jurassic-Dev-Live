@@ -271,7 +271,7 @@
 })();
 </script>
 
-  <body{% if template.name == 'index' %} class="template-index"{% endif %}>
+  <body{% if template.name == 'index' %} class="template-index"{% endif %} data-select-medium-default="false">
     {% if template.name == 'index' %}
       <div class="homepage-loader" id="homepage-loader" aria-hidden="true">
         <div class="homepage-loader__media">
@@ -820,6 +820,8 @@
     </script>
 
 {% render 'shipping-global-script' %}
+
+    <script src="{{ 'select-medium-default-ab-test.js' | asset_url }}" defer></script>
 
     {%- render "ecom_footer" - %}
     

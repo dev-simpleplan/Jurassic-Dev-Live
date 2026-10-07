@@ -61,7 +61,7 @@
                         {% render "blog-card"
                             , article: article %}
                         {% endfor %}
-                        {% render 'pagination' | pagination: paginate %}
+                        {% render 'pagination', pagination: paginate %}
                     {% endpaginate %}
                     </div>
                 </div>
@@ -261,4 +261,13 @@
       }
     ]
   }
-{% endschema %}
+{% endschema %}{%- comment -%}
+
+This file has been rewritten to preserve the original behavior.
+
+---
+Changes:
+- from: "{% render 'pagination' | pagination: paginate %}"
+  to: "{% render 'pagination', pagination: paginate %}"
+  position: 2997..3044
+{%- endcomment -%}

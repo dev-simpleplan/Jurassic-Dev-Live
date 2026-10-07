@@ -823,8 +823,18 @@
 
     <script src="{{ 'select-medium-default-ab-test.js' | asset_url }}" defer></script>
 
-    {%- render "ecom_footer" - %}
+    {%- render "ecom_footer" %}
     
   </body>
 
 </html>
+{% comment %}
+
+This file has been rewritten to preserve the original behavior.
+
+---
+Changes:
+- from: '{%- render "ecom_footer" - %}'
+  to: '{%- render "ecom_footer" %}'
+  position: 29554..29581
+{% endcomment %}

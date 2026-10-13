@@ -23,6 +23,9 @@
       },
       "general": {
         "cart": "Mon panier"
+      },
+      "throttle": {
+        "cart_summary_heading": "Ton panier"
       }
     }
   },

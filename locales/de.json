@@ -28,7 +28,7 @@
   },
   "cart": {
     "checkout": "Kasse",
-    "title": "Warenkorb",
+    "title": "Mein Warenkorb",
     "update": "Aktualisieren",
     "remove": "Entfernen"
   },

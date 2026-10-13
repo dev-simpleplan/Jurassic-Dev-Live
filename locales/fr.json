@@ -49,7 +49,7 @@
   },
   "cart": {
     "checkout": "Paiement",
-    "title": "Panier",
+    "title": "Mon panier",
     "update": "Mettre à jour",
     "remove": "Supprimer"
   },

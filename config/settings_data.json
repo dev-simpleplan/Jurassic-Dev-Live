@@ -357,6 +357,14 @@
         "settings": {
           "load_selling_plans_separately": true
         }
+      },
+      "6943150723303545187": {
+        "type": "shopify://apps/delivery-date-app/blocks/products-filter/01996116-7c1b-724b-af9b-9e5b36aa18ce",
+        "disabled": false,
+        "settings": {
+          "default_collection_handle": "fruit",
+          "use_as_separate_button": false
+        }
       }
     }
   }

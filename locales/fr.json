@@ -22,7 +22,7 @@
         "multiple_primary_payment_not_allowed": "Modes de paiement non valides"
       },
       "general": {
-        "cart": "Mon panier"
+        "cart": "Panier"
       },
       "throttle": {
         "cart_summary_heading": "Ton panier"

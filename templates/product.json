@@ -33,7 +33,6 @@
         },
         "delivery_date_app_product_delivery_info_3Fxy4J": {
           "type": "shopify://apps/delivery-date-app/blocks/product-delivery-info/01996116-7c1b-724b-af9b-9e5b36aa18ce",
-          "disabled": true,
           "settings": {
             "page": ""
           }

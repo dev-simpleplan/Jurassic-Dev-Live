@@ -27,8 +27,13 @@
           "type": "variant_selector",
           "settings": {}
         },
+        "appstle_subscription_appstle_subscription_product_page_widget_8ExE89": {
+          "type": "shopify://apps/appstle-subscription/blocks/appstle-subscription-product-page-widget/fe257d39-6f88-4f35-ab08-bd437e3aa94e",
+          "settings": {}
+        },
         "delivery_date_app_product_delivery_info_3Fxy4J": {
           "type": "shopify://apps/delivery-date-app/blocks/product-delivery-info/01996116-7c1b-724b-af9b-9e5b36aa18ce",
+          "disabled": true,
           "settings": {
             "page": ""
           }
@@ -78,6 +83,7 @@
         "title",
         "product_usp",
         "variant_selector",
+        "appstle_subscription_appstle_subscription_product_page_widget_8ExE89",
         "delivery_date_app_product_delivery_info_3Fxy4J",
         "store_usp",
         "product_info",

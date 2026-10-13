@@ -20,6 +20,9 @@
     "checkout": {
       "payment": {
         "multiple_primary_payment_not_allowed": "Modes de paiement non valides"
+      },
+      "general": {
+        "cart": "Mon panier"
       }
     }
   },

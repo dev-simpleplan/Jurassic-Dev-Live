@@ -2109,29 +2109,39 @@ li.variant-value.is-sold-out {
     appearance: none;
     margin: 0; 
 }
-.variant .delivery-to {
-  margin-top: 16px!important;
-  font-size: 14px;
-}
 .variant .delivery-unavailable {
   margin-top: 16px!important;
   font-size: 14px;
 }
-.variant .delivery-to span.calculated-delivery-date {
-  font-weight: 600;
+
+/* Hide delivery estimate block in subscription / ATC area
+   (Deliver to… / First box delivered by…) */
+/* .delivery-to,
+.jf-po__delivery-hint,
+[data-po-delivery-hint],
+.app-block:has([class*="delivery-date" i]),
+.app-block:has([id*="delivery-date" i]),
+.app-block:has([class*="DeliveryDate" i]),
+[class*="product-delivery-info" i],
+[id*="product-delivery-info" i] {
+  display: none !important;
 }
-.variant .delivery-to .product_delivery_modal_opener small {
-  font-size: 14px;
-  text-decoration: underline;
-  color: #6B6B6B;
-}
-#delivery-info, #delivery-info-skeleton {
-  visibility: hidden!important;
-  opacity: 0!important;
-  height: 0!important;
-  overflow: hidden!important;
-  margin-top: 0!important;
-  padding: 0!important;
+
+.variant .priceCheckout ~ .jf-po__delivery-hint,
+.variant .priceCheckout ~ [data-po-delivery-hint],
+.variant > .delivery-to {
+  display: none !important;
+} */
+
+#delivery-info,
+#delivery-info-skeleton {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  height: 0 !important;
+  overflow: hidden !important;
+  margin: 0 !important;
+  padding: 0 !important;
 }
 #add-to-cart,
 .add-to-cart-btn {

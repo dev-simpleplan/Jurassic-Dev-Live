@@ -2132,6 +2132,18 @@ li.variant-value.is-sold-out {
 .variant > .delivery-to {
   display: none !important;
 } */
+.variant .delivery-to {
+  margin-top: 16px!important;
+  font-size: 14px;
+}
+.variant .delivery-to span.calculated-delivery-date {
+  font-weight: 600;
+}
+.variant .delivery-to .product_delivery_modal_opener small {
+  font-size: 14px;
+  text-decoration: underline;
+  color: #6B6B6B;
+}
 
 #delivery-info,
 #delivery-info-skeleton {

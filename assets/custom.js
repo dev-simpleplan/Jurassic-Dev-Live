@@ -374,51 +374,51 @@ document.addEventListener("DOMContentLoaded", function () {
 
 /* Remove delivery estimate lines under subscription / ATC
    ("Deliver to…", "First box delivered by…") */
-// (function () {
-//   function removeDeliveryEstimates(root) {
-//     const scope = root || document;
-//     const selectors = [
-//       '.delivery-to',
-//       '.jf-po__delivery-hint',
-//       '[data-po-delivery-hint]',
-//       '#delivery-info',
-//       '#delivery-info-skeleton'
-//     ];
-//     selectors.forEach((sel) => {
-//       scope.querySelectorAll?.(sel)?.forEach((el) => el.remove());
-//     });
+(function () {
+  function removeDeliveryEstimates(root) {
+    const scope = root || document;
+    const selectors = [
+      '.delivery-to',
+      '.jf-po__delivery-hint',
+      '[data-po-delivery-hint]',
+      '#delivery-info',
+      '#delivery-info-skeleton'
+    ];
+    selectors.forEach((sel) => {
+      scope.querySelectorAll?.(sel)?.forEach((el) => el.remove());
+    });
 
-//     // Text-match leftovers injected by apps / old purchase-options JS
-//     scope.querySelectorAll?.('p, div, span')?.forEach((el) => {
-//       if (el.closest('.product_delivery_modal_container')) return;
-//       const t = (el.textContent || '').replace(/\s+/g, ' ').trim().toLowerCase();
-//       if (
-//         t.startsWith('first box delivered by') ||
-//         t.startsWith('deliver to ') ||
-//         t.startsWith('liefern nach ') ||
-//         t.startsWith('delivery to ')
-//       ) {
-//         const block = el.closest('p, .delivery-to, .jf-po__delivery-hint') || el;
-//         if (block && block.children.length <= 4) block.remove();
-//       }
-//     });
-//   }
+    // Text-match leftovers injected by apps / old purchase-options JS
+    scope.querySelectorAll?.('p, div, span')?.forEach((el) => {
+      if (el.closest('.product_delivery_modal_container')) return;
+      const t = (el.textContent || '').replace(/\s+/g, ' ').trim().toLowerCase();
+      if (
+        t.startsWith('first box delivered by') ||
+        t.startsWith('deliver to ') ||
+        t.startsWith('liefern nach ') ||
+        t.startsWith('delivery to ')
+      ) {
+        const block = el.closest('p, .delivery-to, .jf-po__delivery-hint') || el;
+        if (block && block.children.length <= 4) block.remove();
+      }
+    });
+  }
 
-//   if (document.readyState === 'loading') {
-//     document.addEventListener('DOMContentLoaded', () => removeDeliveryEstimates());
-//   } else {
-//     removeDeliveryEstimates();
-//   }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => removeDeliveryEstimates());
+  } else {
+    removeDeliveryEstimates();
+  }
 
-//   let timer = null;
-//   const mo = new MutationObserver(() => {
-//     if (timer) return;
-//     timer = setTimeout(() => {
-//       timer = null;
-//       removeDeliveryEstimates();
-//     }, 200);
-//   });
-//   if (document.body) {
-//     mo.observe(document.body, { childList: true, subtree: true });
-//   }
-// })();
+  let timer = null;
+  const mo = new MutationObserver(() => {
+    if (timer) return;
+    timer = setTimeout(() => {
+      timer = null;
+      removeDeliveryEstimates();
+    }, 200);
+  });
+  if (document.body) {
+    mo.observe(document.body, { childList: true, subtree: true });
+  }
+})();

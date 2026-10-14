@@ -1,0 +1,257 @@
+{%- comment -%}
+  Custom purchase options A/B (one-time vs subscribe).
+  Control: body[data-purchase-options-ab="false"] — Appstle default
+  Variant: body[data-purchase-options-ab="true"]  — this UI + hide Appstle
+  IntelliGems: document.body.setAttribute('data-purchase-options-ab', 'true');
+  Dev: ?purchase_options_ab=b
+{%- endcomment -%}
+
+{%- if product.selling_plan_groups.size > 0 -%}
+{%- assign currency_suffix = cart.currency.symbol -%}
+{%- assign selected_variant = product.selected_or_first_available_variant -%}
+{%- assign one_time_price = selected_variant.price -%}
+{%- assign sub_price = one_time_price -%}
+{%- assign default_plan_id = blank -%}
+
+{%- capture selling_plans_json -%}
+[
+{%- assign plan_comma = false -%}
+{%- for group in product.selling_plan_groups -%}
+  {%- for plan in group.selling_plans -%}
+    {%- assign plan_alloc_price = one_time_price -%}
+    {%- assign plan_alloc_compare = one_time_price -%}
+    {%- for allocation in selected_variant.selling_plan_allocations -%}
+      {%- if allocation.selling_plan.id == plan.id -%}
+        {%- assign plan_alloc_price = allocation.price -%}
+        {%- assign plan_alloc_compare = allocation.compare_at_price | default: one_time_price -%}
+        {%- break -%}
+      {%- endif -%}
+    {%- endfor -%}
+
+    {%- assign interval_count = 0 -%}
+    {%- assign interval_unit = 'week' -%}
+    {%- if plan.billing_policy != blank and plan.billing_policy.interval_count != blank -%}
+      {%- assign interval_count = plan.billing_policy.interval_count | plus: 0 -%}
+      {%- assign interval_unit = plan.billing_policy.interval | default: 'week' | downcase -%}
+    {%- elsif plan.delivery_policy != blank and plan.delivery_policy.interval_count != blank -%}
+      {%- assign interval_count = plan.delivery_policy.interval_count | plus: 0 -%}
+      {%- assign interval_unit = plan.delivery_policy.interval | default: 'week' | downcase -%}
+    {%- endif -%}
+
+    {%- if interval_count == 0 -%}
+      {%- assign raw_blob = plan.name | append: ' ' -%}
+      {%- for opt in plan.options -%}
+        {%- assign raw_blob = raw_blob | append: opt.value | append: ' ' -%}
+      {%- endfor -%}
+      {%- assign raw_up = raw_blob | upcase | remove: ' ' -%}
+      {%- if raw_up contains '1WEEK' or raw_up contains 'EVERY1WEEK' or raw_up contains 'WEEKLY' -%}
+        {%- assign interval_count = 1 -%}
+      {%- elsif raw_up contains '2WEEK' or raw_up contains 'EVERY2WEEK' -%}
+        {%- assign interval_count = 2 -%}
+      {%- elsif raw_up contains '3WEEK' or raw_up contains 'EVERY3WEEK' -%}
+        {%- assign interval_count = 3 -%}
+      {%- elsif raw_up contains '4WEEK' or raw_up contains 'EVERY4WEEK' -%}
+        {%- assign interval_count = 4 -%}
+      {%- elsif raw_up contains '6WEEK' or raw_up contains 'EVERY6WEEK' -%}
+        {%- assign interval_count = 6 -%}
+      {%- endif -%}
+    {%- endif -%}
+
+    {%- if interval_unit == 'day' and interval_count >= 7 -%}
+      {%- assign interval_count = interval_count | divided_by: 7 -%}
+      {%- assign interval_unit = 'week' -%}
+    {%- endif -%}
+
+    {%- if interval_count == 1 -%}
+      {%- assign pill_label = 'sections.product.purchase_freq_1_week' | t -%}
+    {%- elsif interval_count == 2 -%}
+      {%- assign pill_label = 'sections.product.purchase_freq_2_weeks' | t -%}
+    {%- elsif interval_count == 3 -%}
+      {%- assign pill_label = 'sections.product.purchase_freq_3_weeks' | t -%}
+    {%- elsif interval_count == 4 -%}
+      {%- assign pill_label = 'sections.product.purchase_freq_4_weeks' | t -%}
+    {%- elsif interval_count == 6 -%}
+      {%- assign pill_label = 'sections.product.purchase_freq_6_weeks' | t -%}
+    {%- elsif interval_count > 0 -%}
+      {%- assign pill_label = interval_count | append: ' weeks' -%}
+    {%- else -%}
+      {%- assign pill_label = 'sections.product.purchase_freq_1_week' | t -%}
+      {%- assign interval_count = 1 -%}
+    {%- endif -%}
+
+    {%- if default_plan_id == blank -%}
+      {%- assign default_plan_id = plan.id -%}
+      {%- assign sub_price = plan_alloc_price -%}
+    {%- endif -%}
+    {%- if interval_count == 4 -%}
+      {%- assign default_plan_id = plan.id -%}
+      {%- assign sub_price = plan_alloc_price -%}
+    {%- endif -%}
+
+    {%- if plan_comma -%},{%- endif -%}
+    {
+      "id": {{ plan.id | json }},
+      "name": {{ plan.name | json }},
+      "label": {{ pill_label | json }},
+      "weeks": {{ interval_count | json }},
+      "price": {{ plan_alloc_price | json }},
+      "compare_at_price": {{ plan_alloc_compare | json }},
+      "price_display": {{ plan_alloc_price | money_without_currency | append: ' ' | append: currency_suffix | json }}
+    }
+    {%- assign plan_comma = true -%}
+  {%- endfor -%}
+{%- endfor -%}
+]
+{%- endcapture -%}
+
+{%- capture variant_plans_json -%}
+{
+{%- for variant in product.variants -%}
+  "{{ variant.id }}": {
+    "price": {{ variant.price | json }},
+    "price_display": {{ variant.price | money_without_currency | append: ' ' | append: currency_suffix | json }},
+    "plans": {
+      {%- for allocation in variant.selling_plan_allocations -%}
+        "{{ allocation.selling_plan.id }}": {
+          "price": {{ allocation.price | json }},
+          "compare_at_price": {{ allocation.compare_at_price | default: variant.price | json }},
+          "price_display": {{ allocation.price | money_without_currency | append: ' ' | append: currency_suffix | json }}
+        }{%- unless forloop.last -%},{%- endunless -%}
+      {%- endfor -%}
+    }
+  }{%- unless forloop.last -%},{%- endunless -%}
+{%- endfor -%}
+}
+{%- endcapture -%}
+
+<div
+  class="jf-purchase-options"
+  data-purchase-options
+  data-default-mode="subscription"
+  data-default-plan="{{ default_plan_id }}"
+  data-currency-suffix="{{ currency_suffix | escape }}"
+>
+  <input
+    type="hidden"
+    name="selling_plan"
+    value="{{ default_plan_id }}"
+    data-selling-plan-input
+    data-jf-po-kept="true"
+  >
+
+  <p class="jf-po__heading">{{ 'sections.product.purchase_options_heading' | t }}</p>
+
+  <div class="jf-po__card">
+    <button type="button" class="jf-po__option" data-po-mode="onetime" aria-pressed="false">
+      <span class="jf-po__radio" aria-hidden="true"></span>
+      <span class="jf-po__option-main">
+        <span class="jf-po__option-label">{{ 'sections.product.purchase_onetime_label' | t }}</span>
+      </span>
+      <span class="jf-po__option-price">
+        <span class="jf-po__price" data-po-onetime-price>{{ one_time_price | money_without_currency }} {{ currency_suffix }}</span>
+        <span class="jf-po__price-sub">{{ 'sections.product.purchase_onetime_shipping' | t }}</span>
+      </span>
+    </button>
+
+    <div
+      class="jf-po__option jf-po__option--subscribe is-selected"
+      data-po-mode="subscription"
+      role="button"
+      tabindex="0"
+      aria-pressed="true"
+      aria-label="{{ 'sections.product.purchase_subscribe_label' | t }}"
+    >
+      <div class="jf-po__option-top">
+        <span class="jf-po__radio" aria-hidden="true"></span>
+        <span class="jf-po__option-main">
+          <span class="jf-po__option-label">{{ 'sections.product.purchase_subscribe_label' | t }}</span>
+          <span class="jf-po__save-badge">{{ 'sections.product.purchase_save_badge' | t }}</span>
+        </span>
+        <span class="jf-po__option-price">
+          <span class="jf-po__price" data-po-sub-price>{{ sub_price | money_without_currency }} {{ currency_suffix }}</span>
+          <span class="jf-po__price-sub jf-po__price-sub--perk">{{ 'sections.product.purchase_subscribe_perk' | t }}</span>
+        </span>
+      </div>
+
+      <div class="jf-po__subscribe-body" data-po-subscribe-body>
+        <div class="jf-po__frequency">
+          <div class="jf-po__pills" role="radiogroup" aria-label="{{ 'sections.product.purchase_frequency_label' | t }}">
+            {%- for group in product.selling_plan_groups -%}
+              {%- for plan in group.selling_plans -%}
+                {%- assign interval_count = 0 -%}
+                {%- assign interval_unit = 'week' -%}
+                {%- if plan.billing_policy != blank and plan.billing_policy.interval_count != blank -%}
+                  {%- assign interval_count = plan.billing_policy.interval_count | plus: 0 -%}
+                  {%- assign interval_unit = plan.billing_policy.interval | default: 'week' | downcase -%}
+                {%- elsif plan.delivery_policy != blank and plan.delivery_policy.interval_count != blank -%}
+                  {%- assign interval_count = plan.delivery_policy.interval_count | plus: 0 -%}
+                  {%- assign interval_unit = plan.delivery_policy.interval | default: 'week' | downcase -%}
+                {%- endif -%}
+                {%- if interval_count == 0 -%}
+                  {%- assign raw_blob = plan.name | append: ' ' -%}
+                  {%- for opt in plan.options -%}
+                    {%- assign raw_blob = raw_blob | append: opt.value | append: ' ' -%}
+                  {%- endfor -%}
+                  {%- assign raw_up = raw_blob | upcase | remove: ' ' -%}
+                  {%- if raw_up contains '1WEEK' or raw_up contains 'EVERY1WEEK' or raw_up contains 'WEEKLY' -%}
+                    {%- assign interval_count = 1 -%}
+                  {%- elsif raw_up contains '2WEEK' or raw_up contains 'EVERY2WEEK' -%}
+                    {%- assign interval_count = 2 -%}
+                  {%- elsif raw_up contains '3WEEK' or raw_up contains 'EVERY3WEEK' -%}
+                    {%- assign interval_count = 3 -%}
+                  {%- elsif raw_up contains '4WEEK' or raw_up contains 'EVERY4WEEK' -%}
+                    {%- assign interval_count = 4 -%}
+                  {%- elsif raw_up contains '6WEEK' or raw_up contains 'EVERY6WEEK' -%}
+                    {%- assign interval_count = 6 -%}
+                  {%- endif -%}
+                {%- endif -%}
+                {%- if interval_unit == 'day' and interval_count >= 7 -%}
+                  {%- assign interval_count = interval_count | divided_by: 7 -%}
+                {%- endif -%}
+
+                {%- if interval_count == 1 -%}
+                  {%- assign pill_label = 'sections.product.purchase_freq_1_week' | t -%}
+                {%- elsif interval_count == 2 -%}
+                  {%- assign pill_label = 'sections.product.purchase_freq_2_weeks' | t -%}
+                {%- elsif interval_count == 3 -%}
+                  {%- assign pill_label = 'sections.product.purchase_freq_3_weeks' | t -%}
+                {%- elsif interval_count == 4 -%}
+                  {%- assign pill_label = 'sections.product.purchase_freq_4_weeks' | t -%}
+                {%- elsif interval_count == 6 -%}
+                  {%- assign pill_label = 'sections.product.purchase_freq_6_weeks' | t -%}
+                {%- elsif interval_count > 0 -%}
+                  {%- assign pill_label = interval_count | append: ' weeks' -%}
+                {%- else -%}
+                  {%- assign pill_label = 'sections.product.purchase_freq_1_week' | t -%}
+                {%- endif -%}
+
+                <button
+                  type="button"
+                  class="jf-po__pill{% if plan.id == default_plan_id %} is-selected{% endif %}"
+                  data-po-plan="{{ plan.id }}"
+                  data-po-plan-label="{{ pill_label | escape }}"
+                  data-po-weeks="{{ interval_count }}"
+                  role="radio"
+                  aria-checked="{% if plan.id == default_plan_id %}true{% else %}false{% endif %}"
+                >
+                  {{ pill_label }}
+                </button>
+              {%- endfor -%}
+            {%- endfor -%}
+          </div>
+        </div>
+
+        <p class="jf-po__cancel-note">
+          <span class="jf-po__cancel-icon" aria-hidden="true">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><rect x="6" y="4" width="4" height="16" rx="1" fill="currentColor"/><rect x="14" y="4" width="4" height="16" rx="1" fill="currentColor"/></svg>
+          </span>
+          {{ 'sections.product.purchase_cancel_note' | t }}
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <script type="application/json" data-po-plans>{{ selling_plans_json }}</script>
+  <script type="application/json" data-po-variant-plans>{{ variant_plans_json }}</script>
+</div>
+{%- endif -%}

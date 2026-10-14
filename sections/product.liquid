@@ -761,6 +761,7 @@
                         </variant-selector>
                     </div>
                     {% endunless %}
+                    {% render 'purchase-options', product: product %}
                     <div class="priceCheckout">
                       
                       <div class="submit submit--with-qty">
@@ -798,7 +799,7 @@
 
                         
                       </div>
-1
+
                     </div>
                     <p style='margin:0;{% unless selected_variant.available %}display:none;{% endunless %}' class="delivery-to">
                       <span class="product_delivery_modal_deliver_to">{{ 'sections.product.deliver_to' | t }}</span>

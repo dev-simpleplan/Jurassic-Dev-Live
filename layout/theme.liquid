@@ -206,6 +206,19 @@
     {{ 'custom-2.css' | asset_url | stylesheet_tag: preload: true }}
     {{ 'responsive.css' | asset_url | stylesheet_tag: preload: true }}
   {{ 'responsive-2.css' | asset_url | stylesheet_tag: preload: true }}
+    {{ 'purchase-options.css' | asset_url | stylesheet_tag }}
+    <script>
+      (function () {
+        try {
+          var p = new URLSearchParams(window.location.search).get('purchase_options_ab');
+          if (p === 'b' || p === 'true') {
+            document.documentElement.setAttribute('data-purchase-options-ab', 'true');
+          } else if (p === 'a' || p === 'false') {
+            document.documentElement.setAttribute('data-purchase-options-ab', 'false');
+          }
+        } catch (e) {}
+      })();
+    </script>
 
     {% # Social, title, etc. %}
     {% render 'meta-tags' %}
@@ -271,7 +284,7 @@
 })();
 </script>
 
-  <body{% if template.name == 'index' %} class="template-index"{% endif %} data-select-medium-default="false">
+  <body{% if template.name == 'index' %} class="template-index"{% endif %} data-select-medium-default="false" data-purchase-options-ab="false">
     {% if template.name == 'index' %}
       <div class="homepage-loader" id="homepage-loader" aria-hidden="true">
         <div class="homepage-loader__media">
@@ -822,6 +835,25 @@
 {% render 'shipping-global-script' %}
 
     <script src="{{ 'select-medium-default-ab-test.js' | asset_url }}" defer></script>
+
+    {% if template.name == 'product' %}
+      <script>
+        window.jfPurchaseStrings = {
+          subscribe: {{ 'sections.product.purchase_subscribe_cta' | t | json }},
+          addToCart: {{ 'products.product.add_to_cart' | t | json }},
+          freq1: {{ 'sections.product.purchase_freq_1_week' | t | json }},
+          weeksWord: {{ 'sections.product.purchase_weeks_word' | t | json }},
+          freqLabels: {
+            1: {{ 'sections.product.purchase_freq_1_week' | t | json }},
+            2: {{ 'sections.product.purchase_freq_2_weeks' | t | json }},
+            3: {{ 'sections.product.purchase_freq_3_weeks' | t | json }},
+            4: {{ 'sections.product.purchase_freq_4_weeks' | t | json }},
+            6: {{ 'sections.product.purchase_freq_6_weeks' | t | json }}
+          }
+        };
+      </script>
+      <script src="{{ 'purchase-options.js' | asset_url }}" defer></script>
+    {% endif %}
 
     {%- render "ecom_footer" %}
     

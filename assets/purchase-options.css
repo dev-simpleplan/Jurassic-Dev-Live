@@ -1,0 +1,247 @@
+/* Jurassic Fruit — Purchase Options A/B
+   Control: body[data-purchase-options-ab="false"] — Appstle default
+   Variant: body[data-purchase-options-ab="true"]  — custom UI
+*/
+
+.jf-purchase-options {
+  --jf-po-text: #2c2418;
+  --jf-po-muted: #8a8174;
+  --jf-po-perk: #3d6b3a;
+  --jf-po-border: #e4ddd2;
+  --jf-po-card: #f7f1e8;
+  --jf-po-gift: #efe6d8;
+  --jf-po-accent: #d4a24a;
+  --jf-po-accent-ring: #c9923a;
+  display: none;
+  margin: 20px 0 8px;
+  position: relative;
+  z-index: 2;
+}
+
+body[data-purchase-options-ab='true'] .jf-purchase-options,
+html[data-purchase-options-ab='true'] body .jf-purchase-options {
+  display: block;
+}
+
+.jf-po__heading {
+  margin: 0 0 10px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--jf-po-text);
+}
+
+.jf-po__card {
+  background: var(--jf-po-card);
+  border: 1px solid var(--jf-po-border);
+  border-radius: 18px;
+  overflow: hidden;
+}
+
+.jf-po__option {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  width: 100%;
+  margin: 0;
+  padding: 16px;
+  border: 0;
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+  color: var(--jf-po-text);
+  font: inherit;
+  appearance: none;
+}
+
+.jf-po__option + .jf-po__option,
+.jf-po__option + .jf-po__option--subscribe,
+button.jf-po__option + .jf-po__option--subscribe {
+  border-top: 1px solid var(--jf-po-border);
+}
+
+.jf-po__option--subscribe {
+  display: block;
+}
+
+.jf-po__option-top {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  width: 100%;
+}
+
+.jf-po__radio {
+  flex: 0 0 20px;
+  width: 20px;
+  height: 20px;
+  margin-top: 2px;
+  border: 1.5px solid #b5aa9a;
+  border-radius: 50%;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.jf-po__option.is-selected .jf-po__radio {
+  border-color: var(--jf-po-accent-ring);
+  border-width: 2px;
+  box-shadow: inset 0 0 0 4px var(--jf-po-accent);
+}
+
+.jf-po__option-main {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.jf-po__option-label {
+  display: block;
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1.3;
+}
+
+.jf-po__option.is-selected .jf-po__option-label {
+  font-weight: 700;
+}
+
+.jf-po__option--subscribe .jf-po__option-main {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+}
+
+.jf-po__save-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 9px;
+  border-radius: 999px;
+  background: #1a1a1a;
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  line-height: 1.2;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.jf-po__option-price {
+  flex: 0 0 auto;
+  text-align: right;
+  margin-left: auto;
+}
+
+.jf-po__price {
+  display: block;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.jf-po__price-sub {
+  display: block;
+  margin-top: 2px;
+  font-size: 12px;
+  color: var(--jf-po-muted);
+}
+
+.jf-po__price-sub--perk {
+  color: var(--jf-po-perk);
+  font-weight: 500;
+}
+
+.jf-po__subscribe-body {
+  display: none;
+  padding: 4px 0 4px 32px;
+}
+
+.jf-po__option--subscribe.is-selected .jf-po__subscribe-body {
+  display: block;
+}
+
+.jf-po__frequency {
+  margin: 12px 0 14px;
+}
+
+.jf-po__cancel-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.35;
+  color: var(--jf-po-muted);
+}
+
+.jf-po__cancel-icon {
+  color: var(--jf-po-muted);
+  margin-top: 1px;
+}
+
+.jf-po__pills {
+  display: flex;
+  gap: 4px;
+  padding: 4px;
+  background: #ebe3d6;
+  border-radius: 999px;
+}
+
+.jf-po__pill {
+  flex: 1 1 0;
+  margin: 0;
+  padding: 9px 8px;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--jf-po-text);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.jf-po__pill.is-selected {
+  background: #fff;
+  border-color: #d9d0c2;
+  font-weight: 600;
+  box-shadow: 0 1px 2px rgba(44, 36, 24, 0.06);
+}
+
+/* Hide Appstle only on variant (true) */
+body[data-purchase-options-ab='true'] .app-block:has([id*='appstle']),
+body[data-purchase-options-ab='true'] .app-block:has([class*='appstle']),
+body[data-purchase-options-ab='true'] [id*='appstle_subscription'],
+body[data-purchase-options-ab='true'] .appstle_subscription_wrapper,
+body[data-purchase-options-ab='true'] .appstle_sub_widget,
+body[data-purchase-options-ab='true'] #appstle_subscription_widget0,
+body[data-purchase-options-ab='true'] .as-subscription-wrapper,
+html[data-purchase-options-ab='true'] body .app-block:has([id*='appstle']),
+html[data-purchase-options-ab='true'] body .app-block:has([class*='appstle']),
+html[data-purchase-options-ab='true'] body [id*='appstle_subscription'],
+html[data-purchase-options-ab='true'] body .appstle_subscription_wrapper,
+html[data-purchase-options-ab='true'] body .appstle_sub_widget,
+html[data-purchase-options-ab='true'] body #appstle_subscription_widget0,
+html[data-purchase-options-ab='true'] body .as-subscription-wrapper {
+  display: none !important;
+  height: 0 !important;
+  overflow: hidden !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+}
+
+@media (max-width: 767px) {
+  .jf-po__option {
+    padding: 14px;
+  }
+
+  .jf-po__subscribe-body {
+    padding-left: 0;
+  }
+
+  .jf-po__pill {
+    font-size: 12px;
+    padding: 8px 6px;
+  }
+}

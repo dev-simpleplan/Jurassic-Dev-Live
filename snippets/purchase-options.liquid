@@ -149,7 +149,7 @@
       </span>
       <span class="jf-po__option-price">
         <span class="jf-po__price" data-po-onetime-price>{{ one_time_price | money_without_currency }} {{ currency_suffix }}</span>
-        <span class="jf-po__price-sub">{{ 'sections.product.purchase_onetime_shipping' | t }}</span>
+        {% comment %} <span class="jf-po__price-sub">{{ 'sections.product.purchase_onetime_shipping' | t }}</span> {% endcomment %}
       </span>
     </button>
 
@@ -169,7 +169,7 @@
         </span>
         <span class="jf-po__option-price">
           <span class="jf-po__price" data-po-sub-price>{{ sub_price | money_without_currency }} {{ currency_suffix }}</span>
-          <span class="jf-po__price-sub">{{ 'sections.product.purchase_onetime_shipping' | t }}</span>
+          {% comment %} <span class="jf-po__price-sub">{{ 'sections.product.purchase_onetime_shipping' | t }}</span> {% endcomment %}
         </span>
       </div>
 

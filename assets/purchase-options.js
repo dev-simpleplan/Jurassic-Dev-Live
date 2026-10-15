@@ -66,10 +66,16 @@
   }
 
   function formatMoney(cents, suffix) {
+    var amount = Number(cents);
+    if (!amount && amount !== 0) return '';
     if (typeof window.formatMoneySafe === 'function') {
-      return window.formatMoneySafe(cents) + (suffix ? ' ' + suffix : '');
+      var safe = window.formatMoneySafe(amount);
+      if (!safe && amount) {
+        safe = (amount / 100).toFixed(2).replace('.', ',');
+      }
+      return safe ? safe + (suffix ? ' ' + suffix : '') : '';
     }
-    var n = (Number(cents) / 100).toFixed(2).replace('.', ',');
+    var n = (amount / 100).toFixed(2).replace('.', ',');
     return n + (suffix ? ' ' + suffix : '');
   }
 
@@ -343,9 +349,11 @@
   };
 
   PurchaseOptions.prototype.resolveVariantId = function () {
-    // Prefer Corner sticky Type dropdown when present (user may change variant there)
-    var fromCorner = this.resolveVariantIdFromCorner();
-    if (fromCorner) return fromCorner;
+    // Only prefer Corner when the sticky Type dropdown was the last user control
+    if (this._preferCornerVariant) {
+      var fromCorner = this.resolveVariantIdFromCorner();
+      if (fromCorner) return fromCorner;
+    }
 
     var active = document.querySelector(
       'variant-selector .variant-value.active[data-variant-id]'
@@ -355,6 +363,10 @@
     }
     var idInput = document.querySelector('#product-form input[name="id"]');
     if (idInput && idInput.value) return Number(idInput.value);
+
+    var fromCornerFallback = this.resolveVariantIdFromCorner();
+    if (fromCornerFallback) return fromCornerFallback;
+
     try {
       var fromUrl = new URLSearchParams(window.location.search).get('variant');
       if (fromUrl) return Number(fromUrl);
@@ -623,6 +635,7 @@
       'click',
       function (e) {
         if (!e.target.closest('variant-selector .variant-value')) return;
+        self._preferCornerVariant = false;
         window.setTimeout(function () {
           self.onVariantUpdated();
         }, 0);
@@ -640,7 +653,7 @@
     this._lastCornerSelectVal = '';
 
     function onCornerVariantChange(e) {
-      if (self._suppressVariantWatch || self._updatingUi) return;
+      if (self._suppressVariantWatch) return;
       var sel =
         (e && e.target) ||
         document.querySelector(
@@ -650,6 +663,7 @@
       if (val && val === self._lastCornerSelectVal) return;
       if (val) self._lastCornerSelectVal = val;
 
+      self._preferCornerVariant = true;
       self.syncFormVariantFromCorner();
       self.onVariantUpdated();
     }
@@ -734,11 +748,21 @@
   PurchaseOptions.prototype.getCurrentPrices = function () {
     var vid = this.getVariantId();
     var entry = this.variantPlans[vid] || this.variantPlans[String(vid)] || {};
+    var fallbackPrice = null;
+    try {
+      var vs = document.querySelector('variant-selector');
+      if (vs && vs.currentVariant && vs.currentVariant.price != null) {
+        fallbackPrice = Number(vs.currentVariant.price);
+      }
+    } catch (e) {}
+
+    var oneTimePrice =
+      entry.price != null ? Number(entry.price) : fallbackPrice;
     var oneTime = {
-      price: entry.price != null ? entry.price : null,
+      price: oneTimePrice,
       price_display: entry.price_display || ''
     };
-    if (!oneTime.price_display && oneTime.price != null) {
+    if (!oneTime.price_display && oneTime.price != null && !isNaN(oneTime.price)) {
       oneTime.price_display = formatMoney(oneTime.price, this.currencySuffix);
     }
     var planId = this.getActivePlanId();
@@ -746,13 +770,11 @@
     var planEntry =
       plansMap[planId] ||
       plansMap[String(planId)] ||
-      this.plans.find(function (p) {
-        return String(p.id) === String(planId);
-      }) ||
       {};
-    var subPrice = planEntry.price != null ? planEntry.price : oneTime.price;
+    var subPrice =
+      planEntry.price != null ? Number(planEntry.price) : oneTime.price;
     var subDisplay = planEntry.price_display || '';
-    if (!subDisplay && subPrice != null) {
+    if (!subDisplay && subPrice != null && !isNaN(subPrice)) {
       subDisplay = formatMoney(subPrice, this.currencySuffix);
     }
     return {
@@ -810,18 +832,26 @@
   };
 
   PurchaseOptions.prototype.onVariantUpdated = function (variant) {
-    if (this._updatingUi) return;
-    this._updatingUi = true;
-    try {
-      this.refreshPrices();
-      this.updateAddToCartButton(variant);
-    } finally {
-      var self = this;
-      // Release after paint so MutationObservers from our DOM writes are ignored
-      window.setTimeout(function () {
-        self._updatingUi = false;
-      }, 0);
+    var self = this;
+    this._pendingVariant = variant;
+    if (this._variantUpdateTimer) {
+      window.clearTimeout(this._variantUpdateTimer);
     }
+    // Debounce: theme fires updateFormID + updatePriceInstant + updateAddToCartButton
+    // in one click — flush once with final variant state.
+    this._variantUpdateTimer = window.setTimeout(function () {
+      self._variantUpdateTimer = null;
+      if (self._updatingUi) return;
+      self._updatingUi = true;
+      try {
+        self.refreshPrices();
+        self.updateAddToCartButton(self._pendingVariant);
+      } finally {
+        window.setTimeout(function () {
+          self._updatingUi = false;
+        }, 0);
+      }
+    }, 40);
   };
 
   PurchaseOptions.prototype.applyMode = function (mode, silent) {
@@ -876,14 +906,22 @@
 
   PurchaseOptions.prototype.getUnitPriceCents = function () {
     var prices = this.getCurrentPrices();
-    if (this.mode === 'subscription') return Number(prices.subscription.price) || 0;
-    return Number(prices.onetime.price) || 0;
+    var cents =
+      this.mode === 'subscription'
+        ? Number(prices.subscription.price)
+        : Number(prices.onetime.price);
+    if (!cents || isNaN(cents)) return 0;
+    return cents;
   };
 
   PurchaseOptions.prototype.getCtaCopy = function () {
     var qtyInput = document.getElementById('Quantity');
     var qty = parseInt(qtyInput && qtyInput.value, 10) || 1;
-    var priceText = formatMoney(this.getUnitPriceCents() * qty, this.currencySuffix);
+    var cents = this.getUnitPriceCents() * qty;
+    var priceText =
+      cents > 0
+        ? formatMoney(cents, this.currencySuffix)
+        : '';
     var addLabel =
       (window.themeStrings && window.themeStrings.addToCart) ||
       STRINGS.addToCart ||
@@ -900,9 +938,11 @@
       return {
         mode: 'subscription',
         priceText: priceText,
-        full: freq
-          ? subscribeWord + ' · ' + priceText + ' / ' + freq
-          : subscribeWord + ' · ' + priceText,
+        full: priceText
+          ? freq
+            ? subscribeWord + ' · ' + priceText + ' / ' + freq
+            : subscribeWord + ' · ' + priceText
+          : subscribeWord,
         label: subscribeWord
       };
     }
@@ -910,7 +950,7 @@
     return {
       mode: 'onetime',
       priceText: priceText,
-      full: addLabel + ' - ' + priceText,
+      full: priceText ? addLabel + ' - ' + priceText : addLabel,
       label: addLabel
     };
   };
@@ -922,37 +962,22 @@
     var separatorEl = btn.querySelector('.btn-separator');
     if (!(label || priceEl)) return;
 
-    // Prevent Corner from reading a compare/sale pair and striking prices
     btn.querySelectorAll('s, del, strike').forEach(function (el) {
       var text = document.createTextNode(el.textContent || '');
       if (el.parentNode) el.parentNode.replaceChild(text, el);
     });
 
-    if (copy.mode === 'subscription') {
-      if (label) {
-        label.textContent = copy.full;
-        label.style.textDecoration = 'none';
-      }
-      if (priceEl) {
-        priceEl.textContent = '';
-        priceEl.style.display = 'none';
-      }
-      if (separatorEl) separatorEl.style.display = 'none';
-    } else {
-      if (label) {
-        label.textContent = copy.label;
-        label.style.textDecoration = 'none';
-      }
-      if (separatorEl) {
-        separatorEl.style.display = '';
-        separatorEl.textContent = ' - ';
-      }
-      if (priceEl) {
-        priceEl.style.display = '';
-        priceEl.textContent = copy.priceText;
-        priceEl.style.textDecoration = 'none';
-      }
+    // Always write the full CTA into .btn-label so price cannot go missing
+    // when .btn-price is hidden/cleared by a previous subscription state.
+    if (label) {
+      label.textContent = copy.full;
+      label.style.textDecoration = 'none';
     }
+    if (priceEl) {
+      priceEl.textContent = '';
+      priceEl.style.display = 'none';
+    }
+    if (separatorEl) separatorEl.style.display = 'none';
   };
 
   PurchaseOptions.prototype.syncCornerStickyCta = function (copy) {

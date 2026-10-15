@@ -283,7 +283,70 @@
     });
   };
 
+  PurchaseOptions.prototype.getCornerStickySelects = function () {
+    return document.querySelectorAll(
+      '#corner-sticky-atc-select-0, select[id^="corner-sticky-atc-select"]'
+    );
+  };
+
+  PurchaseOptions.prototype.resolveVariantIdFromCorner = function () {
+    var selects = this.getCornerStickySelects();
+    if (!selects.length) return null;
+
+    var i;
+    for (i = 0; i < selects.length; i++) {
+      var sel = selects[i];
+      var raw = (sel.value || '').trim();
+      if (!raw) continue;
+
+      var asNum = Number(raw);
+      if (asNum && !isNaN(asNum) && (this.variantPlans[String(asNum)] || this.variantPlans[asNum])) {
+        return asNum;
+      }
+
+      // Corner often uses option title ("1 St.") as value
+      var opt = sel.options[sel.selectedIndex];
+      var label = ((opt && (opt.textContent || opt.label)) || raw).replace(/\s+/g, ' ').trim();
+      var match =
+        document.querySelector(
+          'variant-selector .variant-value[data-variant-id][data-value="' +
+            raw.replace(/"/g, '\\"') +
+            '"]'
+        ) || null;
+
+      if (!match) {
+        var candidates = document.querySelectorAll(
+          'variant-selector .variant-value[data-variant-id]'
+        );
+        var j;
+        for (j = 0; j < candidates.length; j++) {
+          var li = candidates[j];
+          var title = (
+            (li.querySelector('.vvv-value') && li.querySelector('.vvv-value').textContent) ||
+            li.getAttribute('data-value') ||
+            ''
+          )
+            .replace(/\s+/g, ' ')
+            .trim();
+          if (title === label || title === raw || li.getAttribute('data-value') === raw) {
+            match = li;
+            break;
+          }
+        }
+      }
+
+      if (match && match.getAttribute('data-variant-id')) {
+        return Number(match.getAttribute('data-variant-id'));
+      }
+    }
+    return null;
+  };
+
   PurchaseOptions.prototype.resolveVariantId = function () {
+    // Prefer Corner sticky Type dropdown when present (user may change variant there)
+    var fromCorner = this.resolveVariantIdFromCorner();
+    if (fromCorner) return fromCorner;
+
     var active = document.querySelector(
       'variant-selector .variant-value.active[data-variant-id]'
     );
@@ -297,6 +360,29 @@
       if (fromUrl) return Number(fromUrl);
     } catch (e) {}
     return null;
+  };
+
+  PurchaseOptions.prototype.syncFormVariantFromCorner = function () {
+    var variantId = this.resolveVariantIdFromCorner();
+    if (!variantId) return null;
+    var idInput = document.querySelector('#product-form input[name="id"]');
+    if (idInput && String(idInput.value) !== String(variantId)) {
+      idInput.value = String(variantId);
+    }
+    // Mirror selection on PDP swatches without stealing focus loops
+    var li = document.querySelector(
+      'variant-selector .variant-value[data-variant-id="' + variantId + '"]'
+    );
+    if (li && !li.classList.contains('active')) {
+      var parent = li.parentElement;
+      if (parent) {
+        parent.querySelectorAll('.variant-value').forEach(function (el) {
+          el.classList.remove('active');
+        });
+      }
+      li.classList.add('active');
+    }
+    return variantId;
   };
 
   PurchaseOptions.prototype.buildCartPayload = function () {
@@ -528,6 +614,93 @@
         window.setTimeout(function () {
           self.onVariantUpdated();
         }, 0);
+      },
+      true
+    );
+
+    this.bindCornerStickyVariantSync();
+  };
+
+  PurchaseOptions.prototype.bindCornerStickyVariantSync = function () {
+    var self = this;
+    if (this.__cornerStickyBound) return;
+    this.__cornerStickyBound = true;
+
+    function onCornerVariantChange() {
+      self.syncFormVariantFromCorner();
+      self.onVariantUpdated();
+    }
+
+    function attachSelectListeners(root) {
+      var scope = root || document;
+      scope.querySelectorAll(
+        '#corner-sticky-atc-select-0, select[id^="corner-sticky-atc-select"]'
+      ).forEach(function (sel) {
+        if (sel.__jfPoCornerBound) return;
+        sel.__jfPoCornerBound = true;
+        sel.addEventListener('change', onCornerVariantChange);
+        sel.addEventListener('input', onCornerVariantChange);
+      });
+
+      // Corner qty controls inside sticky bar
+      scope.querySelectorAll(
+        '#corner-sticky-atc-container input[type="number"], #corner-sticky-atc-outer-container input[type="number"]'
+      ).forEach(function (input) {
+        if (input.__jfPoCornerQtyBound) return;
+        input.__jfPoCornerQtyBound = true;
+        input.addEventListener('change', function () {
+          var mainQty = document.getElementById('Quantity');
+          if (mainQty && input.value) mainQty.value = input.value;
+          self.updateAddToCartButton();
+        });
+        input.addEventListener('input', function () {
+          var mainQty = document.getElementById('Quantity');
+          if (mainQty && input.value) mainQty.value = input.value;
+          self.updateAddToCartButton();
+        });
+      });
+    }
+
+    attachSelectListeners(document);
+
+    // Corner injects sticky ATC late — watch and rebind
+    if (window.MutationObserver) {
+      var t = null;
+      var lastSelectVal = '';
+      new MutationObserver(function () {
+        if (t) return;
+        t = window.setTimeout(function () {
+          t = null;
+          attachSelectListeners(document);
+          var sel = document.querySelector(
+            '#corner-sticky-atc-select-0, select[id^="corner-sticky-atc-select"]'
+          );
+          var val = sel ? String(sel.value || '') : '';
+          if (val && val !== lastSelectVal) {
+            lastSelectVal = val;
+            onCornerVariantChange();
+          }
+        }, 120);
+      }).observe(document.body, {
+        childList: true,
+        subtree: true,
+        attributes: true,
+        attributeFilter: ['value', 'selected']
+      });
+    }
+
+    document.addEventListener(
+      'change',
+      function (e) {
+        var tEl = e.target;
+        if (!tEl) return;
+        if (
+          tEl.matches &&
+          (tEl.matches('#corner-sticky-atc-select-0') ||
+            tEl.matches('select[id^="corner-sticky-atc-select"]'))
+        ) {
+          onCornerVariantChange();
+        }
       },
       true
     );

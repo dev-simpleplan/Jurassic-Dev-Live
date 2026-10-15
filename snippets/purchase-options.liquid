@@ -110,12 +110,15 @@
   "{{ variant.id }}": {
     "price": {{ variant.price | json }},
     "price_display": {{ variant.price | money_without_currency | append: ' ' | append: currency_suffix | json }},
+    "unit_price": {% if variant.unit_price_measurement %}{{ variant.unit_price | json }}{% else %}null{% endif %},
+    "unit_ref": {% if variant.unit_price_measurement %}{{ variant.unit_price_measurement.reference_unit | json }}{% else %}""{% endif %},
     "plans": {
       {%- for allocation in variant.selling_plan_allocations -%}
         "{{ allocation.selling_plan.id }}": {
           "price": {{ allocation.price | json }},
           "compare_at_price": {{ allocation.compare_at_price | default: variant.price | json }},
-          "price_display": {{ allocation.price | money_without_currency | append: ' ' | append: currency_suffix | json }}
+          "price_display": {{ allocation.price | money_without_currency | append: ' ' | append: currency_suffix | json }},
+          "unit_price": {% if allocation.unit_price != blank %}{{ allocation.unit_price | json }}{% else %}null{% endif %}
         }{%- unless forloop.last -%},{%- endunless -%}
       {%- endfor -%}
     }

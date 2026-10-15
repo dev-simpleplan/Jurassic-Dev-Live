@@ -576,6 +576,43 @@
     var subEl = this.root.querySelector('[data-po-sub-price]');
     if (oneEl && prices.onetime.price_display) oneEl.textContent = prices.onetime.price_display;
     if (subEl && prices.subscription.price_display) subEl.textContent = prices.subscription.price_display;
+    this.updateVariantUnitPrices();
+  };
+
+  PurchaseOptions.prototype.updateVariantUnitPrices = function () {
+    var self = this;
+    var planId = this.getActivePlanId();
+    document.querySelectorAll('variant-selector .variant-value').forEach(function (li) {
+      var unitEl = li.querySelector('.vv-peices[data-unit-price]');
+      if (!unitEl) return;
+      var vid = li.getAttribute('data-variant-id');
+      var entry = self.variantPlans[vid] || self.variantPlans[String(vid)] || {};
+      var baseUnit = entry.unit_price != null ? Number(entry.unit_price) : Number(unitEl.getAttribute('data-unit-price'));
+      var unitRef =
+        entry.unit_ref ||
+        unitEl.getAttribute('data-unit-ref') ||
+        'item';
+      var symbol = unitEl.getAttribute('data-unit-symbol') || self.currencySuffix || '€';
+      var cents = baseUnit;
+
+      if (self.isSubscription() && planId && entry.plans) {
+        var planEntry = entry.plans[planId] || entry.plans[String(planId)] || {};
+        if (planEntry.unit_price != null) {
+          cents = Number(planEntry.unit_price);
+        } else if (
+          planEntry.price != null &&
+          entry.price &&
+          baseUnit &&
+          Number(entry.price) > 0
+        ) {
+          cents = Math.round((Number(planEntry.price) / Number(entry.price)) * baseUnit);
+        }
+      }
+
+      if (!cents && cents !== 0) return;
+      unitEl.setAttribute('data-unit-price', String(cents));
+      unitEl.textContent = formatMoney(cents, symbol) + ' / ' + unitRef;
+    });
   };
 
   PurchaseOptions.prototype.onVariantUpdated = function (variant) {
@@ -591,6 +628,7 @@
       el.setAttribute('aria-pressed', isActive ? 'true' : 'false');
     }.bind(this));
     this.syncSellingPlanInput();
+    this.refreshPrices();
     this.updateAddToCartButton();
     if (!silent) {
       document.dispatchEvent(
@@ -676,17 +714,36 @@
     var separatorEl = btn.querySelector('.btn-separator');
     if (!(label || priceEl)) return;
 
+    // Prevent Corner from reading a compare/sale pair and striking prices
+    btn.querySelectorAll('s, del, strike').forEach(function (el) {
+      var text = document.createTextNode(el.textContent || '');
+      if (el.parentNode) el.parentNode.replaceChild(text, el);
+    });
+
     if (copy.mode === 'subscription') {
-      if (label) label.textContent = copy.full;
-      if (priceEl) priceEl.textContent = '';
+      if (label) {
+        label.textContent = copy.full;
+        label.style.textDecoration = 'none';
+      }
+      if (priceEl) {
+        priceEl.textContent = '';
+        priceEl.style.display = 'none';
+      }
       if (separatorEl) separatorEl.style.display = 'none';
     } else {
-      if (label) label.textContent = copy.label;
+      if (label) {
+        label.textContent = copy.label;
+        label.style.textDecoration = 'none';
+      }
       if (separatorEl) {
         separatorEl.style.display = '';
         separatorEl.textContent = ' - ';
       }
-      if (priceEl) priceEl.textContent = copy.priceText;
+      if (priceEl) {
+        priceEl.style.display = '';
+        priceEl.textContent = copy.priceText;
+        priceEl.style.textDecoration = 'none';
+      }
     }
   };
 
@@ -694,31 +751,45 @@
     if (!copy) return;
     var cta = document.getElementById('corner-sticky-atc-cta-button');
     if (!cta) return;
+
+    // Corner often wraps compare/sale prices in <s>/<del> — strip those
+    cta.querySelectorAll('s, del, strike').forEach(function (el) {
+      var text = document.createTextNode(el.textContent || '');
+      if (el.parentNode) el.parentNode.replaceChild(text, el);
+    });
+    cta.querySelectorAll('[style*="line-through"]').forEach(function (el) {
+      el.style.textDecoration = 'none';
+    });
+
     var labeled = cta.querySelector('[data-jf-po-corner-label]');
-    if (labeled) {
-      if (labeled.textContent !== copy.full) labeled.textContent = copy.full;
-      return;
+    if (!labeled) {
+      labeled = document.createElement('span');
+      labeled.setAttribute('data-jf-po-corner-label', '');
+      while (cta.firstChild) cta.removeChild(cta.firstChild);
+      cta.appendChild(labeled);
+    } else {
+      Array.prototype.slice.call(cta.childNodes).forEach(function (node) {
+        if (node !== labeled) cta.removeChild(node);
+      });
     }
-    var spans = cta.querySelectorAll('span');
-    var textSpan = null;
-    spans.forEach(function (s) {
-      var t = (s.textContent || '').trim();
-      if (
-        t &&
-        (t.indexOf('Warenkorb') !== -1 ||
-          t.indexOf('Abonnieren') !== -1 ||
-          t.indexOf('Subscribe') !== -1 ||
-          t.indexOf('€') !== -1)
-      ) {
-        textSpan = s;
+
+    labeled.style.textDecoration = 'none';
+    labeled.textContent = copy.full;
+    cta.style.textDecoration = 'none';
+
+    // Also clean Corner sticky price chip next to the CTA (~~old~~ new)
+    var stickyRoot =
+      document.getElementById('corner-sticky-atc-outer-container') ||
+      document.getElementById('corner-sticky-atc-container');
+    if (!stickyRoot) return;
+    stickyRoot.querySelectorAll('s, del, strike').forEach(function (el) {
+      // Keep product compare price on the left; only fix CTA-adjacent junk
+      if (cta.contains(el)) return;
+      if (el.closest('#corner-sticky-atc-cta-button')) {
+        var text = document.createTextNode(el.textContent || '');
+        if (el.parentNode) el.parentNode.replaceChild(text, el);
       }
     });
-    if (textSpan) {
-      textSpan.setAttribute('data-jf-po-corner-label', '');
-      textSpan.textContent = copy.full;
-      return;
-    }
-    if (cta.childElementCount === 0) cta.textContent = copy.full;
   };
 
   PurchaseOptions.prototype.updateAddToCartButton = function (variant) {
@@ -748,10 +819,13 @@
       hideTimer = window.setTimeout(function () {
         hideTimer = null;
         hideAppstleWidgets();
-        if (window.jfPurchaseOptions && window.jfPurchaseOptions._lastCtaCopy) {
-          window.jfPurchaseOptions.syncCornerStickyCta(
-            window.jfPurchaseOptions._lastCtaCopy
-          );
+        if (window.jfPurchaseOptions) {
+          if (window.jfPurchaseOptions._lastCtaCopy) {
+            window.jfPurchaseOptions.syncCornerStickyCta(
+              window.jfPurchaseOptions._lastCtaCopy
+            );
+          }
+          window.jfPurchaseOptions.updateVariantUnitPrices();
         }
       }, 250);
     }).observe(document.body, { childList: true, subtree: true });

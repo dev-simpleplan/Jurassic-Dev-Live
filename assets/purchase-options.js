@@ -365,22 +365,32 @@
   PurchaseOptions.prototype.syncFormVariantFromCorner = function () {
     var variantId = this.resolveVariantIdFromCorner();
     if (!variantId) return null;
-    var idInput = document.querySelector('#product-form input[name="id"]');
-    if (idInput && String(idInput.value) !== String(variantId)) {
-      idInput.value = String(variantId);
-    }
-    // Mirror selection on PDP swatches without stealing focus loops
-    var li = document.querySelector(
-      'variant-selector .variant-value[data-variant-id="' + variantId + '"]'
-    );
-    if (li && !li.classList.contains('active')) {
-      var parent = li.parentElement;
-      if (parent) {
-        parent.querySelectorAll('.variant-value').forEach(function (el) {
-          el.classList.remove('active');
-        });
+    this._suppressVariantWatch = true;
+    try {
+      var idInput = document.querySelector('#product-form input[name="id"]');
+      if (idInput && String(idInput.value) !== String(variantId)) {
+        // Set via native descriptor to avoid our patched setter re-entry
+        var desc = Object.getOwnPropertyDescriptor(
+          HTMLInputElement.prototype,
+          'value'
+        );
+        if (desc && desc.set) desc.set.call(idInput, String(variantId));
+        else idInput.value = String(variantId);
       }
-      li.classList.add('active');
+      var li = document.querySelector(
+        'variant-selector .variant-value[data-variant-id="' + variantId + '"]'
+      );
+      if (li && !li.classList.contains('active')) {
+        var parent = li.parentElement;
+        if (parent) {
+          parent.querySelectorAll('.variant-value').forEach(function (el) {
+            el.classList.remove('active');
+          });
+        }
+        li.classList.add('active');
+      }
+    } finally {
+      this._suppressVariantWatch = false;
     }
     return variantId;
   };
@@ -591,11 +601,13 @@
               return desc.get.call(this);
             },
             set: function (v) {
+              var prev = desc.get.call(this);
               desc.set.call(this, v);
+              if (String(prev) === String(v)) return;
               window.setTimeout(function () {
-                if (window.jfPurchaseOptions) {
-                  window.jfPurchaseOptions.onVariantUpdated();
-                }
+                var po = window.jfPurchaseOptions;
+                if (!po || po._suppressVariantWatch || po._updatingUi) return;
+                po.onVariantUpdated();
               }, 0);
             }
           });
@@ -625,85 +637,94 @@
     var self = this;
     if (this.__cornerStickyBound) return;
     this.__cornerStickyBound = true;
+    this._lastCornerSelectVal = '';
 
-    function onCornerVariantChange() {
+    function onCornerVariantChange(e) {
+      if (self._suppressVariantWatch || self._updatingUi) return;
+      var sel =
+        (e && e.target) ||
+        document.querySelector(
+          '#corner-sticky-atc-select-0, select[id^="corner-sticky-atc-select"]'
+        );
+      var val = sel && sel.value != null ? String(sel.value) : '';
+      if (val && val === self._lastCornerSelectVal) return;
+      if (val) self._lastCornerSelectVal = val;
+
       self.syncFormVariantFromCorner();
       self.onVariantUpdated();
     }
 
-    function attachSelectListeners(root) {
-      var scope = root || document;
-      scope.querySelectorAll(
-        '#corner-sticky-atc-select-0, select[id^="corner-sticky-atc-select"]'
-      ).forEach(function (sel) {
-        if (sel.__jfPoCornerBound) return;
-        sel.__jfPoCornerBound = true;
-        sel.addEventListener('change', onCornerVariantChange);
-        sel.addEventListener('input', onCornerVariantChange);
-      });
+    function attachSelectListeners() {
+      document
+        .querySelectorAll(
+          '#corner-sticky-atc-select-0, select[id^="corner-sticky-atc-select"]'
+        )
+        .forEach(function (sel) {
+          if (sel.__jfPoCornerBound) return;
+          sel.__jfPoCornerBound = true;
+          if (!self._lastCornerSelectVal && sel.value) {
+            self._lastCornerSelectVal = String(sel.value);
+          }
+          sel.addEventListener('change', onCornerVariantChange);
+        });
 
-      // Corner qty controls inside sticky bar
-      scope.querySelectorAll(
-        '#corner-sticky-atc-container input[type="number"], #corner-sticky-atc-outer-container input[type="number"]'
-      ).forEach(function (input) {
-        if (input.__jfPoCornerQtyBound) return;
-        input.__jfPoCornerQtyBound = true;
-        input.addEventListener('change', function () {
-          var mainQty = document.getElementById('Quantity');
-          if (mainQty && input.value) mainQty.value = input.value;
-          self.updateAddToCartButton();
+      document
+        .querySelectorAll(
+          '#corner-sticky-atc-container input[type="number"], #corner-sticky-atc-outer-container input[type="number"]'
+        )
+        .forEach(function (input) {
+          if (input.__jfPoCornerQtyBound) return;
+          input.__jfPoCornerQtyBound = true;
+          input.addEventListener('change', function () {
+            if (self._updatingUi) return;
+            var mainQty = document.getElementById('Quantity');
+            if (mainQty && input.value && String(mainQty.value) !== String(input.value)) {
+              mainQty.value = input.value;
+            }
+            self.updateAddToCartButton();
+          });
         });
-        input.addEventListener('input', function () {
-          var mainQty = document.getElementById('Quantity');
-          if (mainQty && input.value) mainQty.value = input.value;
-          self.updateAddToCartButton();
-        });
-      });
     }
 
-    attachSelectListeners(document);
+    attachSelectListeners();
 
-    // Corner injects sticky ATC late — watch and rebind
+    // Only watch for Corner sticky being injected — do NOT react to our own CTA edits
     if (window.MutationObserver) {
       var t = null;
-      var lastSelectVal = '';
-      new MutationObserver(function () {
+      new MutationObserver(function (mutations) {
+        if (self._updatingUi || self._suppressVariantWatch) return;
+        var relevant = false;
+        for (var i = 0; i < mutations.length; i++) {
+          var m = mutations[i];
+          if (m.type !== 'childList') continue;
+          var nodes = [];
+          if (m.addedNodes && m.addedNodes.length) {
+            for (var a = 0; a < m.addedNodes.length; a++) nodes.push(m.addedNodes[a]);
+          }
+          for (var n = 0; n < nodes.length; n++) {
+            var node = nodes[n];
+            if (node.nodeType !== 1) continue;
+            if (
+              (node.id && String(node.id).indexOf('corner-sticky-atc') === 0) ||
+              (node.querySelector &&
+                node.querySelector(
+                  '#corner-sticky-atc-select-0, select[id^="corner-sticky-atc-select"], #corner-sticky-atc-container'
+                ))
+            ) {
+              relevant = true;
+              break;
+            }
+          }
+          if (relevant) break;
+        }
+        if (!relevant) return;
         if (t) return;
         t = window.setTimeout(function () {
           t = null;
-          attachSelectListeners(document);
-          var sel = document.querySelector(
-            '#corner-sticky-atc-select-0, select[id^="corner-sticky-atc-select"]'
-          );
-          var val = sel ? String(sel.value || '') : '';
-          if (val && val !== lastSelectVal) {
-            lastSelectVal = val;
-            onCornerVariantChange();
-          }
-        }, 120);
-      }).observe(document.body, {
-        childList: true,
-        subtree: true,
-        attributes: true,
-        attributeFilter: ['value', 'selected']
-      });
+          attachSelectListeners();
+        }, 150);
+      }).observe(document.body, { childList: true, subtree: true });
     }
-
-    document.addEventListener(
-      'change',
-      function (e) {
-        var tEl = e.target;
-        if (!tEl) return;
-        if (
-          tEl.matches &&
-          (tEl.matches('#corner-sticky-atc-select-0') ||
-            tEl.matches('select[id^="corner-sticky-atc-select"]'))
-        ) {
-          onCornerVariantChange();
-        }
-      },
-      true
-    );
   };
 
   PurchaseOptions.prototype.getVariantId = function () {
@@ -789,8 +810,18 @@
   };
 
   PurchaseOptions.prototype.onVariantUpdated = function (variant) {
-    this.refreshPrices();
-    this.updateAddToCartButton(variant);
+    if (this._updatingUi) return;
+    this._updatingUi = true;
+    try {
+      this.refreshPrices();
+      this.updateAddToCartButton(variant);
+    } finally {
+      var self = this;
+      // Release after paint so MutationObservers from our DOM writes are ignored
+      window.setTimeout(function () {
+        self._updatingUi = false;
+      }, 0);
+    }
   };
 
   PurchaseOptions.prototype.applyMode = function (mode, silent) {
@@ -801,8 +832,12 @@
       el.setAttribute('aria-pressed', isActive ? 'true' : 'false');
     }.bind(this));
     this.syncSellingPlanInput();
-    this.refreshPrices();
-    this.updateAddToCartButton();
+    if (this._updatingUi) {
+      this.refreshPrices();
+      this.updateAddToCartButton();
+    } else {
+      this.onVariantUpdated();
+    }
     if (!silent) {
       document.dispatchEvent(
         new CustomEvent('purchase-options:change', {
@@ -925,44 +960,41 @@
     var cta = document.getElementById('corner-sticky-atc-cta-button');
     if (!cta) return;
 
-    // Corner often wraps compare/sale prices in <s>/<del> — strip those
-    cta.querySelectorAll('s, del, strike').forEach(function (el) {
-      var text = document.createTextNode(el.textContent || '');
-      if (el.parentNode) el.parentNode.replaceChild(text, el);
-    });
-    cta.querySelectorAll('[style*="line-through"]').forEach(function (el) {
-      el.style.textDecoration = 'none';
-    });
-
     var labeled = cta.querySelector('[data-jf-po-corner-label]');
-    if (!labeled) {
-      labeled = document.createElement('span');
-      labeled.setAttribute('data-jf-po-corner-label', '');
-      while (cta.firstChild) cta.removeChild(cta.firstChild);
-      cta.appendChild(labeled);
-    } else {
-      Array.prototype.slice.call(cta.childNodes).forEach(function (node) {
-        if (node !== labeled) cta.removeChild(node);
-      });
+    if (labeled && labeled.textContent === copy.full && cta.childElementCount === 1) {
+      return;
     }
 
-    labeled.style.textDecoration = 'none';
-    labeled.textContent = copy.full;
-    cta.style.textDecoration = 'none';
-
-    // Also clean Corner sticky price chip next to the CTA (~~old~~ new)
-    var stickyRoot =
-      document.getElementById('corner-sticky-atc-outer-container') ||
-      document.getElementById('corner-sticky-atc-container');
-    if (!stickyRoot) return;
-    stickyRoot.querySelectorAll('s, del, strike').forEach(function (el) {
-      // Keep product compare price on the left; only fix CTA-adjacent junk
-      if (cta.contains(el)) return;
-      if (el.closest('#corner-sticky-atc-cta-button')) {
+    var ownedLock = !this._updatingUi;
+    if (ownedLock) this._updatingUi = true;
+    try {
+      cta.querySelectorAll('s, del, strike').forEach(function (el) {
         var text = document.createTextNode(el.textContent || '');
         if (el.parentNode) el.parentNode.replaceChild(text, el);
+      });
+
+      if (!labeled) {
+        labeled = document.createElement('span');
+        labeled.setAttribute('data-jf-po-corner-label', '');
+        while (cta.firstChild) cta.removeChild(cta.firstChild);
+        cta.appendChild(labeled);
+      } else {
+        Array.prototype.slice.call(cta.childNodes).forEach(function (node) {
+          if (node !== labeled) cta.removeChild(node);
+        });
       }
-    });
+
+      labeled.style.textDecoration = 'none';
+      if (labeled.textContent !== copy.full) labeled.textContent = copy.full;
+      cta.style.textDecoration = 'none';
+    } finally {
+      if (ownedLock) {
+        var self = this;
+        window.setTimeout(function () {
+          self._updatingUi = false;
+        }, 0);
+      }
+    }
   };
 
   PurchaseOptions.prototype.updateAddToCartButton = function (variant) {
@@ -988,19 +1020,19 @@
     var hideTimer = null;
     new MutationObserver(function () {
       if (!isVariantB()) return;
+      var po = window.jfPurchaseOptions;
+      if (po && (po._updatingUi || po._suppressVariantWatch)) return;
       if (hideTimer) return;
       hideTimer = window.setTimeout(function () {
         hideTimer = null;
+        if (!isVariantB()) return;
+        var po2 = window.jfPurchaseOptions;
+        if (po2 && (po2._updatingUi || po2._suppressVariantWatch)) return;
         hideAppstleWidgets();
-        if (window.jfPurchaseOptions) {
-          if (window.jfPurchaseOptions._lastCtaCopy) {
-            window.jfPurchaseOptions.syncCornerStickyCta(
-              window.jfPurchaseOptions._lastCtaCopy
-            );
-          }
-          window.jfPurchaseOptions.updateVariantUnitPrices();
+        if (po2 && po2._lastCtaCopy) {
+          po2.syncCornerStickyCta(po2._lastCtaCopy);
         }
-      }, 250);
+      }, 300);
     }).observe(document.body, { childList: true, subtree: true });
 
     function patchVariantSelector() {
